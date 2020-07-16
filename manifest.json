@@ -1,0 +1,21 @@
+{
+	"name": "The Mute Bow",
+	"short_name": "The Mute Bow",
+	"start_url": "https://the-mute-bow.github.io/",
+	"background_color": "#35363a",
+	"theme_color": "#202124",
+	"display": "fullscreen",
+	"orientation": "natural",
+	"icons": [
+		{
+			"src": "img/icon/icon192.png",
+			"sizes": "192x192",
+			"type": "image/png"
+		},
+		{
+			"src": "img/icon/icon512.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		}
+	]
+}
