@@ -1,6 +1,6 @@
 $black: #202124;
 $lightgray: #cdcad3;
-// $lightgray: lightgreen;
+// $lightgray: lightblue;
 
 @font-face {
 	font-family: 'Pixelar';
@@ -19,7 +19,7 @@ body {
 }
 
 canvas {
-	background-color: lightgreen;
+	background-color: $black;
 	position: absolute;
 }
 

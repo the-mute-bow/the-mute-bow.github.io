@@ -1,5 +1,5 @@
-// let onAndroid = /Android/i.test(navigator.userAgent);
-let onAndroid = true;
+let onAndroid = /Android/i.test(navigator.userAgent);
+// let onAndroid = true;
 
 let lang = getCookie('lang');
 if (!lang && onAndroid)
@@ -49,10 +49,11 @@ let over = document.getElementsByClassName('over')[0];
 let gifs = [...document.querySelectorAll('img')];
 let gif_text = document.querySelector('p');
 let ctx = can.getContext('2d');
-let game = null;
 let mode = '';
 
-let setScreen = newmode => {
+var game = new Game();
+
+const setScreen = newmode => {
 	if (newmode != mode) {
 		mode = newmode;
 		// console.log('set mode to', mode);
@@ -78,7 +79,10 @@ let setScreen = newmode => {
 		if (mode == 'touch-screen') {
 			gif_text.innerHTML = lang == '#fr' ? "Touche l'écran." : 'Touch the screen.';
 			setTimeout(() => {
-				over.onclick = () => can.requestFullscreen().catch(error => {});
+				over.onclick = () => {
+					can.requestFullscreen().catch(error => {});
+					// setTimeout(resize, 500);
+				};
 			}, 500);
 		}
 
@@ -97,26 +101,45 @@ let setScreen = newmode => {
 	}
 };
 
-let mainloop = () => {
-	let loop = true;
+addEventListener('resize', event => resize());
 
+const resize = () => {
 	can.width = window.innerWidth;
 	can.height = window.innerHeight;
 
-	if (can.width < can.height) setScreen('rotate-phone');
-	else if (!document.fullscreenElement) setScreen('touch-screen');
-	else {
-		setScreen('game');
-
+	if (document.fullscreenElement) {
 		can.setAttribute('height', Math.floor(can.clientHeight * dpi));
 		can.setAttribute('width', Math.floor(can.clientWidth * dpi));
 	}
 
-	frame++;
-	if (loop) requestAnimationFrame(mainloop);
+	game.scale = can.height / game.height;
+};
+
+const mainloop = () => {
+	if (can.width < can.height) setScreen('rotate-phone');
+	else if (!document.fullscreenElement) setScreen('touch-screen');
+	else if (!game.loop) setScreen('loading');
+	else {
+		setScreen('game');
+		resize();
+		game.tick(frame);
+		game.graphics(frame);
+		frame++;
+	}
+
+	requestAnimationFrame(mainloop);
+};
+
+const loadPage = page_name => {
+	// console.warn(`load ${page_name}`);
+	game.loop = false;
+	setScreen('loading');
+	pages[page_name](game);
 };
 
 window.onload = () => {
-	if (onAndroid) mainloop();
-	else setScreen('android');
+	if (onAndroid) {
+		loadPage('menu');
+		mainloop();
+	} else setScreen('android');
 };
