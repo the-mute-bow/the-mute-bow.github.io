@@ -38,7 +38,14 @@ window.isUpdateAvailable = new Promise(function (resolve, reject) {
 			});
 }).then(isAvailable => {
 	if (isAvailable) {
-		if (confirm('Update available ! Refresh the app?')) location.reload();
+		if (
+			confirm(
+				lang == '#fr'
+					? "Mise à jour disponible ! Recharger l'application?"
+					: 'Update available ! Refresh the app?'
+			)
+		)
+			location.reload();
 	}
 });
 
@@ -51,7 +58,7 @@ let gif_text = document.querySelector('p');
 let ctx = can.getContext('2d');
 let mode = '';
 
-var game = new Game();
+let game = new Game();
 
 const setScreen = newmode => {
 	if (newmode != mode) {
@@ -104,8 +111,8 @@ const setScreen = newmode => {
 addEventListener('resize', event => resize());
 
 const resize = () => {
-	can.width = window.innerWidth;
-	can.height = window.innerHeight;
+	can.width = innerWidth;
+	can.height = innerHeight;
 
 	if (document.fullscreenElement) {
 		can.setAttribute('height', Math.floor(can.clientHeight * dpi));
@@ -116,7 +123,7 @@ const resize = () => {
 };
 
 const mainloop = () => {
-	if (can.width < can.height) setScreen('rotate-phone');
+	if (innerWidth < innerHeight) setScreen('rotate-phone');
 	else if (!document.fullscreenElement) setScreen('touch-screen');
 	else if (!game.loop) setScreen('loading');
 	else {
@@ -124,7 +131,7 @@ const mainloop = () => {
 		resize();
 		game.tick(frame);
 		game.graphics(frame);
-		frame++;
+		frame += game.speed;
 	}
 
 	requestAnimationFrame(mainloop);
@@ -139,6 +146,7 @@ const loadPage = page_name => {
 
 window.onload = () => {
 	if (onAndroid) {
+		initTouch(game.touch_events);
 		loadPage('menu');
 		mainloop();
 	} else setScreen('android');

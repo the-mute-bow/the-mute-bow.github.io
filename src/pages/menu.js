@@ -5,10 +5,10 @@ pages['menu'] = game => {
 		game.can.height = game.ground.height;
 		game.can.width = game.ground.width;
 		game.bg_color = '#323c2e';
-		game.height = 128;
+		game.height = 100;
+		game.speed = 1;
+		game.cam = { x: 200, y: 200 };
 
-		setTimeout(() => {
-			game.loop = true;
-		}, 5000);
+		game.loop = true;
 	});
 };

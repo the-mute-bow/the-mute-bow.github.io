@@ -7,11 +7,17 @@ class Game {
 		this.ground = null;
 		this.bg_color = 'black';
 		this.scale = 1;
-		this.height = 128;
+		this.height = 1;
+		this.speed = 1;
+		this.cam = { x: 0, y: 0 };
+		this.touches = { L: null, R: null, rin: Math.floor(20 * dpi), rout: Math.floor(50 * dpi) };
+		this.touch_events = [];
 		this.can = document.createElement('canvas');
 	}
 
-	tick(frame) {}
+	tick(frame) {
+		this.touch_events = [];
+	}
 
 	graphics(frame) {
 		let mctx = can.getContext('2d');
@@ -19,12 +25,50 @@ class Game {
 
 		mctx.imageSmoothingEnabled = false;
 
-		mctx.fillStyle = this.bg_color;
-		mctx.fillRect(0, 0, can.width, can.height);
+		const fill = color => {
+			mctx.fillStyle = color;
+			mctx.fillRect(0, 0, can.width, can.height);
+		};
 
-		gctx.drawImage(this.ground, -100, -100);
+		// Background fill
+		fill(this.bg_color);
 
-		mctx.drawImage(this.can, 0, 0, this.ground.height * game.scale, this.ground.width * game.scale);
+		// Ground draw
+		gctx.drawImage(this.ground, 0, 0);
+
+		// Game canvas draw
+		let { x, y } = this.cam;
+		mctx.drawImage(
+			this.can,
+			-x * this.scale + can.width / 2,
+			-y * this.scale + can.height / 2,
+			this.ground.height * game.scale,
+			this.ground.width * game.scale
+		);
+
+		// Joysticks
+		let touch_colors = {
+			L: `rgba(255, 255, 255, 0.3)`,
+			R: `rgba(255, 255, 255, 0.3)`
+		};
+
+		for (let side of ['L', 'R']) {
+			let touch = this.touches[side];
+
+			mctx.fillStyle = touch_colors[side];
+			mctx.strokeStyle = touch_colors[side];
+			mctx.lineWidth = 4;
+
+			if (touch) {
+				mctx.beginPath();
+				mctx.arc(touch.start.x, touch.start.y, game.touches.rout, 0, 2 * Math.PI);
+				mctx.stroke();
+
+				mctx.beginPath();
+				mctx.arc(touch.end.x, touch.end.y, game.touches.rin, 0, 2 * Math.PI);
+				mctx.fill();
+			}
+		}
 	}
 
 	loadImg(files, index = 0, callback = () => {}) {
