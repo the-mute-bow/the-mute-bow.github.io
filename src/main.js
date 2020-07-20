@@ -119,7 +119,7 @@ const resize = () => {
 		can.setAttribute('width', Math.floor(can.clientWidth * dpi));
 	}
 
-	game.scale = can.height / game.height;
+	game.scale = can.height / game.cam.h;
 };
 
 const mainloop = () => {

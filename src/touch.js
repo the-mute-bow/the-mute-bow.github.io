@@ -11,7 +11,6 @@ const initTouch = events => {
 			if (getTouchSide(touch) == 'L') game.touches.L = touch;
 			else game.touches.R = touch;
 		}
-		console.log(game.touches);
 	});
 
 	can.addEventListener('touchmove', event => {
@@ -25,6 +24,9 @@ const initTouch = events => {
 						touch.start.x = touch.end.x - (move.x * game.touches.rout) / move.mag;
 						touch.start.y = touch.end.y - (move.y * game.touches.rout) / move.mag;
 					}
+
+					let { x, y } = move;
+					console.log((Math.atan2(y, x) + Math.PI) / (2 * Math.PI));
 				}
 			}
 		}
