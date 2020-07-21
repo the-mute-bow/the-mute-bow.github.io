@@ -26,7 +26,7 @@ const initTouch = events => {
 					}
 
 					let { x, y } = move;
-					console.log((Math.atan2(y, x) + Math.PI) / (2 * Math.PI));
+					// console.log((Math.atan2(y, x) + Math.PI) / (2 * Math.PI));
 				}
 			}
 		}

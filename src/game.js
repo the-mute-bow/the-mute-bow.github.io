@@ -9,14 +9,15 @@ class Game {
 		this.scale = 1;
 		this.speed = 1;
 
-		this.cam = { x: 0, y: 0, h: 16, o: 1, targ_h: 16, targ_o: 1, targ_speed: 1, target: { x: 0, y: 0 } };
+		this.cam = { x: 0, y: 0, h: 100, o: 0, targ_h: 100, targ_o: 0, targ_speed: 1, target: { x: 200, y: 200 } };
 
 		this.entities = {
 			buildings: [],
+			trees: [],
 			humans: []
 		};
 
-		this.player = new Entity({ x: 0, y: 0, z: 0 }, {});
+		this.player = null;
 
 		this.touches = { L: null, R: null, rin: Math.floor(20 * dpi), rout: Math.floor(50 * dpi) };
 		this.touch_events = [];
@@ -26,7 +27,9 @@ class Game {
 	tick(frame) {
 		this.goTarget();
 
-		if (this.touches.L) {
+		for (let tree of this.entities.trees) tree.animate();
+
+		if (game.player && this.touches.L) {
 			let move = getTouchMove(this.touches.L);
 			this.player.pos.x += move.x * this.speed;
 			this.player.pos.y += move.y * this.speed;
@@ -53,10 +56,15 @@ class Game {
 		gctx.drawImage(this.ground, 0, 0);
 
 		// Entities draw
-		let ord_ent = [...game.entities.buildings, ...game.entities.humans];
-		for (let entity of ord_ent) {
-			entity.draw(gctx, 'main');
-		}
+		let ord_ent = [...this.entities.buildings, ...this.entities.humans, ...this.entities.trees].sort(
+			(a, b) => a.getFeet().y - b.getFeet().y
+		);
+
+		for (let entity of ord_ent) entity.draw(gctx, 'shadow');
+		for (let entity of ord_ent) entity.draw(gctx, 'main');
+
+		// Tree calc draw
+		gctx.drawImage(this.images['tree-calc'], 0, 0);
 
 		// Game canvas draw
 		mctx.drawImage(
@@ -81,9 +89,11 @@ class Game {
 			mctx.lineWidth = 4;
 
 			if (touch) {
-				mctx.beginPath();
-				mctx.arc(touch.start.x, touch.start.y, game.touches.rout, 0, 2 * Math.PI);
-				mctx.stroke();
+				if (game.player) {
+					mctx.beginPath();
+					mctx.arc(touch.start.x, touch.start.y, game.touches.rout, 0, 2 * Math.PI);
+					mctx.stroke();
+				}
 
 				mctx.beginPath();
 				mctx.arc(touch.end.x, touch.end.y, game.touches.rin, 0, 2 * Math.PI);
@@ -118,6 +128,8 @@ class Game {
 	goTarget() {
 		let t = this.cam.target;
 		let x, y;
+		let s = this.cam.targ_speed / this.speed;
+
 		if (t.pos) {
 			x = t.pos.x + 12;
 			y = t.pos.y + 12;
@@ -126,15 +138,39 @@ class Game {
 			y = t.y;
 		}
 
-		this.cam.x += (x - this.cam.x) / this.cam.targ_speed;
-		this.cam.y += (y - this.cam.y) / this.cam.targ_speed;
-		this.cam.h += (this.cam.targ_h - this.cam.h) / this.cam.targ_speed;
-		this.cam.o += (this.cam.targ_o - this.cam.o) / this.cam.targ_speed;
+		this.cam.x += (x - this.cam.x) / s;
+		this.cam.y += (y - this.cam.y) / s;
+		this.cam.h += (this.cam.targ_h - this.cam.h) / s;
+		this.cam.o += (this.cam.targ_o - this.cam.o) / s;
 	}
 
 	getHuman(name) {
 		for (let human of game.entities.humans) {
 			if (human.name == name) return human;
 		}
+	}
+
+	getTrees(img) {
+		let canvas = document.createElement('canvas');
+		canvas.height = img.height;
+		canvas.width = img.width;
+
+		let ctx = canvas.getContext('2d');
+		ctx.drawImage(img, 0, 0);
+
+		console.log('Loading trees..');
+		let trees = [];
+
+		for (let y = 0; y < canvas.height; y++) {
+			for (let x = 0; x < canvas.width; x++) {
+				let p = ctx.getImageData(x, y, 1, 1).data;
+				if (p[0] == 255 && p[1] == 0 && p[2] == 0) {
+					console.log(x, y);
+					trees.push({ x: x, y: y, z: 0 });
+				}
+			}
+		}
+
+		console.log(trees);
 	}
 }

@@ -1,4 +1,4 @@
-let version = '2.0.4';
+let version = '2.0.5';
 
 let files = [
 	'./',
