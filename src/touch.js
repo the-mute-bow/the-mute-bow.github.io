@@ -3,7 +3,7 @@ const initTouch = events => {
 		event.preventDefault();
 		for (let t of event.changedTouches) {
 			let touch = {
-				frame: frame,
+				time: time,
 				id: t.identifier,
 				start: { x: t.clientX * dpi, y: t.clientY * dpi },
 				end: { x: t.clientX * dpi, y: t.clientY * dpi }
@@ -42,8 +42,15 @@ const initTouch = events => {
 
 					if (move.mag > 0.2) {
 						events.push({ ...move, type: 'drag' });
-					} else if (move.frames < 30) {
+					} else if (move.duration < 200) {
 						events.push({ ...move, type: 'tap' });
+						if (
+							(move.side == 'L' && getTouchMove(game.touches.R).mag > 0.2) ||
+							(move.side == 'R' && getTouchMove(game.touches.L).mag > 0.2)
+						) {
+							events.push({ ...move, type: 'special' });
+							alert('special');
+						}
 					}
 
 					game.touches[side] = null;
@@ -58,5 +65,5 @@ const getTouchSide = touch => (touch.start.x < can.width / 2 ? 'L' : 'R');
 const getTouchMove = touch => {
 	let x = (touch.end.x - touch.start.x) / game.touches.rout;
 	let y = (touch.end.y - touch.start.y) / game.touches.rout;
-	return { x: x, y: y, mag: Math.sqrt(x * x + y * y), frames: frame - touch.frame, side: getTouchSide(touch) };
+	return { x: x, y: y, mag: Math.sqrt(x * x + y * y), duration: time - touch.time, side: getTouchSide(touch) };
 };

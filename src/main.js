@@ -49,7 +49,8 @@ window.isUpdateAvailable = new Promise(function (resolve, reject) {
 	}
 });
 
-let frame = 0;
+let time = 0;
+let oldtime = 0;
 let dpi = window.devicePixelRatio;
 let can = document.querySelector('canvas');
 let over = document.getElementsByClassName('over')[0];
@@ -122,16 +123,20 @@ const resize = () => {
 	game.scale = can.height / game.cam.h;
 };
 
-const mainloop = () => {
+const mainloop = newtime => {
+	let dtime = newtime - oldtime;
+	oldtime = newtime;
+
 	if (innerWidth < innerHeight) setScreen('rotate-phone');
 	else if (!document.fullscreenElement) setScreen('touch-screen');
 	else if (!game.loop) setScreen('loading');
 	else {
 		setScreen('game');
 		resize();
-		game.tick(frame);
-		game.graphics(frame);
-		frame += game.speed;
+
+		time += game.speed * dtime;
+		game.tick(dtime);
+		game.graphics(dtime);
 	}
 
 	requestAnimationFrame(mainloop);
@@ -140,6 +145,8 @@ const mainloop = () => {
 const loadPage = page_name => {
 	// console.warn(`load ${page_name}`);
 	game.loop = false;
+	let time = 0;
+	let oldtime = 0;
 	setScreen('loading');
 	pages[page_name](game);
 };

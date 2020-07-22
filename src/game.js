@@ -24,21 +24,24 @@ class Game {
 		this.can = document.createElement('canvas');
 	}
 
-	tick(frame) {
-		this.goTarget();
+	tick(dtime) {
+		// console.log(Math.floor(1000 / dtime));
 
-		for (let tree of this.entities.trees) tree.animate();
+		this.goTarget(dtime);
 
-		if (game.player && this.touches.L) {
-			let move = getTouchMove(this.touches.L);
-			this.player.pos.x += move.x * this.speed;
-			this.player.pos.y += move.y * this.speed;
+		for (let entity of [...this.entities.trees, ...this.entities.humans]) entity.animate(dtime);
+
+		if (game.player) {
+			if (this.touches.L) {
+				let move = getTouchMove(this.touches.L);
+				this.player.pushTo(move.x, move.y, dtime);
+			}
 		}
 
 		this.touch_events = [];
 	}
 
-	graphics(frame) {
+	graphics(dtime) {
 		let mctx = can.getContext('2d');
 		let gctx = this.can.getContext('2d');
 
@@ -125,10 +128,10 @@ class Game {
 		});
 	}
 
-	goTarget() {
+	goTarget(dtime) {
 		let t = this.cam.target;
 		let x, y;
-		let s = this.cam.targ_speed / this.speed;
+		let s = this.cam.targ_speed / (this.speed * dtime);
 
 		if (t.pos) {
 			x = t.pos.x + 12;

@@ -158,7 +158,7 @@ pages['menu'] = game => {
 				o: 1,
 				targ_h: 100,
 				targ_o: 0,
-				targ_speed: 20,
+				targ_speed: 400,
 				target: game.player
 			};
 

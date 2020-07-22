@@ -26,13 +26,21 @@ class Entity {
 		this.feet = feet;
 	}
 
-	draw(ctx, sprite_name, coords = this.intPos()) {
+	draw(ctx, sprite_name = main, coords = this.intPos()) {
 		let sprite = this.sprites[sprite_name];
-		if (sprite) sprite.draw(ctx, coords);
+		let { x, y, z } = coords;
+		if (sprite) {
+			if (sprite_name == 'main') y -= z;
+			if (sprite_name == 'shadow') {
+				y -= z * 0.5;
+				x -= z * 0.65;
+			}
+			sprite.draw(ctx, { x: Math.floor(x), y: Math.floor(y), z: Math.floor(z) });
+		}
 	}
 
 	intPos() {
-		return { x: Math.floor(this.pos.x), y: Math.floor(this.pos.y) };
+		return { x: Math.floor(this.pos.x), y: Math.floor(this.pos.y), z: Math.floor(this.pos.z) };
 	}
 
 	getFeet() {
@@ -53,6 +61,37 @@ class Human extends Entity {
 		);
 
 		this.name = name;
+		this.move = { x: 0, y: 0, time: null };
+		this.look = { x: 0, y: 1, aim: false };
+	}
+
+	getOrient(divs) {
+		return Math.floor(((Math.atan2(this.look.y, this.look.x) + Math.PI) / Math.PI / 2) * divs);
+	}
+
+	animate(dtime) {
+		let move_mag = Math.sqrt(this.move.x * this.move.x + this.move.y * this.move.y);
+
+		this.pos.x += (this.move.x * game.speed * dtime) / 1000;
+		this.pos.y += (this.move.y * game.speed * dtime) / 1000;
+
+		this.move.x -= (this.move.x / 100) * game.speed * dtime;
+		this.move.y -= (this.move.y / 100) * game.speed * dtime;
+
+		if (move_mag > 0.1) {
+			this.look = { x: this.move.x, y: this.move.y, aim: false };
+			if (!this.move.time) this.move.time = time;
+			this.sprites.main.tile.y = this.getOrient(4);
+		} else {
+			this.move.x = 0;
+			this.move.y = 0;
+			this.move.time = null;
+		}
+	}
+
+	pushTo(x, y, dtime) {
+		this.move.x += (x * game.speed * dtime) / 4;
+		this.move.y += (y * game.speed * dtime) / 4;
 	}
 }
 
@@ -73,17 +112,15 @@ class Tree extends Entity {
 		);
 
 		this.sprites.main.tile.x = Math.floor(Math.random() * 4);
-		this.nextFrame = Math.random() * 160;
+		this.moveTime = Math.random() * 3000;
 	}
 
 	animate() {
-		if (frame >= this.nextFrame) {
+		if (time >= this.moveTime) {
 			this.sprites.main.tile.x += 1;
 			this.sprites.main.tile.x %= 4;
 
-			console.log(this.sprites.main.tile.x);
-
-			this.nextFrame += Math.random() * 40 + 120;
+			this.moveTime += Math.random() * 1000 + 2000;
 		}
 	}
 }

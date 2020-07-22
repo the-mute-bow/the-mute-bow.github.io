@@ -1,4 +1,4 @@
-# V2.0.5
+# V2.0.6
 
 <img src="./img/icon/icon512.png" height="192"/>
 
@@ -6,8 +6,7 @@
 
 ## New in this version:
 
--   Trees with animation.
--   Tree calc.
--   Entities are now drawed acording to `Entity.getFeet().y`.
--   Entities now have shadows.
--   Test for `viewport-fit=cover` in `viewport` meta tag.
+-   Now use animation duration instead of frames count so the game speed is no longer relative to fps.
+-   Added `Entity.pos.z` in consideration to draw `"main"` and `"shadow"` sprites.
+-   Humans now move by a dynamic velocity.
+-   `Human.sprites.main` now follows movement's direction.
