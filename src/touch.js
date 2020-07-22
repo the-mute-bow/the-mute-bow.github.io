@@ -1,4 +1,4 @@
-const initTouch = events => {
+const initTouch = () => {
 	can.addEventListener('touchstart', event => {
 		event.preventDefault();
 		for (let t of event.changedTouches) {
@@ -24,9 +24,6 @@ const initTouch = events => {
 						touch.start.x = touch.end.x - (move.x * game.touches.rout) / move.mag;
 						touch.start.y = touch.end.y - (move.y * game.touches.rout) / move.mag;
 					}
-
-					let { x, y } = move;
-					// console.log((Math.atan2(y, x) + Math.PI) / (2 * Math.PI));
 				}
 			}
 		}
@@ -43,13 +40,15 @@ const initTouch = events => {
 				if (game.touches[sides.a] && game.touches[sides.a].id == t.identifier) {
 					let move = getTouchMove(game.touches[sides.a]);
 
-					if (move.mag > 0.2) events.push({ ...move, type: 'drag' });
+					if (move.mag > 0.2) game.touch_events.push({ ...move, type: 'drag' });
 					else if (move.duration < 200) {
-						events.push({ ...move, type: 'tap' });
+						game.touch_events.push({ ...move, type: 'tap' });
 
-						if (game.touches[sides.b] && getTouchMove(game.touches[sides.b]).mag > 0.2) {
-							events.push({ ...move, type: 'special' });
-							alert('special');
+						if (game.touches[sides.b]) {
+							let moveb = getTouchMove(game.touches[sides.b]);
+							if (moveb.mag > 0.2) {
+								game.touch_events.push({ ...moveb, type: 'special' });
+							}
 						}
 					}
 

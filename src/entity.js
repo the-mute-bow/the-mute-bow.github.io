@@ -61,8 +61,12 @@ class Human extends Entity {
 		);
 
 		this.name = name;
+		this.health = { val: 6, max: 6 };
+		this.stamina = { val: 0, max: 12, time: 0 };
+		this.mana = { val: 3, max: 9 };
 		this.move = { x: 0, y: 0, time: null };
 		this.look = { x: 0, y: 1, aim: false };
+		this.speed = 1;
 	}
 
 	getOrient(divs) {
@@ -72,20 +76,24 @@ class Human extends Entity {
 	animate(dtime) {
 		let move_mag = Math.sqrt(this.move.x * this.move.x + this.move.y * this.move.y);
 
-		this.pos.x += (this.move.x * game.speed * dtime) / 1000;
-		this.pos.y += (this.move.y * game.speed * dtime) / 1000;
+		this.pos.x += (this.move.x * game.speed * dtime) / 1400;
+		this.pos.y += (this.move.y * game.speed * dtime) / 1400;
 
-		this.move.x -= (this.move.x / 100) * game.speed * dtime;
-		this.move.y -= (this.move.y / 100) * game.speed * dtime;
+		this.move.x -= ((this.move.x / 100) * game.speed * dtime) / this.speed;
+		this.move.y -= ((this.move.y / 100) * game.speed * dtime) / this.speed;
 
-		if (move_mag > 0.1) {
+		this.speed = this.speed * 0.9 + 0.1;
+
+		if (move_mag > 0.3) {
 			this.look = { x: this.move.x, y: this.move.y, aim: false };
 			if (!this.move.time) this.move.time = time;
 			this.sprites.main.tile.y = this.getOrient(4);
+			this.sprites.main.tile.x = (Math.floor((time - this.move.time) / 200) % 2) + 1;
 		} else {
 			this.move.x = 0;
 			this.move.y = 0;
 			this.move.time = null;
+			this.sprites.main.tile.x = 0;
 		}
 	}
 

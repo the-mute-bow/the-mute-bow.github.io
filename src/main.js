@@ -153,7 +153,7 @@ const loadPage = page_name => {
 
 window.onload = () => {
 	if (onAndroid) {
-		initTouch(game.touch_events);
+		initTouch();
 		loadPage('menu');
 		mainloop();
 	} else setScreen('android');

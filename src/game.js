@@ -25,16 +25,31 @@ class Game {
 	}
 
 	tick(dtime) {
-		// console.log(Math.floor(1000 / dtime));
-
 		this.goTarget(dtime);
 
 		for (let entity of [...this.entities.trees, ...this.entities.humans]) entity.animate(dtime);
 
 		if (game.player) {
+			for (let event of this.touch_events) {
+				if (event.type == 'special') {
+					if (event.side == 'L') {
+						if (this.player.stamina.val > 6) {
+							this.player.speed = 5;
+							this.player.pushTo(event.x * 20, event.y * 20, dtime);
+							this.player.stamina.val -= 6;
+						}
+					}
+				}
+			}
+
 			if (this.touches.L) {
 				let move = getTouchMove(this.touches.L);
 				this.player.pushTo(move.x, move.y, dtime);
+			}
+
+			if (time - this.player.stamina.time > 800) {
+				this.player.stamina.time = time;
+				if (this.player.stamina.val < this.player.stamina.max) this.player.stamina.val++;
 			}
 		}
 
@@ -52,13 +67,13 @@ class Game {
 			mctx.fillRect(0, 0, can.width, can.height);
 		};
 
-		// Background fill
+		// Background
 		fill(this.bg_color);
 
-		// Ground draw
+		// Ground
 		gctx.drawImage(this.ground, 0, 0);
 
-		// Entities draw
+		// Entities
 		let ord_ent = [...this.entities.buildings, ...this.entities.humans, ...this.entities.trees].sort(
 			(a, b) => a.getFeet().y - b.getFeet().y
 		);
@@ -66,7 +81,12 @@ class Game {
 		for (let entity of ord_ent) entity.draw(gctx, 'shadow');
 		for (let entity of ord_ent) entity.draw(gctx, 'main');
 
-		// Tree calc draw
+		gctx.globalAlpha = 0.2;
+		for (let human of [...this.entities.humans].sort((a, b) => a.getFeet().y - b.getFeet().y))
+			human.draw(gctx, 'main');
+		gctx.globalAlpha = 1;
+
+		// Tree calc
 		gctx.drawImage(this.images['tree-calc'], 0, 0);
 
 		// Game canvas draw
@@ -102,6 +122,35 @@ class Game {
 				mctx.arc(touch.end.x, touch.end.y, game.touches.rin, 0, 2 * Math.PI);
 				mctx.fill();
 			}
+		}
+
+		// health, stamina, mana
+		if (this.player) {
+			let c = can.height / 50;
+			let offset = { x: c, y: c };
+			let i = this.player.health.val;
+			while (i > 0) {
+				mctx.fillStyle = `rgba(0, 0, 0, 0.2)`;
+				mctx.fillRect(offset.x + 0.5 * c, offset.y + 0.5 * c, 2 * c, 2 * c);
+
+				mctx.fillStyle = i > 1 ? `rgba(192, 48, 48, 0.8)` : `rgba(128, 48, 48, 0.6)`;
+				mctx.fillRect(offset.x, offset.y, 2 * c, 2 * c);
+
+				offset.x += 3 * c;
+				i -= i > 1 ? 2 : 1;
+			}
+
+			mctx.fillStyle = `rgba(0, 0, 0, 0.2)`;
+			mctx.fillRect(offset.x + 0.5 * c, offset.y + 0.5 * c, this.player.stamina.val * c, c);
+			mctx.fillStyle = `rgba(255, 255, 255, 0.6)`;
+			mctx.fillRect(offset.x, offset.y, this.player.stamina.val * c, c);
+
+			offset.y += c;
+
+			mctx.fillStyle = `rgba(0, 0, 0, 0.2)`;
+			mctx.fillRect(offset.x + 0.5 * c, offset.y + 0.5 * c, this.player.mana.val * c, c);
+			mctx.fillStyle = `rgba(96, 64, 192, 0.6)`;
+			mctx.fillRect(offset.x, offset.y, this.player.mana.val * c, c);
 		}
 
 		// Black screen
