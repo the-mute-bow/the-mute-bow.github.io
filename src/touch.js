@@ -36,24 +36,24 @@ const initTouch = events => {
 	can.addEventListener('touchend', event => {
 		event.preventDefault();
 		for (let t of event.changedTouches) {
-			for (let side of ['L', 'R']) {
-				if (game.touches[side] && game.touches[side].id == t.identifier) {
-					let move = getTouchMove(game.touches[side]);
+			for (let sides of [
+				{ a: 'L', b: 'R' },
+				{ a: 'R', b: 'L' }
+			]) {
+				if (game.touches[sides.a] && game.touches[sides.a].id == t.identifier) {
+					let move = getTouchMove(game.touches[sides.a]);
 
-					if (move.mag > 0.2) {
-						events.push({ ...move, type: 'drag' });
-					} else if (move.duration < 200) {
+					if (move.mag > 0.2) events.push({ ...move, type: 'drag' });
+					else if (move.duration < 200) {
 						events.push({ ...move, type: 'tap' });
-						if (
-							(move.side == 'L' && getTouchMove(game.touches.R).mag > 0.2) ||
-							(move.side == 'R' && getTouchMove(game.touches.L).mag > 0.2)
-						) {
+
+						if (game.touches[sides.b] && getTouchMove(game.touches[sides.b]).mag > 0.2) {
 							events.push({ ...move, type: 'special' });
 							alert('special');
 						}
 					}
 
-					game.touches[side] = null;
+					game.touches[sides.a] = null;
 				}
 			}
 		}

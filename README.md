@@ -1,4 +1,4 @@
-# V2.0.6
+# V2.0.6b
 
 <img src="./img/icon/icon512.png" height="192"/>
 
@@ -10,3 +10,6 @@
 -   Added `Entity.pos.z` in consideration to draw `"main"` and `"shadow"` sprites.
 -   Humans now move by a dynamic velocity.
 -   `Human.sprites.main` now follows movement's direction.
+-   Fixed game crash caused by `'special'` touch event detection.
+-   Fixed service worker version.
+-   Added `menu.js` images to cache storage.

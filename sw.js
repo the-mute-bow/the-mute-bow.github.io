@@ -1,6 +1,7 @@
-let version = '2.0.5';
+let version = '2.0.6';
 
 let files = [
+	// system
 	'./',
 	'./index.html',
 	'./styles/style.css',
@@ -14,10 +15,27 @@ let files = [
 	'./img/gifs/loading.gif',
 	'./img/gifs/rotate_phone.gif',
 	'./img/gifs/touch_screen.gif',
+	'./fonts/Pixelar.woff',
+	'./fonts/Pixelar.woff2',
+
+	// gameplay
 	'./img/ground1.png',
 	'./img/buildings/small-house1.png',
-	'./fonts/Pixelar.woff',
-	'./fonts/Pixelar.woff2'
+	'./img/buildings/small-house1-shadow.png',
+	'./img/trees/pine1.png',
+	'./img/trees/pine1-shadow.png',
+	'./img/trees/pine2.png',
+	'./img/trees/pine2-shadow.png',
+	'./img/trees/pine3.png',
+	'./img/trees/pine3-shadow.png',
+	'./img/trees/pine4.png',
+	'./img/trees/pine4-shadow.png',
+	'./img/trees/tree-calc.png',
+	'./img/humans/human-shadow.png',
+	'./img/humans/eliot.png',
+	'./img/humans/lea.png',
+	'./img/humans/scott.png',
+	'./img/humans/karmen.png'
 ];
 
 self.addEventListener('install', event => {
