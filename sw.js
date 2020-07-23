@@ -1,4 +1,4 @@
-let version = '2.0.8';
+let version = '2.0.9';
 
 let files = [
 	// system
@@ -35,7 +35,16 @@ let files = [
 	'./img/humans/eliot.png',
 	'./img/humans/lea.png',
 	'./img/humans/scott.png',
-	'./img/humans/karmen.png'
+	'./img/humans/karmen.png',
+	'./img/humans/icon-null.png',
+	'./img/humans/icon-stay.png',
+	'./img/humans/icon-follow.png',
+	'./img/humans/icon-bow.png',
+	'./img/humans/icon-axe.png',
+	'./img/humans/icon-fence.png',
+	'./img/humans/icon-trap.png',
+	'./img/humans/icon-message.png',
+	'./img/humans/icon-exclam.png'
 ];
 
 self.addEventListener('install', event => {

@@ -8,8 +8,10 @@ class Game {
 		this.bg_color = 'black';
 		this.scale = 1;
 		this.speed = 1;
+		this.mode = 'normal';
 
 		this.cam = { x: 0, y: 0, h: 100, o: 0, targ_h: 100, targ_o: 0, targ_speed: 1, target: { x: 200, y: 200 } };
+		this.strat_fog = 0;
 
 		this.entities = {
 			buildings: [],
@@ -17,6 +19,7 @@ class Game {
 			humans: []
 		};
 
+		this.foot_steps = [];
 		this.player = null;
 
 		this.touches = { L: null, R: null, rin: Math.floor(20 * dpi), rout: Math.floor(50 * dpi) };
@@ -32,18 +35,95 @@ class Game {
 
 		if (game.player) {
 			for (let event of this.touch_events) {
+				if (event.type == 'tap') {
+					if (this.mode == 'strat') {
+						let { x, y } = this.screenToGameCoords(event.end.x, event.end.y);
+						let touched_human = false;
+						for (let human of this.entities.humans) {
+							if (human != this.player) {
+								let t = human.getTargCoords();
+								let pos = t ? t : human.pos;
+								if (
+									human != this.player &&
+									pos.x + 7 < x &&
+									x < pos.x + 17 &&
+									pos.y + 10 < y &&
+									y < pos.y + 24
+								) {
+									touched_human = true;
+									if (human.target) {
+										if (human.target.obj) {
+											human.target.x = human.target.obj.pos.x + human.target.x;
+											human.target.y = human.target.obj.pos.y + human.target.y;
+											human.target.obj = null;
+										} else {
+											human.target = null;
+										}
+									} else {
+										human.target = {
+											x: human.pos.x - this.player.pos.x,
+											y: human.pos.y - this.player.pos.y,
+											obj: this.player
+										};
+									}
+								}
+							}
+						}
+
+						if (!touched_human) {
+							this.mode = 'normal';
+							this.speed = 1;
+						}
+					} else if (event.side == 'L' && game.player) {
+						this.mode = 'strat';
+						this.speed = 0.1;
+						this.catched = null;
+					}
+				}
 				if (event.type == 'special') {
 					if (event.side == 'L') {
 						if (this.player.stamina.val > 6) {
-							this.player.speed = 5;
-							this.player.pushTo(event.x * 20, event.y * 20, dtime);
+							this.player.speed = 2;
+							this.player.pushTo(event.x * 40, event.y * 40, dtime);
 							this.player.stamina.val -= 6;
 						}
 					}
 				}
 			}
 
-			if (this.touches.L) {
+			if (this.mode == 'strat') {
+				for (let touch of [this.touches.L, this.touches.R]) {
+					if (touch) {
+						let { x, y } = this.screenToGameCoords(touch.end.x, touch.end.y);
+						if (touch.catch) {
+							if (touch.catch.target) {
+								let t = touch.catch.getTargCoords();
+								let dx = x - t.x - 12;
+								let dy = y - t.y - 18;
+								touch.catch.target.x += dx;
+								touch.catch.target.y += dy;
+							}
+						} else {
+							for (let human of this.entities.humans) {
+								let t = human.getTargCoords();
+								let pos = t ? t : human.pos;
+								if (
+									human != this.player &&
+									pos.x + 7 < x &&
+									x < pos.x + 17 &&
+									pos.y + 10 < y &&
+									y < pos.y + 24
+								) {
+									touch.catch = human;
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+
+			if (this.touches.L && this.mode == 'normal') {
 				let move = getTouchMove(this.touches.L);
 				this.player.pushTo(move.x, move.y, dtime);
 			}
@@ -63,16 +143,27 @@ class Game {
 
 		mctx.imageSmoothingEnabled = false;
 
-		const fill = color => {
-			mctx.fillStyle = color;
-			mctx.fillRect(0, 0, can.width, can.height);
+		const fill = (ctx, color) => {
+			ctx.fillStyle = color;
+			ctx.fillRect(0, 0, can.width, can.height);
 		};
 
 		// Background
-		fill(this.bg_color);
+		fill(mctx, this.bg_color);
 
 		// Ground
 		gctx.drawImage(this.ground, 0, 0);
+
+		// Foot steps
+		for (let fs of this.foot_steps) {
+			let op = 0.2 - (time - fs.time) / 10000;
+			if (op > 0) {
+				gctx.fillStyle = `rgba(0, 0, 0, ${op})`;
+				gctx.fillRect(fs.x, fs.y, 1, 1);
+			} else fs.time = null;
+		}
+
+		this.foot_steps = this.foot_steps.filter(fs => fs.time);
 
 		// Entities
 		let ord_ent = [...this.entities.buildings, ...this.entities.humans, ...this.entities.trees].sort(
@@ -82,13 +173,37 @@ class Game {
 		for (let entity of ord_ent) entity.draw(gctx, 'shadow');
 		for (let entity of ord_ent) entity.draw(gctx, 'main');
 
-		gctx.globalAlpha = 0.2;
-		for (let human of [...this.entities.humans].sort((a, b) => a.getFeet().y - b.getFeet().y))
-			human.draw(gctx, 'main');
-		gctx.globalAlpha = 1;
-
 		// Tree calc
 		gctx.drawImage(this.images['tree-calc'], 0, 0);
+
+		// Strat fog
+		fill(gctx, `rgba(0, 0, 0, ${this.strat_fog * 0.6})`);
+		if (this.mode == 'strat') this.strat_fog = this.strat_fog * 0.8 + 0.2;
+		else this.strat_fog = this.strat_fog * 0.8;
+
+		// Human ghost
+		gctx.globalAlpha = 0.2 + 0.8 * this.strat_fog;
+		for (let human of [...this.entities.humans].sort((a, b) => a.getFeet().y - b.getFeet().y)) {
+			if (game.mode == 'strat' && human.target) {
+				let { x, y } = human.getTargCoords();
+				human.draw(gctx, 'main', { x: Math.floor(x + 0.5), y: Math.floor(y + 0.5), z: human.pos.z });
+			} else human.draw(gctx, 'main');
+
+			if (human != this.player) {
+				let { x, y, z } = human.pos;
+				let t = human.getTargCoords();
+				if (this.mode == 'strat' && t) {
+					x = t.x;
+					y = t.y;
+				}
+
+				if (human.target) {
+					if (human.target.obj == this.player) human.draw(gctx, 'icon-follow', { x: x, y: y, z: z });
+					else human.draw(gctx, 'icon-stay', { x: x, y: y, z: z });
+				} else human.draw(gctx, 'icon-null', { x: x, y: y, z: z });
+			}
+		}
+		gctx.globalAlpha = 1;
 
 		// Game canvas draw
 		mctx.drawImage(
@@ -113,7 +228,7 @@ class Game {
 			mctx.lineWidth = 4;
 
 			if (touch) {
-				if (game.player) {
+				if (game.player && this.mode == 'normal') {
 					mctx.beginPath();
 					mctx.arc(touch.start.x, touch.start.y, game.touches.rout, 0, 2 * Math.PI);
 					mctx.stroke();
@@ -155,7 +270,7 @@ class Game {
 		}
 
 		// Black screen
-		fill(`rgba(0, 0, 0, ${this.cam.o})`);
+		fill(mctx, `rgba(0, 0, 0, ${this.cam.o})`);
 	}
 
 	loadImg(files, index = 0, callback = () => {}) {
@@ -225,5 +340,12 @@ class Game {
 		}
 
 		console.log(trees);
+	}
+
+	screenToGameCoords(x, y) {
+		return {
+			x: this.cam.x + (x - can.width / 2) / this.scale + 0.5,
+			y: this.cam.y + (y - can.height / 2) / this.scale + 0.5
+		};
 	}
 }

@@ -41,9 +41,8 @@ class Entity {
 		this.feet = feet;
 	}
 
-	draw(ctx, sprite_name = main, coords = null) {
+	draw(ctx, sprite_name = 'main', coords = null) {
 		let sprite = this.sprites[sprite_name];
-
 		let { x, y, z } = coords
 			? coords
 			: { x: Math.floor(this.pos.x + 0.5), y: Math.floor(this.pos.y + 0.5), z: this.pos.z };
@@ -168,7 +167,10 @@ class Human extends Entity {
 			pos,
 			{
 				main: new Sprite(game.images[name], { x: 0, y: 0, w: 24, h: 24 }),
-				shadow: new Sprite(game.images['human-shadow'], { x: 0, y: 0, w: 24, h: 24 })
+				shadow: new Sprite(game.images['human-shadow'], { x: 0, y: 0, w: 24, h: 24 }),
+				'icon-null': new Sprite(game.images['icon-null'], { x: 0, y: 0, w: 24, h: 24 }),
+				'icon-stay': new Sprite(game.images['icon-stay'], { x: 0, y: 0, w: 24, h: 24 }),
+				'icon-follow': new Sprite(game.images['icon-follow'], { x: 0, y: 0, w: 24, h: 24 })
 			},
 			new Hitbox(9, 22, 6, 3, 13),
 			{ x: 12, y: 24 }
@@ -181,6 +183,8 @@ class Human extends Entity {
 		this.move = { x: 0, y: 0, time: null };
 		this.look = { x: 0, y: 1, aim: false };
 		this.speed = 1;
+		this.target = { obj: null, x: this.pos.x, y: this.pos.y };
+		this.foot_step = 0;
 	}
 
 	getOrient(divs) {
@@ -188,6 +192,16 @@ class Human extends Entity {
 	}
 
 	animate(dtime, solids, mobs) {
+		if (this.target) {
+			let { x, y } = this.getTargCoords();
+
+			let dx = x - this.pos.x;
+			let dy = y - this.pos.y;
+
+			let targ_mag = Math.sqrt(dx * dx + dy * dy);
+			if (targ_mag > 0.5) this.pushTo((dx / targ_mag) * 0.8, (dy / targ_mag) * 0.8, dtime);
+		}
+
 		let move_mag = Math.sqrt(this.move.x * this.move.x + this.move.y * this.move.y);
 
 		if (this.move.x || this.move.y) {
@@ -220,7 +234,18 @@ class Human extends Entity {
 			this.look = { x: this.move.x, y: this.move.y, aim: false };
 			if (!this.move.time) this.move.time = time;
 			this.sprites.main.tile.y = this.getOrient(4);
-			this.sprites.main.tile.x = (Math.floor((time - this.move.time) / 200) % 2) + 1;
+
+			let step = (Math.floor((time - this.move.time) / 200) % 2) + 1;
+			this.sprites.main.tile.x = step;
+			if (this.foot_step != step) {
+				this.foot_step = step;
+				let { x, y } = this.getFeet();
+				game.foot_steps.push({
+					x: x + Math.floor(Math.random() * 4 - 2),
+					y: y + Math.floor(Math.random() * 4 - 2),
+					time: time
+				});
+			}
 		} else {
 			this.move.x = 0;
 			this.move.y = 0;
@@ -232,6 +257,20 @@ class Human extends Entity {
 	pushTo(x, y, dtime) {
 		this.move.x += (x * game.speed * dtime) / 4;
 		this.move.y += (y * game.speed * dtime) / 4;
+	}
+
+	getTargCoords() {
+		if (this.target) {
+			let x = this.target.x;
+			let y = this.target.y;
+
+			if (this.target.obj) {
+				x += this.target.obj.pos.x;
+				y += this.target.obj.pos.y;
+			}
+
+			return { x: x, y: y };
+		}
 	}
 }
 

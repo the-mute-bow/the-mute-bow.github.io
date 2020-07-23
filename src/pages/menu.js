@@ -18,7 +18,16 @@ pages['menu'] = game => {
 			'humans/eliot.png',
 			'humans/lea.png',
 			'humans/scott.png',
-			'humans/karmen.png'
+			'humans/karmen.png',
+			'humans/icon-null.png',
+			'humans/icon-stay.png',
+			'humans/icon-follow.png',
+			'humans/icon-bow.png',
+			'humans/icon-axe.png',
+			'humans/icon-fence.png',
+			'humans/icon-trap.png',
+			'humans/icon-message.png',
+			'humans/icon-exclam.png'
 		],
 		0,
 		() => {
@@ -152,6 +161,8 @@ pages['menu'] = game => {
 			}
 
 			game.player = game.getHuman('eliot');
+			game.player.target = null;
+
 			game.cam = {
 				x: game.player.pos.x + 12,
 				y: game.player.pos.y + 12,
@@ -164,6 +175,8 @@ pages['menu'] = game => {
 			};
 
 			game.loop = true;
+
+			for (let human of game.entities.humans) human.target = null;
 		}
 	);
 };

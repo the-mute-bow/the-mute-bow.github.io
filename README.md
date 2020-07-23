@@ -1,4 +1,4 @@
-# V2.0.8
+# V2.0.9
 
 <img src="./img/icon/icon512.png" height="192"/>
 
@@ -6,6 +6,8 @@
 
 ## New in this version:
 
--   Hard colisions with `Entity` and `Tree` instances.
--   Soft colisions with other `Human` instances.
--   Dicreased `cam.h`.
+-   Human footsteps.
+-   `'strat'` game mode with left tap.
+-   `game.speed = 0.1` in strategy mode.
+-   Everything darkens in strategy mode except Humans.
+-   Strategy mode allows to make `Human` instances to follow `game.player`'s movements of to go/stay at a `(x, y)` position.

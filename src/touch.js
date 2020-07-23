@@ -40,16 +40,19 @@ const initTouch = () => {
 				if (game.touches[sides.a] && game.touches[sides.a].id == t.identifier) {
 					let move = getTouchMove(game.touches[sides.a]);
 
-					if (move.mag > 0.2) game.touch_events.push({ ...move, type: 'drag' });
+					if (move.mag > 0.2) game.touch_events.push({ ...game.touches[sides.a], ...move, type: 'drag' });
 					else if (move.duration < 200) {
-						game.touch_events.push({ ...move, type: 'tap' });
+						let special = false;
 
 						if (game.touches[sides.b]) {
 							let moveb = getTouchMove(game.touches[sides.b]);
 							if (moveb.mag > 0.2) {
-								game.touch_events.push({ ...moveb, type: 'special' });
+								game.touch_events.push({ ...game.touches[sides.b], ...moveb, type: 'special' });
+								special = true;
 							}
 						}
+
+						if (!special) game.touch_events.push({ ...game.touches[sides.a], ...move, type: 'tap' });
 					}
 
 					game.touches[sides.a] = null;
