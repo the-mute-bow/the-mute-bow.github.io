@@ -27,7 +27,8 @@ class Game {
 	tick(dtime) {
 		this.goTarget(dtime);
 
-		for (let entity of [...this.entities.trees, ...this.entities.humans]) entity.animate(dtime);
+		for (let entity of [...this.entities.trees, ...this.entities.humans])
+			entity.animate(dtime, [...this.entities.buildings, ...this.entities.trees], [...this.entities.humans]);
 
 		if (game.player) {
 			for (let event of this.touch_events) {

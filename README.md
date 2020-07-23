@@ -1,4 +1,4 @@
-# V2.0.7
+# V2.0.8
 
 <img src="./img/icon/icon512.png" height="192"/>
 
@@ -6,6 +6,6 @@
 
 ## New in this version:
 
--   `Human` walk cycle.
--   Scott got a new haircut.
--   Left `'special'` touch gives a speed boost to player and drains stamina.
+-   Hard colisions with `Entity` and `Tree` instances.
+-   Soft colisions with other `Human` instances.
+-   Dicreased `cam.h`.

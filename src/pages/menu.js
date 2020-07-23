@@ -134,6 +134,7 @@ pages['menu'] = game => {
 							main: new Sprite(game.images['small-house1'], { x: 0, y: 0, w: 73, h: 49 }),
 							shadow: new Sprite(game.images['small-house1-shadow'], { x: 0, y: 0, w: 73, h: 49 })
 						},
+						new Hitbox(18, 26, 54, 22, 50),
 						{ x: 18, y: 48 }
 					)
 				],
@@ -156,7 +157,7 @@ pages['menu'] = game => {
 				y: game.player.pos.y + 12,
 				h: 128,
 				o: 1,
-				targ_h: 100,
+				targ_h: 86,
 				targ_o: 0,
 				targ_speed: 400,
 				target: game.player
