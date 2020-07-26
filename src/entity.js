@@ -228,8 +228,6 @@ class Human extends Entity {
 			}
 		}
 
-		this.speed = this.speed * 0.9 + 0.1;
-
 		if (move_mag > 0.3) {
 			this.look = { x: this.move.x, y: this.move.y, aim: false };
 			if (!this.move.time) this.move.time = time;
@@ -275,7 +273,7 @@ class Human extends Entity {
 }
 
 class Tree extends Entity {
-	constructor(pos, type = 0) {
+	constructor(pos, type = 0, variant = '') {
 		type = type ? type : Math.floor(Math.random() * 4) + 1;
 
 		pos.x -= 62;
@@ -291,8 +289,8 @@ class Tree extends Entity {
 		super(
 			pos,
 			{
-				main: new Sprite(game.images['pine' + type], { x: 0, y: 0, w: 128, h: 128 }),
-				shadow: new Sprite(game.images['pine' + type + '-shadow'], { x: 0, y: 0, w: 128, h: 128 })
+				main: new Sprite(game.images['pine' + type + variant], { x: 0, y: 0, w: 128, h: 128 }),
+				shadow: new Sprite(game.images['pine' + type + '-shadow' + variant], { x: 0, y: 0, w: 128, h: 128 })
 			},
 			hitboxes[type],
 			{ x: 65, y: 122 }

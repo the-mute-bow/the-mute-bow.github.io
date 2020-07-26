@@ -1,4 +1,4 @@
-let version = '2.0.9';
+let version = '2.0.10';
 
 let files = [
 	// system

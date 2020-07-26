@@ -5,6 +5,7 @@ class Game {
 		this.images = [];
 		this.loop = false;
 		this.ground = null;
+		this.tree_calc = null;
 		this.bg_color = 'black';
 		this.scale = 1;
 		this.speed = 1;
@@ -24,6 +25,8 @@ class Game {
 
 		this.touches = { L: null, R: null, rin: Math.floor(20 * dpi), rout: Math.floor(50 * dpi) };
 		this.touch_events = [];
+		this.buttons = [];
+		this.events = [];
 		this.can = document.createElement('canvas');
 	}
 
@@ -33,9 +36,14 @@ class Game {
 		for (let entity of [...this.entities.trees, ...this.entities.humans])
 			entity.animate(dtime, [...this.entities.buildings, ...this.entities.trees], [...this.entities.humans]);
 
-		if (game.player) {
-			for (let event of this.touch_events) {
-				if (event.type == 'tap') {
+		for (let event of this.touch_events) {
+			if (event.type == 'tap') {
+				let wasButton = false;
+				for (let button of this.buttons) {
+					if (button.tick(event.end.x, event.end.y)) wasButton = true;
+				}
+
+				if (!wasButton && this.player) {
 					if (this.mode == 'strat') {
 						let { x, y } = this.screenToGameCoords(event.end.x, event.end.y);
 						let touched_human = false;
@@ -80,17 +88,16 @@ class Game {
 						this.catched = null;
 					}
 				}
-				if (event.type == 'special') {
-					if (event.side == 'L') {
-						if (this.player.stamina.val > 6) {
-							this.player.speed = 2;
-							this.player.pushTo(event.x * 40, event.y * 40, dtime);
-							this.player.stamina.val -= 6;
-						}
-					}
-				}
 			}
+			if (event.type == 'drag') {
+				if (event.side == 'L' && this.player) this.player.speed = 1;
+			}
+			if (event.type == 'special') {
+				if (event.side == 'L' && this.player) this.player.speed = this.player.speed == 2 ? 1 : 2;
+			}
+		}
 
+		if (this.player) {
 			if (this.mode == 'strat') {
 				for (let touch of [this.touches.L, this.touches.R]) {
 					if (touch) {
@@ -128,11 +135,19 @@ class Game {
 				this.player.pushTo(move.x, move.y, dtime);
 			}
 
-			if (time - this.player.stamina.time > 800) {
+			if (time - this.player.stamina.time > 800 / (this.player.speed * 2 - 1)) {
 				this.player.stamina.time = time;
-				if (this.player.stamina.val < this.player.stamina.max) this.player.stamina.val++;
+				if (this.player.speed == 2) {
+					if (this.player.stamina.val <= 0) this.player.speed = 1;
+					else this.player.stamina.val--;
+				} else if (this.player.stamina.val < this.player.stamina.max) this.player.stamina.val++;
 			}
 		}
+
+		this.buttons = this.buttons.filter(button => !button.done);
+
+		for (let event of this.events) event.tick();
+		this.events = this.events.filter(event => !event.done);
 
 		this.touch_events = [];
 	}
@@ -174,7 +189,7 @@ class Game {
 		for (let entity of ord_ent) entity.draw(gctx, 'main');
 
 		// Tree calc
-		gctx.drawImage(this.images['tree-calc'], 0, 0);
+		gctx.drawImage(this.tree_calc, 0, 0);
 
 		// Strat fog
 		fill(gctx, `rgba(0, 0, 0, ${this.strat_fog * 0.6})`);
@@ -213,6 +228,10 @@ class Game {
 			this.ground.height * game.scale,
 			this.ground.width * game.scale
 		);
+
+		for (let button of this.buttons) {
+			button.draw();
+		}
 
 		// Joysticks
 		let touch_colors = {

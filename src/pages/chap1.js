@@ -1,26 +1,37 @@
-pages['menu'] = game => {
+pages['chap1'] = game => {
 	game.images = [];
 	game.loadImg(
 		[
-			'ground1-night.png',
-			'buttons/menu-button.png',
-			'buttons/menu-button-shadow.png',
-			'buildings/small-house1-night.png',
+			'ground1.png',
+			'buildings/small-house1.png',
 			'buildings/small-house1-shadow.png',
-			'trees/pine1-night.png',
-			'trees/pine1-shadow-night.png',
-			'trees/pine2-night.png',
-			'trees/pine2-shadow-night.png',
-			'trees/pine3-night.png',
-			'trees/pine3-shadow-night.png',
-			'trees/pine4-night.png',
-			'trees/pine4-shadow-night.png',
-			'trees/tree-calc-night.png'
+			'trees/pine1.png',
+			'trees/pine1-shadow.png',
+			'trees/pine2.png',
+			'trees/pine2-shadow.png',
+			'trees/pine3.png',
+			'trees/pine3-shadow.png',
+			'trees/pine4.png',
+			'trees/pine4-shadow.png',
+			'trees/tree-calc.png',
+			'humans/human-shadow.png',
+			'humans/eliot.png',
+			'humans/lea.png',
+			'humans/scott.png',
+			'humans/karmen.png',
+			'humans/icon-null.png',
+			'humans/icon-stay.png',
+			'humans/icon-follow.png',
+			'humans/icon-bow.png',
+			'humans/icon-axe.png',
+			'humans/icon-fence.png',
+			'humans/icon-trap.png',
+			'humans/icon-message.png',
+			'humans/icon-exclam.png'
 		],
 		0,
 		() => {
-			game.ground = game.images['ground1-night'];
-			game.tree_calc = game.images['tree-calc-night'];
+			game.ground = game.images['ground1'];
 			game.can.height = game.ground.height;
 			game.can.width = game.ground.width;
 			game.bg_color = '#323c2e';
@@ -129,7 +140,7 @@ pages['menu'] = game => {
 					new Entity(
 						{ x: 270, y: 90, z: 0 },
 						{
-							main: new Sprite(game.images['small-house1-night'], { x: 0, y: 0, w: 73, h: 49 }),
+							main: new Sprite(game.images['small-house1'], { x: 0, y: 0, w: 73, h: 49 }),
 							shadow: new Sprite(game.images['small-house1-shadow'], { x: 0, y: 0, w: 73, h: 49 })
 						},
 						new Hitbox(18, 26, 54, 22, 50),
@@ -137,45 +148,31 @@ pages['menu'] = game => {
 					)
 				],
 				trees: [],
-				humans: []
+				humans: [
+					new Human('eliot', { x: 250, y: 160, z: 0 }),
+					new Human('lea', { x: 270, y: 165, z: 0 }),
+					new Human('karmen', { x: 245, y: 175, z: 0 }),
+					new Human('scott', { x: 260, y: 155, z: 0 })
+				]
 			};
 
 			for (let coords of treeList) {
-				game.entities.trees.push(new Tree(coords, 0, '-night'));
+				game.entities.trees.push(new Tree(coords));
 			}
 
+			game.player = game.getHuman('eliot');
+			game.player.target = null;
+
 			game.cam = {
-				x: 300,
-				y: 300,
-				h: 128,
+				x: game.player.pos.x + 12,
+				y: game.player.pos.y + 12,
+				h: 80,
 				o: 1,
-				targ_h: 100,
+				targ_h: 86,
 				targ_o: 0,
 				targ_speed: 400,
-				target: { x: 300, y: 300 }
+				target: game.player
 			};
-
-			game.buttons = [
-				new Button(
-					'menu-button',
-					lang == '#fr' ? 'Jouer' : 'Play',
-					btn => ({
-						x: (can.width - btn.img.width * game.scale) / 2,
-						y: can.height - (btn.img.height + 5) * game.scale
-					}),
-					btn => {
-						loadPage('chap1');
-						btn.done = true;
-					},
-					'disabled'
-				)
-			];
-
-			game.events = [
-				new TimeEvent(1000, event => {
-					game.buttons[0].mode = 'normal';
-				})
-			];
 
 			game.loop = true;
 
