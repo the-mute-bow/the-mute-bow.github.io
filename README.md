@@ -1,4 +1,4 @@
-# V2.0.11
+# V2.0.12
 
 <img src="./img/icon/icon512.png" height="192"/>
 
@@ -6,7 +6,7 @@
 
 ## New in this version:
 
--   Borders on touch surface to prevent unwanted touches.
--   fade apearing for buttons.
--   Click sound for buttons.
--   Game soundtrack.
+-   Fixed button opacity problem.
+-   Overlays.
+-   Title on menu screen
+-   Added sounds to cache.

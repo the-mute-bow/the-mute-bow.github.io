@@ -22,9 +22,10 @@ class Button extends Overlay {
 
 		let op = this.getOp();
 
-		if (op) mctx.globalAlpha = op;
+		mctx.globalAlpha = op;
 		if (this.mode == 'disabled') mctx.globalAlpha *= 0.5;
 		if (this.mode == 'pressed') mctx.globalAlpha *= 0.85;
+
 		mctx.drawImage(this.shadow, x, y + game.scale, w, h);
 		mctx.drawImage(this.img, x, this.mode == 'pressed' ? y + game.scale : y, w, h);
 

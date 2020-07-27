@@ -228,7 +228,7 @@ class Human extends Entity {
 			}
 		}
 
-		if (move_mag > 0.3) {
+		if (move_mag > 0.4) {
 			this.look = { x: this.move.x, y: this.move.y, aim: false };
 			if (!this.move.time) this.move.time = time;
 			this.sprites.main.tile.y = this.getOrient(4);
@@ -237,6 +237,7 @@ class Human extends Entity {
 			this.sprites.main.tile.x = step;
 			if (this.foot_step != step) {
 				this.foot_step = step;
+
 				let { x, y } = this.getFeet();
 				game.foot_steps.push({
 					x: x + Math.floor(Math.random() * 4 - 2),

@@ -1,9 +1,11 @@
 pages['chap1'] = game => {
 	game.images = [];
 	game.sounds = {
-		click: new Audio('./sounds/click.mp3')
+		click: new Audio('./sounds/click.mp3'),
+		ambience: new Audio('./sounds/nature-ambience.mp3')
 	};
-	game.soundtrack = null;
+	game.soundtrack = game.sounds.ambience;
+	game.soundtrack.volume = 0.05;
 	game.loadImg(
 		[
 			'ground1.png',
@@ -160,9 +162,7 @@ pages['chap1'] = game => {
 				]
 			};
 
-			for (let coords of treeList) {
-				game.entities.trees.push(new Tree(coords));
-			}
+			for (let coords of treeList) game.entities.trees.push(new Tree(coords));
 
 			game.player = game.getHuman('eliot');
 			game.player.target = null;
@@ -177,6 +177,10 @@ pages['chap1'] = game => {
 				targ_speed: 400,
 				target: game.player
 			};
+
+			game.buttons = [];
+			game.overlays = [];
+			game.events = [];
 
 			game.loop = true;
 

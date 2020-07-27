@@ -21,4 +21,15 @@ class Overlay {
 		if (this.die_time) op = (this.die_time - time) / this.fade;
 		return op;
 	}
+
+	draw() {
+		let mctx = can.getContext('2d');
+		let { x, y, w, h } = this.getXYWH();
+
+		let op = this.getOp();
+
+		mctx.globalAlpha = op;
+		mctx.drawImage(this.img, x, y, w, h);
+		mctx.globalAlpha = 1;
+	}
 }

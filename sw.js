@@ -1,4 +1,4 @@
-let version = '2.0.11';
+let version = '2.0.12';
 
 let files = [
 	// system
@@ -19,6 +19,9 @@ let files = [
 	'./fonts/Pixelar.woff2',
 
 	// gameplay
+	'./sounds/click.mp3',
+	'./sounds/Art Of Silence.mp3',
+	'./sounds/nature-ambience.mp3',
 	'./img/ground1.png',
 	'./img/buildings/small-house1.png',
 	'./img/buildings/small-house1-shadow.png',

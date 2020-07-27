@@ -29,7 +29,7 @@ pages['menu'] = game => {
 			game.tree_calc = game.images['tree-calc-night'];
 			game.can.height = game.ground.height;
 			game.can.width = game.ground.width;
-			game.bg_color = '#323c2e';
+			game.bg_color = '#293d48';
 			game.speed = 1;
 
 			let treeList = [
@@ -146,9 +146,9 @@ pages['menu'] = game => {
 				humans: []
 			};
 
-			for (let coords of treeList) {
-				game.entities.trees.push(new Tree(coords, 0, '-night'));
-			}
+			game.player = null;
+
+			for (let coords of treeList) game.entities.trees.push(new Tree(coords, 0, '-night'));
 
 			game.cam = {
 				x: 300,
@@ -162,6 +162,16 @@ pages['menu'] = game => {
 			};
 
 			game.buttons = [];
+			game.overlays = [
+				new Overlay(
+					game.images['title'],
+					overlay => ({
+						x: (can.width - overlay.img.width * game.scale) / 2,
+						y: (can.height - overlay.img.height * game.scale) / 2
+					}),
+					1000
+				)
+			];
 
 			game.events = [
 				new TimeEvent(1000, event => {
@@ -187,7 +197,6 @@ pages['menu'] = game => {
 				})
 			];
 
-			for (let human of game.entities.humans) human.target = null;
 			game.loop = true;
 		}
 	);

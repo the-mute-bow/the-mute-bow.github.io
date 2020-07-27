@@ -28,6 +28,7 @@ class Game {
 		this.touches = { L: null, R: null, rin: Math.floor(20 * dpi), rout: Math.floor(50 * dpi) };
 		this.touch_events = [];
 		this.buttons = [];
+		this.overlays = [];
 		this.events = [];
 		this.can = document.createElement('canvas');
 	}
@@ -234,9 +235,8 @@ class Game {
 			this.ground.width * game.scale
 		);
 
-		for (let button of this.buttons) {
-			button.draw();
-		}
+		for (let overlay of this.overlays) overlay.draw();
+		for (let button of this.buttons) button.draw();
 
 		// Joysticks
 		let touch_colors = {
