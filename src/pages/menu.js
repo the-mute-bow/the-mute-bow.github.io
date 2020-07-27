@@ -184,11 +184,15 @@ pages['menu'] = game => {
 								y: can.height - (btn.img.height + 5) * game.scale
 							}),
 							btn => {
-								btn.die_time = time + 300;
 								game.events.push(
-									new TimeEvent(400, event => {
-										game.soundtrack.pause();
-										loadPage('chap1');
+									new TimeEvent(200, event => {
+										btn.die_time = time + 300;
+										game.events.push(
+											new TimeEvent(400, event => {
+												game.soundtrack.pause();
+												loadPage('chap1');
+											})
+										);
 									})
 								);
 							}

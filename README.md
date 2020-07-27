@@ -1,4 +1,4 @@
-# V2.0.12
+# V2.0.13
 
 <img src="./img/icon/icon512.png" height="192"/>
 
@@ -6,7 +6,5 @@
 
 ## New in this version:
 
--   Fixed button opacity problem.
--   Overlays.
--   Title on menu screen
--   Added sounds to cache.
+-   Beta weapon selection with buttons via right `'tap'` event.
+-   `Human.alert` and weapon indication.

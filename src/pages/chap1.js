@@ -31,13 +31,22 @@ pages['chap1'] = game => {
 			'humans/icon-bow.png',
 			'humans/icon-axe.png',
 			'humans/icon-fence.png',
-			'humans/icon-trap.png',
+			'humans/icon-none.png',
 			'humans/icon-message.png',
-			'humans/icon-exclam.png'
+			'humans/icon-exclam.png',
+			'buttons/none-button.png',
+			'buttons/none-button-shadow.png',
+			'buttons/bow-button.png',
+			'buttons/bow-button-shadow.png',
+			'buttons/axe-button.png',
+			'buttons/axe-button-shadow.png',
+			'buttons/fence-button.png',
+			'buttons/fence-button-shadow.png'
 		],
 		0,
 		() => {
 			game.ground = game.images['ground1'];
+			game.tree_calc = game.images['tree-calc'];
 			game.can.height = game.ground.height;
 			game.can.width = game.ground.width;
 			game.bg_color = '#323c2e';

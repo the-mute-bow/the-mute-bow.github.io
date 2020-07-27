@@ -170,7 +170,11 @@ class Human extends Entity {
 				shadow: new Sprite(game.images['human-shadow'], { x: 0, y: 0, w: 24, h: 24 }),
 				'icon-null': new Sprite(game.images['icon-null'], { x: 0, y: 0, w: 24, h: 24 }),
 				'icon-stay': new Sprite(game.images['icon-stay'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-follow': new Sprite(game.images['icon-follow'], { x: 0, y: 0, w: 24, h: 24 })
+				'icon-follow': new Sprite(game.images['icon-follow'], { x: 0, y: 0, w: 24, h: 24 }),
+				'icon-bow': new Sprite(game.images['icon-bow'], { x: 0, y: 0, w: 24, h: 24 }),
+				'icon-axe': new Sprite(game.images['icon-axe'], { x: 0, y: 0, w: 24, h: 24 }),
+				'icon-fence': new Sprite(game.images['icon-fence'], { x: 0, y: 0, w: 24, h: 24 }),
+				'icon-none': new Sprite(game.images['icon-none'], { x: 0, y: 0, w: 24, h: 24 })
 			},
 			new Hitbox(9, 22, 6, 3, 13),
 			{ x: 12, y: 24 }
@@ -182,6 +186,8 @@ class Human extends Entity {
 		this.mana = { val: 3, max: 9 };
 		this.move = { x: 0, y: 0, time: null };
 		this.look = { x: 0, y: 1, aim: false };
+		this.weapon = 'none';
+		this.alert = null;
 		this.speed = 1;
 		this.target = { obj: null, x: this.pos.x, y: this.pos.y };
 		this.foot_step = 0;
@@ -192,6 +198,8 @@ class Human extends Entity {
 	}
 
 	animate(dtime, solids, mobs) {
+		if (this.alert && this.alert.timeout && time > this.alert.timeout) this.alert = null;
+
 		if (this.target) {
 			let { x, y } = this.getTargCoords();
 
@@ -270,6 +278,16 @@ class Human extends Entity {
 
 			return { x: x, y: y };
 		}
+	}
+
+	setWeapon(weapon) {
+		this.weapon = weapon;
+		this.setAlert(weapon, 1000);
+	}
+
+	setAlert(icon, duration) {
+		if (duration) this.alert = { icon: 'icon-' + icon, duration: duration, timeout: time + duration };
+		else this.alert = { icon: 'icon-' + icon, duration: null, timeout: null };
 	}
 }
 

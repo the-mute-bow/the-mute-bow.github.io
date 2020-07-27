@@ -28,6 +28,13 @@ const initTouch = () => {
 				if (touch && touch.id == t.identifier) {
 					touch.end = { x: t.clientX * dpi, y: t.clientY * dpi };
 					let move = getTouchMove(touch);
+					if (
+						game.getButton('bow') &&
+						!game.getButton('bow').die_time &&
+						(move.mag > 0.2 || move.duration > 200)
+					) {
+						for (let id of ['bow', 'axe', 'fence', 'none']) game.getButton(id).die_time = time + 100;
+					}
 					if (move.mag > 1) {
 						touch.start.x = touch.end.x - (move.x * game.touches.rout) / move.mag;
 						touch.start.y = touch.end.y - (move.y * game.touches.rout) / move.mag;

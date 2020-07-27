@@ -1,4 +1,4 @@
-let version = '2.0.12';
+let version = '2.0.13';
 
 let files = [
 	// system
@@ -45,9 +45,19 @@ let files = [
 	'./img/humans/icon-bow.png',
 	'./img/humans/icon-axe.png',
 	'./img/humans/icon-fence.png',
-	'./img/humans/icon-trap.png',
+	'./img/humans/icon-none.png',
 	'./img/humans/icon-message.png',
-	'./img/humans/icon-exclam.png'
+	'./img/humans/icon-exclam.png',
+	'./img/buttons/axe-button.png',
+	'./img/buttons/axe-button-shadow.png',
+	'./img/buttons/bow-button.png',
+	'./img/buttons/bow-button-shadow.png',
+	'./img/buttons/fence-button.png',
+	'./img/buttons/fence-button-shadow.png',
+	'./img/buttons/none-button.png',
+	'./img/buttons/none-button-shadow.png',
+	'./img/buttons/menu-button.png',
+	'./img/buttons/menu-button-shadow.png'
 ];
 
 self.addEventListener('install', event => {

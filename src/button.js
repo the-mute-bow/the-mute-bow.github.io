@@ -6,7 +6,8 @@ class Button extends Overlay {
 		callcack = btn => {},
 		fade = 400,
 		mode = 'normal',
-		fontsize = 12
+		fontsize = 12,
+		id = null
 	) {
 		super(game.images[img], getCoords, fade);
 		this.shadow = game.images[img + '-shadow'];
@@ -14,6 +15,7 @@ class Button extends Overlay {
 		this.callcack = callcack;
 		this.fontsize = fontsize;
 		this.mode = mode;
+		this.id = id;
 	}
 
 	draw() {
@@ -46,7 +48,7 @@ class Button extends Overlay {
 			if (this.mode == 'normal') {
 				this.mode = 'pressed';
 				game.sounds.click.play();
-				game.events.push(new TimeEvent(200, event => this.callcack(this)));
+				this.callcack(this);
 			}
 
 			return true;

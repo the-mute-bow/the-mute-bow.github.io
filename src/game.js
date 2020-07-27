@@ -47,6 +47,10 @@ class Game {
 				}
 
 				if (!wasButton && this.player) {
+					let hide = () => {
+						for (let id of ['bow', 'axe', 'fence', 'none']) this.getButton(id).die_time = time + 100;
+					};
+
 					if (this.mode == 'strat') {
 						let { x, y } = this.screenToGameCoords(event.end.x, event.end.y);
 						let touched_human = false;
@@ -85,10 +89,87 @@ class Game {
 							this.mode = 'normal';
 							this.speed = 1;
 						}
-					} else if (event.side == 'L' && game.player) {
+					} else if (event.side == 'L') {
+						if (this.getButton('bow')) hide();
 						this.mode = 'strat';
 						this.speed = 0.1;
 						this.catched = null;
+					} else {
+						if (this.getButton('bow')) hide();
+						else {
+							this.buttons.push(
+								new Button(
+									'bow-button',
+									'',
+									btn => ({
+										x: event.start.x - (btn.img.width / 2) * game.scale,
+										y: event.start.y - (btn.img.height / 2 + 10) * game.scale
+									}),
+									btn => {
+										hide();
+										game.player.setWeapon('bow');
+									},
+									100,
+									'normal',
+									12,
+									'bow'
+								)
+							);
+							this.buttons.push(
+								new Button(
+									'fence-button',
+									'',
+									btn => ({
+										x: event.start.x - (btn.img.width / 2 - 10) * game.scale,
+										y: event.start.y - (btn.img.height / 2) * game.scale
+									}),
+									btn => {
+										hide();
+										game.player.setWeapon('fence');
+									},
+									100,
+									'normal',
+									12,
+									'fence'
+								)
+							);
+							this.buttons.push(
+								new Button(
+									'axe-button',
+									'',
+									btn => ({
+										x: event.start.x - (btn.img.width / 2 + 10) * game.scale,
+										y: event.start.y - (btn.img.height / 2) * game.scale
+									}),
+									btn => {
+										hide();
+										game.player.setWeapon('axe');
+									},
+									100,
+									'normal',
+									12,
+									'axe'
+								)
+							);
+							this.buttons.push(
+								new Button(
+									'none-button',
+									'',
+									btn => ({
+										x: event.start.x - (btn.img.width / 2) * game.scale,
+										y: event.start.y - (btn.img.height / 2 - 10) * game.scale
+									}),
+									btn => {
+										hide();
+										game.player.setWeapon('none');
+									},
+									100,
+									'normal',
+									12,
+									'none'
+								)
+							);
+						}
 					}
 				}
 			}
@@ -203,26 +284,29 @@ class Game {
 		else this.strat_fog = this.strat_fog * 0.8;
 
 		// Human ghost
-		gctx.globalAlpha = 0.2 + 0.8 * this.strat_fog;
 		for (let human of [...this.entities.humans].sort((a, b) => a.getFeet().y - b.getFeet().y)) {
+			gctx.globalAlpha = 0.2 + 0.8 * this.strat_fog;
 			if (game.mode == 'strat' && human.target) {
 				let { x, y } = human.getTargCoords();
 				human.draw(gctx, 'main', { x: Math.floor(x + 0.5), y: Math.floor(y + 0.5), z: human.pos.z });
 			} else human.draw(gctx, 'main');
 
-			if (human != this.player) {
-				let { x, y, z } = human.pos;
-				let t = human.getTargCoords();
-				if (this.mode == 'strat' && t) {
-					x = t.x;
-					y = t.y;
-				}
-
-				if (human.target) {
-					if (human.target.obj == this.player) human.draw(gctx, 'icon-follow', { x: x, y: y, z: z });
-					else human.draw(gctx, 'icon-stay', { x: x, y: y, z: z });
-				} else human.draw(gctx, 'icon-null', { x: x, y: y, z: z });
+			let { x, y, z } = human.pos;
+			x += 0.5;
+			y += 0.5;
+			let t = human.getTargCoords();
+			if (this.mode == 'strat' && t) {
+				x = t.x;
+				y = t.y;
 			}
+
+			if (game.mode == 'normal' && human.alert) {
+				gctx.globalAlpha = human.alert.duration ? (human.alert.timeout - time) / human.alert.duration : 1;
+				human.draw(gctx, human.alert.icon, { x: x, y: y, z: z });
+			} else if (human.target && human != this.player) {
+				if (human.target.obj == this.player) human.draw(gctx, 'icon-follow', { x: x, y: y, z: z });
+				else human.draw(gctx, 'icon-stay', { x: x, y: y, z: z });
+			} else human.draw(gctx, 'icon-null', { x: x, y: y, z: z });
 		}
 		gctx.globalAlpha = 1;
 
@@ -339,6 +423,12 @@ class Game {
 	getHuman(name) {
 		for (let human of game.entities.humans) {
 			if (human.name == name) return human;
+		}
+	}
+
+	getButton(id) {
+		for (let button of this.buttons) {
+			if (button.id == id) return button;
 		}
 	}
 
