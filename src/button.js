@@ -1,24 +1,30 @@
-class Button {
-	constructor(img, text, getCoords = btn => ({ x: 0, y: 0 }), callcack = btn => {}, mode = 'normal', fontsize = 12) {
-		this.img = game.images[img];
+class Button extends Overlay {
+	constructor(
+		img,
+		text,
+		getCoords = btn => ({ x: 0, y: 0 }),
+		callcack = btn => {},
+		fade = 400,
+		mode = 'normal',
+		fontsize = 12
+	) {
+		super(game.images[img], getCoords, fade);
 		this.shadow = game.images[img + '-shadow'];
 		this.text = text;
-		this.getCoords = getCoords;
 		this.callcack = callcack;
 		this.fontsize = fontsize;
 		this.mode = mode;
-		this.done = false;
 	}
 
 	draw() {
 		let mctx = can.getContext('2d');
-		let { x, y } = this.getCoords(this);
+		let { x, y, w, h } = this.getXYWH();
 
-		let w = this.img.width * game.scale;
-		let h = this.img.height * game.scale;
+		let op = this.getOp();
 
-		if (this.mode == 'disabled') mctx.globalAlpha = 0.5;
-		if (this.mode == 'pressed') mctx.globalAlpha = 0.85;
+		if (op) mctx.globalAlpha = op;
+		if (this.mode == 'disabled') mctx.globalAlpha *= 0.5;
+		if (this.mode == 'pressed') mctx.globalAlpha *= 0.85;
 		mctx.drawImage(this.shadow, x, y + game.scale, w, h);
 		mctx.drawImage(this.img, x, this.mode == 'pressed' ? y + game.scale : y, w, h);
 
@@ -38,6 +44,7 @@ class Button {
 		if (x < ex && ex < x + w && y < ey && ey < y + h) {
 			if (this.mode == 'normal') {
 				this.mode = 'pressed';
+				game.sounds.click.play();
 				game.events.push(new TimeEvent(200, event => this.callcack(this)));
 			}
 

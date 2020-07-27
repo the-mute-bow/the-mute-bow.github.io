@@ -1,7 +1,13 @@
 pages['menu'] = game => {
+	game.sounds = {
+		click: new Audio('./sounds/click.mp3'),
+		menu: new Audio('./sounds/Art Of Silence.mp3')
+	};
+	game.soundtrack = game.sounds.menu;
 	game.images = [];
 	game.loadImg(
 		[
+			'title.png',
 			'ground1-night.png',
 			'buttons/menu-button.png',
 			'buttons/menu-button-shadow.png',
@@ -155,31 +161,34 @@ pages['menu'] = game => {
 				target: { x: 300, y: 300 }
 			};
 
-			game.buttons = [
-				new Button(
-					'menu-button',
-					lang == '#fr' ? 'Jouer' : 'Play',
-					btn => ({
-						x: (can.width - btn.img.width * game.scale) / 2,
-						y: can.height - (btn.img.height + 5) * game.scale
-					}),
-					btn => {
-						loadPage('chap1');
-						btn.done = true;
-					},
-					'disabled'
-				)
-			];
+			game.buttons = [];
 
 			game.events = [
 				new TimeEvent(1000, event => {
-					game.buttons[0].mode = 'normal';
+					game.buttons.push(
+						new Button(
+							'menu-button',
+							lang == '#fr' ? 'Jouer' : 'Play',
+							btn => ({
+								x: (can.width - btn.img.width * game.scale) / 2,
+								y: can.height - (btn.img.height + 5) * game.scale
+							}),
+							btn => {
+								btn.die_time = time + 300;
+								game.events.push(
+									new TimeEvent(400, event => {
+										game.soundtrack.pause();
+										loadPage('chap1');
+									})
+								);
+							}
+						)
+					);
 				})
 			];
 
-			game.loop = true;
-
 			for (let human of game.entities.humans) human.target = null;
+			game.loop = true;
 		}
 	);
 };

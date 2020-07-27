@@ -3,6 +3,8 @@ var pages = [];
 class Game {
 	constructor() {
 		this.images = [];
+		this.sounds = {};
+		this.soundtrack = null;
 		this.loop = false;
 		this.ground = null;
 		this.tree_calc = null;
@@ -144,10 +146,13 @@ class Game {
 			}
 		}
 
-		this.buttons = this.buttons.filter(button => !button.done);
-
 		for (let event of this.events) event.tick();
 		this.events = this.events.filter(event => !event.done);
+
+		for (let button of this.buttons) {
+			if (button.die_time && button.die_time - time <= 0) button.done = true;
+		}
+		this.buttons = this.buttons.filter(button => !button.done);
 
 		this.touch_events = [];
 	}

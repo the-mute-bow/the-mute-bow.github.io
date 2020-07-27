@@ -1,5 +1,9 @@
 pages['chap1'] = game => {
 	game.images = [];
+	game.sounds = {
+		click: new Audio('./sounds/click.mp3')
+	};
+	game.soundtrack = null;
 	game.loadImg(
 		[
 			'ground1.png',

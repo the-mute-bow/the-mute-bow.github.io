@@ -1,4 +1,4 @@
-# V2.0.10
+# V2.0.11
 
 <img src="./img/icon/icon512.png" height="192"/>
 
@@ -6,6 +6,7 @@
 
 ## New in this version:
 
--   Left special move chaged from dodge/boost to sprint.
--   True menu and chap1 pages.
--   Buttons and game events.
+-   Borders on touch surface to prevent unwanted touches.
+-   fade apearing for buttons.
+-   Click sound for buttons.
+-   Game soundtrack.

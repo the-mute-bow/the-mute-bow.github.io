@@ -8,8 +8,16 @@ const initTouch = () => {
 				start: { x: t.clientX * dpi, y: t.clientY * dpi },
 				end: { x: t.clientX * dpi, y: t.clientY * dpi }
 			};
-			if (getTouchSide(touch) == 'L') game.touches.L = touch;
-			else game.touches.R = touch;
+
+			if (
+				can.width / 30 < touch.start.x &&
+				can.height / 15 < touch.start.y &&
+				touch.start.x < (can.width / 30) * 29 &&
+				touch.start.y < (can.height / 15) * 14
+			) {
+				if (getTouchSide(touch) == 'L') game.touches.L = touch;
+				else game.touches.R = touch;
+			}
 		}
 	});
 

@@ -127,6 +127,8 @@ const mainloop = newtime => {
 	let dtime = newtime - oldtime;
 	oldtime = newtime;
 
+	let sound = false;
+
 	if (innerWidth < innerHeight) setScreen('rotate-phone');
 	else if (!document.fullscreenElement) setScreen('touch-screen');
 	else if (!game.loop) setScreen('loading');
@@ -134,19 +136,22 @@ const mainloop = newtime => {
 		setScreen('game');
 		resize();
 
+		sound = true;
 		time += game.speed * dtime;
 		game.tick(dtime);
 		game.graphics(dtime);
 	}
 
+	if (game.soundtrack) {
+		if (sound) game.soundtrack.play();
+		else game.soundtrack.pause();
+	}
 	requestAnimationFrame(mainloop);
 };
 
 const loadPage = page_name => {
 	// console.warn(`load ${page_name}`);
 	game.loop = false;
-	let time = 0;
-	let oldtime = 0;
 	setScreen('loading');
 	pages[page_name](game);
 };
