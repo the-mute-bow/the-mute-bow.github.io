@@ -292,13 +292,14 @@ class Game {
 			} else human.draw(gctx, 'main');
 
 			let { x, y, z } = human.pos;
-			x += 0.5;
-			y += 0.5;
 			let t = human.getTargCoords();
 			if (this.mode == 'strat' && t) {
 				x = t.x;
 				y = t.y;
 			}
+
+			x += 0.5;
+			y += 0.5;
 
 			if (game.mode == 'normal' && human.alert) {
 				gctx.globalAlpha = human.alert.duration ? (human.alert.timeout - time) / human.alert.duration : 1;
@@ -315,8 +316,8 @@ class Game {
 			this.can,
 			-this.cam.x * this.scale + can.width / 2,
 			-this.cam.y * this.scale + can.height / 2,
-			this.ground.height * game.scale,
-			this.ground.width * game.scale
+			this.ground.width * game.scale,
+			this.ground.height * game.scale
 		);
 
 		for (let overlay of this.overlays) overlay.draw();
@@ -461,5 +462,9 @@ class Game {
 			x: this.cam.x + (x - can.width / 2) / this.scale + 0.5,
 			y: this.cam.y + (y - can.height / 2) / this.scale + 0.5
 		};
+	}
+
+	screenshot() {
+		document.documentElement.innerHTML = `<img src='${this.can.toDataURL()}'></img>`;
 	}
 }

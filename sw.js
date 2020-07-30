@@ -1,4 +1,4 @@
-let version = '2.0.13';
+let version = '2.0.14';
 
 let files = [
 	// system
@@ -22,9 +22,15 @@ let files = [
 	'./sounds/click.mp3',
 	'./sounds/Art Of Silence.mp3',
 	'./sounds/nature-ambience.mp3',
+
+	'./img/title.png',
 	'./img/ground1.png',
+	'./img/ground1-night.png',
+
 	'./img/buildings/small-house1.png',
 	'./img/buildings/small-house1-shadow.png',
+	'./img/buildings/small-house1-night.png',
+
 	'./img/trees/pine1.png',
 	'./img/trees/pine1-shadow.png',
 	'./img/trees/pine2.png',
@@ -34,11 +40,27 @@ let files = [
 	'./img/trees/pine4.png',
 	'./img/trees/pine4-shadow.png',
 	'./img/trees/tree-calc.png',
+
+	'./img/trees/pine1-night.png',
+	'./img/trees/pine1-shadow-night.png',
+	'./img/trees/pine2-night.png',
+	'./img/trees/pine2-shadow-night.png',
+	'./img/trees/pine3-night.png',
+	'./img/trees/pine3-shadow-night.png',
+	'./img/trees/pine4-night.png',
+	'./img/trees/pine4-shadow-night.png',
+	'./img/trees/tree-calc-night.png',
+
 	'./img/humans/human-shadow.png',
 	'./img/humans/eliot.png',
+	'./img/humans/eliot-night.png',
 	'./img/humans/lea.png',
+	'./img/humans/lea-night.png',
 	'./img/humans/scott.png',
+	'./img/humans/scott-night.png',
 	'./img/humans/karmen.png',
+	'./img/humans/karmen-night.png',
+
 	'./img/humans/icon-null.png',
 	'./img/humans/icon-stay.png',
 	'./img/humans/icon-follow.png',
@@ -48,6 +70,7 @@ let files = [
 	'./img/humans/icon-none.png',
 	'./img/humans/icon-message.png',
 	'./img/humans/icon-exclam.png',
+
 	'./img/buttons/axe-button.png',
 	'./img/buttons/axe-button-shadow.png',
 	'./img/buttons/bow-button.png',
@@ -56,6 +79,12 @@ let files = [
 	'./img/buttons/fence-button-shadow.png',
 	'./img/buttons/none-button.png',
 	'./img/buttons/none-button-shadow.png',
+
+	'./img/buttons/france-button.png',
+	'./img/buttons/france-button-shadow.png',
+	'./img/buttons/usa-button.png',
+	'./img/buttons/usa-button-shadow.png',
+
 	'./img/buttons/menu-button.png',
 	'./img/buttons/menu-button-shadow.png'
 ];

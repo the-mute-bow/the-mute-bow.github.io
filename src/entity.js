@@ -162,12 +162,15 @@ class Entity {
 }
 
 class Human extends Entity {
-	constructor(name, pos) {
+	constructor(name, pos, variant = '') {
 		super(
 			pos,
 			{
-				main: new Sprite(game.images[name], { x: 0, y: 0, w: 24, h: 24 }),
+				main: new Sprite(game.images[name + variant], { x: 0, y: 0, w: 24, h: 24 }),
 				shadow: new Sprite(game.images['human-shadow'], { x: 0, y: 0, w: 24, h: 24 }),
+				axe: new Sprite(game.images['axe-hold'], { x: 0, y: 0, w: 24, h: 24 }),
+				bow: new Sprite(game.images['bow-hold'], { x: 0, y: 0, w: 24, h: 24 }),
+				bow_aim: new Sprite(game.images['bow-aim'], { x: 0, y: 0, w: 24, h: 24 }),
 				'icon-null': new Sprite(game.images['icon-null'], { x: 0, y: 0, w: 24, h: 24 }),
 				'icon-stay': new Sprite(game.images['icon-stay'], { x: 0, y: 0, w: 24, h: 24 }),
 				'icon-follow': new Sprite(game.images['icon-follow'], { x: 0, y: 0, w: 24, h: 24 }),
@@ -237,7 +240,7 @@ class Human extends Entity {
 		}
 
 		if (move_mag > 0.4) {
-			this.look = { x: this.move.x, y: this.move.y, aim: false };
+			this.look = { x: this.move.x, y: this.move.y, aim: null };
 			if (!this.move.time) this.move.time = time;
 			this.sprites.main.tile.y = this.getOrient(4);
 
@@ -258,6 +261,39 @@ class Human extends Entity {
 			this.move.y = 0;
 			this.move.time = null;
 			this.sprites.main.tile.x = 0;
+		}
+	}
+
+	draw(ctx, sprite_name = 'main', coords = null) {
+		let { x, y, z } = coords
+			? coords
+			: { x: Math.floor(this.pos.x + 0.5), y: Math.floor(this.pos.y + 0.5), z: this.pos.z };
+
+		if (sprite_name == 'shadow') {
+			let shadow = this.sprites[sprite_name];
+			y -= z * 0.5;
+			x -= z * 0.65;
+			shadow.draw(ctx, { x: Math.floor(x), y: Math.floor(y), z: Math.floor(z) });
+		} else if (sprite_name == 'main') {
+			y -= z;
+			let body = this.sprites[sprite_name];
+			if (this.weapon == 'bow' || this.weapon == 'axe') {
+				let weapon = this.sprites[this.weapon];
+				let o = this.getOrient(4);
+				weapon.tile.x = o == 1 || o == 2;
+
+				if (o < 2) {
+					weapon.draw(ctx, { x: Math.floor(x), y: Math.floor(y), z: Math.floor(z) });
+					body.draw(ctx, { x: Math.floor(x), y: Math.floor(y), z: Math.floor(z) });
+				} else {
+					body.draw(ctx, { x: Math.floor(x), y: Math.floor(y), z: Math.floor(z) });
+					weapon.draw(ctx, { x: Math.floor(x), y: Math.floor(y), z: Math.floor(z) });
+				}
+			} else body.draw(ctx, { x: Math.floor(x), y: Math.floor(y), z: Math.floor(z) });
+		} else {
+			y -= z;
+			let sprite = this.sprites[sprite_name];
+			sprite.draw(ctx, { x: Math.floor(x), y: Math.floor(y), z: Math.floor(z) });
 		}
 	}
 

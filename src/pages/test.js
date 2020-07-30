@@ -1,22 +1,14 @@
-pages['menu'] = game => {
-	game.sounds = {
-		click: new Audio('./sounds/click.mp3'),
-		menu: new Audio('./sounds/Art Of Silence.mp3')
-	};
-	game.soundtrack = game.sounds.menu;
+pages['test'] = game => {
+	game.sounds = {};
+	game.soundtrack = null;
 	game.images = [];
 	game.loadImg(
 		[
-			'title.png',
 			'ground1-night.png',
-			'buttons/menu-button.png',
-			'buttons/menu-button-shadow.png',
-			'buttons/france-button.png',
-			'buttons/france-button-shadow.png',
-			'buttons/usa-button.png',
-			'buttons/usa-button-shadow.png',
+
 			'buildings/small-house1-night.png',
 			'buildings/small-house1-shadow.png',
+
 			'trees/pine1-night.png',
 			'trees/pine1-shadow-night.png',
 			'trees/pine2-night.png',
@@ -25,7 +17,33 @@ pages['menu'] = game => {
 			'trees/pine3-shadow-night.png',
 			'trees/pine4-night.png',
 			'trees/pine4-shadow-night.png',
-			'trees/tree-calc-night.png'
+			'trees/tree-calc-night.png',
+
+			'humans/human-shadow.png',
+			'humans/eliot-night.png',
+
+			'humans/icon-null.png',
+			'humans/icon-stay.png',
+			'humans/icon-follow.png',
+			'humans/icon-bow.png',
+			'humans/icon-axe.png',
+			'humans/icon-fence.png',
+			'humans/icon-none.png',
+			'humans/icon-message.png',
+			'humans/icon-exclam.png',
+
+			'humans/axe-hold.png',
+			'humans/bow-hold.png',
+			'humans/bow-aim.png',
+
+			'buttons/none-button.png',
+			'buttons/none-button-shadow.png',
+			'buttons/bow-button.png',
+			'buttons/bow-button-shadow.png',
+			'buttons/axe-button.png',
+			'buttons/axe-button-shadow.png',
+			'buttons/fence-button.png',
+			'buttons/fence-button-shadow.png'
 		],
 		0,
 		() => {
@@ -147,10 +165,11 @@ pages['menu'] = game => {
 					)
 				],
 				trees: [],
-				humans: []
+				humans: [new Human('eliot', { x: 250, y: 250, z: 0 }, '-night')]
 			};
 
-			game.player = null;
+			game.player = game.getHuman('eliot');
+			game.player.target = null;
 
 			for (let coords of treeList) game.entities.trees.push(new Tree(coords, 0, '-night'));
 
@@ -162,68 +181,13 @@ pages['menu'] = game => {
 				targ_h: 100,
 				targ_o: 0,
 				targ_speed: 400,
-				target: { x: 300, y: 300 }
+				target: game.player
 			};
 
 			game.buttons = [];
-			game.overlays = [
-				new Overlay(
-					game.images['title'],
-					overlay => ({
-						x: (can.width - overlay.img.width * game.scale) / 2,
-						y: (can.height - overlay.img.height * game.scale) / 2
-					}),
-					1000
-				)
-			];
+			game.overlays = [];
 
-			game.events = [
-				new TimeEvent(1000, event => {
-					game.buttons.push(
-						new Button(
-							'menu-button',
-							lang == '#fr' ? 'Jouer' : 'Play',
-							btn => ({
-								x: (can.width - btn.img.width * game.scale) / 2,
-								y: can.height - (btn.img.height + 5) * game.scale
-							}),
-							btn => {
-								game.events.push(
-									new TimeEvent(200, event => {
-										btn.die_time = time + 300;
-										game.events.push(
-											new TimeEvent(400, event => {
-												game.soundtrack.pause();
-												loadPage('chap1');
-											})
-										);
-									})
-								);
-							}
-						)
-					);
-				}),
-				new TimeEvent(2000, event => {
-					game.buttons.push(
-						new Button(
-							lang == '#fr' ? 'france-button' : 'usa-button',
-							'',
-							btn => ({
-								x: can.width - (btn.img.width + 5) * game.scale,
-								y: 5 * game.scale
-							}),
-							btn => {
-								game.events.push(
-									new TimeEvent(200, event => {
-										location.href = lang == '#fr' ? '/#en' : '/#fr';
-										location.reload(true);
-									})
-								);
-							}
-						)
-					);
-				})
-			];
+			game.events = [];
 
 			game.loop = true;
 		}
