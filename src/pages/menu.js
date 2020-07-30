@@ -147,7 +147,8 @@ pages['menu'] = game => {
 					)
 				],
 				trees: [],
-				humans: []
+				humans: [],
+				particles: []
 			};
 
 			game.player = null;

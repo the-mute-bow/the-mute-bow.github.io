@@ -177,6 +177,8 @@ class Human extends Entity {
 				'icon-bow': new Sprite(game.images['icon-bow'], { x: 0, y: 0, w: 24, h: 24 }),
 				'icon-axe': new Sprite(game.images['icon-axe'], { x: 0, y: 0, w: 24, h: 24 }),
 				'icon-fence': new Sprite(game.images['icon-fence'], { x: 0, y: 0, w: 24, h: 24 }),
+				'icon-noamo': new Sprite(game.images['icon-noamo'], { x: 0, y: 0, w: 24, h: 24 }),
+				'icon-plus': new Sprite(game.images['icon-plus'], { x: 0, y: 0, w: 24, h: 24 }),
 				'icon-none': new Sprite(game.images['icon-none'], { x: 0, y: 0, w: 24, h: 24 })
 			},
 			new Hitbox(9, 22, 6, 3, 13),
@@ -185,11 +187,13 @@ class Human extends Entity {
 
 		this.name = name;
 		this.health = { val: 6, max: 6 };
-		this.stamina = { val: 0, max: 12, time: 0 };
+		this.stamina = { val: 0, max: 9, time: 0 };
 		this.mana = { val: 3, max: 9 };
+		this.wood = { val: 16, max: 32 };
 		this.move = { x: 0, y: 0, time: null };
 		this.look = { x: 0, y: 1, aim: false };
 		this.weapon = 'none';
+		this.arrow = null;
 		this.alert = null;
 		this.speed = 1;
 		this.target = { obj: null, x: this.pos.x, y: this.pos.y };
@@ -197,7 +201,9 @@ class Human extends Entity {
 	}
 
 	getOrient(divs) {
-		return Math.floor(((Math.atan2(this.look.y, this.look.x) + Math.PI) / Math.PI / 2) * divs);
+		let o = Math.atan2(this.look.y, this.look.x) + Math.PI;
+		if (divs == 8) o = (o + Math.PI / 8) % (2 * Math.PI);
+		return Math.floor((o / Math.PI / 2) * divs);
 	}
 
 	animate(dtime, solids, mobs) {
@@ -240,9 +246,12 @@ class Human extends Entity {
 		}
 
 		if (move_mag > 0.4) {
-			this.look = { x: this.move.x, y: this.move.y, aim: null };
+			if (!this.look.aim) {
+				this.look.x = this.move.x;
+				this.look.y = this.move.y;
+			}
+
 			if (!this.move.time) this.move.time = time;
-			this.sprites.main.tile.y = this.getOrient(4);
 
 			let step = (Math.floor((time - this.move.time) / 200) % 2) + 1;
 			this.sprites.main.tile.x = step;
@@ -262,6 +271,16 @@ class Human extends Entity {
 			this.move.time = null;
 			this.sprites.main.tile.x = 0;
 		}
+
+		this.sprites.main.tile.y = this.getOrient(4);
+
+		if (time - this.stamina.time > 1200 / (this.speed * 2 - 1)) {
+			this.stamina.time = time;
+			if (this.speed == 2) {
+				if (this.stamina.val <= 0 || this.look.aim) this.speed = 1;
+				else this.stamina.val--;
+			} else if (this.stamina.val < this.stamina.max) this.stamina.val++;
+		}
 	}
 
 	draw(ctx, sprite_name = 'main', coords = null) {
@@ -273,27 +292,46 @@ class Human extends Entity {
 			let shadow = this.sprites[sprite_name];
 			y -= z * 0.5;
 			x -= z * 0.65;
-			shadow.draw(ctx, { x: Math.floor(x), y: Math.floor(y), z: Math.floor(z) });
+			x = Math.floor(x);
+			y = Math.floor(y);
+			z = Math.floor(z);
+			shadow.draw(ctx, { x: x, y: y, z: z });
 		} else if (sprite_name == 'main') {
 			y -= z;
+			x = Math.floor(x);
+			y = Math.floor(y);
+			z = Math.floor(z);
 			let body = this.sprites[sprite_name];
 			if (this.weapon == 'bow' || this.weapon == 'axe') {
-				let weapon = this.sprites[this.weapon];
-				let o = this.getOrient(4);
-				weapon.tile.x = o == 1 || o == 2;
-
-				if (o < 2) {
-					weapon.draw(ctx, { x: Math.floor(x), y: Math.floor(y), z: Math.floor(z) });
-					body.draw(ctx, { x: Math.floor(x), y: Math.floor(y), z: Math.floor(z) });
+				if (this.look.aim) {
+					if (this.weapon == 'bow') {
+						this.sprites.bow_aim.tile.x = this.getOrient(8);
+						body.draw(ctx, { x: x, y: y, z: z });
+						this.sprites.bow_aim.draw(ctx, { x: x, y: y, z: z });
+					} else {
+						body.draw(ctx, { x: x, y: y, z: z });
+					}
 				} else {
-					body.draw(ctx, { x: Math.floor(x), y: Math.floor(y), z: Math.floor(z) });
-					weapon.draw(ctx, { x: Math.floor(x), y: Math.floor(y), z: Math.floor(z) });
+					let weapon = this.sprites[this.weapon];
+					let o = this.sprites.main.tile.y;
+					weapon.tile.x = o == 1 || o == 2;
+
+					if (o < 2) {
+						weapon.draw(ctx, { x: x, y: y, z: z });
+						body.draw(ctx, { x: x, y: y, z: z });
+					} else {
+						body.draw(ctx, { x: x, y: y, z: z });
+						weapon.draw(ctx, { x: x, y: y, z: z });
+					}
 				}
-			} else body.draw(ctx, { x: Math.floor(x), y: Math.floor(y), z: Math.floor(z) });
+			} else body.draw(ctx, { x: x, y: y, z: z });
 		} else {
 			y -= z;
+			x = Math.floor(x);
+			y = Math.floor(y);
+			z = Math.floor(z);
 			let sprite = this.sprites[sprite_name];
-			sprite.draw(ctx, { x: Math.floor(x), y: Math.floor(y), z: Math.floor(z) });
+			sprite.draw(ctx, { x: x, y: y, z: z });
 		}
 	}
 
@@ -324,6 +362,15 @@ class Human extends Entity {
 	setAlert(icon, duration) {
 		if (duration) this.alert = { icon: 'icon-' + icon, duration: duration, timeout: time + duration };
 		else this.alert = { icon: 'icon-' + icon, duration: null, timeout: null };
+	}
+
+	shoot(event, type) {
+		if (this.weapon == 'bow') {
+			this.arrow = new Arrow({ ...this.getFeet(), z: 10 }, { x: event.x / 10, y: event.y / 10, z: 0 });
+			game.entities.particles.push(this.arrow);
+			this.stamina.val--;
+			this.wood.val--;
+		}
 	}
 }
 
@@ -362,5 +409,165 @@ class Tree extends Entity {
 
 			this.moveTime += Math.random() * 1000 + 2000;
 		}
+	}
+}
+
+class Particle {
+	constructor(pos, vel, width = 1, opacity = 1, shadow = true, color = 'white', gravity = 0) {
+		this.pos = pos;
+		this.vel = vel;
+		this.width = width;
+		this.opacity = opacity;
+		this.shadow = shadow;
+		this.color = color;
+		this.dead = false;
+		this.gravity = gravity;
+
+		if (this.color == 'blood') {
+			let r = Math.floor(192 + Math.random() * 63);
+			let g = Math.floor(Math.random() * 96);
+			let b = Math.floor(Math.random() * 96);
+			this.color = `rgba(${r}, ${g}, ${b}, 1)`;
+		}
+
+		if (this.color == 'spit') {
+			let r = Math.floor(64 + Math.random() * 32);
+			let g = Math.floor(128 + Math.random() * 28);
+			let b = Math.floor(96 + Math.random() * 32);
+			this.color = `rgba(${r}, ${g}, ${b}, 1)`;
+		}
+	}
+
+	animate(dtime) {
+		for (let c of 'xyz') this.pos[c] += this.vel[c] * dtime * game.speed;
+	}
+
+	draw(ctx, mode) {
+		ctx.globalAlpha = this.opacity;
+		if (mode == 'main') {
+			ctx.fillStyle = this.color;
+
+			let x = Math.floor(this.pos.x - this.width / 2);
+			let y = Math.floor(this.pos.y - this.width / 2 - this.pos.z);
+
+			ctx.fillRect(x, y, this.width, this.width);
+		} else if (mode == 'shadow') {
+			ctx.globalAlpha *= 0.2;
+			ctx.fillStyle = 'black';
+
+			let { x, y } = this.getShad(this.pos);
+			ctx.fillRect(x, y, this.width, this.width);
+		}
+		ctx.globalAlpha = 1;
+	}
+
+	getShad(pos) {
+		return {
+			x: Math.floor(pos.x - pos.z * 0.65),
+			y: Math.floor(pos.y - pos.z * 0.5)
+		};
+	}
+
+	getFeet() {
+		return { x: this.pos.x, y: this.pos.y, z: 0 };
+	}
+}
+
+class Trail extends Particle {
+	constructor(pos, vel, width = 10, opacity = 1, shadow = true, color = 'white', gravity = 0) {
+		super(pos, vel, width, opacity, shadow, color, gravity);
+		this.endPoint = null;
+		this.stuck = false;
+	}
+
+	animate(dtime, solids, mobs) {
+		let h = this.get3DEx().head;
+		this.stuck = h.z < 0.5;
+
+		if (!this.stuck) {
+			for (let solid of solids) {
+				if (solid.collidePoint(h.x, h.y, h.z)) {
+					this.stuck = false;
+					break;
+				}
+			}
+		}
+
+		if (!this.stuck) {
+			for (let c of 'xyz') this.pos[c] += this.vel[c] * dtime * game.speed;
+			this.vel.z -= (this.gravity * dtime * game.speed) / 10000;
+		}
+	}
+
+	get3DEx() {
+		let mag = this.getMag();
+		return {
+			head: {
+				x: this.pos.x + ((this.vel.x / mag) * this.width) / 2,
+				y: this.pos.y + ((this.vel.y / mag) * this.width) / 2,
+				z: this.pos.z + ((this.vel.z / mag) * this.width) / 2
+			},
+
+			tail: {
+				x: this.pos.x - ((this.vel.x / mag) * this.width) / 2,
+				y: this.pos.y - ((this.vel.y / mag) * this.width) / 2,
+				z: this.pos.z - ((this.vel.z / mag) * this.width) / 2
+			}
+		};
+	}
+
+	get2DEx(mode) {
+		let { head, tail } = this.get3DEx();
+		let mag = this.getMag();
+
+		if (mode == 'shadow') {
+			let tail_shad = this.getShad(tail);
+			let head_shad = this.getShad(head);
+			return {
+				x1: tail_shad.x,
+				y1: tail_shad.y,
+				x2: head_shad.x,
+				y2: head_shad.y
+			};
+		} else {
+			return {
+				x1: tail.x,
+				y1: tail.y - tail.z,
+				x2: head.x,
+				y2: head.y - head.z
+			};
+		}
+	}
+
+	draw(ctx, mode) {
+		if (this.getMag()) {
+			ctx.globalAlpha = this.opacity;
+			ctx.fillStyle = mode == 'shadow' ? 'black' : this.color;
+			if (mode == 'shadow') ctx.globalAlpha *= 0.2;
+
+			let { x1, y1, x2, y2 } = this.get2DEx(mode);
+			for (let p of game.getLine(x1, y1, x2, y2)) {
+				ctx.fillRect(p[0], p[1], 1, 1);
+			}
+
+			if (mode != 'shadow' && this.endPoint) {
+				ctx.fillStyle = this.endPoint;
+				ctx.fillRect(Math.floor(x2), Math.floor(y2), 1, 1);
+			}
+
+			ctx.globalAlpha = 1;
+		}
+	}
+
+	getMag() {
+		let v = this.vel;
+		return Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+	}
+}
+
+class Arrow extends Trail {
+	constructor(pos, vel) {
+		super(pos, vel, 8, 1, true, '#4e443a', 0.5);
+		this.endPoint = 'white';
 	}
 }

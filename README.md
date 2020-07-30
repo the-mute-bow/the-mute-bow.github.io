@@ -4,7 +4,19 @@
 
 ### Use [this link](https://the-mute-bow.github.io/) to play.
 
-## V2.0.14
+## B2.0.15
+
+-   `game.player` aims with right joystick.
+-   `Human` look where they aims if `Human.stamina.val > 0`.
+-   Bow aim draw for `Human` instances.
+-   `Particle` and `Trail` classes.
+-   Line drawing.
+-   `Arrow` shooting and drawing.
+-   `Arrow` get stuck in the ground by gravity.
+-   Shooting `Arrow` drains `Human.stamina` and costs 1 wood.
+-   _No amo_ and _plus_ icons.
+
+## B2.0.14
 
 -   Screenshot of `game.can` via command line with `game.screenshot()`.
 -   Bigger map for `menu` and `chap1`.
@@ -14,32 +26,32 @@
 -   New app icon.
 -   Updated cache file list.
 
-## V2.0.13
+## B2.0.13
 
 -   Beta weapon selection with buttons via right `'tap'` event.
 -   `Human.alert` and weapon indication.
 
-## V2.0.12
+## B2.0.12
 
 -   Fixed button opacity problem.
 -   Overlays.
 -   Title on menu screen
 -   Added sounds to cache.
 
-## V2.0.11
+## B2.0.11
 
 -   Borders on touch surface to prevent unwanted touches.
 -   fade apearing for buttons.
 -   Click sound for buttons.
 -   Game soundtrack.
 
-## V2.0.10
+## B2.0.10
 
 -   Left special move chaged from dodge/boost to sprint.
 -   True menu and chap1 pages.
 -   Buttons and game events.
 
-## V2.0.9
+## B2.0.9
 
 -   Human footsteps.
 -   `'strat'` game mode with left tap.
@@ -47,25 +59,25 @@
 -   Everything darkens in strategy mode except Humans.
 -   Strategy mode allows to make `Human` instances to follow `game.player`'s movements of to go/stay at a `(x, y)` position.
 
-## V2.0.8
+## B2.0.8
 
 -   Hard colisions with `Entity` and `Tree` instances.
 -   Soft colisions with other `Human` instances.
 -   Dicreased `cam.h`.
 
-## V2.0.7
+## B2.0.7
 
 -   `Human` walk cycle.
 -   Scott got a new haircut.
 -   Left `'special'` touch gives a speed boost to player and drains stamina.
 
-## V2.0.6
+## B2.0.6
 
 -   Fixed game crash caused by `'special'` touch event detection.
 -   Fixed service worker version.
 -   Added `menu.js` images to cache storage.
 
-## V2.0.5
+## B2.0.5
 
 -   Trees with animation.
 -   Tree calc.
@@ -73,7 +85,7 @@
 -   Entities now have shadows.
 -   Test for `viewport-fit=cover` in `viewport` meta tag.
 
-## V2.0.4
+## B2.0.4
 
 -   Better camera system and transitions with `game.cam.target` and `game.cam.targ_h`.
 -   Using `game.cam.h` to calculate `game.scale`.
@@ -82,7 +94,7 @@
 -   Use of a `Human` instance for `game.cam.target`.
 -   `game.player` is now a `Human` instance and moves thanks to the left joystick.
 
-## V2.0.3
+## B2.0.3
 
 -   Resolved _turn the screen_ page not displaying after loading the page.
 -   Added French version for update pop up.

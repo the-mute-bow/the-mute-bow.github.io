@@ -1,20 +1,29 @@
-let version = '2.0.14';
+let version = '2.0.15';
 
 let files = [
 	// system
 	'./',
 	'./index.html',
 	'./styles/style.css',
+
 	'./src/cookie.js',
+	'./src/touch.js',
+	'./src/overlay.js',
+	'./src/button.js',
+	'./src/event.js',
+	'./src/entity.js',
 	'./src/game.js',
 	'./src/pages/menu.js',
+	'./src/pages/chap1.js',
 	'./src/main.js',
+
 	'./img/icon/icon192.png',
 	'./img/icon/icon512.png',
 	'./img/gifs/android.gif',
 	'./img/gifs/loading.gif',
 	'./img/gifs/rotate_phone.gif',
 	'./img/gifs/touch_screen.gif',
+
 	'./fonts/Pixelar.woff',
 	'./fonts/Pixelar.woff2',
 
@@ -70,6 +79,8 @@ let files = [
 	'./img/humans/icon-none.png',
 	'./img/humans/icon-message.png',
 	'./img/humans/icon-exclam.png',
+	'./img/humans/icon-noamo.png',
+	'./img/humans/icon-plus.png',
 
 	'./img/buttons/axe-button.png',
 	'./img/buttons/axe-button-shadow.png',

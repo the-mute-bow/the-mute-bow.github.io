@@ -19,7 +19,8 @@ class Game {
 		this.entities = {
 			buildings: [],
 			trees: [],
-			humans: []
+			humans: [],
+			particles: []
 		};
 
 		this.foot_steps = [];
@@ -36,7 +37,7 @@ class Game {
 	tick(dtime) {
 		this.goTarget(dtime);
 
-		for (let entity of [...this.entities.trees, ...this.entities.humans])
+		for (let entity of [...this.entities.trees, ...this.entities.humans, ...this.entities.particles])
 			entity.animate(dtime, [...this.entities.buildings, ...this.entities.trees], [...this.entities.humans]);
 
 		for (let event of this.touch_events) {
@@ -173,8 +174,9 @@ class Game {
 					}
 				}
 			}
-			if (event.type == 'drag') {
-				if (event.side == 'L' && this.player) this.player.speed = 1;
+			if (event.type == 'drag' && this.player) {
+				if (event.side == 'L') this.player.speed = 1;
+				else if (this.player.look.aim) this.player.shoot(event, 'normal');
 			}
 			if (event.type == 'special') {
 				if (event.side == 'L' && this.player) this.player.speed = this.player.speed == 2 ? 1 : 2;
@@ -214,17 +216,39 @@ class Game {
 				}
 			}
 
-			if (this.touches.L && this.mode == 'normal') {
-				let move = getTouchMove(this.touches.L);
-				this.player.pushTo(move.x, move.y, dtime);
+			if (this.mode == 'normal') {
+				if (this.touches.L) {
+					let move = getTouchMove(this.touches.L);
+					this.player.pushTo(move.x, move.y, dtime);
+				}
+
+				let aim = false;
+				if (this.touches.R) {
+					let move = getTouchMove(this.touches.R);
+					if (move.mag > 0.2) {
+						this.player.look.x = move.x;
+						this.player.look.y = move.y;
+						if (this.player.stamina.val) {
+							if (this.player.wood.val) aim = true;
+							else if (!this.player.alert) this.player.setAlert('noamo', 1800);
+						}
+					}
+				}
+
+				this.player.look.aim = aim;
 			}
 
-			if (time - this.player.stamina.time > 800 / (this.player.speed * 2 - 1)) {
-				this.player.stamina.time = time;
-				if (this.player.speed == 2) {
-					if (this.player.stamina.val <= 0) this.player.speed = 1;
-					else this.player.stamina.val--;
-				} else if (this.player.stamina.val < this.player.stamina.max) this.player.stamina.val++;
+			if (this.player.wood.val < this.player.wood.max) {
+				let { x, y } = this.player.getFeet();
+				for (let part of this.entities.particles) {
+					let dx = part.pos.x - x;
+					let dy = part.pos.y - y;
+					if (part instanceof Arrow && part.stuck && Math.sqrt(dx * dx + dy * dy) < 5) {
+						part.dead = true;
+						this.player.wood.val++;
+						this.player.setAlert('plus', 600);
+					}
+				}
 			}
 		}
 
@@ -235,6 +259,7 @@ class Game {
 			if (button.die_time && button.die_time - time <= 0) button.done = true;
 		}
 		this.buttons = this.buttons.filter(button => !button.done);
+		this.entities.particles = this.entities.particles.filter(part => !part.dead);
 
 		this.touch_events = [];
 	}
@@ -268,9 +293,12 @@ class Game {
 		this.foot_steps = this.foot_steps.filter(fs => fs.time);
 
 		// Entities
-		let ord_ent = [...this.entities.buildings, ...this.entities.humans, ...this.entities.trees].sort(
-			(a, b) => a.getFeet().y - b.getFeet().y
-		);
+		let ord_ent = [
+			...this.entities.buildings,
+			...this.entities.humans,
+			...this.entities.trees,
+			...this.entities.particles
+		].sort((a, b) => a.getFeet().y - b.getFeet().y);
 
 		for (let entity of ord_ent) entity.draw(gctx, 'shadow');
 		for (let entity of ord_ent) entity.draw(gctx, 'main');
@@ -308,6 +336,14 @@ class Game {
 				if (human.target.obj == this.player) human.draw(gctx, 'icon-follow', { x: x, y: y, z: z });
 				else human.draw(gctx, 'icon-stay', { x: x, y: y, z: z });
 			} else human.draw(gctx, 'icon-null', { x: x, y: y, z: z });
+
+			if (human.look.aim) {
+				gctx.globalAlpha = 1;
+				gctx.fillStyle = `rgba(255, 255, 255, 0.5)`;
+				let x = Math.floor(human.pos.x + 11.5 + human.look.x * 15);
+				let y = Math.floor(human.pos.y + 16.5 + human.look.y * 15);
+				gctx.fillRect(x, y, 1, 1);
+			}
 		}
 		gctx.globalAlpha = 1;
 
@@ -466,5 +502,28 @@ class Game {
 
 	screenshot() {
 		document.documentElement.innerHTML = `<img src='${this.can.toDataURL()}'></img>`;
+	}
+
+	getLine(x1, y1, x2, y2) {
+		let points = [];
+		let strpts = [];
+
+		let dx = x2 - x1;
+		let dy = y2 - y1;
+
+		let mag = Math.sqrt(dx * dx + dy * dy);
+		let n = Math.floor(mag * 1.2);
+
+		for (let i = 0; i < n; i++) {
+			let c = i / n;
+			let p = [Math.floor(x1 + dx * c), Math.floor(y1 + dy * c)];
+			let str = p.toString();
+			if (!strpts.includes(str)) {
+				points.push(p);
+				strpts.push(str);
+			}
+		}
+
+		return points;
 	}
 }

@@ -37,6 +37,8 @@ pages['chap1'] = game => {
 			'humans/icon-none.png',
 			'humans/icon-message.png',
 			'humans/icon-exclam.png',
+			'humans/icon-noamo.png',
+			'humans/icon-plus.png',
 
 			'humans/axe-hold.png',
 			'humans/bow-hold.png',
@@ -240,7 +242,8 @@ pages['chap1'] = game => {
 					new Human('lea', { x: 270, y: 165, z: 0 }),
 					new Human('karmen', { x: 245, y: 175, z: 0 }),
 					new Human('scott', { x: 260, y: 155, z: 0 })
-				]
+				],
+				particles: []
 			};
 
 			for (let coords of treeList) game.entities.trees.push(new Tree(coords));
