@@ -44,6 +44,11 @@ pages['chap1'] = game => {
 			'humans/bow-hold.png',
 			'humans/bow-aim.png',
 
+			'buttons/pause-button.png',
+			'buttons/pause-button-shadow.png',
+			'buttons/menu2-button.png',
+			'buttons/menu2-button-shadow.png',
+
 			'buttons/none-button.png',
 			'buttons/none-button-shadow.png',
 			'buttons/bow-button.png',
@@ -262,7 +267,68 @@ pages['chap1'] = game => {
 				target: game.player
 			};
 
-			game.buttons = [];
+			game.buttons = [
+				new Button(
+					'pause-button',
+					'',
+					pause_btn => ({
+						x: can.width - (pause_btn.img.width + 3) * game.scale,
+						y: game.scale * 3
+					}),
+					btn => {
+						game.pause();
+						game.buttons.push(
+							new Button(
+								'menu2-button',
+								lang == '#fr' ? 'Reprendre' : 'Resume',
+								btn => ({
+									x: (can.width - btn.img.width * game.scale) / 2,
+									y: (can.height - btn.img.height * game.scale) / 3
+								}),
+								btn => {
+									game.pause();
+									game.getButton('pause').mode = 'normal';
+									game.getButton('quit').die_time = time + 400;
+									btn.die_time = time + 400;
+								},
+								200,
+								'normal',
+								12,
+								'resume'
+							)
+						);
+						game.buttons.push(
+							new Button(
+								'menu2-button',
+								lang == '#fr' ? 'Quitter' : 'Quit',
+								btn => ({
+									x: (can.width - btn.img.width * game.scale) / 2,
+									y: ((can.height - btn.img.height * game.scale) / 3) * 2
+								}),
+								btn => {
+									game.getButton('pause').die_time = time + 400;
+									game.getButton('resume').die_time = time + 400;
+									btn.die_time = time + 400;
+									game.events.push(
+										new TimeEvent(500, event => {
+											game.pause();
+											loadPage('menu');
+										})
+									);
+								},
+								200,
+								'normal',
+								12,
+								'quit'
+							)
+						);
+					},
+					200,
+					'normal',
+					12,
+					'pause'
+				)
+			];
 			game.overlays = [];
 			game.events = [];
 

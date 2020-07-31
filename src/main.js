@@ -151,6 +151,7 @@ const mainloop = newtime => {
 
 const loadPage = page_name => {
 	// console.warn(`load ${page_name}`);
+	if (game.soundtrack) game.soundtrack.pause();
 	game.loop = false;
 	setScreen('loading');
 	pages[page_name](game);

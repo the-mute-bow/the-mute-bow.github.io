@@ -192,12 +192,7 @@ pages['menu'] = game => {
 								game.events.push(
 									new TimeEvent(200, event => {
 										btn.die_time = time + 300;
-										game.events.push(
-											new TimeEvent(400, event => {
-												game.soundtrack.pause();
-												loadPage('chap1');
-											})
-										);
+										game.events.push(new TimeEvent(400, event => loadPage('chap1')));
 									})
 								);
 							}

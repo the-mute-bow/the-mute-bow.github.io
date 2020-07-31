@@ -12,6 +12,7 @@ class Game {
 		this.scale = 1;
 		this.speed = 1;
 		this.mode = 'normal';
+		this.pause_time = 0;
 
 		this.cam = { x: 0, y: 0, h: 100, o: 0, targ_h: 100, targ_o: 0, targ_speed: 1, target: { x: 200, y: 200 } };
 		this.strat_fog = 0;
@@ -32,6 +33,11 @@ class Game {
 		this.overlays = [];
 		this.events = [];
 		this.can = document.createElement('canvas');
+	}
+
+	pause() {
+		this.pause_time = time;
+		this.mode = this.mode == 'pause' ? 'normal' : 'pause';
 	}
 
 	tick(dtime) {
@@ -345,6 +351,16 @@ class Game {
 				gctx.fillRect(x, y, 1, 1);
 			}
 		}
+
+		let pause_duration = time - this.pause_time;
+		if (pause_duration < 200) {
+			gctx.globalAlpha = this.mode != 'pause' ? 1 - pause_duration / 200 : pause_duration / 200;
+			fill(gctx, '#202124');
+		} else if (this.mode == 'pause') {
+			gctx.globalAlpha = 1;
+			fill(gctx, '#202124');
+		}
+
 		gctx.globalAlpha = 1;
 
 		// Game canvas draw
@@ -386,7 +402,7 @@ class Game {
 		}
 
 		// health, stamina, mana
-		if (this.player) {
+		if (this.player && this.mode != 'pause') {
 			let c = can.height / 50;
 			let offset = { x: c, y: c };
 			let i = this.player.health.val;

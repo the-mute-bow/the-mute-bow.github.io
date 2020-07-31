@@ -4,6 +4,11 @@
 
 ### Use [this link](https://the-mute-bow.github.io/) to play.
 
+## B2.0.16
+
+-   `'pause'` mode.
+-   Quit / resume / pause buttons.
+
 ## B2.0.15
 
 -   `game.player` aims with right joystick.
