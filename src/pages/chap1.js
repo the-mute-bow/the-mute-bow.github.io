@@ -293,7 +293,7 @@ pages['chap1'] = game => {
 								},
 								200,
 								'normal',
-								12,
+								10,
 								'resume'
 							)
 						);
@@ -309,6 +309,7 @@ pages['chap1'] = game => {
 									game.getButton('pause').die_time = time + 400;
 									game.getButton('resume').die_time = time + 400;
 									btn.die_time = time + 400;
+									game.speed = 1;
 									game.events.push(
 										new TimeEvent(500, event => {
 											game.pause();
@@ -318,7 +319,7 @@ pages['chap1'] = game => {
 								},
 								200,
 								'normal',
-								12,
+								10,
 								'quit'
 							)
 						);

@@ -1,4 +1,4 @@
-let version = '2.0.16';
+let version = '2.0.17';
 
 let files = [
 	// system
@@ -98,10 +98,10 @@ let files = [
 
 	'./img/buttons/menu-button.png',
 	'./img/buttons/menu-button-shadow.png',
-	'buttons/menu2-button.png',
-	'buttons/menu2-button-shadow.png',
-	'buttons/pause-button.png',
-	'buttons/pause-button-shadow.png'
+	'./img/buttons/menu2-button.png',
+	'./img/buttons/menu2-button-shadow.png',
+	'./img/buttons/pause-button.png',
+	'./img/buttons/pause-button-shadow.png'
 ];
 
 self.addEventListener('install', event => {

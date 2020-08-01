@@ -306,8 +306,13 @@ class Human extends Entity {
 				if (this.look.aim) {
 					if (this.weapon == 'bow') {
 						this.sprites.bow_aim.tile.x = this.getOrient(8);
-						body.draw(ctx, { x: x, y: y, z: z });
-						this.sprites.bow_aim.draw(ctx, { x: x, y: y, z: z });
+						if (this.look.y < 0) {
+							this.sprites.bow_aim.draw(ctx, { x: x, y: y, z: z });
+							body.draw(ctx, { x: x, y: y, z: z });
+						} else {
+							body.draw(ctx, { x: x, y: y, z: z });
+							this.sprites.bow_aim.draw(ctx, { x: x, y: y, z: z });
+						}
 					} else {
 						body.draw(ctx, { x: x, y: y, z: z });
 					}
@@ -407,7 +412,7 @@ class Tree extends Entity {
 			this.sprites.main.tile.x += 1;
 			this.sprites.main.tile.x %= 4;
 
-			this.moveTime += Math.random() * 1000 + 2000;
+			this.moveTime = time + Math.random() * 1000 + 2000;
 		}
 	}
 }
@@ -487,7 +492,7 @@ class Trail extends Particle {
 		if (!this.stuck) {
 			for (let solid of solids) {
 				if (solid.collidePoint(h.x, h.y, h.z)) {
-					this.stuck = false;
+					this.stuck = true;
 					break;
 				}
 			}

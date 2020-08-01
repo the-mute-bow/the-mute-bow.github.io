@@ -4,6 +4,13 @@
 
 ### Use [this link](https://the-mute-bow.github.io/) to play.
 
+## B2.0.17
+
+-   `'pause'` mode now sets `game.speed` to 0.1.
+-   Fixed `'menu2-button'` && `'pause-button'` cache error.
+-   Fixed `Arrow` not getting stuck in solids.
+-   Fixed `Human.sprites['bow-aim']` always drawed in front of `Human.sprites.main`.
+
 ## B2.0.16
 
 -   `'pause'` mode.

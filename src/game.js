@@ -37,7 +37,17 @@ class Game {
 
 	pause() {
 		this.pause_time = time;
-		this.mode = this.mode == 'pause' ? 'normal' : 'pause';
+		if (this.mode == 'pause') {
+			this.mode = 'normal';
+			this.speed = 1;
+		} else {
+			this.mode = 'pause';
+			this.events.push(
+				new TimeEvent(500, event => {
+					this.speed = 0.1;
+				})
+			);
+		}
 	}
 
 	tick(dtime) {
