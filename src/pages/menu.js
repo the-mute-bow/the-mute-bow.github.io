@@ -9,14 +9,17 @@ pages['menu'] = game => {
 		[
 			'title.png',
 			'ground1-night.png',
+
 			'buttons/menu-button.png',
 			'buttons/menu-button-shadow.png',
 			'buttons/france-button.png',
 			'buttons/france-button-shadow.png',
 			'buttons/usa-button.png',
 			'buttons/usa-button-shadow.png',
+
 			'buildings/small-house1-night.png',
 			'buildings/small-house1-shadow.png',
+
 			'trees/pine1-night.png',
 			'trees/pine1-shadow-night.png',
 			'trees/pine2-night.png',

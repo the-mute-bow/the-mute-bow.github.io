@@ -2,10 +2,7 @@ let onAndroid = /Android/i.test(navigator.userAgent);
 // let onAndroid = true;
 
 let lang = getCookie('lang');
-if (!lang && onAndroid)
-	alert(
-		'🇫🇷 Ce jeu utilise les cookies pour enregistrer les préférences de langue et la progression du jeu.\n🇺🇸 This game uses cookies to save language preferences and progression in game.'
-	);
+if (!lang && onAndroid) alert('🇫🇷 Ce jeu utilise les cookies pour enregistrer les préférences de langue et la progression du jeu.\n🇺🇸 This game uses cookies to save language preferences and progression in game.');
 
 if (!location.hash) {
 	if (lang) {
@@ -38,14 +35,7 @@ window.isUpdateAvailable = new Promise(function (resolve, reject) {
 			});
 }).then(isAvailable => {
 	if (isAvailable) {
-		if (
-			confirm(
-				lang == '#fr'
-					? "Mise à jour disponible ! Recharger l'application?"
-					: 'Update available ! Refresh the app?'
-			)
-		)
-			location.reload();
+		if (confirm(lang == '#fr' ? "Mise à jour disponible ! Recharger l'application?" : 'Update available ! Refresh the app?')) location.reload();
 	}
 });
 
@@ -95,8 +85,7 @@ const setScreen = newmode => {
 		}
 
 		if (mode == 'android') {
-			gif_text.innerHTML =
-				lang == '#fr' ? 'Jeu disponible uniquement sur Android.' : 'Game only available on Android.';
+			gif_text.innerHTML = lang == '#fr' ? 'Jeu disponible uniquement sur Android.' : 'Game only available on Android.';
 		}
 
 		if (mode == 'loading') {
@@ -160,7 +149,7 @@ const loadPage = page_name => {
 window.onload = () => {
 	if (onAndroid) {
 		initTouch();
-		loadPage('menu');
+		loadPage('chap2');
 		mainloop();
 	} else setScreen('android');
 };

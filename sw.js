@@ -1,4 +1,4 @@
-let version = '2.0.18';
+let version = '2.0.19';
 
 let files = [
 	// system
@@ -15,6 +15,7 @@ let files = [
 	'./src/game.js',
 	'./src/pages/menu.js',
 	'./src/pages/chap1.js',
+	'./src/pages/chap2.js',
 	'./src/main.js',
 
 	'./img/icon/icon192.png',

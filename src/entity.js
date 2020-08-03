@@ -143,7 +143,8 @@ class Human extends Entity {
 				'icon-fence': new Sprite(game.images['icon-fence'], { x: 0, y: 0, w: 24, h: 24 }),
 				'icon-noamo': new Sprite(game.images['icon-noamo'], { x: 0, y: 0, w: 24, h: 24 }),
 				'icon-plus': new Sprite(game.images['icon-plus'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-none': new Sprite(game.images['icon-none'], { x: 0, y: 0, w: 24, h: 24 })
+				'icon-none': new Sprite(game.images['icon-none'], { x: 0, y: 0, w: 24, h: 24 }),
+				'icon-exclam': new Sprite(game.images['icon-exclam'], { x: 0, y: 0, w: 24, h: 24 })
 			},
 			new Hitbox(9, 22, 6, 3, 13),
 			{ x: 12, y: 24 }
@@ -162,6 +163,16 @@ class Human extends Entity {
 		this.speed = 1;
 		this.target = { obj: null, x: this.pos.x, y: this.pos.y };
 		this.foot_step = 0;
+		this.aura = null;
+	}
+
+	createAura(color, gravity) {
+		let { x, y } = this.getFeet();
+		let r = () => Math.random() - 0.5;
+		x += r() * 6;
+		y += r() * 6;
+		let z = Math.random() * 8 + 4;
+		game.entities.particles.push(new Particle({ x: x, y: y, z: z }, { x: 0, y: 0, z: 0 }, 1, 1, false, color, gravity, -500));
 	}
 
 	getOrient(divs) {
@@ -250,6 +261,8 @@ class Human extends Entity {
 				else this.stamina.val--;
 			} else if (this.stamina.val < this.stamina.max) this.stamina.val++;
 		}
+
+		if (this.aura && time - this.aura.last > this.aura.delay) this.createAura(this.aura.color, 10);
 	}
 
 	draw(ctx, sprite_name = 'main', coords = null) {
@@ -303,6 +316,7 @@ class Human extends Entity {
 			y = Math.floor(y);
 			z = Math.floor(z);
 			let sprite = this.sprites[sprite_name];
+			console.log(sprite_name);
 			sprite.draw(ctx, { x: x, y: y, z: z });
 		}
 	}
@@ -349,6 +363,9 @@ class Human extends Entity {
 class Creature extends Human {
 	constructor(pos) {
 		super('creature', pos);
+		this.aura = { color: '#212423', delay: 200, last: time };
+		this.speed = 0.6;
+		this.target = null;
 	}
 }
 
@@ -434,7 +451,7 @@ class Particle {
 			let y = Math.floor(this.pos.y - this.width / 2 - this.pos.z);
 
 			ctx.fillRect(x, y, this.width, this.width);
-		} else if (mode == 'shadow') {
+		} else if (mode == 'shadow' && this.shadow) {
 			ctx.globalAlpha *= 0.2;
 			ctx.fillStyle = 'black';
 
@@ -487,7 +504,7 @@ class Trail extends Particle {
 
 		if (this.trailing && !this.stuck && this.trail_time - time < 0) {
 			this.trail_time = time + 30;
-			game.entities.particles.push(new Particle(ex.tail, { x: 0, y: 0, z: 0 }, 1, Math.random() / 2 + 0.5, true, 'white', 0, -1000));
+			game.entities.particles.push(new Particle(ex.tail, { x: 0, y: 0, z: 0 }, 1, Math.random() / 2 + 0.5, true, 'white', 0, -500));
 		}
 	}
 

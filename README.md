@@ -4,6 +4,13 @@
 
 ### Use [this link](https://the-mute-bow.github.io/) to play.
 
+## B2.0.19
+
+-   `Human` aura.
+-   `Creature` dark aura.
+-   `Creature` exclam alert and hunting `Human` if too close.
+-   `Creature` stops hunting if human too far
+
 ## B2.0.18
 
 -   Text overlays.

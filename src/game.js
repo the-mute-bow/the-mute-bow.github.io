@@ -278,6 +278,27 @@ class Game {
 			}
 		}
 
+		for (let creature of this.entities.creatures) {
+			let trig_dist = 40;
+
+			if (creature.target && creature.target.obj) {
+				let dx = Math.abs(creature.target.obj.pos.x - creature.pos.x);
+				let dy = Math.abs(creature.target.obj.pos.y - creature.pos.y);
+				if (dx > trig_dist || dy > trig_dist || Math.sqrt(dx * dx + dy * dy) > trig_dist) creature.target = null;
+			}
+
+			if (!creature.target || creature.target.obj.health <= 0) {
+				for (let human of this.entities.humans) {
+					let dx = Math.abs(human.pos.x - creature.pos.x);
+					let dy = Math.abs(human.pos.y - creature.pos.y);
+					if (dx < trig_dist && dy < trig_dist && Math.sqrt(dx * dx + dy * dy) < trig_dist) {
+						creature.setAlert('exclam', 600);
+						creature.target = { obj: human, x: 0, y: 0 };
+					}
+				}
+			}
+		}
+
 		for (let event of this.events) event.tick();
 		this.events = this.events.filter(event => !event.done);
 
@@ -366,6 +387,17 @@ class Game {
 				let x = Math.floor(human.pos.x + 11.5 + human.look.x * 15);
 				let y = Math.floor(human.pos.y + 16.5 + human.look.y * 15);
 				gctx.fillRect(x, y, 1, 1);
+			}
+		}
+
+		for (let creature of this.entities.creatures) {
+			let a = creature.alert;
+			if (a) {
+				let { x, y, z } = creature.pos;
+				x += 0.5;
+				y += 0.5;
+				gctx.globalAlpha = a.duration ? (a.timeout - time) / a.duration : 1;
+				creature.draw(gctx, a.icon, { x: x, y: y, z: z });
 			}
 		}
 
