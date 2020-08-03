@@ -27,6 +27,7 @@ pages['chap1'] = game => {
 			'humans/lea.png',
 			'humans/scott.png',
 			'humans/karmen.png',
+			'humans/creature.png',
 			'humans/icon-null.png',
 
 			'humans/icon-stay.png',
@@ -66,6 +67,7 @@ pages['chap1'] = game => {
 			game.can.width = game.ground.width;
 			game.bg_color = '#323c2e';
 			game.speed = 1;
+			game.fps = { frames: 0, duration: 0, value: 0 };
 
 			let treeList = [
 				{ x: 131, y: 19, z: 0 },
@@ -242,12 +244,8 @@ pages['chap1'] = game => {
 					)
 				],
 				trees: [],
-				humans: [
-					new Human('eliot', { x: 250, y: 160, z: 0 }),
-					new Human('lea', { x: 270, y: 165, z: 0 }),
-					new Human('karmen', { x: 245, y: 175, z: 0 }),
-					new Human('scott', { x: 260, y: 155, z: 0 })
-				],
+				humans: [new Human('eliot', { x: 250, y: 160, z: 0 }), new Human('lea', { x: 270, y: 165, z: 0 }), new Human('karmen', { x: 245, y: 175, z: 0 }), new Human('scott', { x: 260, y: 155, z: 0 })],
+				creatures: [],
 				particles: []
 			};
 
@@ -269,68 +267,89 @@ pages['chap1'] = game => {
 
 			game.buttons = [
 				new Button(
+					'pause',
 					'pause-button',
 					'',
-					pause_btn => ({
-						x: can.width - (pause_btn.img.width + 3) * game.scale,
+					btn => ({
+						x: can.width - (btn.img.width + 3) * game.scale,
 						y: game.scale * 3
 					}),
 					btn => {
-						game.pause();
+						game.pause(true);
+
+						game.overlays.push(
+							new OverText(
+								'pause',
+								overtext => 'Pause',
+								overtext => ({ x: can.width / 2, y: can.height / 3 }),
+								200,
+								16
+							)
+						);
+
 						game.buttons.push(
 							new Button(
+								'resume',
 								'menu2-button',
 								lang == '#fr' ? 'Reprendre' : 'Resume',
 								btn => ({
 									x: (can.width - btn.img.width * game.scale) / 2,
-									y: (can.height - btn.img.height * game.scale) / 3
+									y: (can.height / 3) * 2 - btn.img.height * game.scale
 								}),
 								btn => {
 									game.pause();
+									game.getOverlay('pause').kill(400);
 									game.getButton('pause').mode = 'normal';
-									game.getButton('quit').die_time = time + 400;
-									btn.die_time = time + 400;
+									game.getButton('quit').kill(400);
+									btn.kill(400);
 								},
 								200,
 								'normal',
-								10,
-								'resume'
+								10
 							)
 						);
 						game.buttons.push(
 							new Button(
+								'quit',
 								'menu2-button',
 								lang == '#fr' ? 'Quitter' : 'Quit',
 								btn => ({
 									x: (can.width - btn.img.width * game.scale) / 2,
-									y: ((can.height - btn.img.height * game.scale) / 3) * 2
+									y: (can.height / 3) * 2 + 2 * game.scale
 								}),
 								btn => {
-									game.getButton('pause').die_time = time + 400;
-									game.getButton('resume').die_time = time + 400;
-									btn.die_time = time + 400;
+									game.getOverlay('pause').kill(400);
+									game.getButton('pause').kill(400);
+									game.getButton('resume').kill(400);
+									btn.kill(400);
 									game.speed = 1;
 									game.events.push(
 										new TimeEvent(500, event => {
-											game.pause();
+											game.pause(false);
 											loadPage('menu');
 										})
 									);
 								},
 								200,
 								'normal',
-								10,
-								'quit'
+								10
 							)
 						);
-					},
-					200,
-					'normal',
-					12,
-					'pause'
+					}
 				)
 			];
-			game.overlays = [];
+			game.overlays = [
+				new OverText(
+					'fps',
+					overtext => `${game.fps.value}`,
+					overtext => ({
+						x: 6 * game.scale,
+						y: can.height - 2 * game.scale
+					}),
+					200,
+					8
+				)
+			];
 			game.events = [];
 
 			game.loop = true;

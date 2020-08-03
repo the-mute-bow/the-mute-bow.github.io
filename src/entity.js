@@ -5,17 +5,7 @@ class Sprite {
 	}
 
 	draw(ctx, coords) {
-		ctx.drawImage(
-			this.img,
-			this.tile.x * this.tile.w,
-			this.tile.y * this.tile.h,
-			this.tile.w,
-			this.tile.h,
-			coords.x,
-			coords.y,
-			this.tile.w,
-			this.tile.h
-		);
+		ctx.drawImage(this.img, this.tile.x * this.tile.w, this.tile.y * this.tile.h, this.tile.w, this.tile.h, coords.x, coords.y, this.tile.w, this.tile.h);
 	}
 }
 
@@ -43,9 +33,7 @@ class Entity {
 
 	draw(ctx, sprite_name = 'main', coords = null) {
 		let sprite = this.sprites[sprite_name];
-		let { x, y, z } = coords
-			? coords
-			: { x: Math.floor(this.pos.x + 0.5), y: Math.floor(this.pos.y + 0.5), z: this.pos.z };
+		let { x, y, z } = coords ? coords : { x: Math.floor(this.pos.x + 0.5), y: Math.floor(this.pos.y + 0.5), z: this.pos.z };
 
 		if (sprite) {
 			if (sprite_name == 'main') y -= z;
@@ -78,47 +66,23 @@ class Entity {
 		if (Math.abs(dc.x) < 40 && Math.abs(dc.y) < 40) {
 			let collision = false;
 
-			if (
-				(other_sides.T < this_sides.B && this_sides.B < other_sides.B) ||
-				(other_sides.T < this_sides.T && this_sides.T < other_sides.B)
-			) {
-				if (
-					(other_sides.L < this_sides.R && this_sides.R < other_sides.R) ||
-					(other_sides.L < this_sides.L && this_sides.L < other_sides.R)
-				) {
+			if ((other_sides.T < this_sides.B && this_sides.B < other_sides.B) || (other_sides.T < this_sides.T && this_sides.T < other_sides.B)) {
+				if ((other_sides.L < this_sides.R && this_sides.R < other_sides.R) || (other_sides.L < this_sides.L && this_sides.L < other_sides.R)) {
 					collision = true;
 				}
 			}
 
-			if (
-				(!collision && this_sides.T <= other_sides.B && other_sides.B <= this_sides.B) ||
-				(this_sides.T <= other_sides.T && other_sides.T <= this_sides.B)
-			) {
-				if (
-					(this_sides.L <= other_sides.R && other_sides.R <= this_sides.R) ||
-					(this_sides.L <= other_sides.L && other_sides.L <= this_sides.R)
-				) {
+			if ((!collision && this_sides.T <= other_sides.B && other_sides.B <= this_sides.B) || (this_sides.T <= other_sides.T && other_sides.T <= this_sides.B)) {
+				if ((this_sides.L <= other_sides.R && other_sides.R <= this_sides.R) || (this_sides.L <= other_sides.L && other_sides.L <= this_sides.R)) {
 					collision = true;
 				}
 			}
 
-			if (
-				!collision &&
-				other_sides.L <= this_sides.L &&
-				this_sides.R <= other_sides.R &&
-				this_sides.T <= other_sides.T &&
-				other_sides.B <= this_sides.B
-			) {
+			if (!collision && other_sides.L <= this_sides.L && this_sides.R <= other_sides.R && this_sides.T <= other_sides.T && other_sides.B <= this_sides.B) {
 				collision = true;
 			}
 
-			if (
-				!collision &&
-				this_sides.L <= other_sides.L &&
-				other_sides.R <= this_sides.R &&
-				other_sides.T <= this_sides.T &&
-				this_sides.B <= other_sides.B
-			) {
+			if (!collision && this_sides.L <= other_sides.L && other_sides.R <= this_sides.R && other_sides.T <= this_sides.T && this_sides.B <= other_sides.B) {
 				collision = true;
 			}
 
@@ -240,8 +204,13 @@ class Human extends Entity {
 
 		for (let mob of mobs) {
 			if (mob != this) {
-				let d = this.collideGround(mob, false);
-				if (d) mob.pushTo(d.x / 2, d.y / 2, dtime);
+				if (this.collideGround(mob, false)) {
+					let h = this.getFeet();
+					let m = mob.getFeet();
+					let v = { x: m.x - h.x, y: m.y - h.y };
+					let mag = Math.sqrt(v.x * v.x + v.y * v.y);
+					mob.pushTo(v.x / mag, v.y / mag, dtime);
+				}
 			}
 		}
 
@@ -274,7 +243,7 @@ class Human extends Entity {
 
 		this.sprites.main.tile.y = this.getOrient(4);
 
-		if (time - this.stamina.time > 1200 / (this.speed * 2 - 1)) {
+		if (time - this.stamina.time > 900 / (this.speed * 2 - 1)) {
 			this.stamina.time = time;
 			if (this.speed == 2) {
 				if (this.stamina.val <= 0 || this.look.aim) this.speed = 1;
@@ -284,9 +253,7 @@ class Human extends Entity {
 	}
 
 	draw(ctx, sprite_name = 'main', coords = null) {
-		let { x, y, z } = coords
-			? coords
-			: { x: Math.floor(this.pos.x + 0.5), y: Math.floor(this.pos.y + 0.5), z: this.pos.z };
+		let { x, y, z } = coords ? coords : { x: Math.floor(this.pos.x + 0.5), y: Math.floor(this.pos.y + 0.5), z: this.pos.z };
 
 		if (sprite_name == 'shadow') {
 			let shadow = this.sprites[sprite_name];
@@ -379,6 +346,12 @@ class Human extends Entity {
 	}
 }
 
+class Creature extends Human {
+	constructor(pos) {
+		super('creature', pos);
+	}
+}
+
 class Tree extends Entity {
 	constructor(pos, type = 0, variant = '') {
 		type = type ? type : Math.floor(Math.random() * 4) + 1;
@@ -418,7 +391,7 @@ class Tree extends Entity {
 }
 
 class Particle {
-	constructor(pos, vel, width = 1, opacity = 1, shadow = true, color = 'white', gravity = 0) {
+	constructor(pos, vel, width = 1, opacity = 1, shadow = true, color = 'white', gravity = 0, timeout = null) {
 		this.pos = pos;
 		this.vel = vel;
 		this.width = width;
@@ -427,6 +400,9 @@ class Particle {
 		this.color = color;
 		this.dead = false;
 		this.gravity = gravity;
+		this.timeout = timeout;
+		if (timeout && timeout < -1) this.timeout = Math.random() * Math.abs(timeout) + Math.abs(timeout) / 10;
+		this.time = time;
 
 		if (this.color == 'blood') {
 			let r = Math.floor(192 + Math.random() * 63);
@@ -444,6 +420,8 @@ class Particle {
 	}
 
 	animate(dtime) {
+		if (this.timeout && this.time + this.timeout - time <= 0) this.dead = true;
+
 		for (let c of 'xyz') this.pos[c] += this.vel[c] * dtime * game.speed;
 	}
 
@@ -479,14 +457,18 @@ class Particle {
 }
 
 class Trail extends Particle {
-	constructor(pos, vel, width = 10, opacity = 1, shadow = true, color = 'white', gravity = 0) {
+	constructor(pos, vel, width = 10, opacity = 1, shadow = true, color = 'white', gravity = 0, trailing = false) {
 		super(pos, vel, width, opacity, shadow, color, gravity);
 		this.endPoint = null;
 		this.stuck = false;
+		this.trailing = trailing;
+		this.trail_time = time;
 	}
 
 	animate(dtime, solids, mobs) {
-		let h = this.get3DEx().head;
+		let ex = this.get3DEx();
+		let h = ex.head;
+
 		this.stuck = h.z < 0.5;
 
 		if (!this.stuck) {
@@ -501,6 +483,11 @@ class Trail extends Particle {
 		if (!this.stuck) {
 			for (let c of 'xyz') this.pos[c] += this.vel[c] * dtime * game.speed;
 			this.vel.z -= (this.gravity * dtime * game.speed) / 10000;
+		}
+
+		if (this.trailing && !this.stuck && this.trail_time - time < 0) {
+			this.trail_time = time + 30;
+			game.entities.particles.push(new Particle(ex.tail, { x: 0, y: 0, z: 0 }, 1, Math.random() / 2 + 0.5, true, 'white', 0, -1000));
 		}
 	}
 
@@ -572,7 +559,7 @@ class Trail extends Particle {
 
 class Arrow extends Trail {
 	constructor(pos, vel) {
-		super(pos, vel, 8, 1, true, '#4e443a', 0.5);
+		super(pos, vel, 8, 1, true, '#4e443a', 0.5, true);
 		this.endPoint = 'white';
 	}
 }

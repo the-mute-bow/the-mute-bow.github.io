@@ -4,6 +4,15 @@
 
 ### Use [this link](https://the-mute-bow.github.io/) to play.
 
+## B2.0.18
+
+-   Text overlays.
+-   Pause text.
+-   Fps counter.
+-   `Creature` entities.
+-   `Arrow` trails.
+-   `Human.stamina.val` goes up faster.
+
 ## B2.0.17
 
 -   `'pause'` mode now sets `game.speed` to 0.1.

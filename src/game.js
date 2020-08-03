@@ -13,6 +13,7 @@ class Game {
 		this.speed = 1;
 		this.mode = 'normal';
 		this.pause_time = 0;
+		this.fps = { frames: 0, duration: 0, value: 0 };
 
 		this.cam = { x: 0, y: 0, h: 100, o: 0, targ_h: 100, targ_o: 0, targ_speed: 1, target: { x: 200, y: 200 } };
 		this.strat_fog = 0;
@@ -21,6 +22,7 @@ class Game {
 			buildings: [],
 			trees: [],
 			humans: [],
+			creatures: [],
 			particles: []
 		};
 
@@ -35,13 +37,21 @@ class Game {
 		this.can = document.createElement('canvas');
 	}
 
-	pause() {
-		this.pause_time = time;
-		if (this.mode == 'pause') {
-			this.mode = 'normal';
-			this.speed = 1;
+	pause(given) {
+		if (given != undefined) {
+			if (given) var newmode = 'pause';
+			else newmode = 'normal';
+			if (newmode != this.mode) {
+				this.mode = newmode;
+				this.pause_time = time;
+			}
 		} else {
-			this.mode = 'pause';
+			this.pause_time = time;
+			this.mode = this.mode == 'pause' ? 'normal' : 'pause';
+		}
+
+		if (this.mode == 'normal') this.speed = 1;
+		else {
 			this.events.push(
 				new TimeEvent(500, event => {
 					this.speed = 0.1;
@@ -53,8 +63,16 @@ class Game {
 	tick(dtime) {
 		this.goTarget(dtime);
 
-		for (let entity of [...this.entities.trees, ...this.entities.humans, ...this.entities.particles])
-			entity.animate(dtime, [...this.entities.buildings, ...this.entities.trees], [...this.entities.humans]);
+		this.fps.frames++;
+		this.fps.duration += dtime;
+		if (this.fps.duration >= 1000) {
+			this.fps.value = this.fps.frames;
+			this.fps.frames = 0;
+			this.fps.duration = 0;
+		}
+
+		for (let entity of [...this.entities.trees, ...this.entities.humans, ...this.entities.creatures, ...this.entities.particles])
+			entity.animate(dtime, [...this.entities.buildings, ...this.entities.trees], [...this.entities.humans, ...this.entities.creatures]);
 
 		for (let event of this.touch_events) {
 			if (event.type == 'tap') {
@@ -63,9 +81,9 @@ class Game {
 					if (button.tick(event.end.x, event.end.y)) wasButton = true;
 				}
 
-				if (!wasButton && this.player) {
+				if (!wasButton && this.player && game.mode != 'pause') {
 					let hide = () => {
-						for (let id of ['bow', 'axe', 'fence', 'none']) this.getButton(id).die_time = time + 100;
+						for (let id of ['bow', 'axe', 'fence', 'none']) this.getButton(id).kill(100);
 					};
 
 					if (this.mode == 'strat') {
@@ -75,13 +93,7 @@ class Game {
 							if (human != this.player) {
 								let t = human.getTargCoords();
 								let pos = t ? t : human.pos;
-								if (
-									human != this.player &&
-									pos.x + 7 < x &&
-									x < pos.x + 17 &&
-									pos.y + 10 < y &&
-									y < pos.y + 24
-								) {
+								if (human != this.player && pos.x + 7 < x && x < pos.x + 17 && pos.y + 10 < y && y < pos.y + 24) {
 									touched_human = true;
 									if (human.target) {
 										if (human.target.obj) {
@@ -116,6 +128,7 @@ class Game {
 						else {
 							this.buttons.push(
 								new Button(
+									'bow',
 									'bow-button',
 									'',
 									btn => ({
@@ -134,6 +147,7 @@ class Game {
 							);
 							this.buttons.push(
 								new Button(
+									'fence',
 									'fence-button',
 									'',
 									btn => ({
@@ -152,6 +166,7 @@ class Game {
 							);
 							this.buttons.push(
 								new Button(
+									'axe',
 									'axe-button',
 									'',
 									btn => ({
@@ -170,6 +185,7 @@ class Game {
 							);
 							this.buttons.push(
 								new Button(
+									'none',
 									'none-button',
 									'',
 									btn => ({
@@ -216,13 +232,7 @@ class Game {
 							for (let human of this.entities.humans) {
 								let t = human.getTargCoords();
 								let pos = t ? t : human.pos;
-								if (
-									human != this.player &&
-									pos.x + 7 < x &&
-									x < pos.x + 17 &&
-									pos.y + 10 < y &&
-									y < pos.y + 24
-								) {
+								if (human != this.player && pos.x + 7 < x && x < pos.x + 17 && pos.y + 10 < y && y < pos.y + 24) {
 									touch.catch = human;
 									break;
 								}
@@ -271,10 +281,12 @@ class Game {
 		for (let event of this.events) event.tick();
 		this.events = this.events.filter(event => !event.done);
 
-		for (let button of this.buttons) {
-			if (button.die_time && button.die_time - time <= 0) button.done = true;
+		for (let overlay of [...this.overlays, ...this.buttons]) {
+			if (overlay.die_time && overlay.die_time - time <= 0) overlay.done = true;
 		}
+
 		this.buttons = this.buttons.filter(button => !button.done);
+		this.overlays = this.overlays.filter(overlay => !overlay.done);
 		this.entities.particles = this.entities.particles.filter(part => !part.dead);
 
 		this.touch_events = [];
@@ -309,12 +321,7 @@ class Game {
 		this.foot_steps = this.foot_steps.filter(fs => fs.time);
 
 		// Entities
-		let ord_ent = [
-			...this.entities.buildings,
-			...this.entities.humans,
-			...this.entities.trees,
-			...this.entities.particles
-		].sort((a, b) => a.getFeet().y - b.getFeet().y);
+		let ord_ent = [...this.entities.buildings, ...this.entities.humans, ...this.entities.creatures, ...this.entities.trees, ...this.entities.particles].sort((a, b) => a.getFeet().y - b.getFeet().y);
 
 		for (let entity of ord_ent) entity.draw(gctx, 'shadow');
 		for (let entity of ord_ent) entity.draw(gctx, 'main');
@@ -362,6 +369,7 @@ class Game {
 			}
 		}
 
+		// pause mode
 		let pause_duration = time - this.pause_time;
 		if (pause_duration < 200) {
 			gctx.globalAlpha = this.mode != 'pause' ? 1 - pause_duration / 200 : pause_duration / 200;
@@ -374,13 +382,7 @@ class Game {
 		gctx.globalAlpha = 1;
 
 		// Game canvas draw
-		mctx.drawImage(
-			this.can,
-			-this.cam.x * this.scale + can.width / 2,
-			-this.cam.y * this.scale + can.height / 2,
-			this.ground.width * game.scale,
-			this.ground.height * game.scale
-		);
+		mctx.drawImage(this.can, -this.cam.x * this.scale + can.width / 2, -this.cam.y * this.scale + can.height / 2, this.ground.width * game.scale, this.ground.height * game.scale);
 
 		for (let overlay of this.overlays) overlay.draw();
 		for (let button of this.buttons) button.draw();
@@ -492,6 +494,12 @@ class Game {
 	getButton(id) {
 		for (let button of this.buttons) {
 			if (button.id == id) return button;
+		}
+	}
+
+	getOverlay(id) {
+		for (let overlay of this.overlays) {
+			if (overlay.id == id) return overlay;
 		}
 	}
 

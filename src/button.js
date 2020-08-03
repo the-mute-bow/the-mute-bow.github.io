@@ -1,21 +1,12 @@
 class Button extends Overlay {
-	constructor(
-		img,
-		text,
-		getCoords = btn => ({ x: 0, y: 0 }),
-		callcack = btn => {},
-		fade = 400,
-		mode = 'normal',
-		fontsize = 12,
-		id = null
-	) {
-		super(game.images[img], getCoords, fade);
+	constructor(id = null, img, text, getCoords = btn => ({ x: 0, y: 0 }), callcack = btn => {}, fade = 400, mode = 'normal', fontsize = 12, textcolor = '#202124') {
+		super(id, game.images[img], getCoords, fade);
 		this.shadow = game.images[img + '-shadow'];
 		this.text = text;
 		this.callcack = callcack;
 		this.fontsize = fontsize;
 		this.mode = mode;
-		this.id = id;
+		this.textcolor = textcolor;
 	}
 
 	draw() {
@@ -34,6 +25,7 @@ class Button extends Overlay {
 		let fs = this.fontsize * game.scale;
 		mctx.font = `${fs}px Pixelar`;
 		mctx.textAlign = 'center';
+		mctx.fillStyle = this.textcolor;
 		mctx.fillText(this.text, x + w / 2, y + h / 2 + fs / 4 + (this.mode == 'pressed' ? game.scale : 0));
 		mctx.globalAlpha = 1;
 	}

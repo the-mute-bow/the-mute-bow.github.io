@@ -148,6 +148,7 @@ pages['menu'] = game => {
 				],
 				trees: [],
 				humans: [],
+				creatures: [],
 				particles: []
 			};
 
@@ -169,6 +170,7 @@ pages['menu'] = game => {
 			game.buttons = [];
 			game.overlays = [
 				new Overlay(
+					'title',
 					game.images['title'],
 					overlay => ({
 						x: (can.width - overlay.img.width * game.scale) / 2,
@@ -182,6 +184,7 @@ pages['menu'] = game => {
 				new TimeEvent(1000, event => {
 					game.buttons.push(
 						new Button(
+							'menu',
 							'menu-button',
 							lang == '#fr' ? 'Jouer' : 'Play',
 							btn => ({
@@ -191,8 +194,12 @@ pages['menu'] = game => {
 							btn => {
 								game.events.push(
 									new TimeEvent(200, event => {
-										btn.die_time = time + 300;
-										game.events.push(new TimeEvent(400, event => loadPage('chap1')));
+										btn.kill(300);
+										game.events.push(
+											new TimeEvent(400, event => {
+												loadPage('chap1');
+											})
+										);
 									})
 								);
 							}
@@ -202,6 +209,7 @@ pages['menu'] = game => {
 				new TimeEvent(2000, event => {
 					game.buttons.push(
 						new Button(
+							'lang',
 							lang == '#fr' ? 'france-button' : 'usa-button',
 							'',
 							btn => ({
