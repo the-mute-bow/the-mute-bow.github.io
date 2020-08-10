@@ -34,6 +34,8 @@ pages['menu'] = game => {
 		() => {
 			game.ground = game.images['ground1-night'];
 			game.tree_calc = game.images['tree-calc-night'];
+			game.fog_map = null;
+
 			game.can.height = game.ground.height;
 			game.can.width = game.ground.width;
 			game.bg_color = '#293d48';
@@ -165,6 +167,7 @@ pages['menu'] = game => {
 				h: 128,
 				o: 1,
 				targ_h: 100,
+				default_h: 100,
 				targ_o: 0,
 				targ_speed: 400,
 				target: { x: 300, y: 300 }

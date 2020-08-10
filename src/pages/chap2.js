@@ -63,9 +63,11 @@ pages['chap2'] = game => {
 		() => {
 			game.ground = game.images['ground1-night'];
 			game.tree_calc = game.images['tree-calc-night'];
-			game.can.height = game.ground.height;
+
 			game.can.width = game.ground.width;
-			game.bg_color = '#293d48';
+			game.can.height = game.ground.height;
+
+			game.bg_color = '#212423';
 			game.speed = 1;
 			game.fps = { frames: 0, duration: 0, value: 0 };
 
@@ -259,12 +261,15 @@ pages['chap2'] = game => {
 			game.player = game.getHuman('eliot');
 			game.player.target = null;
 
+			game.fog_map = new FogMap(game.ground.width, game.ground.height);
+
 			game.cam = {
 				x: game.player.pos.x + 12,
 				y: game.player.pos.y + 12,
 				h: 80,
 				o: 1,
 				targ_h: 86,
+				default_h: 86,
 				targ_o: 0,
 				targ_speed: 400,
 				target: game.player
@@ -348,14 +353,64 @@ pages['chap2'] = game => {
 					'fps',
 					overtext => `${game.fps.value}`,
 					overtext => ({
-						x: 6 * game.scale,
+						x: 16 * game.scale,
+						y: can.height - 2 * game.scale
+					}),
+					200,
+					8
+				),
+				new OverText(
+					'pix',
+					overtext => `${game.fog_map.pix_size}`,
+					overtext => ({
+						x: 32 * game.scale,
+						y: can.height - 2 * game.scale
+					}),
+					200,
+					8
+				),
+				new OverText(
+					'len',
+					overtext => `${game.fog_map.pix.length}`,
+					overtext => ({
+						x: 48 * game.scale,
+						y: can.height - 2 * game.scale
+					}),
+					200,
+					8
+				),
+				new OverText(
+					'fps',
+					overtext => `${Math.floor(1000 / game.fog_map.average_dtime)}`,
+					overtext => ({
+						x: 64 * game.scale,
+						y: can.height - 2 * game.scale
+					}),
+					200,
+					8
+				),
+				new OverText(
+					'best',
+					overtext => `${Math.floor(1000 / game.best_perf)}`,
+					overtext => ({
+						x: 80 * game.scale,
 						y: can.height - 2 * game.scale
 					}),
 					200,
 					8
 				)
 			];
-			game.events = [];
+			game.events = [
+				new TimeEvent(8000, event => {
+					game.player.view_distance = 24;
+					game.fog_map.fill();
+					// game.fog_map.eyes.push(game.getHuman('lea'));
+				}),
+				new TimeEvent(20000, event => {
+					game.player.view_distance = 64;
+					// game.fog_map.eyes.push(game.getHuman('lea'));
+				})
+			];
 
 			game.loop = true;
 

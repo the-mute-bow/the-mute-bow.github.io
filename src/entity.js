@@ -164,12 +164,13 @@ class Human extends Entity {
 		this.target = { obj: null, x: this.pos.x, y: this.pos.y };
 		this.foot_step = 0;
 		this.aura = null;
+		this.view_distance = 64;
 	}
 
 	createAura(color, gravity) {
 		let { x, y } = this.getFeet();
 		let r = () => Math.random() - 0.5;
-		x += r() * 6;
+		x += r() * 8 + 0.5;
 		y += r() * 6;
 		let z = Math.random() * 8 + 4;
 		game.entities.particles.push(new Particle({ x: x, y: y, z: z }, { x: 0, y: 0, z: 0 }, 1, 1, false, color, gravity, -500));
@@ -316,7 +317,6 @@ class Human extends Entity {
 			y = Math.floor(y);
 			z = Math.floor(z);
 			let sprite = this.sprites[sprite_name];
-			console.log(sprite_name);
 			sprite.draw(ctx, { x: x, y: y, z: z });
 		}
 	}
@@ -352,7 +352,7 @@ class Human extends Entity {
 
 	shoot(event, type) {
 		if (this.weapon == 'bow') {
-			this.arrow = new Arrow({ ...this.getFeet(), z: 10 }, { x: event.x / 10, y: event.y / 10, z: 0 });
+			this.arrow = new Arrow({ ...this.getFeet(), z: 10 }, { x: event.x / 8, y: event.y / 8, z: 0 });
 			game.entities.particles.push(this.arrow);
 			this.stamina.val--;
 			this.wood.val--;

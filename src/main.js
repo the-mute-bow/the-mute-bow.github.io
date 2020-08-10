@@ -2,13 +2,13 @@ let onAndroid = /Android/i.test(navigator.userAgent);
 // let onAndroid = true;
 
 let lang = getCookie('lang');
-if (!lang && onAndroid) alert('🇫🇷 Ce jeu utilise les cookies pour enregistrer les préférences de langue et la progression du jeu.\n🇺🇸 This game uses cookies to save language preferences and progression in game.');
+if (!lang && onAndroid) alert('🇺🇸 This game uses cookies to save language preferences and progression in game.\n🇫🇷 Ce jeu utilise les cookies pour enregistrer les préférences de langue et la progression du jeu.');
 
 if (!location.hash) {
 	if (lang) {
-		location.assign(location.href + lang);
+		location.assign(lang);
 	} else {
-		setCookie('lang', '#fr');
+		setCookie('lang', '#en');
 		location.reload(true);
 	}
 } else if (lang != location.hash) {
@@ -34,9 +34,7 @@ window.isUpdateAvailable = new Promise(function (resolve, reject) {
 				};
 			});
 }).then(isAvailable => {
-	if (isAvailable) {
-		if (confirm(lang == '#fr' ? "Mise à jour disponible ! Recharger l'application?" : 'Update available ! Refresh the app?')) location.reload();
-	}
+	if (isAvailable && confirm(lang == '#fr' ? "Mise à jour disponible ! Recharger l'application?" : 'Update available ! Refresh the app?')) location.reload();
 });
 
 let time = 0;

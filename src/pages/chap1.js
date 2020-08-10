@@ -65,6 +65,8 @@ pages['chap1'] = game => {
 			game.tree_calc = game.images['tree-calc'];
 			game.can.height = game.ground.height;
 			game.can.width = game.ground.width;
+			game.fog_map = null;
+
 			game.bg_color = '#323c2e';
 			game.speed = 1;
 			game.fps = { frames: 0, duration: 0, value: 0 };
@@ -260,6 +262,7 @@ pages['chap1'] = game => {
 				h: 80,
 				o: 1,
 				targ_h: 86,
+				default_h: 86,
 				targ_o: 0,
 				targ_speed: 400,
 				target: game.player
