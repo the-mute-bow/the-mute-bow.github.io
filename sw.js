@@ -1,4 +1,4 @@
-let version = '2.0.20';
+let version = '2.0.21';
 
 let files = [
 	// system
@@ -32,6 +32,7 @@ let files = [
 	'./sounds/click.mp3',
 	'./sounds/Art Of Silence.mp3',
 	'./sounds/nature-ambience.mp3',
+	'./sounds/rain-piano.mp3',
 
 	'./img/title.png',
 	'./img/ground1.png',

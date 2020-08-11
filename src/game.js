@@ -78,10 +78,7 @@ class Game {
 			this.fps.duration = 0;
 		}
 
-		if (dtime < this.best_perf) {
-			this.best_perf = dtime;
-			console.log('best', this.best_perf);
-		}
+		if (dtime < this.best_perf) this.best_perf = dtime;
 
 		if (this.fog_map) this.fog_map.animate(dtime);
 
@@ -517,7 +514,7 @@ class Game {
 	}
 
 	goTarget(dtime) {
-		if (this.fog_map && this.player && this.mode != 'pause') this.cam.targ_h = Math.min(this.player.view_distance * 2.2, 86);
+		if (this.fog_map && this.player && this.mode != 'pause') this.cam.targ_h = Math.min(this.player.view_distance * 2.6, 72);
 		else this.cam.targ_h = this.cam.default_h;
 
 		let t = this.cam.target;
@@ -620,10 +617,10 @@ class FogMap {
 		this.img = document.createElement('canvas');
 		this.img.width = w;
 		this.img.height = h;
-		this.pix = [];
-		this.pix_size = 2;
+
+		this.pix_size = 1;
 		this.pix_time = time;
-		this.focus = game.player;
+		this.humans = [];
 		this.average_dtime = null;
 		this.fill();
 	}
@@ -637,104 +634,70 @@ class FogMap {
 		this.ctx().fillRect(0, 0, this.img.width, this.img.height);
 	}
 
-	has(coords) {
-		for (let i = 0; i < this.pix.length; i++) {
-			let p = this.pix[i];
-			if (p && p.x == coords.x && p.y == coords.y) return i;
-		}
-
-		return -1;
-	}
-
 	animate(dtime) {
 		let ctx = this.ctx();
 		ctx.fillStyle = '#212423';
 
-		if (!this.average_dtime) this.average_dtime = dtime;
-		else this.average_dtime = (dtime + this.average_dtime * 9) / 10;
-
-		let e = {
-			x: Math.floor(this.focus.pos.x + 12),
-			y: Math.floor(this.focus.pos.y + 12)
-		};
-
-		let drawPix = (pixel, dist) => {
+		let drawPix = (pixel, mag, view_distance) => {
 			ctx.globalAlpha = 1;
-			ctx.clearRect(pixel.x, pixel.y, this.pix_size, this.pix_size);
-			ctx.globalAlpha = dist / this.focus.view_distance + ((dist / this.focus.view_distance) * Math.random()) / 4;
+			if (mag < view_distance) {
+				ctx.clearRect(pixel.x, pixel.y, this.pix_size, this.pix_size);
+				ctx.globalAlpha = mag / view_distance + ((mag / view_distance) * Math.random()) / 4;
+			}
 			ctx.fillRect(pixel.x, pixel.y, this.pix_size, this.pix_size);
 		};
 
-		if (time - this.pix_time > 1000) {
-			if (this.pix_size < 4 && this.average_dtime > game.best_perf * 2) {
-				this.pix_size *= 2;
-				for (let p of this.pix) {
-					if (p && p.x % this.pix_size == 0 && p.y % this.pix_size == 0) {
-						let d = {
-							x: p.x - e.x,
-							y: p.y - e.y
-						};
+		if (!this.average_dtime) this.average_dtime = dtime;
+		else this.average_dtime = (dtime + this.average_dtime * 49) / 50;
 
-						drawPix(p, Math.sqrt(d.x * d.x + d.y * d.y));
-					}
-				}
-			} else if (this.pix_size > 1 && this.average_dtime < game.best_perf * 1.1) {
-				this.pix_size /= 2;
-			}
+		if (time - this.pix_time > 500) {
+			if (this.pix_size < 2 && this.average_dtime > game.best_perf * 2.5) this.pix_size++;
+			else if (this.pix_size > 1 && this.average_dtime < game.best_perf * 1.6) this.pix_size--;
 
 			this.pix_time = time;
 		}
 
-		for (let i = 0; i < (dtime * this.focus.view_distance * game.speed) / 4 / (this.pix_size * this.pix_size); i++) {
+		let tl = game.screenToGameCoords(0, 0);
+		let br = game.screenToGameCoords(can.width, can.height);
+
+		let border = 5;
+		let l = -border + tl.x;
+		let t = -border + tl.y;
+		let w = br.x - tl.x + border * 2;
+		let h = br.y - tl.y + border * 2;
+
+		for (let i = 0; i < (dtime * game.speed * game.player.view_distance * 5000) / (this.pix_size * this.pix_size) / (w * h); i++) {
 			let p = {
-				x: Math.floor(e.x - (Math.random() - 0.5) * this.focus.view_distance * 2 - this.pix_size / 2),
-				y: Math.floor(e.y - (Math.random() - 0.5) * this.focus.view_distance * 2 - this.pix_size / 2)
+				x: Math.floor(l + Math.random() * w),
+				y: Math.floor(t + Math.random() * h)
 			};
 
 			p.x -= p.x % this.pix_size;
 			p.y -= p.y % this.pix_size;
 
-			let d = {
-				x: p.x - e.x,
-				y: p.y - e.y
-			};
+			let view_distance = 0;
+			let mag = Infinity;
 
-			let mag = Math.sqrt(d.x * d.x + d.y * d.y);
+			for (let human of this.humans) {
+				let h = {
+					x: Math.floor(human.pos.x + 12),
+					y: Math.floor(human.pos.y + 12)
+				};
 
-			if (mag < this.focus.view_distance) {
-				if (this.has(p) == -1) this.pix.push(p);
-				if (Math.random() > 0.1 * game.speed) drawPix(p, mag);
+				let d = {
+					x: p.x - h.x,
+					y: p.y - h.y
+				};
+
+				let new_mag = Math.sqrt(d.x * d.x + d.y * d.y);
+				if (new_mag < mag) {
+					mag = new_mag;
+				}
 			}
+
+			drawPix(p, mag, game.player.view_distance);
 		}
 
 		ctx.globalAlpha = 1;
-
-		for (let index = 0; index < this.pix.length; index++) {
-			let p = this.pix[index];
-
-			if (p) {
-				let p2 = {
-					x: p.x - (p.x % this.pix_size),
-					y: p.y - (p.y % this.pix_size)
-				};
-
-				if (p2.x != p.x || p2.y != p.y) {
-					this.pix[index] = null;
-				} else {
-					let d = {
-						x: p.x - e.x,
-						y: p.y - e.y
-					};
-
-					let mag = Math.sqrt(d.x * d.x + d.y * d.y);
-					if (mag > this.focus.view_distance && Math.random() < 0.1) {
-						ctx.fillRect(p.x, p.y, this.pix_size, this.pix_size);
-						this.pix[index] = null;
-					}
-				}
-			}
-		}
-
-		this.pix = this.pix.filter(val => val);
 	}
 }

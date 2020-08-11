@@ -10,6 +10,13 @@
 
 ## Change log
 
+### **B2.0.21**
+
+-   `game.fog_map` won't remember light pixels (less RAM consumption) and will use screen borders.
+-   Multiple `Human` can see in `game.fog_map`.
+-   New app icon.
+-   `'rain-piano.mp3'` is now the night soundtrack.
+
 ### **B2.0.20**
 
 -   Larger `Human` aura.

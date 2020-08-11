@@ -2,7 +2,7 @@ pages['chap2'] = game => {
 	game.images = [];
 	game.sounds = {
 		click: new Audio('./sounds/click.mp3'),
-		ambience: new Audio('./sounds/nature-ambience.mp3')
+		ambience: new Audio('./sounds/rain-piano.mp3')
 	};
 	game.soundtrack = game.sounds.ambience;
 	game.soundtrack.volume = 0.05;
@@ -349,68 +349,59 @@ pages['chap2'] = game => {
 				)
 			];
 			game.overlays = [
-				new OverText(
-					'fps',
-					overtext => `${game.fps.value}`,
-					overtext => ({
-						x: 16 * game.scale,
-						y: can.height - 2 * game.scale
-					}),
-					200,
-					8
-				),
-				new OverText(
-					'pix',
-					overtext => `${game.fog_map.pix_size}`,
-					overtext => ({
-						x: 32 * game.scale,
-						y: can.height - 2 * game.scale
-					}),
-					200,
-					8
-				),
-				new OverText(
-					'len',
-					overtext => `${game.fog_map.pix.length}`,
-					overtext => ({
-						x: 48 * game.scale,
-						y: can.height - 2 * game.scale
-					}),
-					200,
-					8
-				),
-				new OverText(
-					'fps',
-					overtext => `${Math.floor(1000 / game.fog_map.average_dtime)}`,
-					overtext => ({
-						x: 64 * game.scale,
-						y: can.height - 2 * game.scale
-					}),
-					200,
-					8
-				),
-				new OverText(
-					'best',
-					overtext => `${Math.floor(1000 / game.best_perf)}`,
-					overtext => ({
-						x: 80 * game.scale,
-						y: can.height - 2 * game.scale
-					}),
-					200,
-					8
-				)
+				// new OverText(
+				// 	'fps',
+				// 	overtext => `${game.fps.value}`,
+				// 	overtext => ({
+				// 		x: 16 * game.scale,
+				// 		y: can.height - 2 * game.scale
+				// 	}),
+				// 	200,
+				// 	8
+				// ),
+				// new OverText(
+				// 	'fps',
+				// 	overtext => `${Math.floor(1000 / game.fog_map.average_dtime)}`,
+				// 	overtext => ({
+				// 		x: 32 * game.scale,
+				// 		y: can.height - 2 * game.scale
+				// 	}),
+				// 	200,
+				// 	8
+				// ),
+				// new OverText(
+				// 	'best',
+				// 	overtext => `${Math.floor(1000 / game.best_perf)}`,
+				// 	overtext => ({
+				// 		x: 48 * game.scale,
+				// 		y: can.height - 2 * game.scale
+				// 	}),
+				// 	200,
+				// 	8
+				// ),
+				// new OverText(
+				// 	'size',
+				// 	overtext => `${game.fog_map.pix_size}`,
+				// 	overtext => ({
+				// 		x: 64 * game.scale,
+				// 		y: can.height - 2 * game.scale
+				// 	}),
+				// 	200,
+				// 	8
+				// )
 			];
 			game.events = [
+				// new TimeEvent(8000, event => {
+				// 	game.fog_map.humans.push(game.getHuman('lea'));
+				// }),
+
 				new TimeEvent(8000, event => {
-					game.player.view_distance = 24;
-					game.fog_map.fill();
-					// game.fog_map.eyes.push(game.getHuman('lea'));
-				}),
-				new TimeEvent(20000, event => {
 					game.player.view_distance = 64;
-					// game.fog_map.eyes.push(game.getHuman('lea'));
 				})
 			];
+
+			game.fog_map.humans.push(game.player);
+			game.player.view_distance = 24;
 
 			game.loop = true;
 
