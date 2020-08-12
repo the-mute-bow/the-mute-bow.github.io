@@ -1,11 +1,16 @@
 pages['chap2'] = game => {
+	game.title = lang == '#fr' ? 'Une mystérieuse créature' : 'A mysterious creature';
+
 	game.images = [];
 	game.sounds = {
 		click: new Audio('./sounds/click.mp3'),
-		ambience: new Audio('./sounds/rain-piano.mp3')
+		click: new Audio('./sounds/click.mp3'),
+		dark: new Audio('./sounds/dark-ambient.mp3'),
+		ambience: new Audio('./sounds/night-ambience.mp3')
 	};
+
 	game.soundtrack = game.sounds.ambience;
-	game.soundtrack.volume = 0.05;
+
 	game.loadImg(
 		[
 			'ground1-night.png',
@@ -261,7 +266,7 @@ pages['chap2'] = game => {
 			game.player = game.getHuman('eliot');
 			game.player.target = null;
 
-			game.fog_map = new FogMap(game.ground.width, game.ground.height);
+			game.fog_map = null;
 
 			game.cam = {
 				x: game.player.pos.x + 12,
@@ -348,60 +353,39 @@ pages['chap2'] = game => {
 					}
 				)
 			];
-			game.overlays = [
-				// new OverText(
-				// 	'fps',
-				// 	overtext => `${game.fps.value}`,
-				// 	overtext => ({
-				// 		x: 16 * game.scale,
-				// 		y: can.height - 2 * game.scale
-				// 	}),
-				// 	200,
-				// 	8
-				// ),
-				// new OverText(
-				// 	'fps',
-				// 	overtext => `${Math.floor(1000 / game.fog_map.average_dtime)}`,
-				// 	overtext => ({
-				// 		x: 32 * game.scale,
-				// 		y: can.height - 2 * game.scale
-				// 	}),
-				// 	200,
-				// 	8
-				// ),
-				// new OverText(
-				// 	'best',
-				// 	overtext => `${Math.floor(1000 / game.best_perf)}`,
-				// 	overtext => ({
-				// 		x: 48 * game.scale,
-				// 		y: can.height - 2 * game.scale
-				// 	}),
-				// 	200,
-				// 	8
-				// ),
-				// new OverText(
-				// 	'size',
-				// 	overtext => `${game.fog_map.pix_size}`,
-				// 	overtext => ({
-				// 		x: 64 * game.scale,
-				// 		y: can.height - 2 * game.scale
-				// 	}),
-				// 	200,
-				// 	8
-				// )
-			];
-			game.events = [
-				// new TimeEvent(8000, event => {
-				// 	game.fog_map.humans.push(game.getHuman('lea'));
-				// }),
 
+			game.overlays = [
+				new OverText(
+					'fps',
+					overtext => `${game.fps.value}`,
+					overtext => ({
+						x: 8 * game.scale,
+						y: can.height - 2 * game.scale
+					}),
+					200,
+					8
+				),
+				new OverText(
+					'best',
+					overtext => `${Math.floor(1000 / game.best_perf)}`,
+					overtext => ({
+						x: 16 * game.scale,
+						y: can.height - 2 * game.scale
+					}),
+					200,
+					8
+				)
+			];
+
+			game.events = [
 				new TimeEvent(8000, event => {
-					game.player.view_distance = 64;
+					game.fog_map = new FogMap(game.ground.width, game.ground.height);
+					game.fog_map.humans.push(game.player);
+					game.fog_map.fill();
+					game.soundtrack.pause();
+					game.soundtrack = game.sounds.dark;
 				})
 			];
-
-			game.fog_map.humans.push(game.player);
-			game.player.view_distance = 24;
 
 			game.loop = true;
 

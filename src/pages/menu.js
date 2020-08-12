@@ -1,10 +1,12 @@
 pages['menu'] = game => {
+	game.title = 'menu';
+
+	game.images = [];
 	game.sounds = {
 		click: new Audio('./sounds/click.mp3'),
 		menu: new Audio('./sounds/Art Of Silence.mp3')
 	};
 	game.soundtrack = game.sounds.menu;
-	game.images = [];
 	game.loadImg(
 		[
 			'title.png',

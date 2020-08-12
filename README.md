@@ -1,6 +1,6 @@
 # The Mute Bow
 
-<img src="./img/icon/icon512.png" height="192"/>
+<img src="./img/menu.jpg"/>
 
 ## Links
 
@@ -10,11 +10,20 @@
 
 ## Change log
 
+### **B2.0.22**
+
+-   New app icon.
+-   Night soundtrack replaced by `'night-ambient.mp3'`.
+-   Night soundtrack is set to `'dark-ambient.mp3'` when fog is on.
+-   Removed `'nature-ambient.mp3'`.
+-   Nicer and more efficient fog for low performance devices.
+-   Player can only see `Creature`'s aura when there is no fog.
+
 ### **B2.0.21**
 
 -   `game.fog_map` won't remember light pixels (less RAM consumption) and will use screen borders.
 -   Multiple `Human` can see in `game.fog_map`.
--   New app icon.
+-   Test for a new app icon.
 -   `'rain-piano.mp3'` is now the night soundtrack.
 
 ### **B2.0.20**
@@ -22,7 +31,7 @@
 -   Larger `Human` aura.
 -   Stronger `Human` shoot.
 -   `game.fog_map`.
--   `game.fog_map.pix_size` now adaptative to performance.
+-   `game.fog_map.pix_size` now adaptative to device performances.
 
 ### **B2.0.19**
 

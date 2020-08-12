@@ -3,6 +3,7 @@ var pages = [];
 class Game {
 	constructor() {
 		this.loop = false;
+		this.title = null;
 
 		this.best_perf = 40;
 
@@ -79,6 +80,11 @@ class Game {
 		}
 
 		if (dtime < this.best_perf) this.best_perf = dtime;
+
+		if (this.soundtrack) {
+			if (this.mode == 'normal') this.soundtrack.volume = 0.3;
+			else if (this.title != 'menu') this.soundtrack.volume = 0.1;
+		}
 
 		if (this.fog_map) this.fog_map.animate(dtime);
 
@@ -613,16 +619,15 @@ class Game {
 }
 
 class FogMap {
-	constructor(w, h) {
+	constructor(gw, gh) {
 		this.img = document.createElement('canvas');
-		this.img.width = w;
-		this.img.height = h;
+		this.img.width = gw;
+		this.img.height = gh;
 
 		this.pix_size = 1;
 		this.pix_time = time;
 		this.humans = [];
 		this.average_dtime = null;
-		this.fill();
 	}
 
 	ctx() {
@@ -632,6 +637,20 @@ class FogMap {
 	fill() {
 		this.ctx().fillStyle = '#212423';
 		this.ctx().fillRect(0, 0, this.img.width, this.img.height);
+	}
+
+	getBorders() {
+		let tl = game.screenToGameCoords(0, 0);
+		let br = game.screenToGameCoords(can.width, can.height);
+
+		let border = 5;
+
+		return {
+			l: -border + tl.x,
+			t: -border + tl.y,
+			w: br.x - tl.x + border * 2,
+			h: br.y - tl.y + border * 2
+		};
 	}
 
 	animate(dtime) {
@@ -651,29 +670,19 @@ class FogMap {
 		else this.average_dtime = (dtime + this.average_dtime * 49) / 50;
 
 		if (time - this.pix_time > 500) {
-			if (this.pix_size < 2 && this.average_dtime > game.best_perf * 2.5) this.pix_size++;
+			if (this.pix_size < 4 && this.average_dtime > game.best_perf * 2.5) this.pix_size++;
 			else if (this.pix_size > 1 && this.average_dtime < game.best_perf * 1.6) this.pix_size--;
 
 			this.pix_time = time;
 		}
 
-		let tl = game.screenToGameCoords(0, 0);
-		let br = game.screenToGameCoords(can.width, can.height);
-
-		let border = 5;
-		let l = -border + tl.x;
-		let t = -border + tl.y;
-		let w = br.x - tl.x + border * 2;
-		let h = br.y - tl.y + border * 2;
+		let { l, t, w, h } = this.getBorders();
 
 		for (let i = 0; i < (dtime * game.speed * game.player.view_distance * 5000) / (this.pix_size * this.pix_size) / (w * h); i++) {
 			let p = {
 				x: Math.floor(l + Math.random() * w),
 				y: Math.floor(t + Math.random() * h)
 			};
-
-			p.x -= p.x % this.pix_size;
-			p.y -= p.y % this.pix_size;
 
 			let view_distance = 0;
 			let mag = Infinity;

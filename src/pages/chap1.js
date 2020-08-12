@@ -1,11 +1,11 @@
 pages['chap1'] = game => {
+	game.title = lang == '#fr' ? 'Retrouvailles' : 'Reunion';
+
 	game.images = [];
 	game.sounds = {
-		click: new Audio('./sounds/click.mp3'),
-		ambience: new Audio('./sounds/nature-ambience.mp3')
+		click: new Audio('./sounds/click.mp3')
 	};
-	game.soundtrack = game.sounds.ambience;
-	game.soundtrack.volume = 0.05;
+	game.soundtrack = null;
 	game.loadImg(
 		[
 			'ground1.png',
