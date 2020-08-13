@@ -1,5 +1,5 @@
-let onAndroid = /Android/i.test(navigator.userAgent);
-// let onAndroid = true;
+// let onAndroid = /Android/i.test(navigator.userAgent);
+let onAndroid = true;
 
 let lang = getCookie('lang');
 if (!lang && onAndroid) alert('🇺🇸 This game uses cookies to save language preferences and progression in game.\n🇫🇷 Ce jeu utilise les cookies pour enregistrer les préférences de langue et la progression du jeu.');
