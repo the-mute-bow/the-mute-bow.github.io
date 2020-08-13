@@ -1,4 +1,4 @@
-let version = '2.0.22';
+let version = '2.0.23';
 
 let files = [
 	// system
@@ -31,9 +31,10 @@ let files = [
 	// gameplay
 	'./sounds/click.mp3',
 	'./sounds/Art Of Silence.mp3',
-	'./sounds/night-ambience.mp3',
 	'./sounds/rain-piano.mp3',
-	'./sounds/dark-ambient.mp3',
+	'./sounds/night-ambience.mp3',
+	'./sounds/dark-ambience.mp3',
+	'./sounds/tense-ambience.mp3',
 
 	'./img/title.png',
 	'./img/ground1.png',

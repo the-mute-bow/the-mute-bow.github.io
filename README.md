@@ -10,14 +10,21 @@
 
 ## Change log
 
+### **B2.0.23**
+
+-   `Game.event_map`.
+-   Fog appears when `Creature` nearby.
+-   `'chap2'` starts with `Humans` in front of the house.
+-   If a `Human` is a `Creature`'s target, the player's view distance is set to 24 and the soundtrack switches to `'tense-ambience.mp3'`, and this effect goes when all humans get lost by Creatures.
+
 ### **B2.0.22**
 
 -   New app icon.
--   Night soundtrack replaced by `'night-ambient.mp3'`.
--   Night soundtrack is set to `'dark-ambient.mp3'` when fog is on.
--   Removed `'nature-ambient.mp3'`.
+-   Night soundtrack replaced by `'night-ambience.mp3'`.
+-   Night soundtrack is set to `'dark-ambience.mp3'` when fog is on.
+-   Removed `'nature-ambience.mp3'`.
 -   Nicer and more efficient fog for low performance devices.
--   Player can only see `Creature`'s aura when there is no fog.
+-   `Game.player` can only see `Creature`'s aura when there is no fog.
 
 ### **B2.0.21**
 

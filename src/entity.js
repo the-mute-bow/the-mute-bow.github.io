@@ -264,7 +264,7 @@ class Human extends Entity {
 		}
 
 		if (this.aura && time - this.aura.last > this.aura.delay) {
-			this.createAura(this.aura.color, 10);
+			this.createAura(this.aura.color, 0);
 			this.aura.last = time + this.aura.delay * Math.random() * 0.5;
 			if (this.name == 'creature' && game.fog_map) this.aura.delay = 10;
 		}
@@ -429,8 +429,8 @@ class Particle {
 
 		if (this.color == 'blood') {
 			let r = Math.floor(192 + Math.random() * 63);
-			let g = Math.floor(Math.random() * 96);
-			let b = Math.floor(Math.random() * 96);
+			let g = Math.floor(Math.random() * 32);
+			let b = Math.floor(Math.random() * 32);
 			this.color = `rgba(${r}, ${g}, ${b}, 1)`;
 		}
 
@@ -446,10 +446,11 @@ class Particle {
 		if (this.timeout && this.time + this.timeout - time <= 0) this.dead = true;
 
 		for (let c of 'xyz') this.pos[c] += this.vel[c] * dtime * game.speed;
+		this.vel.z -= (this.gravity * dtime * game.speed) / 10000;
 	}
 
-	draw(ctx, mode) {
-		ctx.globalAlpha = this.opacity;
+	draw(ctx, mode, alpha = 1) {
+		ctx.globalAlpha = this.opacity * alpha;
 		if (mode == 'main') {
 			ctx.fillStyle = this.color;
 
@@ -480,39 +481,52 @@ class Particle {
 }
 
 class Trail extends Particle {
-	constructor(pos, vel, width = 10, opacity = 1, shadow = true, color = 'white', gravity = 0, trailing = false) {
-		super(pos, vel, width, opacity, shadow, color, gravity);
+	constructor(pos, vel, width = 10, opacity = 1, shadow = true, color = 'white', gravity = 0, trailing = false, timeout = null, slowness = 0) {
+		super(pos, vel, width, opacity, shadow, color, gravity, timeout);
 		this.endPoint = null;
 		this.stuck = false;
 		this.trailing = trailing;
 		this.trail_time = time;
+		this.slowness = slowness;
 	}
 
 	animate(dtime, solids, mobs) {
-		let ex = this.get3DEx();
-		let h = ex.head;
+		if (this.timeout && this.time + this.timeout - time <= 0) this.dead = true;
+		else {
+			let ex = this.get3DEx();
+			let h = ex.head;
 
-		this.stuck = h.z < 0.5;
+			this.stuck = h.z < 0.5;
 
-		if (!this.stuck) {
-			for (let solid of solids) {
-				if (solid.collidePoint(h.x, h.y, h.z)) {
-					this.stuck = true;
-					break;
+			if (!this.stuck) {
+				for (let solid of solids) {
+					if (solid.collidePoint(h.x, h.y, h.z)) {
+						this.stuck = true;
+						break;
+					}
 				}
 			}
-		}
 
-		if (!this.stuck) {
-			for (let c of 'xyz') this.pos[c] += this.vel[c] * dtime * game.speed;
-			this.vel.z -= (this.gravity * dtime * game.speed) / 10000;
-		}
+			if (!this.stuck) {
+				for (let c of 'xyz') {
+					this.pos[c] += this.vel[c] * dtime * game.speed;
+					this.vel[c] *= 1 - this.slowness * dtime;
+				}
+				this.vel.z -= (this.gravity * dtime * game.speed) / 10000;
 
-		if (this.trailing && !this.stuck && this.trail_time - time < 0) {
-			this.trail_time = time + 30;
-			game.entities.particles.push(new Particle(ex.tail, { x: 0, y: 0, z: 0 }, 1, Math.random() / 2 + 0.5, true, 'white', 0, -500));
+				for (let mob of mobs) {
+					if (mob.collidePoint(h.x, h.y, h.z)) this.onContact(mob);
+				}
+			}
+
+			if (this.trailing && !this.stuck && this.trail_time - time < 0) {
+				this.trail_time = time + 30;
+				game.entities.particles.push(new Particle(ex.tail, { x: 0, y: 0, z: 0 }, 1, Math.random() / 2 + 0.5, true, this instanceof Arrow ? 'white' : this.color, 0, -500));
+			}
 		}
 	}
+
+	onContact(mob) {}
 
 	get3DEx() {
 		let mag = this.getMag();
@@ -554,9 +568,9 @@ class Trail extends Particle {
 		}
 	}
 
-	draw(ctx, mode) {
+	draw(ctx, mode, alpha = 1) {
 		if (this.getMag()) {
-			ctx.globalAlpha = this.opacity;
+			ctx.globalAlpha = this.opacity * alpha;
 			ctx.fillStyle = mode == 'shadow' ? 'black' : this.color;
 			if (mode == 'shadow') ctx.globalAlpha *= 0.2;
 
@@ -582,7 +596,36 @@ class Trail extends Particle {
 
 class Arrow extends Trail {
 	constructor(pos, vel) {
-		super(pos, vel, 8, 1, true, '#4e443a', 0.5, true);
+		super(pos, vel, 8, 1, true, '#4e443a', 0.5, true, null, 0.0001);
 		this.endPoint = 'white';
+		this.victims = [];
+	}
+
+	onContact(mob) {
+		if (mob instanceof Creature && !this.victims.includes(mob)) {
+			mob.health.val -= this.getMag() * 10;
+			this.victims.push(mob);
+			for (let c of 'xyz') this.vel[c] *= 0.5;
+			for (let i = 0; i < 5; i++) {
+				game.entities.particles.push(
+					new Trail(
+						{ ...this.pos },
+						{
+							x: this.vel.x * 0.9 + (Math.random() - 0.5) * 0.05,
+							y: this.vel.y * 0.9 + (Math.random() - 0.5) * 0.05,
+							z: this.vel.z * 0.9 + (Math.random() - 0.5) * 0.05
+						},
+						1,
+						1,
+						true,
+						'blood',
+						0.1,
+						true,
+						-1000,
+						0.01
+					)
+				);
+			}
+		}
 	}
 }

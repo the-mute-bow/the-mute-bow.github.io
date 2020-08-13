@@ -147,7 +147,7 @@ const loadPage = page_name => {
 window.onload = () => {
 	if (onAndroid) {
 		initTouch();
-		loadPage('chap2');
+		loadPage('menu');
 		mainloop();
 	} else setScreen('android');
 };

@@ -4,12 +4,12 @@ pages['chap2'] = game => {
 	game.images = [];
 	game.sounds = {
 		click: new Audio('./sounds/click.mp3'),
-		click: new Audio('./sounds/click.mp3'),
-		dark: new Audio('./sounds/dark-ambient.mp3'),
-		ambience: new Audio('./sounds/night-ambience.mp3')
+		dark: new Audio('./sounds/dark-ambience.mp3'),
+		night: new Audio('./sounds/night-ambience.mp3'),
+		tense: new Audio('./sounds/tense-ambience.mp3')
 	};
 
-	game.soundtrack = game.sounds.ambience;
+	game.soundtrack = game.sounds.night;
 
 	game.loadImg(
 		[
@@ -252,10 +252,10 @@ pages['chap2'] = game => {
 				],
 				trees: [],
 				humans: [
-					new Human('eliot', { x: 250, y: 160, z: 0 }, '-night'),
-					new Human('lea', { x: 270, y: 165, z: 0 }, '-night'),
-					new Human('karmen', { x: 245, y: 175, z: 0 }, '-night'),
-					new Human('scott', { x: 260, y: 155, z: 0 }, '-night')
+					new Human('eliot', { x: 315, y: 120, z: 0 }, '-night'),
+					new Human('lea', { x: 320, y: 126, z: 0 }, '-night'),
+					new Human('karmen', { x: 297, y: 125, z: 0 }, '-night'),
+					new Human('scott', { x: 308, y: 128, z: 0 }, '-night')
 				],
 				creatures: [new Creature({ x: 190, y: 145, z: 0 }), new Creature({ x: 200, y: 136, z: 0 }), new Creature({ x: 205, y: 148, z: 0 })],
 				particles: []
@@ -355,37 +355,96 @@ pages['chap2'] = game => {
 			];
 
 			game.overlays = [
-				new OverText(
-					'fps',
-					overtext => `${game.fps.value}`,
-					overtext => ({
-						x: 8 * game.scale,
-						y: can.height - 2 * game.scale
-					}),
-					200,
-					8
-				),
-				new OverText(
-					'best',
-					overtext => `${Math.floor(1000 / game.best_perf)}`,
-					overtext => ({
-						x: 16 * game.scale,
-						y: can.height - 2 * game.scale
-					}),
-					200,
-					8
-				)
+				// new OverText(
+				// 	'fps',
+				// 	overtext => `${game.fps.value}`,
+				// 	overtext => ({
+				// 		x: 8 * game.scale,
+				// 		y: can.height - 2 * game.scale
+				// 	}),
+				// 	200,
+				// 	8
+				// ),
+				// new OverText(
+				// 	'best',
+				// 	overtext => `${Math.floor(1000 / game.best_perf)}`,
+				// 	overtext => ({
+				// 		x: 16 * game.scale,
+				// 		y: can.height - 2 * game.scale
+				// 	}),
+				// 	200,
+				// 	8
+				// )
 			];
 
-			game.events = [
-				new TimeEvent(8000, event => {
-					game.fog_map = new FogMap(game.ground.width, game.ground.height);
-					game.fog_map.humans.push(game.player);
-					game.fog_map.fill();
-					game.soundtrack.pause();
-					game.soundtrack = game.sounds.dark;
-				})
-			];
+			game.events = [];
+			game.event_map = {
+				creature_nearby: () => {
+					game.events.push(
+						new GameEvent(event => {
+							for (let creature of game.entities.creatures) {
+								let dx = creature.pos.x - game.player.pos.x;
+								let dy = creature.pos.y - game.player.pos.y;
+								if (Math.sqrt(dx * dx + dy * dy) < 56) {
+									event.done = true;
+									game.fog_map = new FogMap(game.ground.width, game.ground.height);
+									game.fog_map.humans.push(game.player);
+									game.fog_map.fill();
+									game.soundtrack.pause();
+									game.soundtrack = game.sounds.dark;
+									game.triggerEvent('creature_chase');
+									break;
+								}
+							}
+						})
+					);
+				},
+				creature_chase: () => {
+					game.events.push(
+						new GameEvent(event => {
+							for (let creature of game.entities.creatures) {
+								if (creature.target && creature.target.obj && creature.target.obj instanceof Human) {
+									event.done = true;
+									game.soundtrack.pause();
+									game.soundtrack = game.sounds.tense;
+									game.soundtrack.currentTime = 0;
+									game.player.view_distance = 24;
+									game.triggerEvent('creature_toofar');
+									break;
+								}
+							}
+						})
+					);
+				},
+				creature_toofar: () => {
+					game.events.push(
+						new TimeEvent(1000, event => {
+							game.events.push(
+								new GameEvent(event => {
+									let far = true;
+									for (let creature of game.entities.creatures) {
+										if (creature.target && creature.target.obj && creature.target.obj instanceof Human) {
+											far = false;
+											break;
+										}
+									}
+
+									if (far) {
+										event.done = true;
+										game.soundtrack.pause();
+										game.soundtrack = game.sounds.dark;
+										game.soundtrack.currentTime = 0;
+										game.player.view_distance = 64;
+										game.triggerEvent('creature_chase');
+									}
+								})
+							);
+						})
+					);
+				}
+			};
+
+			game.triggerEvent('creature_nearby');
 
 			game.loop = true;
 

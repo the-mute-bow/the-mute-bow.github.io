@@ -41,7 +41,12 @@ class Game {
 		this.buttons = [];
 		this.overlays = [];
 		this.events = [];
+		this.event_map = {};
 		this.can = document.createElement('canvas');
+	}
+
+	triggerEvent(name) {
+		this.event_map[name]();
 	}
 
 	pause(given) {
@@ -374,6 +379,9 @@ class Game {
 		fill(gctx, `rgba(0, 0, 0, ${this.strat_fog * 0.6})`);
 		if (this.mode == 'strat') this.strat_fog = this.strat_fog * 0.8 + 0.2;
 		else this.strat_fog = this.strat_fog * 0.8;
+
+		// Particle ghost
+		for (let particle of [...this.entities.particles].sort((a, b) => a.getFeet().y - b.getFeet().y)) particle.draw(gctx, 'main', this.fog_map ? 0.5 : 0.1);
 
 		// Human ghost
 		for (let human of [...this.entities.humans].sort((a, b) => a.getFeet().y - b.getFeet().y)) {

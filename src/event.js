@@ -4,7 +4,9 @@ class GameEvent {
 		this.done = false;
 	}
 
-	tick() {}
+	tick() {
+		this.callback(this);
+	}
 }
 
 class TimeEvent extends GameEvent {
