@@ -10,12 +10,26 @@
 
 ## Change log
 
+### **B2.0.24**
+
+-   More white in `'blood'` color.
+-   `Creature` die if their health is below 0.
+-   Added missing images to cache.
+-   `'error'` screen.
+-   `Game.loadIMG` fail triggers `'error'` screen.
+-   `Game.player.view_distance` is no longer set to 24 when chased by a `Creature.`
+-   `Creature` hit `Human` on colision.
+-   Hitting `Human` decreases its `view_distance`.
+-   If `Human.view_distance` is lower than 12, `Human` dies.
+-   No drawing for health, stamina and mana anymore.
+
 ### **B2.0.23**
 
 -   `Game.event_map`.
 -   Fog appears when `Creature` nearby.
 -   `'chap2'` starts with `Humans` in front of the house.
 -   If a `Human` is a `Creature`'s target, the player's view distance is set to 24 and the soundtrack switches to `'tense-ambience.mp3'`, and this effect goes when all humans get lost by Creatures.
+-   If a `Creature` gets hit by an `Arrow` then `Creature.health.val` goes down according to the `Arrow`'s speed.
 
 ### **B2.0.22**
 

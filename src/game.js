@@ -65,9 +65,10 @@ class Game {
 
 		if (this.mode == 'normal') this.speed = 1;
 		else {
+			this.speed = 1;
 			this.events.push(
-				new TimeEvent(500, event => {
-					this.speed = 0.1;
+				new TimeEvent(1000, event => {
+					if (this.mode == 'pause') this.speed = 0.1;
 				})
 			);
 		}
@@ -92,6 +93,9 @@ class Game {
 		}
 
 		if (this.fog_map) this.fog_map.animate(dtime);
+
+		this.entities.humans = this.entities.humans.filter(human => !human.dead);
+		this.entities.creatures = this.entities.creatures.filter(creature => !creature.dead);
 
 		for (let entity of [...this.entities.trees, ...this.entities.humans, ...this.entities.creatures, ...this.entities.particles])
 			entity.animate(dtime, [...this.entities.buildings, ...this.entities.trees], [...this.entities.humans, ...this.entities.creatures]);
@@ -309,7 +313,7 @@ class Game {
 				if (dx > trig_dist || dy > trig_dist || Math.sqrt(dx * dx + dy * dy) > trig_dist) creature.target = null;
 			}
 
-			if (!creature.target || creature.target.obj.health <= 0) {
+			if (!creature.target || creature.target.obj.health.val <= 0) {
 				for (let human of this.entities.humans) {
 					let dx = Math.abs(human.pos.x - creature.pos.x);
 					let dy = Math.abs(human.pos.y - creature.pos.y);
@@ -475,33 +479,33 @@ class Game {
 		}
 
 		// health, stamina, mana
-		if (this.player && this.mode != 'pause') {
-			let c = can.height / 50;
-			let offset = { x: c, y: c };
-			let i = this.player.health.val;
-			while (i > 0) {
-				mctx.fillStyle = `rgba(0, 0, 0, 0.2)`;
-				mctx.fillRect(offset.x + 0.5 * c, offset.y + 0.5 * c, 2 * c, 2 * c);
+		// if (this.player && this.mode != 'pause') {
+		// 	let c = can.height / 50;
+		// 	let offset = { x: c, y: c };
+		// 	let i = this.player.health.val;
+		// 	while (i > 0) {
+		// 		mctx.fillStyle = `rgba(0, 0, 0, 0.2)`;
+		// 		mctx.fillRect(offset.x + 0.5 * c, offset.y + 0.5 * c, 2 * c, 2 * c);
 
-				mctx.fillStyle = i > 1 ? `rgba(192, 48, 48, 0.8)` : `rgba(128, 48, 48, 0.6)`;
-				mctx.fillRect(offset.x, offset.y, 2 * c, 2 * c);
+		// 		mctx.fillStyle = i > 1 ? `rgba(192, 48, 48, 0.8)` : `rgba(128, 48, 48, 0.6)`;
+		// 		mctx.fillRect(offset.x, offset.y, 2 * c, 2 * c);
 
-				offset.x += 3 * c;
-				i -= i > 1 ? 2 : 1;
-			}
+		// 		offset.x += 3 * c;
+		// 		i -= i > 1 ? 2 : 1;
+		// 	}
 
-			mctx.fillStyle = `rgba(0, 0, 0, 0.2)`;
-			mctx.fillRect(offset.x + 0.5 * c, offset.y + 0.5 * c, this.player.stamina.val * c, c);
-			mctx.fillStyle = `rgba(255, 255, 255, 0.6)`;
-			mctx.fillRect(offset.x, offset.y, this.player.stamina.val * c, c);
+		// 	mctx.fillStyle = `rgba(0, 0, 0, 0.2)`;
+		// 	mctx.fillRect(offset.x + 0.5 * c, offset.y + 0.5 * c, this.player.stamina.val * c, c);
+		// 	mctx.fillStyle = `rgba(255, 255, 255, 0.6)`;
+		// 	mctx.fillRect(offset.x, offset.y, this.player.stamina.val * c, c);
 
-			offset.y += c;
+		// 	offset.y += c;
 
-			mctx.fillStyle = `rgba(0, 0, 0, 0.2)`;
-			mctx.fillRect(offset.x + 0.5 * c, offset.y + 0.5 * c, this.player.mana.val * c, c);
-			mctx.fillStyle = `rgba(96, 64, 192, 0.6)`;
-			mctx.fillRect(offset.x, offset.y, this.player.mana.val * c, c);
-		}
+		// 	mctx.fillStyle = `rgba(0, 0, 0, 0.2)`;
+		// 	mctx.fillRect(offset.x + 0.5 * c, offset.y + 0.5 * c, this.player.mana.val * c, c);
+		// 	mctx.fillStyle = `rgba(96, 64, 192, 0.6)`;
+		// 	mctx.fillRect(offset.x, offset.y, this.player.mana.val * c, c);
+		// }
 
 		// Black screen
 		fill(mctx, `rgba(0, 0, 0, ${this.cam.o})`);
@@ -514,6 +518,8 @@ class Game {
 
 		let img = new Image();
 		img.src = src;
+
+		img.addEventListener('error', event => setScreen('error'));
 
 		img.addEventListener('load', event => {
 			let key = src.split('/')[src.split('/').length - 1].split('.')[0];
@@ -528,7 +534,8 @@ class Game {
 	}
 
 	goTarget(dtime) {
-		if (this.fog_map && this.player && this.mode != 'pause') this.cam.targ_h = Math.min(this.player.view_distance * 2.6, 72);
+		if (this.mode == 'pause') this.cam.targ_h = 100;
+		else if (this.fog_map && this.player) this.cam.targ_h = Math.min(Math.max(64, this.player.view_distance * 2), 72);
 		else this.cam.targ_h = this.cam.default_h;
 
 		let t = this.cam.target;
@@ -686,7 +693,7 @@ class FogMap {
 
 		let { l, t, w, h } = this.getBorders();
 
-		for (let i = 0; i < (dtime * game.speed * game.player.view_distance * 5000) / (this.pix_size * this.pix_size) / (w * h); i++) {
+		for (let i = 0; i < Math.max(200, (dtime * game.speed * game.player.view_distance * 5000) / (w * h)) / (this.pix_size * this.pix_size); i++) {
 			let p = {
 				x: Math.floor(l + Math.random() * w),
 				y: Math.floor(t + Math.random() * h)

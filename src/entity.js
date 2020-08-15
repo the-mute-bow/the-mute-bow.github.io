@@ -151,6 +151,7 @@ class Human extends Entity {
 		);
 
 		this.name = name;
+		this.dead = false;
 		this.health = { val: 6, max: 6 };
 		this.stamina = { val: 0, max: 9, time: 0 };
 		this.mana = { val: 3, max: 9 };
@@ -176,10 +177,23 @@ class Human extends Entity {
 		game.entities.particles.push(new Particle({ x: x, y: y, z: z }, { x: 0, y: 0, z: 0 }, 1, 1, false, color, gravity, -500));
 	}
 
+	die() {
+		for (let i = 0; i < 20; i++) this.createAura('blood', 0);
+		this.dead = true;
+	}
+
 	getOrient(divs) {
 		let o = Math.atan2(this.look.y, this.look.x) + Math.PI;
 		if (divs == 8) o = (o + Math.PI / 8) % (2 * Math.PI);
 		return Math.floor((o / Math.PI / 2) * divs);
+	}
+
+	touchMob(mob, dtime) {
+		let h = this.getFeet();
+		let m = mob.getFeet();
+		let v = { x: m.x - h.x, y: m.y - h.y };
+		let mag = Math.sqrt(v.x * v.x + v.y * v.y);
+		mob.pushTo(v.x / mag, v.y / mag, dtime);
 	}
 
 	animate(dtime, solids, mobs) {
@@ -215,15 +229,7 @@ class Human extends Entity {
 		}
 
 		for (let mob of mobs) {
-			if (mob != this) {
-				if (this.collideGround(mob, false)) {
-					let h = this.getFeet();
-					let m = mob.getFeet();
-					let v = { x: m.x - h.x, y: m.y - h.y };
-					let mag = Math.sqrt(v.x * v.x + v.y * v.y);
-					mob.pushTo(v.x / mag, v.y / mag, dtime);
-				}
-			}
+			if (mob != this && this.collideGround(mob, false)) this.touchMob(mob, dtime);
 		}
 
 		if (move_mag > 0.4) {
@@ -268,12 +274,18 @@ class Human extends Entity {
 			this.aura.last = time + this.aura.delay * Math.random() * 0.5;
 			if (this.name == 'creature' && game.fog_map) this.aura.delay = 10;
 		}
+
+		if (this.view_distance < 12) {
+			this.health.val = 0;
+			this.view_distance = 0;
+		}
+		if (this.health.val <= 0) this.die();
 	}
 
 	draw(ctx, sprite_name = 'main', coords = null) {
 		let { x, y, z } = coords ? coords : { x: Math.floor(this.pos.x + 0.5), y: Math.floor(this.pos.y + 0.5), z: this.pos.z };
 
-		if (this.name != 'creature' || game.fog_map) {
+		if (this.name != 'creature' || (game.fog_map && game.player && game.player.view_distance < 80)) {
 			if (sprite_name == 'shadow') {
 				let shadow = this.sprites[sprite_name];
 				y -= z * 0.5;
@@ -373,6 +385,23 @@ class Creature extends Human {
 		this.speed = 0.6;
 		this.target = null;
 	}
+
+	die() {
+		for (let i = 0; i < 20; i++) this.createAura('blood', 0);
+		for (let i = 0; i < 10; i++) this.createAura(this.aura.color, 0);
+		this.dead = true;
+	}
+
+	touchMob(mob, dtime) {
+		let h = this.getFeet();
+		let m = mob.getFeet();
+		let v = { x: m.x - h.x, y: m.y - h.y };
+		let mag = Math.sqrt(v.x * v.x + v.y * v.y);
+		if (mob instanceof Human) {
+			mob.pushTo((v.x / mag) * 10, (v.y / mag) * 10, dtime);
+			mob.view_distance *= 0.9;
+		} else mob.pushTo(v.x / mag, v.y / mag, dtime);
+	}
 }
 
 class Tree extends Entity {
@@ -429,8 +458,8 @@ class Particle {
 
 		if (this.color == 'blood') {
 			let r = Math.floor(192 + Math.random() * 63);
-			let g = Math.floor(Math.random() * 32);
-			let b = Math.floor(Math.random() * 32);
+			let g = Math.floor(64 + Math.random() * 32);
+			let b = Math.floor(64 + Math.random() * 32);
 			this.color = `rgba(${r}, ${g}, ${b}, 1)`;
 		}
 
@@ -603,17 +632,18 @@ class Arrow extends Trail {
 
 	onContact(mob) {
 		if (mob instanceof Creature && !this.victims.includes(mob)) {
-			mob.health.val -= this.getMag() * 10;
+			let arr_mag = this.getMag();
+			mob.health.val -= arr_mag * 10;
 			this.victims.push(mob);
 			for (let c of 'xyz') this.vel[c] *= 0.5;
-			for (let i = 0; i < 5; i++) {
+			for (let i = 0; i < 50 * arr_mag; i++) {
 				game.entities.particles.push(
 					new Trail(
 						{ ...this.pos },
 						{
-							x: this.vel.x * 0.9 + (Math.random() - 0.5) * 0.05,
-							y: this.vel.y * 0.9 + (Math.random() - 0.5) * 0.05,
-							z: this.vel.z * 0.9 + (Math.random() - 0.5) * 0.05
+							x: this.vel.x + (Math.random() - 0.5) * 0.07,
+							y: this.vel.y + (Math.random() - 0.5) * 0.07,
+							z: this.vel.z + (Math.random() - 0.5) * 0.07
 						},
 						1,
 						1,

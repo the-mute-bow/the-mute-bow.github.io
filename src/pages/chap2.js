@@ -266,7 +266,10 @@ pages['chap2'] = game => {
 			game.player = game.getHuman('eliot');
 			game.player.target = null;
 
-			game.fog_map = null;
+			game.fog_map = new FogMap(game.ground.width, game.ground.height);
+			game.fog_map.humans.push(game.player);
+			game.player.view_distance = 80;
+			game.fog_map.fill();
 
 			game.cam = {
 				x: game.player.pos.x + 12,
@@ -379,17 +382,27 @@ pages['chap2'] = game => {
 
 			game.events = [];
 			game.event_map = {
+				creature_dead: () => {
+					game.events.push(
+						new GameEvent(event => {
+							if (!game.entities.creatures.length) {
+								event.done = true;
+								game.soundtrack.pause();
+								game.soundtrack = game.sounds.night;
+								game.player.view_distance = 80;
+							}
+						})
+					);
+				},
 				creature_nearby: () => {
 					game.events.push(
 						new GameEvent(event => {
 							for (let creature of game.entities.creatures) {
 								let dx = creature.pos.x - game.player.pos.x;
 								let dy = creature.pos.y - game.player.pos.y;
-								if (Math.sqrt(dx * dx + dy * dy) < 56) {
+								if (Math.sqrt(dx * dx + dy * dy) < 48) {
 									event.done = true;
-									game.fog_map = new FogMap(game.ground.width, game.ground.height);
-									game.fog_map.humans.push(game.player);
-									game.fog_map.fill();
+									game.player.view_distance = 64;
 									game.soundtrack.pause();
 									game.soundtrack = game.sounds.dark;
 									game.triggerEvent('creature_chase');
@@ -402,15 +415,17 @@ pages['chap2'] = game => {
 				creature_chase: () => {
 					game.events.push(
 						new GameEvent(event => {
-							for (let creature of game.entities.creatures) {
-								if (creature.target && creature.target.obj && creature.target.obj instanceof Human) {
-									event.done = true;
-									game.soundtrack.pause();
-									game.soundtrack = game.sounds.tense;
-									game.soundtrack.currentTime = 0;
-									game.player.view_distance = 24;
-									game.triggerEvent('creature_toofar');
-									break;
+							if (!game.entities.creatures.length) this.done = true;
+							else {
+								for (let creature of game.entities.creatures) {
+									if (creature.target && creature.target.obj && creature.target.obj instanceof Human) {
+										event.done = true;
+										game.soundtrack.pause();
+										game.soundtrack = game.sounds.tense;
+										game.soundtrack.currentTime = 0;
+										game.triggerEvent('creature_toofar');
+										break;
+									}
 								}
 							}
 						})
@@ -421,21 +436,23 @@ pages['chap2'] = game => {
 						new TimeEvent(1000, event => {
 							game.events.push(
 								new GameEvent(event => {
-									let far = true;
-									for (let creature of game.entities.creatures) {
-										if (creature.target && creature.target.obj && creature.target.obj instanceof Human) {
-											far = false;
-											break;
+									if (!game.entities.creatures.length) this.done = true;
+									else {
+										let far = true;
+										for (let creature of game.entities.creatures) {
+											if (creature.target && creature.target.obj && creature.target.obj instanceof Human) {
+												far = false;
+												break;
+											}
 										}
-									}
 
-									if (far) {
-										event.done = true;
-										game.soundtrack.pause();
-										game.soundtrack = game.sounds.dark;
-										game.soundtrack.currentTime = 0;
-										game.player.view_distance = 64;
-										game.triggerEvent('creature_chase');
+										if (far) {
+											event.done = true;
+											game.soundtrack.pause();
+											game.soundtrack = game.sounds.dark;
+											game.soundtrack.currentTime = 0;
+											game.triggerEvent('creature_chase');
+										}
 									}
 								})
 							);
@@ -444,6 +461,7 @@ pages['chap2'] = game => {
 				}
 			};
 
+			game.triggerEvent('creature_dead');
 			game.triggerEvent('creature_nearby');
 
 			game.loop = true;

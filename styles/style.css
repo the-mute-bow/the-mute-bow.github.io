@@ -55,4 +55,8 @@ canvas {
 .hidden {
   display: none;
 }
+
+.red {
+  color: #e88;
+}
 /*# sourceMappingURL=style.css.map */

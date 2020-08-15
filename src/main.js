@@ -1,5 +1,5 @@
-// let onAndroid = /Android/i.test(navigator.userAgent);
-let onAndroid = true;
+let onAndroid = /Android/i.test(navigator.userAgent);
+// let onAndroid = true;
 
 let lang = getCookie('lang');
 if (!lang && onAndroid) alert('🇺🇸 This game uses cookies to save language preferences and progression in game.\n🇫🇷 Ce jeu utilise les cookies pour enregistrer les préférences de langue et la progression du jeu.');
@@ -86,6 +86,11 @@ const setScreen = newmode => {
 			gif_text.innerHTML = lang == '#fr' ? 'Jeu disponible uniquement sur Android.' : 'Game only available on Android.';
 		}
 
+		if (mode == 'error') {
+			gif_text.innerHTML = lang == '#fr' ? 'Erreur.' : 'Error.';
+			gif_text.classList.add('red');
+		}
+
 		if (mode == 'loading') {
 			gif_text.innerHTML = lang == '#fr' ? 'Chargement...' : 'Loading...';
 		}
@@ -111,7 +116,9 @@ const resize = () => {
 };
 
 const mainloop = newtime => {
-	let dtime = newtime - oldtime;
+	if (mode == 'error') return;
+
+	let dtime = Math.min(newtime - oldtime, 200);
 	oldtime = newtime;
 
 	let sound = false;
@@ -133,6 +140,7 @@ const mainloop = newtime => {
 		if (sound) game.soundtrack.play();
 		else game.soundtrack.pause();
 	}
+
 	requestAnimationFrame(mainloop);
 };
 
