@@ -1,6 +1,6 @@
 # The Mute Bow
 
-<img src="./img/menu.jpg"/>
+<img src="https://iconejey.github.io/img/the-mute-bow.gif"/>
 
 ## Links
 
@@ -10,7 +10,17 @@
 
 ## Change log
 
-### **B2.0.24**
+### **0.0.25**
+
+-   Joysticks apearance now depends on screen height.
+-   Sheep sprites.
+-   New Icon.
+-   More info on `'error'` screen and new `'error.gif'`.
+-   Modified `'loading.gif'`.
+-   Displaying version on gif sceens.
+-   Dev mode when `location.hash` set to `'#dev'`.
+
+### **0.0.24**
 
 -   More white in `'blood'` color.
 -   `Creature` die if their health is below 0.
@@ -23,7 +33,7 @@
 -   If `Human.view_distance` is lower than 12, `Human` dies.
 -   No drawing for health, stamina and mana anymore.
 
-### **B2.0.23**
+### **0.0.23**
 
 -   `Game.event_map`.
 -   Fog appears when `Creature` nearby.
@@ -31,7 +41,7 @@
 -   If a `Human` is a `Creature`'s target, the player's view distance is set to 24 and the soundtrack switches to `'tense-ambience.mp3'`, and this effect goes when all humans get lost by Creatures.
 -   If a `Creature` gets hit by an `Arrow` then `Creature.health.val` goes down according to the `Arrow`'s speed.
 
-### **B2.0.22**
+### **0.0.22**
 
 -   New app icon.
 -   Night soundtrack replaced by `'night-ambience.mp3'`.
@@ -40,28 +50,28 @@
 -   Nicer and more efficient fog for low performance devices.
 -   `Game.player` can only see `Creature`'s aura when there is no fog.
 
-### **B2.0.21**
+### **0.0.21**
 
 -   `game.fog_map` won't remember light pixels (less RAM consumption) and will use screen borders.
 -   Multiple `Human` can see in `game.fog_map`.
 -   Test for a new app icon.
 -   `'rain-piano.mp3'` is now the night soundtrack.
 
-### **B2.0.20**
+### **0.0.20**
 
 -   Larger `Human` aura.
 -   Stronger `Human` shoot.
 -   `game.fog_map`.
 -   `game.fog_map.pix_size` now adaptative to device performances.
 
-### **B2.0.19**
+### **0.0.19**
 
 -   `Human` aura.
 -   `Creature` dark aura.
 -   `Creature` exclam alert and hunting `Human` if too close.
 -   `Creature` stops hunting if human too far
 
-### **B2.0.18**
+### **0.0.18**
 
 -   Text overlays.
 -   Pause text.
@@ -70,19 +80,19 @@
 -   `Arrow` trails.
 -   `Human.stamina.val` goes up faster.
 
-### **B2.0.17**
+### **0.0.17**
 
 -   `'pause'` mode now sets `game.speed` to 0.1.
 -   Fixed `'menu2-button'` && `'pause-button'` cache error.
 -   Fixed `Arrow` not getting stuck in solids.
 -   Fixed `Human.sprites['bow-aim']` always drawed in front of `Human.sprites.main`.
 
-### **B2.0.16**
+### **0.0.16**
 
 -   `'pause'` mode.
 -   Quit / resume / pause buttons.
 
-### **B2.0.15**
+### **0.0.15**
 
 -   `game.player` aims with right joystick.
 -   `Human` look where they aims if `Human.stamina.val > 0`.
@@ -94,7 +104,7 @@
 -   Shooting `Arrow` drains `Human.stamina` and costs 1 wood.
 -   _No amo_ and _plus_ icons.
 
-### **B2.0.14**
+### **0.0.14**
 
 -   Screenshot of `game.can` via command line with `game.screenshot()`.
 -   Bigger map for `menu` and `chap1`.
@@ -104,32 +114,32 @@
 -   New app icon.
 -   Updated cache file list.
 
-### **B2.0.13**
+### **0.0.13**
 
 -   Beta weapon selection with buttons via right `'tap'` event.
 -   `Human.alert` and weapon indication.
 
-### **B2.0.12**
+### **0.0.12**
 
 -   Fixed button opacity problem.
 -   Overlays.
 -   Title on menu screen
 -   Added sounds to cache.
 
-### **B2.0.11**
+### **0.0.11**
 
 -   Borders on touch surface to prevent unwanted touches.
 -   fade apearing for buttons.
 -   Click sound for buttons.
 -   Game soundtrack.
 
-### **B2.0.10**
+### **0.0.10**
 
 -   Left special move chaged from dodge/boost to sprint.
 -   True menu and chap1 pages.
 -   Buttons and game events.
 
-### **B2.0.9**
+### **0.0.9**
 
 -   Human footsteps.
 -   `'strat'` game mode with left tap.
@@ -137,25 +147,25 @@
 -   Everything darkens in strategy mode except Humans.
 -   Strategy mode allows to make `Human` instances to follow `game.player`'s movements of to go/stay at a `(x, y)` position.
 
-### **B2.0.8**
+### **0.0.8**
 
 -   Hard colisions with `Entity` and `Tree` instances.
 -   Soft colisions with other `Human` instances.
 -   Dicreased `cam.h`.
 
-### **B2.0.7**
+### **0.0.7**
 
 -   `Human` walk cycle.
 -   Scott got a new haircut.
 -   Left `'special'` touch gives a speed boost to player and drains stamina.
 
-### **B2.0.6**
+### **0.0.6**
 
 -   Fixed game crash caused by `'special'` touch event detection.
 -   Fixed service worker version.
 -   Added `menu.js` images to cache storage.
 
-### **B2.0.5**
+### **0.0.5**
 
 -   Trees with animation.
 -   Tree calc.
@@ -163,7 +173,7 @@
 -   Entities now have shadows.
 -   Test for `viewport-fit=cover` in `viewport` meta tag.
 
-### **B2.0.4**
+### **0.0.4**
 
 -   Better camera system and transitions with `game.cam.target` and `game.cam.targ_h`.
 -   Using `game.cam.h` to calculate `game.scale`.
@@ -172,7 +182,7 @@
 -   Use of a `Human` instance for `game.cam.target`.
 -   `game.player` is now a `Human` instance and moves thanks to the left joystick.
 
-### **B2.0.3**
+### **0.0.3**
 
 -   Resolved _turn the screen_ page not displaying after loading the page.
 -   Added French version for update pop up.

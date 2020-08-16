@@ -1,5 +1,7 @@
 # Licence
 
+<img src="https://iconejey.github.io/img/the-mute-bow.gif"/>
+
 ### EN:
 
 The Mute Bow is a creation of [Nicolas Gouwy](https://github.com/Iconejey) and is free to play on [the-mute-bow.github.io](https://the-mute-bow.github.io/). Any copy without the mention of my name and any use or distribution for profit without my permission will lead to claim for any profits made or to prosecution.

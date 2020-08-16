@@ -320,6 +320,7 @@ pages['chap2'] = game => {
 									game.getButton('pause').mode = 'normal';
 									game.getButton('quit').kill(400);
 									btn.kill(400);
+									game.speed = 1;
 								},
 								200,
 								'normal',
@@ -337,12 +338,14 @@ pages['chap2'] = game => {
 								}),
 								btn => {
 									game.getOverlay('pause').kill(400);
+									game.getButton('pause').mode = 'normal';
 									game.getButton('pause').kill(400);
 									game.getButton('resume').kill(400);
 									btn.kill(400);
 									game.speed = 1;
 									game.events.push(
 										new TimeEvent(500, event => {
+											game.speed = 1;
 											game.pause(false);
 											loadPage('menu');
 										})
@@ -357,28 +360,41 @@ pages['chap2'] = game => {
 				)
 			];
 
-			game.overlays = [
-				// new OverText(
-				// 	'fps',
-				// 	overtext => `${game.fps.value}`,
-				// 	overtext => ({
-				// 		x: 8 * game.scale,
-				// 		y: can.height - 2 * game.scale
-				// 	}),
-				// 	200,
-				// 	8
-				// ),
-				// new OverText(
-				// 	'best',
-				// 	overtext => `${Math.floor(1000 / game.best_perf)}`,
-				// 	overtext => ({
-				// 		x: 16 * game.scale,
-				// 		y: can.height - 2 * game.scale
-				// 	}),
-				// 	200,
-				// 	8
-				// )
-			];
+			game.overlays =
+				lang == '#dev'
+					? [
+							new OverText(
+								'fps',
+								overtext => `${game.fps.value}`,
+								overtext => ({
+									x: 8 * game.scale,
+									y: can.height - 2 * game.scale
+								}),
+								200,
+								8
+							),
+							new OverText(
+								'best',
+								overtext => `${Math.floor(1000 / game.best_perf)}`,
+								overtext => ({
+									x: 16 * game.scale,
+									y: can.height - 2 * game.scale
+								}),
+								200,
+								8
+							),
+							new OverText(
+								'speed',
+								overtext => `${game.speed}`,
+								overtext => ({
+									x: 24 * game.scale,
+									y: can.height - 2 * game.scale
+								}),
+								200,
+								8
+							)
+					  ]
+					: [];
 
 			game.events = [];
 			game.event_map = {
@@ -403,6 +419,7 @@ pages['chap2'] = game => {
 								if (Math.sqrt(dx * dx + dy * dy) < 48) {
 									event.done = true;
 									game.player.view_distance = 64;
+									game.fog_map.fill();
 									game.soundtrack.pause();
 									game.soundtrack = game.sounds.dark;
 									game.triggerEvent('creature_chase');

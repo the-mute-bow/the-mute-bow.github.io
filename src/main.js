@@ -43,9 +43,11 @@ let dpi = window.devicePixelRatio;
 let can = document.querySelector('canvas');
 let over = document.getElementsByClassName('over')[0];
 let gifs = [...document.querySelectorAll('img')];
-let gif_text = document.querySelector('p');
+let gif_text = document.getElementById('message');
 let ctx = can.getContext('2d');
 let mode = '';
+
+let dev_log = '';
 
 let game = new Game();
 
@@ -87,7 +89,8 @@ const setScreen = newmode => {
 		}
 
 		if (mode == 'error') {
-			gif_text.innerHTML = lang == '#fr' ? 'Erreur.' : 'Error.';
+			gif_text.innerHTML = lang == '#fr' ? 'Erreur de chargement.' : 'Loading error.';
+			if (lang == '#dev') gif_text.innerHTML += `<br/>${dev_log}`;
 			gif_text.classList.add('red');
 		}
 
@@ -155,7 +158,7 @@ const loadPage = page_name => {
 window.onload = () => {
 	if (onAndroid) {
 		initTouch();
-		loadPage('menu');
+		loadPage('chap2');
 		mainloop();
 	} else setScreen('android');
 };

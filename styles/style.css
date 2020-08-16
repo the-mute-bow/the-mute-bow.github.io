@@ -43,13 +43,21 @@ canvas {
 
 .over p {
   position: absolute;
-  top: 50%;
-  width: 100%;
-  font-size: 24px;
-  -webkit-transform: translate(0, 36px);
-          transform: translate(0, 36px);
   font-family: Pixelar;
   text-align: center;
+  font-size: 24px;
+  width: 100%;
+}
+
+.over #message {
+  top: 50%;
+  -webkit-transform: translate(0, 36px);
+          transform: translate(0, 36px);
+}
+
+.over #version {
+  bottom: 8px;
+  opacity: 0.1;
 }
 
 .hidden {

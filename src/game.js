@@ -36,7 +36,7 @@ class Game {
 		this.foot_steps = [];
 		this.player = null;
 
-		this.touches = { L: null, R: null, rin: Math.floor(20 * dpi), rout: Math.floor(50 * dpi) };
+		this.touches = { L: null, R: null, rin: 20, rout: 50 };
 		this.touch_events = [];
 		this.buttons = [];
 		this.overlays = [];
@@ -68,7 +68,7 @@ class Game {
 			this.speed = 1;
 			this.events.push(
 				new TimeEvent(1000, event => {
-					if (this.mode == 'pause') this.speed = 0.1;
+					if (this.getButton('pause').mode == 'pressed') this.speed = 0.1;
 				})
 			);
 		}
@@ -86,6 +86,9 @@ class Game {
 		}
 
 		if (dtime < this.best_perf) this.best_perf = dtime;
+
+		this.touches.rin = Math.floor(can.height / 16);
+		this.touches.rout = Math.floor(can.height / 7);
 
 		if (this.soundtrack) {
 			if (this.mode == 'normal') this.soundtrack.volume = 0.3;
@@ -463,7 +466,7 @@ class Game {
 
 			mctx.fillStyle = touch_colors[side];
 			mctx.strokeStyle = touch_colors[side];
-			mctx.lineWidth = 4;
+			mctx.lineWidth = this.touches.rin / 16;
 
 			if (touch) {
 				if (game.player && this.mode == 'normal') {
@@ -519,7 +522,10 @@ class Game {
 		let img = new Image();
 		img.src = src;
 
-		img.addEventListener('error', event => setScreen('error'));
+		img.addEventListener('error', event => {
+			if (lang == '#dev') dev_log = src;
+			setScreen('error');
+		});
 
 		img.addEventListener('load', event => {
 			let key = src.split('/')[src.split('/').length - 1].split('.')[0];

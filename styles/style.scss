@@ -40,12 +40,20 @@ canvas {
 
 	p {
 		position: absolute;
-		top: 50%;
-		width: 100%;
-		font-size: 24px;
-		transform: translate(0, 36px);
 		font-family: Pixelar;
 		text-align: center;
+		font-size: 24px;
+		width: 100%;
+	}
+
+	#message {
+		top: 50%;
+		transform: translate(0, 36px);
+	}
+
+	#version {
+		bottom: 8px;
+		opacity: 0.1;
 	}
 }
 

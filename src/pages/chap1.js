@@ -9,7 +9,7 @@ pages['chap1'] = game => {
 	game.loadImg(
 		[
 			'ground1.png',
-			'buildings/small-house1.png',
+			'buildings/smallhouse1.png',
 			'buildings/small-house1-shadow.png',
 
 			'trees/pine1.png',

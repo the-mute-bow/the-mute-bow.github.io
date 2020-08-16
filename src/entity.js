@@ -165,7 +165,7 @@ class Human extends Entity {
 		this.target = { obj: null, x: this.pos.x, y: this.pos.y };
 		this.foot_step = 0;
 		this.aura = null;
-		this.view_distance = 64;
+		this.view_distance = 80;
 	}
 
 	createAura(color, gravity) {
