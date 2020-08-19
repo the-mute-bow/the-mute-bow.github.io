@@ -40,18 +40,16 @@ class Entity {
 	}
 
 	draw(ctx, sprite_name = 'main', coords = null) {
-		if (this.inScreen()) {
-			let sprite = this.sprites[sprite_name];
-			let { x, y, z } = coords ? coords : { x: Math.floor(this.pos.x + 0.5), y: Math.floor(this.pos.y + 0.5), z: this.pos.z };
+		let sprite = this.sprites[sprite_name];
+		let { x, y, z } = coords ? coords : { x: Math.floor(this.pos.x + 0.5), y: Math.floor(this.pos.y + 0.5), z: this.pos.z };
 
-			if (sprite) {
-				if (sprite_name == 'main') y -= z;
-				if (sprite_name == 'shadow') {
-					y -= z * 0.5;
-					x -= z * 0.65;
-				}
-				sprite.draw(ctx, { x: Math.floor(x), y: Math.floor(y), z: Math.floor(z) });
+		if (sprite) {
+			if (sprite_name == 'main') y -= z;
+			if (sprite_name == 'shadow') {
+				y -= z * 0.5;
+				x -= z * 0.65;
 			}
+			sprite.draw(ctx, { x: Math.floor(x), y: Math.floor(y), z: Math.floor(z) });
 		}
 	}
 
@@ -131,7 +129,7 @@ class Human extends Entity {
 
 		this.name = name;
 		this.dead = false;
-		this.health = { val: 6, max: 6 };
+		this.health = { val: 12, max: 9 };
 		this.stamina = { val: 0, max: 9, time: 0 };
 		this.mana = { val: 3, max: 9 };
 		this.wood = { val: 16, max: 32 };
@@ -159,6 +157,7 @@ class Human extends Entity {
 
 	die() {
 		for (let i = 0; i < 20; i++) this.createAura('blood', 0);
+		this.view_distance = 0;
 		this.dead = true;
 	}
 
@@ -185,7 +184,7 @@ class Human extends Entity {
 				this.attack.next_time = time + this.attack.delay;
 			}
 
-			if (this.weapon == 'axe') {
+			if (this.weapon == 'axe' || this.name == 'creature') {
 				let tile = this.sprites.axe_hit.tile;
 				if (this.attack.level == 1) {
 					tile.x = this.attack.progression;
@@ -283,82 +282,77 @@ class Human extends Entity {
 			if (this.name == 'creature' && game.fog_map) this.aura.delay = 10;
 		}
 
-		if (this.view_distance < 12) {
-			this.health.val = 0;
-			this.view_distance = 0;
-		}
+		this.view_distance = 12 + this.health.val * 5.7;
 		if (this.health.val <= 0) this.die();
 	}
 
 	draw(ctx, sprite_name = 'main', coords = null) {
-		if (this.inScreen()) {
-			let { x, y, z } = coords ? coords : { x: Math.floor(this.pos.x + 0.5), y: Math.floor(this.pos.y + 0.5), z: this.pos.z };
+		let { x, y, z } = coords ? coords : { x: Math.floor(this.pos.x + 0.5), y: Math.floor(this.pos.y + 0.5), z: this.pos.z };
 
-			if (this.name != 'creature' || (game.fog_map && game.player && game.player.view_distance < 80)) {
-				if (sprite_name == 'shadow') {
-					let shadow = this.sprites[sprite_name];
-					y -= z * 0.5;
-					x -= z * 0.65;
-					x = Math.floor(x);
-					y = Math.floor(y);
-					z = Math.floor(z);
-					shadow.draw(ctx, { x: x, y: y, z: z });
-				} else if (sprite_name == 'main') {
-					y -= z;
-					x = Math.floor(x);
-					y = Math.floor(y);
-					z = Math.floor(z);
-					let body = this.sprites[sprite_name];
-					body.tile.y = Math.min(Math.max(0, body.tile.y), 3);
+		if (this.name != 'creature' || (game.fog_map && game.player && game.player.view_distance < 80)) {
+			if (sprite_name == 'shadow') {
+				let shadow = this.sprites[sprite_name];
+				y -= z * 0.5;
+				x -= z * 0.65;
+				x = Math.floor(x);
+				y = Math.floor(y);
+				z = Math.floor(z);
+				shadow.draw(ctx, { x: x, y: y, z: z });
+			} else if (sprite_name == 'main') {
+				y -= z;
+				x = Math.floor(x);
+				y = Math.floor(y);
+				z = Math.floor(z);
+				let body = this.sprites[sprite_name];
+				body.tile.y = Math.min(Math.max(0, body.tile.y), 3);
 
-					if (this.weapon == 'bow' || this.weapon == 'axe') {
-						if (this.look.aim) {
-							if (this.weapon == 'bow') {
-								this.sprites.bow_aim.tile.x = this.getOrient(8);
-								if (this.look.y < 0) {
-									this.sprites.bow_aim.draw(ctx, { x: x, y: y, z: z });
-									body.draw(ctx, { x: x, y: y, z: z });
-								} else {
-									body.draw(ctx, { x: x, y: y, z: z });
-									this.sprites.bow_aim.draw(ctx, { x: x, y: y, z: z });
-								}
+				if (this.weapon == 'bow' || this.weapon == 'axe' || (this.name == 'creature' && this.attack)) {
+					if (this.look.aim) {
+						if (this.weapon == 'bow') {
+							this.sprites.bow_aim.tile.x = this.getOrient(8);
+							if (this.look.y < 0) {
+								this.sprites.bow_aim.draw(ctx, { x: x, y: y, z: z });
+								body.draw(ctx, { x: x, y: y, z: z });
 							} else {
 								body.draw(ctx, { x: x, y: y, z: z });
+								this.sprites.bow_aim.draw(ctx, { x: x, y: y, z: z });
 							}
 						} else {
-							if ((this.weapon == 'axe' || this.name == 'creature') && this.attack) {
-								let hit = this.sprites.axe_hit;
+							body.draw(ctx, { x: x, y: y, z: z });
+						}
+					} else {
+						if ((this.weapon == 'axe' || this.name == 'creature') && this.attack) {
+							let hit = this.sprites.axe_hit;
 
-								if (hit.tile.y < 2) {
-									hit.draw(ctx, { x: x, y: y, z: z });
-									body.draw(ctx, { x: x, y: y, z: z });
-								} else {
-									body.draw(ctx, { x: x, y: y, z: z });
-									hit.draw(ctx, { x: x, y: y, z: z });
-								}
-							} else if (this.weapon == 'bow' || this.weapon == 'axe') {
-								let o = body.tile.y;
-								let weapon = this.sprites[this.weapon];
-								weapon.tile.x = o == 1 || o == 2;
+							if (hit.tile.y < 2) {
+								hit.draw(ctx, { x: x, y: y, z: z });
+								body.draw(ctx, { x: x, y: y, z: z });
+							} else {
+								body.draw(ctx, { x: x, y: y, z: z });
+								hit.draw(ctx, { x: x, y: y, z: z });
+							}
+						} else if (this.weapon == 'bow' || this.weapon == 'axe') {
+							let o = body.tile.y;
+							let weapon = this.sprites[this.weapon];
+							weapon.tile.x = o == 1 || o == 2;
 
-								if (o < 2) {
-									weapon.draw(ctx, { x: x, y: y, z: z });
-									body.draw(ctx, { x: x, y: y, z: z });
-								} else {
-									body.draw(ctx, { x: x, y: y, z: z });
-									weapon.draw(ctx, { x: x, y: y, z: z });
-								}
+							if (o < 2) {
+								weapon.draw(ctx, { x: x, y: y, z: z });
+								body.draw(ctx, { x: x, y: y, z: z });
+							} else {
+								body.draw(ctx, { x: x, y: y, z: z });
+								weapon.draw(ctx, { x: x, y: y, z: z });
 							}
 						}
-					} else body.draw(ctx, { x: x, y: y, z: z });
-				} else {
-					y -= z;
-					x = Math.floor(x);
-					y = Math.floor(y);
-					z = Math.floor(z);
-					let sprite = this.sprites[sprite_name];
-					sprite.draw(ctx, { x: x, y: y, z: z });
-				}
+					}
+				} else body.draw(ctx, { x: x, y: y, z: z });
+			} else {
+				y -= z;
+				x = Math.floor(x);
+				y = Math.floor(y);
+				z = Math.floor(z);
+				let sprite = this.sprites[sprite_name];
+				sprite.draw(ctx, { x: x, y: y, z: z });
 			}
 		}
 	}
@@ -393,19 +387,21 @@ class Human extends Entity {
 	}
 
 	shoot(event, level) {
-		if (this.weapon == 'bow') {
-			this.arrow = new Arrow({ ...this.getFeet(), z: 10 }, { x: event.x / 8, y: event.y / 8, z: 0 });
-			game.entities.particles.push(this.arrow);
-			this.stamina.val--;
-			this.wood.val--;
-		} else if (this.weapon == 'axe' || this.name == 'creature') {
-			this.attack = {
-				dir: { ...this.look },
-				level: level,
-				progression: -1,
-				next_time: 0,
-				delay: 10
-			};
+		if (!this.dead) {
+			if (this.weapon == 'bow') {
+				this.arrow = new Arrow({ ...this.getFeet(), z: 10 }, { x: event.x / 8, y: event.y / 8, z: 0 });
+				game.entities.particles.push(this.arrow);
+				this.stamina.val--;
+				this.wood.val--;
+			} else if (this.weapon == 'axe' || this.name == 'creature') {
+				this.attack = {
+					dir: { ...this.look },
+					level: level,
+					progression: -1,
+					next_time: 0,
+					delay: 30
+				};
+			}
 		}
 	}
 }
@@ -414,7 +410,7 @@ class Creature extends Human {
 	constructor(pos) {
 		super('creature', pos);
 		this.aura = { color: '#212423', delay: 100, last: time };
-		this.speed = 0.6;
+		this.speed = 1.2;
 		this.target = null;
 	}
 
@@ -430,9 +426,11 @@ class Creature extends Human {
 		let v = { x: m.x - h.x, y: m.y - h.y };
 		let mag = Math.sqrt(v.x * v.x + v.y * v.y);
 		if (mob.name == 'creature') mob.pushTo(v.x / mag, v.y / mag, dtime);
-		else {
+		else if (!this.attack) {
 			mob.pushTo((v.x / mag) * 10, (v.y / mag) * 10, dtime);
-			mob.view_distance *= 0.9;
+			mob.health.val -= 1;
+			mob.view_distance = 96;
+			this.shoot(null, 1);
 		}
 	}
 }
@@ -502,6 +500,11 @@ class Particle {
 			let b = Math.floor(96 + Math.random() * 32);
 			this.color = `rgba(${r}, ${g}, ${b}, 1)`;
 		}
+	}
+
+	inScreen() {
+		let { l, t, w, h } = game.borders;
+		return l < this.pos.x && t < this.pos.y && this.pos.x < l + w && this.pos.y < t + h;
 	}
 
 	animate(dtime) {
@@ -666,7 +669,7 @@ class Arrow extends Trail {
 	onContact(mob) {
 		if (mob instanceof Creature && !this.victims.includes(mob)) {
 			let arr_mag = this.getMag();
-			mob.health.val -= arr_mag * 10;
+			mob.health.val -= arr_mag * 20;
 			this.victims.push(mob);
 			for (let c of 'xyz') this.vel[c] *= 0.5;
 			for (let i = 0; i < 50 * arr_mag; i++) {

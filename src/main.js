@@ -51,7 +51,7 @@ let dev_log = '';
 
 let game = new Game();
 
-const setScreen = newmode => {
+const setScreen = (newmode, message = null) => {
 	if (newmode != mode) {
 		mode = newmode;
 		// console.log('set mode to', mode);
@@ -84,23 +84,18 @@ const setScreen = newmode => {
 			}, 500);
 		}
 
-		if (mode == 'android') {
-			gif_text.innerHTML = lang == '#fr' ? 'Jeu disponible uniquement sur Android.' : 'Game only available on Android.';
-		}
+		if (mode == 'android') gif_text.innerHTML = lang == '#fr' ? 'Jeu disponible uniquement sur Android.' : 'Game only available on Android.';
 
 		if (mode == 'error') {
-			gif_text.innerHTML = lang == '#fr' ? 'Erreur de chargement.' : 'Loading error.';
+			if (message) gif_text.innerHTML = message;
+			else gif_text.innerHTML = lang == '#fr' ? 'Erreur de chargement.' : 'Loading error.';
 			if (lang == '#dev') gif_text.innerHTML += `<br/>${dev_log}`;
 			gif_text.classList.add('red');
 		}
 
-		if (mode == 'loading') {
-			gif_text.innerHTML = lang == '#fr' ? 'Chargement...' : 'Loading...';
-		}
+		if (mode == 'loading') gif_text.innerHTML = lang == '#fr' ? 'Chargement...' : 'Loading...';
 
-		if (mode == 'rotate-phone') {
-			gif_text.innerHTML = lang == '#fr' ? "Tourne l'écran." : 'Turn the screen.';
-		}
+		if (mode == 'rotate-phone') gif_text.innerHTML = lang == '#fr' ? "Tourne l'écran." : 'Turn the screen.';
 	}
 };
 
@@ -119,32 +114,38 @@ const resize = () => {
 };
 
 const mainloop = newtime => {
-	if (mode == 'error') return;
+	try {
+		if (mode == 'error') return;
 
-	let dtime = Math.min(newtime - oldtime, 200);
-	oldtime = newtime;
+		let dtime = Math.min(newtime - oldtime, 200);
+		oldtime = newtime;
 
-	let sound = false;
+		let sound = false;
 
-	if (innerWidth < innerHeight) setScreen('rotate-phone');
-	else if (!document.fullscreenElement) setScreen('touch-screen');
-	else if (!game.loop) setScreen('loading');
-	else {
-		setScreen('game');
-		resize();
+		if (innerWidth < innerHeight) setScreen('rotate-phone');
+		else if (!document.fullscreenElement) setScreen('touch-screen');
+		else if (!game.loop) setScreen('loading');
+		else {
+			setScreen('game');
+			resize();
 
-		sound = true;
-		time += game.speed * dtime;
-		game.tick(dtime);
-		game.graphics(dtime);
+			sound = true;
+			time += game.speed * dtime;
+			game.tick(dtime);
+			game.graphics(dtime);
+		}
+
+		if (game.soundtrack) {
+			if (sound) game.soundtrack.play();
+			else game.soundtrack.pause();
+		}
+
+		requestAnimationFrame(mainloop);
+	} catch (error) {
+		dev_log = error;
+		setScreen('error', lang == '#fr' ? 'Erreur interne.' : 'Internal error.');
+		console.error(error);
 	}
-
-	if (game.soundtrack) {
-		if (sound) game.soundtrack.play();
-		else game.soundtrack.pause();
-	}
-
-	requestAnimationFrame(mainloop);
 };
 
 const loadPage = page_name => {

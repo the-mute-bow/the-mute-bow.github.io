@@ -10,6 +10,16 @@
 
 ## Change log
 
+### **0.0.27**
+
+-   `Creature` are faster.
+-   `Entity` and `Particle` are filtered to keep only the ones on screen before sorting.
+-   Larger `Human` hitbox (making `Creatures` easier to hit with `Arrow`).
+-   Limited `Game.best_perf` to 16.6 (60fps).
+-   `Game.best_perf` determined from `Game.average_dtime`.
+-   `Human.view_ditance` determined from `Human.health.val`.
+-   _You are dead_ pause screen with a `Button` to get back to `'menu'` page.
+
 ### **0.0.26**
 
 -   `Human` axe hit and special animations.

@@ -6,6 +6,7 @@ class Game {
 		this.title = null;
 
 		this.best_perf = 40;
+		this.average_dtime = 40;
 
 		this.images = [];
 		this.sounds = {};
@@ -69,7 +70,7 @@ class Game {
 		else {
 			this.speed = 1;
 			this.events.push(
-				new TimeEvent(1000, event => {
+				new TimeEvent(2000, event => {
 					if (this.getButton('pause').mode == 'pressed') this.speed = 0.1;
 				})
 			);
@@ -79,15 +80,8 @@ class Game {
 	tick(dtime) {
 		this.goTarget(dtime);
 
-		this.fps.frames++;
-		this.fps.duration += dtime;
-		if (this.fps.duration >= 1000) {
-			this.fps.value = this.fps.frames;
-			this.fps.frames = 0;
-			this.fps.duration = 0;
-		}
-
-		if (dtime < this.best_perf) this.best_perf = dtime;
+		this.average_dtime = (dtime + this.average_dtime * 99) / 100;
+		if (this.average_dtime < this.best_perf) this.best_perf = Math.max(dtime, 16.6);
 
 		this.touches.rin = Math.floor(can.height / 16);
 		this.touches.rout = Math.floor(can.height / 7);
@@ -380,7 +374,7 @@ class Game {
 		this.foot_steps = this.foot_steps.filter(fs => fs.time);
 
 		// Entities
-		let ord_ent = [...this.entities.buildings, ...this.entities.humans, ...this.entities.creatures, ...this.entities.trees, ...this.entities.particles].sort((a, b) => a.getFeet().y - b.getFeet().y);
+		let ord_ent = [...this.entities.buildings, ...this.entities.humans, ...this.entities.creatures, ...this.entities.trees, ...this.entities.particles].filter(entity => entity.inScreen()).sort((a, b) => a.getFeet().y - b.getFeet().y);
 
 		for (let entity of ord_ent) entity.draw(gctx, 'shadow');
 		for (let entity of ord_ent) entity.draw(gctx, 'main');
@@ -671,7 +665,6 @@ class FogMap {
 		this.pix_size = 1;
 		this.pix_time = time;
 		this.humans = [];
-		this.average_dtime = null;
 	}
 
 	ctx() {
@@ -696,12 +689,9 @@ class FogMap {
 			ctx.fillRect(pixel.x, pixel.y, this.pix_size, this.pix_size);
 		};
 
-		if (!this.average_dtime) this.average_dtime = dtime;
-		else this.average_dtime = (dtime + this.average_dtime * 49) / 50;
-
 		if (time - this.pix_time > 500) {
-			if (this.pix_size < 4 && this.average_dtime > game.best_perf * 2.5) this.pix_size++;
-			else if (this.pix_size > 1 && this.average_dtime < game.best_perf * 1.6) this.pix_size--;
+			if (this.pix_size < 4 && game.average_dtime > game.best_perf * 2.5) this.pix_size++;
+			else if (this.pix_size > 1 && game.average_dtime < game.best_perf * 1.6) this.pix_size--;
 
 			this.pix_time = time;
 		}

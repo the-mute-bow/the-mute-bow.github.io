@@ -53,6 +53,8 @@ pages['chap2'] = game => {
 
 			'buttons/pause-button.png',
 			'buttons/pause-button-shadow.png',
+			'buttons/menu-button.png',
+			'buttons/menu-button-shadow.png',
 			'buttons/menu2-button.png',
 			'buttons/menu2-button-shadow.png',
 
@@ -269,7 +271,6 @@ pages['chap2'] = game => {
 
 			game.fog_map = new FogMap(game.ground.width, game.ground.height);
 			game.fog_map.humans.push(game.player);
-			game.player.view_distance = 80;
 			game.fog_map.fill();
 
 			game.cam = {
@@ -302,7 +303,7 @@ pages['chap2'] = game => {
 								overtext => 'Pause',
 								overtext => ({ x: can.width / 2, y: can.height / 3 }),
 								200,
-								16
+								18
 							)
 						);
 
@@ -366,7 +367,7 @@ pages['chap2'] = game => {
 					? [
 							new OverText(
 								'fps',
-								overtext => `${game.fps.value}`,
+								overtext => `${Math.floor(1000 / game.average_dtime)}`,
 								overtext => ({
 									x: 8 * game.scale,
 									y: can.height - 2 * game.scale
@@ -426,7 +427,7 @@ pages['chap2'] = game => {
 								event.done = true;
 								game.soundtrack.pause();
 								game.soundtrack = game.sounds.night;
-								game.player.view_distance = 80;
+								for (let human of game.entities.humans) human.health.val = 12;
 							}
 						})
 					);
@@ -439,7 +440,7 @@ pages['chap2'] = game => {
 								let dy = creature.pos.y - game.player.pos.y;
 								if (Math.sqrt(dx * dx + dy * dy) < 48) {
 									event.done = true;
-									game.player.view_distance = 64;
+									game.player.health.val = 9;
 									game.fog_map.fill();
 									game.soundtrack.pause();
 									game.soundtrack = game.sounds.dark;
@@ -474,7 +475,7 @@ pages['chap2'] = game => {
 						new TimeEvent(1000, event => {
 							game.events.push(
 								new GameEvent(event => {
-									if (!game.entities.creatures.length) this.done = true;
+									if (!game.entities.creatures.length) event.done = true;
 									else {
 										let far = true;
 										for (let creature of game.entities.creatures) {
@@ -496,11 +497,68 @@ pages['chap2'] = game => {
 							);
 						})
 					);
+				},
+				dead_player: () => {
+					game.events.push(
+						new GameEvent(event => {
+							if (game.player.dead) {
+								event.done = true;
+								game.events.push(
+									new TimeEvent(1000, event => {
+										game.pause(true);
+
+										game.getButton('pause').mode = 'pressed';
+
+										game.overlays = [
+											new OverText(
+												'dead',
+												overtext => (lang == '#fr' ? 'Tu es mort.' : 'You are dead.'),
+												overtext => ({
+													x: can.width / 2,
+													y: can.height / 2
+												}),
+												1000,
+												18
+											)
+										];
+
+										game.buttons.push(
+											new Button(
+												'next',
+												'menu-button',
+												lang == '#fr' ? 'Suite' : 'Next',
+												btn => ({
+													x: (can.width - btn.img.width * game.scale) / 2,
+													y: can.height - (btn.img.height + 5) * game.scale
+												}),
+												btn => {
+													game.getOverlay('dead').kill(400);
+													btn.kill(400);
+													game.speed = 1;
+													game.events.push(
+														new TimeEvent(500, event => {
+															game.speed = 1;
+															game.pause(false);
+															loadPage('menu');
+														})
+													);
+												},
+												200,
+												'normal',
+												10
+											)
+										);
+									})
+								);
+							}
+						})
+					);
 				}
 			};
 
 			game.triggerEvent('creature_dead');
 			game.triggerEvent('creature_nearby');
+			game.triggerEvent('dead_player');
 
 			game.loop = true;
 
