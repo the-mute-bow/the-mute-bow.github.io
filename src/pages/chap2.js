@@ -47,6 +47,7 @@ pages['chap2'] = game => {
 			'humans/icon-plus.png',
 
 			'humans/axe-hold.png',
+			'humans/axe-hit.png',
 			'humans/bow-hold.png',
 			'humans/bow-aim.png',
 
@@ -389,6 +390,26 @@ pages['chap2'] = game => {
 								overtext => ({
 									x: 24 * game.scale,
 									y: can.height - 2 * game.scale
+								}),
+								200,
+								8
+							),
+							new OverText(
+								'fog',
+								overtext => `${game.fog_map.pix_size}`,
+								overtext => ({
+									x: 32 * game.scale,
+									y: can.height - 2 * game.scale
+								}),
+								200,
+								8
+							),
+							new OverText(
+								'attack-sprite',
+								overtext => (game.player.attack ? `[${game.player.sprites.axe_hit.tile.x}, ${game.player.sprites.axe_hit.tile.y}]` : ''),
+								overtext => ({
+									x: 12 * game.scale,
+									y: can.height - 8 * game.scale
 								}),
 								200,
 								8

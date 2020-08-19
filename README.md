@@ -10,6 +10,12 @@
 
 ## Change log
 
+### **0.0.26**
+
+-   `Human` axe hit and special animations.
+-   `Entity` drawed only if `Entity.onScreen()` is `true`.
+-   Better collision algorithm.
+
 ### **0.0.25**
 
 -   Joysticks apearance now depends on screen height.

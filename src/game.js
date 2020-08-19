@@ -42,7 +42,9 @@ class Game {
 		this.overlays = [];
 		this.events = [];
 		this.event_map = {};
+
 		this.can = document.createElement('canvas');
+		this.borders = null;
 	}
 
 	triggerEvent(name) {
@@ -237,10 +239,15 @@ class Game {
 			}
 			if (event.type == 'drag' && this.player) {
 				if (event.side == 'L') this.player.speed = 1;
-				else if (this.player.look.aim) this.player.shoot(event, 'normal');
+				else if (this.player.look.aim) this.player.shoot(event, 1);
 			}
-			if (event.type == 'special') {
-				if (event.side == 'L' && this.player) this.player.speed = this.player.speed == 2 ? 1 : 2;
+			if (event.type == 'special' && this.player) {
+				if (event.side == 'L') this.player.speed = this.player.speed == 2 ? 1 : 2;
+				if (event.side == 'R' && this.player.look.aim) {
+					this.player.shoot(event, 2);
+					this.player.look.aim = false;
+					this.touches.R = null;
+				}
 			}
 		}
 
@@ -352,6 +359,8 @@ class Game {
 			ctx.fillStyle = color;
 			ctx.fillRect(0, 0, can.width, can.height);
 		};
+
+		this.borders = this.getBorders();
 
 		// Background
 		fill(mctx, this.bg_color);
@@ -637,6 +646,20 @@ class Game {
 
 		return points;
 	}
+
+	getBorders() {
+		let tl = this.screenToGameCoords(0, 0);
+		let br = this.screenToGameCoords(can.width, can.height);
+
+		let border = 5;
+
+		return {
+			l: -border + tl.x,
+			t: -border + tl.y,
+			w: br.x - tl.x + border * 2,
+			h: br.y - tl.y + border * 2
+		};
+	}
 }
 
 class FogMap {
@@ -658,20 +681,6 @@ class FogMap {
 	fill() {
 		this.ctx().fillStyle = '#212423';
 		this.ctx().fillRect(0, 0, this.img.width, this.img.height);
-	}
-
-	getBorders() {
-		let tl = game.screenToGameCoords(0, 0);
-		let br = game.screenToGameCoords(can.width, can.height);
-
-		let border = 5;
-
-		return {
-			l: -border + tl.x,
-			t: -border + tl.y,
-			w: br.x - tl.x + border * 2,
-			h: br.y - tl.y + border * 2
-		};
 	}
 
 	animate(dtime) {
@@ -697,7 +706,7 @@ class FogMap {
 			this.pix_time = time;
 		}
 
-		let { l, t, w, h } = this.getBorders();
+		let { l, t, w, h } = game.getBorders();
 
 		for (let i = 0; i < Math.max(200, (dtime * game.speed * game.player.view_distance * 5000) / (w * h)) / (this.pix_size * this.pix_size); i++) {
 			let p = {
