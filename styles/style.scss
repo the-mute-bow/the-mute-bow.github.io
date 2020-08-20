@@ -53,7 +53,26 @@ canvas {
 
 	#version {
 		bottom: 8px;
+		opacity: 0.2;
+	}
+
+	.load-bar {
+		position: absolute;
+		width: 128px;
+		height: 4px;
+		left: 50%;
+		top: 50%;
+		transform: translate(-64px, 72px);
+	}
+
+	#load-bar-back {
+		background-color: $lightgray;
 		opacity: 0.1;
+	}
+
+	#load-bar-front {
+		width: 0px;
+		background-color: $lightgray;
 	}
 }
 

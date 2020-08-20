@@ -57,7 +57,27 @@ canvas {
 
 .over #version {
   bottom: 8px;
+  opacity: 0.2;
+}
+
+.over .load-bar {
+  position: absolute;
+  width: 128px;
+  height: 4px;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-64px, 72px);
+          transform: translate(-64px, 72px);
+}
+
+.over #load-bar-back {
+  background-color: #cdcad3;
   opacity: 0.1;
+}
+
+.over #load-bar-front {
+  width: 0px;
+  background-color: #cdcad3;
 }
 
 .hidden {

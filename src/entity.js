@@ -32,11 +32,13 @@ class Entity {
 	}
 
 	inScreen() {
-		let { l, t, w, h } = game.borders;
-		let tile = this.sprites.main.tile;
-		let pos = this.pos;
+		if (game.borders) {
+			let { l, t, w, h } = game.borders;
+			let tile = this.sprites.main.tile;
+			let pos = this.pos;
 
-		return !(pos.x + tile.w < l || pos.y + tile.h < t || l + w < pos.x || t + h < pos.y);
+			return !(pos.x + tile.w < l || pos.y + tile.h < t || l + w < pos.x || t + h < pos.y);
+		} else return false;
 	}
 
 	draw(ctx, sprite_name = 'main', coords = null) {
@@ -664,13 +666,25 @@ class Arrow extends Trail {
 		super(pos, vel, 8, 1, true, '#4e443a', 0.5, true, null, 0.0001);
 		this.endPoint = 'white';
 		this.victims = [];
+		this.start_coords = { ...pos };
+		console.log(pos, game.player.pos);
 	}
 
 	onContact(mob) {
-		if (mob instanceof Creature && !this.victims.includes(mob)) {
+		if (mob.name == 'creature' && !this.victims.includes(mob)) {
 			let arr_mag = this.getMag();
 			mob.health.val -= arr_mag * 20;
 			this.victims.push(mob);
+
+			if (!mob.target || !mob.target.obj) {
+				mob.setAlert('exclam', 200);
+				mob.target = {
+					x: this.start_coords.x - 12 + (Math.random() - 0.5) * 48,
+					y: this.start_coords.y - 24 + (Math.random() - 0.5) * 48,
+					obj: null
+				};
+			}
+
 			for (let c of 'xyz') this.vel[c] *= 0.5;
 			for (let i = 0; i < 50 * arr_mag; i++) {
 				game.entities.particles.push(

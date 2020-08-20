@@ -407,7 +407,7 @@ pages['chap2'] = game => {
 							),
 							new OverText(
 								'attack-sprite',
-								overtext => (game.player.attack ? `[${game.player.sprites.axe_hit.tile.x}, ${game.player.sprites.axe_hit.tile.y}]` : ''),
+								overtext => (game.player && game.player.attack ? `[${game.player.sprites.axe_hit.tile.x}, ${game.player.sprites.axe_hit.tile.y}]` : ''),
 								overtext => ({
 									x: 12 * game.scale,
 									y: can.height - 8 * game.scale
@@ -461,6 +461,7 @@ pages['chap2'] = game => {
 										event.done = true;
 										game.soundtrack.pause();
 										game.soundtrack = game.sounds.tense;
+										game.player.view_distance = 0;
 										game.soundtrack.currentTime = 0;
 										game.triggerEvent('creature_toofar');
 										break;
@@ -506,8 +507,8 @@ pages['chap2'] = game => {
 								game.events.push(
 									new TimeEvent(1000, event => {
 										game.pause(true);
-
 										game.getButton('pause').mode = 'pressed';
+										game.player = null;
 
 										game.overlays = [
 											new OverText(

@@ -44,6 +44,10 @@ let can = document.querySelector('canvas');
 let over = document.getElementsByClassName('over')[0];
 let gifs = [...document.querySelectorAll('img')];
 let gif_text = document.getElementById('message');
+let load_bar = {
+	back: document.getElementById('load-bar-back'),
+	front: document.getElementById('load-bar-front')
+};
 let ctx = can.getContext('2d');
 let mode = '';
 
@@ -51,8 +55,8 @@ let dev_log = '';
 
 let game = new Game();
 
-const setScreen = (newmode, message = null) => {
-	if (newmode != mode) {
+const setScreen = (newmode, data) => {
+	if (newmode != mode || data) {
 		mode = newmode;
 		// console.log('set mode to', mode);
 
@@ -87,13 +91,20 @@ const setScreen = (newmode, message = null) => {
 		if (mode == 'android') gif_text.innerHTML = lang == '#fr' ? 'Jeu disponible uniquement sur Android.' : 'Game only available on Android.';
 
 		if (mode == 'error') {
-			if (message) gif_text.innerHTML = message;
-			else gif_text.innerHTML = lang == '#fr' ? 'Erreur de chargement.' : 'Loading error.';
+			if (data) gif_text.innerHTML = data;
+			else gif_text.innerHTML = lang == '#fr' ? 'Erreur.' : 'Error.';
 			if (lang == '#dev') gif_text.innerHTML += `<br/>${dev_log}`;
 			gif_text.classList.add('red');
 		}
 
-		if (mode == 'loading') gif_text.innerHTML = lang == '#fr' ? 'Chargement...' : 'Loading...';
+		if (mode == 'loading') {
+			gif_text.innerHTML = lang == '#fr' ? 'Chargement...' : 'Loading...';
+			load_bar.front.classList.remove('hidden');
+			load_bar.back.classList.remove('hidden');
+		} else {
+			load_bar.front.classList.add('hidden');
+			load_bar.back.classList.add('hidden');
+		}
 
 		if (mode == 'rotate-phone') gif_text.innerHTML = lang == '#fr' ? "Tourne l'écran." : 'Turn the screen.';
 	}
@@ -159,7 +170,7 @@ const loadPage = page_name => {
 window.onload = () => {
 	if (onAndroid) {
 		initTouch();
-		loadPage('chap2');
+		loadPage('menu');
 		mainloop();
 	} else setScreen('android');
 };

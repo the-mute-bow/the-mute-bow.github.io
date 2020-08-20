@@ -34,6 +34,8 @@ class Game {
 			particles: []
 		};
 
+		this.ord_ent = [];
+
 		this.foot_steps = [];
 		this.player = null;
 
@@ -98,6 +100,8 @@ class Game {
 
 		for (let entity of [...this.entities.trees, ...this.entities.humans, ...this.entities.creatures, ...this.entities.particles])
 			entity.animate(dtime, [...this.entities.buildings, ...this.entities.trees], [...this.entities.humans, ...this.entities.creatures]);
+
+		this.ord_ent = [...this.entities.buildings, ...this.entities.humans, ...this.entities.creatures, ...this.entities.trees, ...this.entities.particles].filter(entity => entity.inScreen()).sort((a, b) => a.getFeet().y - b.getFeet().y);
 
 		for (let event of this.touch_events) {
 			if (event.type == 'tap') {
@@ -317,7 +321,7 @@ class Game {
 				if (dx > trig_dist || dy > trig_dist || Math.sqrt(dx * dx + dy * dy) > trig_dist) creature.target = null;
 			}
 
-			if (!creature.target || creature.target.obj.health.val <= 0) {
+			if (!creature.target || !creature.target.obj || creature.target.obj.health.val <= 0) {
 				for (let human of this.entities.humans) {
 					let dx = Math.abs(human.pos.x - creature.pos.x);
 					let dy = Math.abs(human.pos.y - creature.pos.y);
@@ -374,10 +378,8 @@ class Game {
 		this.foot_steps = this.foot_steps.filter(fs => fs.time);
 
 		// Entities
-		let ord_ent = [...this.entities.buildings, ...this.entities.humans, ...this.entities.creatures, ...this.entities.trees, ...this.entities.particles].filter(entity => entity.inScreen()).sort((a, b) => a.getFeet().y - b.getFeet().y);
-
-		for (let entity of ord_ent) entity.draw(gctx, 'shadow');
-		for (let entity of ord_ent) entity.draw(gctx, 'main');
+		for (let entity of this.ord_ent) entity.draw(gctx, 'shadow');
+		for (let entity of this.ord_ent) entity.draw(gctx, 'main');
 
 		// Tree calc
 		gctx.drawImage(this.tree_calc, 0, 0);
@@ -520,6 +522,8 @@ class Game {
 	loadImg(files, index = 0, callback = () => {}) {
 		let src = './img/' + files[index];
 
+		load_bar.front.style.width = `${(index / (files.length - 1)) * 128}px`;
+
 		// console.log(`${index + 1}/${files.length}: loading`, src);
 
 		let img = new Image();
@@ -527,7 +531,7 @@ class Game {
 
 		img.addEventListener('error', event => {
 			if (lang == '#dev') dev_log = src;
-			setScreen('error');
+			setScreen('error', lang == '#fr' ? 'Erreur de chargement.' : 'Loading error.');
 		});
 
 		img.addEventListener('load', event => {
@@ -698,13 +702,12 @@ class FogMap {
 
 		let { l, t, w, h } = game.getBorders();
 
-		for (let i = 0; i < Math.max(200, (dtime * game.speed * game.player.view_distance * 5000) / (w * h)) / (this.pix_size * this.pix_size); i++) {
+		for (let i = 0; i < Math.max(200, (dtime * game.speed * this.humans[0].view_distance * 5000) / (w * h)) / (this.pix_size * this.pix_size); i++) {
 			let p = {
 				x: Math.floor(l + Math.random() * w),
 				y: Math.floor(t + Math.random() * h)
 			};
 
-			let view_distance = 0;
 			let mag = Infinity;
 
 			for (let human of this.humans) {
@@ -724,7 +727,7 @@ class FogMap {
 				}
 			}
 
-			drawPix(p, mag, game.player.view_distance);
+			drawPix(p, mag, this.humans[0].view_distance);
 		}
 
 		ctx.globalAlpha = 1;

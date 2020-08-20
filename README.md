@@ -10,6 +10,13 @@
 
 ## Change log
 
+### **0.0.28**
+
+-   `Creature.target` is set to random coordinates around the `Human` who hit it with an `arrow`.
+-   Changed how `setScreen()` data works for `'error'` ans `'loading'`.
+-   Loading bar.
+-   [ ] Google AdSence test.
+
 ### **0.0.27**
 
 -   `Creature` are faster.
