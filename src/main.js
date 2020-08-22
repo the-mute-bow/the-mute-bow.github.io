@@ -98,7 +98,8 @@ const setScreen = (newmode, data) => {
 		}
 
 		if (mode == 'loading') {
-			gif_text.innerHTML = lang == '#fr' ? 'Chargement...' : 'Loading...';
+			if (lang == '#dev' && data) gif_text.innerHTML = data;
+			else gif_text.innerHTML = lang == '#fr' ? 'Chargement...' : 'Loading...';
 			load_bar.front.classList.remove('hidden');
 			load_bar.back.classList.remove('hidden');
 		} else {

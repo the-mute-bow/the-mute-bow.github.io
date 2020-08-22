@@ -17,6 +17,7 @@ class Game {
 		this.fog_map = null;
 
 		this.bg_color = 'black';
+		this.leave_color = 'green';
 		this.scale = 1;
 		this.speed = 1;
 		this.mode = 'normal';
@@ -289,7 +290,7 @@ class Game {
 						this.player.look.x = move.x;
 						this.player.look.y = move.y;
 						if (this.player.stamina.val) {
-							if (this.player.wood.val) aim = true;
+							if (this.player.weapon == 'axe' || this.player.wood.val) aim = true;
 							else if (!this.player.alert) this.player.setAlert('noamo', 1800);
 						}
 					}
@@ -396,37 +397,47 @@ class Game {
 		for (let particle of [...this.entities.particles].sort((a, b) => a.getFeet().y - b.getFeet().y)) particle.draw(gctx, 'main', this.fog_map ? 0.5 : 0.1);
 
 		// Human ghost
-		for (let human of [...this.entities.humans].sort((a, b) => a.getFeet().y - b.getFeet().y)) {
-			gctx.globalAlpha = 0.2 + 0.8 * this.strat_fog;
-			if (game.mode == 'strat' && human.target) {
-				let { x, y } = human.getTargCoords();
-				human.draw(gctx, 'main', { x: Math.floor(x + 0.5), y: Math.floor(y + 0.5), z: human.pos.z });
-			} else human.draw(gctx, 'main');
+		if (game.getHuman('eliot')) {
+			for (let human of [...this.entities.humans].sort((a, b) => a.getFeet().y - b.getFeet().y)) {
+				gctx.globalAlpha = 0.2 + 0.8 * this.strat_fog;
+				if (game.mode == 'strat' && human.target) {
+					let { x, y } = human.getTargCoords();
+					human.draw(gctx, 'main', { x: Math.floor(x + 0.5), y: Math.floor(y + 0.5), z: human.pos.z });
+				} else human.draw(gctx, 'main');
 
-			let { x, y, z } = human.pos;
-			let t = human.getTargCoords();
-			if (this.mode == 'strat' && t) {
-				x = t.x;
-				y = t.y;
-			}
+				let { x, y, z } = human.pos;
+				let t = human.getTargCoords();
+				if (this.mode == 'strat' && t) {
+					x = t.x;
+					y = t.y;
+				}
 
-			x += 0.5;
-			y += 0.5;
+				x += 0.5;
+				y += 0.5;
 
-			if (game.mode == 'normal' && human.alert) {
-				gctx.globalAlpha = human.alert.duration ? (human.alert.timeout - time) / human.alert.duration : 1;
-				human.draw(gctx, human.alert.icon, { x: x, y: y, z: z });
-			} else if (human.target && human != this.player) {
-				if (human.target.obj == this.player) human.draw(gctx, 'icon-follow', { x: x, y: y, z: z });
-				else human.draw(gctx, 'icon-stay', { x: x, y: y, z: z });
-			} else human.draw(gctx, 'icon-null', { x: x, y: y, z: z });
+				if (game.mode == 'normal' && human.alert) {
+					gctx.globalAlpha = human.alert.duration ? (human.alert.timeout - time) / human.alert.duration : 1;
+					human.draw(gctx, human.alert.icon, { x: x, y: y, z: z });
+				} else if (human.target && human != this.player) {
+					if (human.target.obj == this.player) human.draw(gctx, 'icon-follow', { x: x, y: y, z: z });
+					else human.draw(gctx, 'icon-stay', { x: x, y: y, z: z });
+				} else human.draw(gctx, 'icon-null', { x: x, y: y, z: z });
 
-			if (human.look.aim) {
-				gctx.globalAlpha = 1;
-				gctx.fillStyle = `rgba(255, 255, 255, 0.5)`;
-				let x = Math.floor(human.pos.x + 11.5 + human.look.x * 15);
-				let y = Math.floor(human.pos.y + 16.5 + human.look.y * 15);
-				gctx.fillRect(x, y, 1, 1);
+				if (human.look.aim) {
+					gctx.globalAlpha = 0.5;
+					gctx.fillStyle = `white`;
+
+					let i1 = human.weapon == 'bow' ? 12 : 6;
+					let i2 = human.weapon == 'bow' ? 16 : 9;
+					let pos = human.getFeet();
+
+					let x1 = Math.floor(pos.x + human.look.x * i1);
+					let y1 = Math.floor(pos.y + human.look.y * i1 - 8);
+					let x2 = Math.floor(pos.x + human.look.x * i2);
+					let y2 = Math.floor(pos.y + human.look.y * i2 - 8);
+
+					for (let p of this.getLine(x1, y1, x2, y2)) gctx.fillRect(p[0], p[1], 1, 1);
+				}
 			}
 		}
 
@@ -523,6 +534,7 @@ class Game {
 		let src = './img/' + files[index];
 
 		load_bar.front.style.width = `${(index / (files.length - 1)) * 128}px`;
+		setScreen('loading', `Loading...<br/><br/>${src}`);
 
 		// console.log(`${index + 1}/${files.length}: loading`, src);
 

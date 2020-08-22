@@ -123,7 +123,9 @@ class Human extends Entity {
 				'icon-noamo': new Sprite(game.images['icon-noamo'], { x: 0, y: 0, w: 24, h: 24 }),
 				'icon-plus': new Sprite(game.images['icon-plus'], { x: 0, y: 0, w: 24, h: 24 }),
 				'icon-none': new Sprite(game.images['icon-none'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-exclam': new Sprite(game.images['icon-exclam'], { x: 0, y: 0, w: 24, h: 24 })
+				'icon-exclam': new Sprite(game.images['icon-exclam'], { x: 0, y: 0, w: 24, h: 24 }),
+				'icon-stamina-red': new Sprite(game.images['icon-stamina-red'], { x: 0, y: 0, w: 24, h: 24 }),
+				'icon-stamina-green': new Sprite(game.images['icon-stamina-green'], { x: 0, y: 0, w: 24, h: 24 })
 			},
 			new Hitbox(9, 21, 6, 5, 13),
 			{ x: 12, y: 24 }
@@ -146,6 +148,7 @@ class Human extends Entity {
 		this.foot_step = 0;
 		this.aura = null;
 		this.view_distance = 80;
+		this.tired = false;
 	}
 
 	createAura(color, gravity) {
@@ -284,6 +287,16 @@ class Human extends Entity {
 			if (this.name == 'creature' && game.fog_map) this.aura.delay = 10;
 		}
 
+		if (!this.tired && this.stamina.val < 1) {
+			this.tired = true;
+			this.setAlert('stamina-red', 1000);
+		}
+
+		if (this.tired && this.stamina.val == this.stamina.max) {
+			this.tired = false;
+			this.setAlert('stamina-green', 1000);
+		}
+
 		this.view_distance = 12 + this.health.val * 5.7;
 		if (this.health.val <= 0) this.die();
 	}
@@ -360,8 +373,8 @@ class Human extends Entity {
 	}
 
 	pushTo(x, y, dtime) {
-		this.move.x += (x * game.speed * dtime) / 4;
-		this.move.y += (y * game.speed * dtime) / 4;
+		this.move.x += (x * game.speed * (dtime | 1)) / 4;
+		this.move.y += (y * game.speed * (dtime | 1)) / 4;
 	}
 
 	getTargCoords() {
@@ -390,10 +403,10 @@ class Human extends Entity {
 
 	shoot(event, level) {
 		if (!this.dead) {
+			this.stamina.val--;
 			if (this.weapon == 'bow') {
 				this.arrow = new Arrow({ ...this.getFeet(), z: 10 }, { x: event.x / 8, y: event.y / 8, z: 0 });
 				game.entities.particles.push(this.arrow);
-				this.stamina.val--;
 				this.wood.val--;
 			} else if (this.weapon == 'axe' || this.name == 'creature') {
 				this.attack = {
@@ -403,6 +416,46 @@ class Human extends Entity {
 					next_time: 0,
 					delay: 30
 				};
+
+				let pos = this.getFeet();
+				let x1 = pos.x + this.look.x * 2;
+				let y1 = pos.y + this.look.y * 2 - 9;
+				let x2 = pos.x + this.look.x * 9;
+				let y2 = pos.y + this.look.y * 9 - 9;
+
+				for (let entity of [...game.entities.creatures, ...game.entities.trees].filter(entity => !entity.dead)) {
+					let d = {
+						x: entity.getFeet().x - pos.x,
+						y: entity.getFeet().y - pos.y
+					};
+
+					let r = 9;
+
+					if (Math.abs(d.x) < r && Math.abs(d.y) < r && Math.sqrt(d.x * d.x + d.y * d.y) < r) {
+						let atan = Math.abs(Math.atan2(this.look.x, this.look.y) + Math.PI) - Math.abs(Math.atan2(d.x, d.y) + Math.PI);
+						if (level == 2 || atan < 0.1) {
+							entity.health.val--;
+							if (entity.name) {
+								entity.pushTo(d.x, d.y, 100 * level);
+								// entity.setAlert('noamo', 500);
+							} else {
+								for (let i = 0; i < 20; i++)
+									game.entities.particles.push(
+										new Particle(
+											{ x: entity.getFeet().x + (Math.random() - 0.5) * 12, y: entity.getFeet().y + (Math.random() - 0.5) * 12, z: 3 + Math.random() * 6 },
+											{ x: 0, y: 0, z: 0 },
+											1,
+											Math.random(),
+											false,
+											'white',
+											0,
+											-500
+										)
+									);
+							}
+						}
+					}
+				}
 			}
 		}
 	}
@@ -427,11 +480,12 @@ class Creature extends Human {
 		let m = mob.getFeet();
 		let v = { x: m.x - h.x, y: m.y - h.y };
 		let mag = Math.sqrt(v.x * v.x + v.y * v.y);
-		if (mob.name == 'creature') mob.pushTo(v.x / mag, v.y / mag, dtime);
+		if (mob.name == 'creature' || this.attack) mob.pushTo(v.x / mag, v.y / mag, dtime);
 		else if (!this.attack) {
-			mob.pushTo((v.x / mag) * 10, (v.y / mag) * 10, dtime);
+			mob.pushTo(v.x / mag, v.y / mag, 500);
 			mob.health.val -= 1;
-			mob.view_distance = 96;
+			mob.view_distance *= 2;
+			if (mob == game.player) game.cam.h *= 1.016;
 			this.shoot(null, 1);
 		}
 	}
@@ -445,10 +499,10 @@ class Tree extends Entity {
 		pos.y -= 120;
 
 		let hitboxes = {
-			1: new Hitbox(63, 118, 5, 4, 100),
-			2: new Hitbox(62, 118, 4, 3, 100),
-			3: new Hitbox(62, 119, 3, 2, 100),
-			4: new Hitbox(61, 118, 4, 3, 100)
+			1: new Hitbox(63, 118, 5, 4, 70),
+			2: new Hitbox(62, 118, 4, 3, 70),
+			3: new Hitbox(62, 119, 3, 2, 70),
+			4: new Hitbox(61, 118, 4, 3, 70)
 		};
 
 		super(
@@ -463,15 +517,35 @@ class Tree extends Entity {
 
 		this.sprites.main.tile.x = Math.floor(Math.random() * 4);
 		this.moveTime = Math.random() * 3000;
+		this.health = { val: 24, max: 24 };
+		this.dead = false;
 	}
 
 	animate() {
-		if (time >= this.moveTime) {
-			this.sprites.main.tile.x += 1;
-			this.sprites.main.tile.x %= 4;
+		if (!this.dead) {
+			if (time >= this.moveTime) {
+				this.sprites.main.tile.x += 1;
+				this.sprites.main.tile.x %= 4;
 
-			this.moveTime = time + Math.random() * 1000 + 2000;
+				this.moveTime = time + Math.random() * 1000 + 2000;
+			}
+
+			if (this.health.val <= 0) this.die();
 		}
+	}
+
+	die() {
+		this.dead = true;
+		this.sprites.main.tile.y = 1;
+		this.sprites.shadow.tile.y = 1;
+		this.hitbox.h = 4;
+		for (let i = 0; i < Math.random() * 4 + 6; i++)
+			game.entities.particles.push(
+				new Arrow(
+					{ x: this.getFeet().x + (Math.random() - 0.5) * 24, y: this.getFeet().y + (Math.random() - 0.5) * 24, z: 8 + Math.random() * 32 },
+					{ x: (Math.random() - 0.5) / 50, y: (Math.random() - 0.5) / 50, z: (Math.random() - 0.5) / 50 }
+				)
+			);
 	}
 }
 
@@ -667,7 +741,6 @@ class Arrow extends Trail {
 		this.endPoint = 'white';
 		this.victims = [];
 		this.start_coords = { ...pos };
-		console.log(pos, game.player.pos);
 	}
 
 	onContact(mob) {

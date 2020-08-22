@@ -45,6 +45,8 @@ pages['chap2'] = game => {
 			'humans/icon-exclam.png',
 			'humans/icon-noamo.png',
 			'humans/icon-plus.png',
+			'humans/icon-stamina-red.png',
+			'humans/icon-stamina-green.png',
 
 			'humans/axe-hold.png',
 			'humans/axe-hit.png',
@@ -76,6 +78,7 @@ pages['chap2'] = game => {
 			game.can.height = game.ground.height;
 
 			game.bg_color = '#212423';
+			game.leave_color = '#293d48';
 			game.speed = 1;
 			game.fps = { frames: 0, duration: 0, value: 0 };
 
@@ -462,6 +465,7 @@ pages['chap2'] = game => {
 										game.soundtrack.pause();
 										game.soundtrack = game.sounds.tense;
 										game.player.view_distance = 0;
+										game.cam.h *= 0.96;
 										game.soundtrack.currentTime = 0;
 										game.triggerEvent('creature_toofar');
 										break;
@@ -506,9 +510,9 @@ pages['chap2'] = game => {
 								event.done = true;
 								game.events.push(
 									new TimeEvent(1000, event => {
-										game.pause(true);
 										game.getButton('pause').mode = 'pressed';
 										game.player = null;
+										game.pause(false);
 
 										game.overlays = [
 											new OverText(

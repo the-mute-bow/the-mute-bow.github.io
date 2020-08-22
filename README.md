@@ -10,12 +10,25 @@
 
 ## Change log
 
+### **0.0.29**
+
+-   `img.src` shown on loading screen in dev mode.
+-   `'icon-stamina-green'` and `'icon-stamina-green'` for `Human.alert` when stamina empty or full.
+-   `'icon-noamo'` is now red to differenciate from `'icon-plus'`.
+-   No pause mode when player killed.
+-   Axe attack toward creatures and trees.
+-   Tree cut draw.
+-   Tree damage particles.
+-   Tree dying spawns 6-10 arrows.
+-   Fixed knockback.
+-   No `Human` ghost draw if Eliot is dead.
+
 ### **0.0.28**
 
 -   `Creature.target` is set to random coordinates around the `Human` who hit it with an `arrow`.
 -   Changed how `setScreen()` data works for `'error'` ans `'loading'`.
 -   Loading bar.
--   [ ] Google AdSence test.
+-   [ ] Google AdSence test. [Failed]
 
 ### **0.0.27**
 
@@ -194,7 +207,7 @@
 -   Tree calc.
 -   Entities are now drawed acording to `Entity.getFeet().y`.
 -   Entities now have shadows.
--   Test for `viewport-fit=cover` in `viewport` meta tag.
+-   [x] Test for `viewport-fit=cover` in `viewport` meta tag.
 
 ### **0.0.4**
 
