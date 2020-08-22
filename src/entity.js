@@ -149,6 +149,8 @@ class Human extends Entity {
 		this.aura = null;
 		this.view_distance = 80;
 		this.tired = false;
+		this.enemies = null;
+		this.shoot_time = null;
 	}
 
 	createAura(color, gravity) {
@@ -169,7 +171,7 @@ class Human extends Entity {
 	getOrient(divs, dir = this.look) {
 		let o = Math.atan2(dir.y, dir.x) + Math.PI;
 		if (divs == 8) o = (o + Math.PI / 8) % (2 * Math.PI);
-		return Math.floor((o / Math.PI / 2) * divs);
+		return Math.floor((o / Math.PI / 2) * divs) | 0;
 	}
 
 	touchMob(mob, dtime) {
@@ -182,6 +184,8 @@ class Human extends Entity {
 
 	animate(dtime, solids, mobs) {
 		if (this.alert && this.alert.timeout && time > this.alert.timeout) this.alert = null;
+
+		if (this.enemies) this.autoAim(game.entities[this.enemies]);
 
 		if (this.attack) {
 			if (time > this.attack.next_time) {
@@ -401,11 +405,45 @@ class Human extends Entity {
 		else this.alert = { icon: 'icon-' + icon, duration: null, timeout: null };
 	}
 
-	shoot(event, level) {
+	autoAim(mobs) {
+		let best = null;
+		for (let mob of mobs) {
+			let d = {
+				x: mob.getFeet().x - this.getFeet().x,
+				y: mob.getFeet().y - this.getFeet().y
+			};
+
+			let r = 48;
+			if (Math.abs(d.x) < r && Math.abs(d.y) < r) {
+				let mag = Math.sqrt(d.x * d.x + d.y * d.y);
+				if (mag < r && (!best || mag < best.mag)) best = { d: d, mag: mag };
+			}
+		}
+
+		if (best) {
+			this.look = { x: best.d.x / best.mag, y: best.d.y / best.mag, aim: true };
+			if (!this.shoot_time) this.shoot_time = this.shoot_time = time + Math.random() * 1000 + 500;
+			if (this.stamina.val > 0 && time - this.shoot_time > 0) {
+				this.shoot(
+					{
+						x: this.look.x + (Math.random() - 0.5) * 0.5,
+						y: this.look.y + (Math.random() - 0.5) * 0.5
+					},
+					1
+				);
+				this.shoot_time = time + Math.random() * 1000 + 500;
+			}
+		} else {
+			this.look.aim = false;
+			this.shoot_time = null;
+		}
+	}
+
+	shoot(dir, level) {
 		if (!this.dead) {
 			this.stamina.val--;
 			if (this.weapon == 'bow') {
-				this.arrow = new Arrow({ ...this.getFeet(), z: 10 }, { x: event.x / 8, y: event.y / 8, z: 0 });
+				this.arrow = new Arrow({ ...this.getFeet(), z: 10 }, { x: dir.x / 8, y: dir.y / 8, z: 0 }, this.name == 'eliot' ? null : -5000);
 				game.entities.particles.push(this.arrow);
 				this.wood.val--;
 			} else if (this.weapon == 'axe' || this.name == 'creature') {
@@ -467,6 +505,7 @@ class Creature extends Human {
 		this.aura = { color: '#212423', delay: 100, last: time };
 		this.speed = 1.2;
 		this.target = null;
+		this.can_see = true;
 	}
 
 	die() {
@@ -736,8 +775,8 @@ class Trail extends Particle {
 }
 
 class Arrow extends Trail {
-	constructor(pos, vel) {
-		super(pos, vel, 8, 1, true, '#4e443a', 0.5, true, null, 0.0001);
+	constructor(pos, vel, timeout = null) {
+		super(pos, vel, 8, 1, true, '#4e443a', 0.5, true, timeout, 0.0001);
 		this.endPoint = 'white';
 		this.victims = [];
 		this.start_coords = { ...pos };

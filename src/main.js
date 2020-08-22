@@ -1,5 +1,4 @@
 let onAndroid = /Android/i.test(navigator.userAgent);
-// let onAndroid = true;
 
 let lang = getCookie('lang');
 if (!lang && onAndroid) alert('🇺🇸 This game uses cookies to save language preferences and progression in game.\n🇫🇷 Ce jeu utilise les cookies pour enregistrer les préférences de langue et la progression du jeu.');
@@ -14,6 +13,14 @@ if (!location.hash) {
 } else if (lang != location.hash) {
 	setCookie('lang', location.hash);
 	location.reload(true);
+}
+
+let allow_fullscreen = true;
+
+if (lang == '#dev-nfs') {
+	lang = '#dev';
+	allow_fullscreen = false;
+	console.log('disabled fullscreen');
 }
 
 window.isUpdateAvailable = new Promise(function (resolve, reject) {
@@ -39,7 +46,8 @@ window.isUpdateAvailable = new Promise(function (resolve, reject) {
 
 let time = 0;
 let oldtime = 0;
-let dpi = window.devicePixelRatio;
+let dpi = 1;
+let resise_time = 0;
 let can = document.querySelector('canvas');
 let over = document.getElementsByClassName('over')[0];
 let gifs = [...document.querySelectorAll('img')];
@@ -114,6 +122,7 @@ const setScreen = (newmode, data) => {
 addEventListener('resize', event => resize());
 
 const resize = () => {
+	dpi = allow_fullscreen ? window.devicePixelRatio : 1;
 	can.width = innerWidth;
 	can.height = innerHeight;
 
@@ -121,8 +130,6 @@ const resize = () => {
 		can.setAttribute('height', Math.floor(can.clientHeight * dpi));
 		can.setAttribute('width', Math.floor(can.clientWidth * dpi));
 	}
-
-	game.scale = can.height / game.cam.h;
 };
 
 const mainloop = newtime => {
@@ -135,11 +142,16 @@ const mainloop = newtime => {
 		let sound = false;
 
 		if (innerWidth < innerHeight) setScreen('rotate-phone');
-		else if (!document.fullscreenElement) setScreen('touch-screen');
+		else if (!document.fullscreenElement && allow_fullscreen) setScreen('touch-screen');
 		else if (!game.loop) setScreen('loading');
 		else {
 			setScreen('game');
-			resize();
+
+			if (time - resise_time >= 100) {
+				resise_time = time;
+				resize();
+			}
+			game.scale = can.height / game.cam.h;
 
 			sound = true;
 			time += game.speed * dtime;
@@ -169,7 +181,7 @@ const loadPage = page_name => {
 };
 
 window.onload = () => {
-	if (onAndroid) {
+	if (onAndroid || lang == '#dev') {
 		initTouch();
 		loadPage('menu');
 		mainloop();

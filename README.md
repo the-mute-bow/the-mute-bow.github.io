@@ -1,14 +1,38 @@
-# The Mute Bow
+<p align="center">
+  <a href="https://the-mute-bow.github.io/">
+    <img src="https://the-mute-bow.github.io/img/icon/icon1024.png" alt="App" width="165" height="165">
+  </a>
+</p>
 
-<img src="https://iconejey.github.io/img/the-mute-bow.gif"/>
+<h2 align="center">The Mute Bow</h2>
 
-## Links
+<p align="center">
+  A mobile pixel-art game made with web thecnologies.
+  <br>
+  <a href="https://iconejey.github.io/#the-mute-bow"><strong>See on my portfolio</strong></a>
+  <br>
+  <br>
+  <a href="https://the-mute-bow.github.io/">Playstore</a>
+  ·
+  <a href="https://the-mute-bow.github.io/">Try on web</a>
+  ·
+  <a href="https://github.com/the-mute-bow/the-mute-bow">Licence</a>
+  ·
+  <a href="https://iconejey.github.io/">Other projects</a>
+</p>
 
--   Use [this link](https://the-mute-bow.github.io/) to play.
-
--   View on my [portfolio](https://iconejey.github.io/#the-mute-bow-page).
+<p align="center">
+<video width="100%" style="max-width:1024px;border-radius:12px" controls="" poster="https://iconejey.github.io/img/the-mute-bow.jpg" src="https://iconejey.github.io/img/the-mute-bow.mp4"></video>
+</p>
 
 ## Change log
+
+### **0.0.30**
+
+-   `'#dev'` mode allows non-android devices.
+-   `'#dev-nfs'` mode disables fullscreen.
+-   Allies shoot `Arrow` at `Game.entitites.creatures` if any of them is purchasing a `Human`.
+-   Randomized allies shoot direction to decrease precision.
 
 ### **0.0.29**
 

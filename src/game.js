@@ -90,8 +90,8 @@ class Game {
 		this.touches.rout = Math.floor(can.height / 7);
 
 		if (this.soundtrack) {
-			if (this.mode == 'normal') this.soundtrack.volume = 0.3;
-			else if (this.title != 'menu') this.soundtrack.volume = 0.1;
+			if (this.mode == 'normal') this.soundtrack.volume = 1;
+			else if (this.title != 'menu') this.soundtrack.volume = 0.3;
 		}
 
 		if (this.fog_map) this.fog_map.animate(dtime);
@@ -304,7 +304,7 @@ class Game {
 				for (let part of this.entities.particles) {
 					let dx = part.pos.x - x;
 					let dy = part.pos.y - y;
-					if (part instanceof Arrow && part.stuck && Math.sqrt(dx * dx + dy * dy) < 5) {
+					if (part instanceof Arrow && !part.timeout && part.stuck && Math.sqrt(dx * dx + dy * dy) < 5) {
 						part.dead = true;
 						this.player.wood.val++;
 						this.player.setAlert('plus', 600);
@@ -316,21 +316,25 @@ class Game {
 		for (let creature of this.entities.creatures) {
 			let trig_dist = 40;
 
-			if (creature.target && creature.target.obj) {
-				let dx = Math.abs(creature.target.obj.pos.x - creature.pos.x);
-				let dy = Math.abs(creature.target.obj.pos.y - creature.pos.y);
-				if (dx > trig_dist || dy > trig_dist || Math.sqrt(dx * dx + dy * dy) > trig_dist) creature.target = null;
-			}
+			if (creature.can_see) {
+				if (creature.target && creature.target.obj) {
+					let dx = Math.abs(creature.target.obj.pos.x - creature.pos.x);
+					let dy = Math.abs(creature.target.obj.pos.y - creature.pos.y);
+					if (dx > trig_dist || dy > trig_dist || Math.sqrt(dx * dx + dy * dy) > trig_dist) creature.target = null;
+				}
 
-			if (!creature.target || !creature.target.obj || creature.target.obj.health.val <= 0) {
-				for (let human of this.entities.humans) {
-					let dx = Math.abs(human.pos.x - creature.pos.x);
-					let dy = Math.abs(human.pos.y - creature.pos.y);
-					if (dx < trig_dist && dy < trig_dist && Math.sqrt(dx * dx + dy * dy) < trig_dist) {
-						creature.setAlert('exclam', 600);
-						creature.target = { obj: human, x: 0, y: 0 };
+				if (!creature.target || !creature.target.obj || creature.target.obj.health.val <= 0) {
+					for (let human of this.entities.humans) {
+						let dx = Math.abs(human.pos.x - creature.pos.x);
+						let dy = Math.abs(human.pos.y - creature.pos.y);
+						if (dx < trig_dist && dy < trig_dist && Math.sqrt(dx * dx + dy * dy) < trig_dist) {
+							creature.setAlert('exclam', 600);
+							creature.target = { obj: human, x: 0, y: 0 };
+						}
 					}
 				}
+			} else {
+				creature.target = null;
 			}
 		}
 

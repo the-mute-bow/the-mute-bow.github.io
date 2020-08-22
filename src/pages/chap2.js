@@ -438,17 +438,30 @@ pages['chap2'] = game => {
 				creature_nearby: () => {
 					game.events.push(
 						new GameEvent(event => {
-							for (let creature of game.entities.creatures) {
-								let dx = creature.pos.x - game.player.pos.x;
-								let dy = creature.pos.y - game.player.pos.y;
-								if (Math.sqrt(dx * dx + dy * dy) < 48) {
-									event.done = true;
-									game.player.health.val = 9;
-									game.fog_map.fill();
-									game.soundtrack.pause();
-									game.soundtrack = game.sounds.dark;
-									game.triggerEvent('creature_chase');
-									break;
+							if (game.player.dead) event.done = true;
+							else {
+								for (let creature of game.entities.creatures) {
+									let dx = creature.pos.x - game.player.pos.x;
+									let dy = creature.pos.y - game.player.pos.y;
+									if (Math.sqrt(dx * dx + dy * dy) < 48) {
+										event.done = true;
+										game.player.health.val = 9;
+										game.fog_map.fill();
+										game.soundtrack.pause();
+										game.soundtrack = game.sounds.dark;
+										game.triggerEvent('creature_chase');
+
+										for (let human of game.entities.humans) {
+											if (human.name != 'eliot' && human.name != 'lea')
+												game.events.push(
+													new TimeEvent(Math.random() * 1000, event => {
+														human.setWeapon('bow');
+														human.enemies = 'creatures';
+													})
+												);
+										}
+										break;
+									}
 								}
 							}
 						})
@@ -457,10 +470,10 @@ pages['chap2'] = game => {
 				creature_chase: () => {
 					game.events.push(
 						new GameEvent(event => {
-							if (!game.entities.creatures.length) this.done = true;
+							if (!game.entities.creatures.length || game.player.dead) event.done = true;
 							else {
 								for (let creature of game.entities.creatures) {
-									if (creature.target && creature.target.obj && creature.target.obj instanceof Human) {
+									if (creature.target && creature.target.obj && creature.target.obj.name != 'creature') {
 										event.done = true;
 										game.soundtrack.pause();
 										game.soundtrack = game.sounds.tense;
@@ -480,11 +493,11 @@ pages['chap2'] = game => {
 						new TimeEvent(1000, event => {
 							game.events.push(
 								new GameEvent(event => {
-									if (!game.entities.creatures.length) event.done = true;
+									if (!game.entities.creatures.length || game.player.dead) event.done = true;
 									else {
 										let far = true;
 										for (let creature of game.entities.creatures) {
-											if (creature.target && creature.target.obj && creature.target.obj instanceof Human) {
+											if (creature.target && creature.target.obj && creature.target.obj.name != 'creature') {
 												far = false;
 												break;
 											}
