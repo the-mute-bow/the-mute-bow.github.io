@@ -4,7 +4,7 @@
   </a>
 </p>
 
-<h2 align="center">The Mute Bow</h2>
+<h3 align="center">The Mute Bow</h3>
 
 <p align="center">
   A mobile pixel-art game made with web thecnologies.
@@ -22,10 +22,18 @@
 </p>
 
 <p align="center">
-<video width="100%" style="max-width:1024px;border-radius:12px" controls="" poster="https://iconejey.github.io/img/the-mute-bow.jpg" src="https://iconejey.github.io/img/the-mute-bow.mp4"></video>
+<img src="https://iconejey.github.io/img/the-mute-bow.gif"/>
 </p>
 
 ## Change log
+
+### **0.0.31**
+
+-   Added `Sheep` class.
+-   Added `Mob` class to link `Human` and `Sheep`.
+-   `Sheep` walk cycle.
+-   `Sheep` eat grass animation.
+-   `Sheep` stop eating grass when `Human` nearby.
 
 ### **0.0.30**
 

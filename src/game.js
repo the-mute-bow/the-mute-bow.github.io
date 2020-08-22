@@ -30,6 +30,7 @@ class Game {
 		this.entities = {
 			buildings: [],
 			trees: [],
+			sheeps: [],
 			humans: [],
 			creatures: [],
 			particles: []
@@ -99,10 +100,10 @@ class Game {
 		this.entities.humans = this.entities.humans.filter(human => !human.dead);
 		this.entities.creatures = this.entities.creatures.filter(creature => !creature.dead);
 
-		for (let entity of [...this.entities.trees, ...this.entities.humans, ...this.entities.creatures, ...this.entities.particles])
-			entity.animate(dtime, [...this.entities.buildings, ...this.entities.trees], [...this.entities.humans, ...this.entities.creatures]);
+		let all_entities = [...this.entities.buildings, ...this.entities.trees, ...this.entities.sheeps, ...this.entities.humans, ...this.entities.creatures, ...this.entities.particles];
+		this.ord_ent = all_entities.filter(entity => entity.inScreen()).sort((a, b) => a.getFeet().y - b.getFeet().y);
 
-		this.ord_ent = [...this.entities.buildings, ...this.entities.humans, ...this.entities.creatures, ...this.entities.trees, ...this.entities.particles].filter(entity => entity.inScreen()).sort((a, b) => a.getFeet().y - b.getFeet().y);
+		for (let entity of all_entities) entity.animate(dtime, [...this.entities.buildings, ...this.entities.trees], [...this.entities.sheeps, ...this.entities.humans, ...this.entities.creatures]);
 
 		for (let event of this.touch_events) {
 			if (event.type == 'tap') {

@@ -27,6 +27,9 @@ pages['chap2'] = game => {
 			'trees/pine4-shadow-night.png',
 			'trees/tree-calc-night.png',
 
+			'mobs/sheep.png',
+			'mobs/sheep-shadow.png',
+
 			'humans/human-shadow.png',
 			'humans/eliot-night.png',
 			'humans/lea-night.png',
@@ -257,6 +260,7 @@ pages['chap2'] = game => {
 					)
 				],
 				trees: [],
+				sheeps: [new Sheep({ x: 285, y: 140, z: 0 }), new Sheep({ x: 296, y: 130, z: 0 })],
 				humans: [
 					new Human('eliot', { x: 315, y: 120, z: 0 }, '-night'),
 					new Human('lea', { x: 320, y: 126, z: 0 }, '-night'),
@@ -580,7 +584,7 @@ pages['chap2'] = game => {
 
 			game.loop = true;
 
-			for (let human of game.entities.humans) human.target = null;
+			for (let mob of [...game.entities.humans, ...game.entities.sheeps]) mob.target = null;
 		}
 	);
 };

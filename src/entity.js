@@ -41,6 +41,8 @@ class Entity {
 		} else return false;
 	}
 
+	animate() {}
+
 	draw(ctx, sprite_name = 'main', coords = null) {
 		let sprite = this.sprites[sprite_name];
 		let { x, y, z } = coords ? coords : { x: Math.floor(this.pos.x + 0.5), y: Math.floor(this.pos.y + 0.5), z: this.pos.z };
@@ -103,68 +105,24 @@ class Entity {
 	}
 }
 
-class Human extends Entity {
-	constructor(name, pos, variant = '') {
-		super(
-			pos,
-			{
-				main: new Sprite(game.images[name + variant], { x: 0, y: 0, w: 24, h: 24 }),
-				shadow: new Sprite(game.images['human-shadow'], { x: 0, y: 0, w: 24, h: 24 }),
-				axe: new Sprite(game.images['axe-hold'], { x: 0, y: 0, w: 24, h: 24 }),
-				axe_hit: new Sprite(game.images['axe-hit'], { x: 0, y: 0, w: 24, h: 24 }),
-				bow: new Sprite(game.images['bow-hold'], { x: 0, y: 0, w: 24, h: 24 }),
-				bow_aim: new Sprite(game.images['bow-aim'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-null': new Sprite(game.images['icon-null'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-stay': new Sprite(game.images['icon-stay'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-follow': new Sprite(game.images['icon-follow'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-bow': new Sprite(game.images['icon-bow'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-axe': new Sprite(game.images['icon-axe'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-fence': new Sprite(game.images['icon-fence'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-noamo': new Sprite(game.images['icon-noamo'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-plus': new Sprite(game.images['icon-plus'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-none': new Sprite(game.images['icon-none'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-exclam': new Sprite(game.images['icon-exclam'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-stamina-red': new Sprite(game.images['icon-stamina-red'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-stamina-green': new Sprite(game.images['icon-stamina-green'], { x: 0, y: 0, w: 24, h: 24 })
-			},
-			new Hitbox(9, 21, 6, 5, 13),
-			{ x: 12, y: 24 }
-		);
+class Mob extends Entity {
+	constructor(pos, sprites, hitbox) {
+		super(pos, sprites, hitbox, { x: 12, y: 24 });
 
-		this.name = name;
 		this.dead = false;
-		this.health = { val: 12, max: 9 };
-		this.stamina = { val: 0, max: 9, time: 0 };
-		this.mana = { val: 3, max: 9 };
-		this.wood = { val: 16, max: 32 };
+		this.health = { val: 9, max: 9 };
 		this.move = { x: 0, y: 0, time: null };
 		this.look = { x: 0, y: 1, aim: false };
-		this.weapon = 'none';
-		this.attack = null;
-		this.arrow = null;
 		this.alert = null;
 		this.speed = 1;
 		this.target = { obj: null, x: this.pos.x, y: this.pos.y };
 		this.foot_step = 0;
+		this.still_tile = 0;
 		this.aura = null;
-		this.view_distance = 80;
-		this.tired = false;
-		this.enemies = null;
-		this.shoot_time = null;
-	}
-
-	createAura(color, gravity) {
-		let { x, y } = this.getFeet();
-		let r = () => Math.random() - 0.5;
-		x += r() * 8 + 0.5;
-		y += r() * 6;
-		let z = Math.random() * 8 + 4;
-		game.entities.particles.push(new Particle({ x: x, y: y, z: z }, { x: 0, y: 0, z: 0 }, 1, 1, false, color, gravity, -500));
 	}
 
 	die() {
 		for (let i = 0; i < 20; i++) this.createAura('blood', 0);
-		this.view_distance = 0;
 		this.dead = true;
 	}
 
@@ -182,39 +140,11 @@ class Human extends Entity {
 		mob.pushTo(v.x / mag, v.y / mag, dtime);
 	}
 
-	animate(dtime, solids, mobs) {
-		if (this.alert && this.alert.timeout && time > this.alert.timeout) this.alert = null;
+	getStep() {
+		return (Math.floor((time - this.move.time) / 200) % 2) + 1;
+	}
 
-		if (this.enemies) this.autoAim(game.entities[this.enemies]);
-
-		if (this.attack) {
-			if (time > this.attack.next_time) {
-				this.attack.progression++;
-				this.attack.next_time = time + this.attack.delay;
-			}
-
-			if (this.weapon == 'axe' || this.name == 'creature') {
-				let tile = this.sprites.axe_hit.tile;
-				if (this.attack.level == 1) {
-					tile.x = this.attack.progression;
-					tile.y = this.getOrient(8, this.attack.dir);
-					if (this.attack.progression > 3) this.attack = null;
-				} else {
-					if (this.attack.progression > 10) this.attack = null;
-					else if (this.attack.progression > 9) {
-						tile.x = 3;
-						tile.y = 7;
-					} else if (this.attack.progression > 1) {
-						tile.x = 2;
-						tile.y = this.attack.progression - 2;
-					} else {
-						tile.x = this.attack.progression;
-						tile.y = 0;
-					}
-				}
-			}
-		}
-
+	moveOn(dtime, solids, mobs) {
 		if (this.target) {
 			let { x, y } = this.getTargCoords();
 
@@ -256,7 +186,7 @@ class Human extends Entity {
 
 			if (!this.move.time) this.move.time = time;
 
-			let step = (Math.floor((time - this.move.time) / 200) % 2) + 1;
+			let step = this.getStep();
 			this.sprites.main.tile.x = step;
 			if (this.foot_step != step) {
 				this.foot_step = step;
@@ -272,10 +202,133 @@ class Human extends Entity {
 			this.move.x = 0;
 			this.move.y = 0;
 			this.move.time = null;
-			this.sprites.main.tile.x = 0;
+			this.sprites.main.tile.x = this.still_tile;
 		}
 
 		this.sprites.main.tile.y = this.getOrient(4);
+	}
+
+	animate(dtime, solids, mobs) {
+		if (this.alert && this.alert.timeout && time > this.alert.timeout) this.alert = null;
+		this.moveOn(dtime, solids, mobs);
+		if (this.health.val <= 0) this.die();
+	}
+
+	pushTo(x, y, dtime) {
+		this.move.x += (x * game.speed * (dtime | 1)) / 4;
+		this.move.y += (y * game.speed * (dtime | 1)) / 4;
+	}
+
+	getTargCoords() {
+		if (this.target) {
+			let x = this.target.x;
+			let y = this.target.y;
+
+			if (this.target.obj) {
+				x += this.target.obj.pos.x;
+				y += this.target.obj.pos.y;
+			}
+
+			return { x: x, y: y };
+		}
+	}
+
+	setAlert(icon, duration) {
+		if (duration) this.alert = { icon: 'icon-' + icon, duration: duration, timeout: time + duration };
+		else this.alert = { icon: 'icon-' + icon, duration: null, timeout: null };
+	}
+}
+
+class Human extends Mob {
+	constructor(name, pos, variant = '') {
+		super(
+			pos,
+			{
+				main: new Sprite(game.images[name + variant], { x: 0, y: 0, w: 24, h: 24 }),
+				shadow: new Sprite(game.images['human-shadow'], { x: 0, y: 0, w: 24, h: 24 }),
+				axe: new Sprite(game.images['axe-hold'], { x: 0, y: 0, w: 24, h: 24 }),
+				axe_hit: new Sprite(game.images['axe-hit'], { x: 0, y: 0, w: 24, h: 24 }),
+				bow: new Sprite(game.images['bow-hold'], { x: 0, y: 0, w: 24, h: 24 }),
+				bow_aim: new Sprite(game.images['bow-aim'], { x: 0, y: 0, w: 24, h: 24 }),
+				'icon-null': new Sprite(game.images['icon-null'], { x: 0, y: 0, w: 24, h: 24 }),
+				'icon-stay': new Sprite(game.images['icon-stay'], { x: 0, y: 0, w: 24, h: 24 }),
+				'icon-follow': new Sprite(game.images['icon-follow'], { x: 0, y: 0, w: 24, h: 24 }),
+				'icon-bow': new Sprite(game.images['icon-bow'], { x: 0, y: 0, w: 24, h: 24 }),
+				'icon-axe': new Sprite(game.images['icon-axe'], { x: 0, y: 0, w: 24, h: 24 }),
+				'icon-fence': new Sprite(game.images['icon-fence'], { x: 0, y: 0, w: 24, h: 24 }),
+				'icon-noamo': new Sprite(game.images['icon-noamo'], { x: 0, y: 0, w: 24, h: 24 }),
+				'icon-plus': new Sprite(game.images['icon-plus'], { x: 0, y: 0, w: 24, h: 24 }),
+				'icon-none': new Sprite(game.images['icon-none'], { x: 0, y: 0, w: 24, h: 24 }),
+				'icon-exclam': new Sprite(game.images['icon-exclam'], { x: 0, y: 0, w: 24, h: 24 }),
+				'icon-stamina-red': new Sprite(game.images['icon-stamina-red'], { x: 0, y: 0, w: 24, h: 24 }),
+				'icon-stamina-green': new Sprite(game.images['icon-stamina-green'], { x: 0, y: 0, w: 24, h: 24 })
+			},
+			new Hitbox(9, 21, 6, 5, 13)
+		);
+
+		this.name = name;
+		this.health = { val: 12, max: 9 };
+		this.stamina = { val: 0, max: 9, time: 0 };
+		this.mana = { val: 3, max: 9 };
+		this.wood = { val: 16, max: 32 };
+		this.weapon = 'none';
+		this.attack = null;
+		this.arrow = null;
+		this.view_distance = 80;
+		this.tired = false;
+		this.enemies = null;
+		this.shoot_time = null;
+	}
+
+	die() {
+		for (let i = 0; i < 20; i++) this.createAura('blood', 0);
+		this.view_distance = 0;
+		this.dead = true;
+	}
+
+	createAura(color, gravity) {
+		let { x, y } = this.getFeet();
+		let r = () => Math.random() - 0.5;
+		x += r() * 8 + 0.5;
+		y += r() * 6;
+		let z = Math.random() * 8 + 4;
+		game.entities.particles.push(new Particle({ x: x, y: y, z: z }, { x: 0, y: 0, z: 0 }, 1, 1, false, color, gravity, -500));
+	}
+
+	animate(dtime, solids, mobs) {
+		if (this.alert && this.alert.timeout && time > this.alert.timeout) this.alert = null;
+
+		if (this.enemies) this.autoAim(game.entities[this.enemies]);
+
+		if (this.attack) {
+			if (time > this.attack.next_time) {
+				this.attack.progression++;
+				this.attack.next_time = time + this.attack.delay;
+			}
+
+			if (this.weapon == 'axe' || this.name == 'creature') {
+				let tile = this.sprites.axe_hit.tile;
+				if (this.attack.level == 1) {
+					tile.x = this.attack.progression;
+					tile.y = this.getOrient(8, this.attack.dir);
+					if (this.attack.progression > 3) this.attack = null;
+				} else {
+					if (this.attack.progression > 10) this.attack = null;
+					else if (this.attack.progression > 9) {
+						tile.x = 3;
+						tile.y = 7;
+					} else if (this.attack.progression > 1) {
+						tile.x = 2;
+						tile.y = this.attack.progression - 2;
+					} else {
+						tile.x = this.attack.progression;
+						tile.y = 0;
+					}
+				}
+			}
+		}
+
+		this.moveOn(dtime, solids, mobs);
 
 		if (time - this.stamina.time > 900 / (this.speed * 2 - 1)) {
 			this.stamina.time = time;
@@ -376,33 +429,9 @@ class Human extends Entity {
 		}
 	}
 
-	pushTo(x, y, dtime) {
-		this.move.x += (x * game.speed * (dtime | 1)) / 4;
-		this.move.y += (y * game.speed * (dtime | 1)) / 4;
-	}
-
-	getTargCoords() {
-		if (this.target) {
-			let x = this.target.x;
-			let y = this.target.y;
-
-			if (this.target.obj) {
-				x += this.target.obj.pos.x;
-				y += this.target.obj.pos.y;
-			}
-
-			return { x: x, y: y };
-		}
-	}
-
 	setWeapon(weapon) {
 		this.weapon = weapon;
 		this.setAlert(weapon, 1000);
-	}
-
-	setAlert(icon, duration) {
-		if (duration) this.alert = { icon: 'icon-' + icon, duration: duration, timeout: time + duration };
-		else this.alert = { icon: 'icon-' + icon, duration: null, timeout: null };
 	}
 
 	autoAim(mobs) {
@@ -527,6 +556,55 @@ class Creature extends Human {
 			if (mob == game.player) game.cam.h *= 1.016;
 			this.shoot(null, 1);
 		}
+	}
+}
+
+class Sheep extends Mob {
+	constructor(pos, variant = '') {
+		super(
+			pos,
+			{
+				main: new Sprite(game.images['sheep' + variant], { x: 0, y: 0, w: 24, h: 24 }),
+				shadow: new Sprite(game.images['sheep-shadow'], { x: 0, y: 0, w: 24, h: 24 })
+			},
+			new Hitbox(7, 21, 11, 5, 9)
+		);
+
+		this.still_tile = Math.floor(Math.random() * 2);
+		this.peek_time = { lonely: 0, people: 0 };
+	}
+
+	getStep() {
+		return (Math.floor((time - this.move.time) / 200) % 4) + 2;
+	}
+
+	animate(dtime, solids, mobs) {
+		if (this.alert && this.alert.timeout && time > this.alert.timeout) this.alert = null;
+		this.moveOn(dtime, solids, mobs);
+
+		if (this.sprites.main.tile.x < 2) {
+			if (time - this.peek_time.lonely > 0) {
+				this.peek_time.lonely = time + Math.random() * 19000 + 1000;
+				this.still_tile = this.still_tile ? 0 : 1;
+			}
+
+			if (time - this.peek_time.people > 0) {
+				this.peek_time.people = time + 100;
+
+				for (let mob of mobs) {
+					if (mob instanceof Human) {
+						let h = this.getFeet();
+						let m = mob.getFeet();
+						let v = { x: m.x - h.x, y: m.y - h.y };
+						let mag = Math.sqrt(v.x * v.x + v.y * v.y);
+
+						if (mag < 32) this.still_tile = 1;
+					}
+				}
+			}
+		}
+
+		if (this.health.val <= 0) this.die();
 	}
 }
 

@@ -154,6 +154,7 @@ pages['menu'] = game => {
 					)
 				],
 				trees: [],
+				sheeps: [],
 				humans: [],
 				creatures: [],
 				particles: []
