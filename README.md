@@ -34,6 +34,8 @@
 -   `Sheep` walk cycle.
 -   `Sheep` eat grass animation.
 -   `Sheep` stop eating grass when `Human` nearby.
+-   Added `Sheep` images to cache.
+-   Corrected `'./img/mobs'` path name.
 
 ### **0.0.30**
 
