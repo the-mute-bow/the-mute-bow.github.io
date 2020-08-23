@@ -260,7 +260,7 @@ pages['chap2'] = game => {
 					)
 				],
 				trees: [],
-				sheeps: [new Sheep({ x: 285, y: 140, z: 0 }), new Sheep({ x: 296, y: 130, z: 0 })],
+				sheeps: [new Sheep({ x: 285, y: 140, z: 0 }), new Sheep({ x: 296, y: 150, z: 0 })],
 				humans: [
 					new Human('eliot', { x: 315, y: 120, z: 0 }, '-night'),
 					new Human('lea', { x: 320, y: 126, z: 0 }, '-night'),
@@ -425,7 +425,12 @@ pages['chap2'] = game => {
 					  ]
 					: [];
 
-			game.events = [];
+			game.events = [
+				new WalkEvent(322, 150, 32, game.entities.humans, 'all', 'out', 'white', event => {
+					console.log('all out');
+				})
+			];
+
 			game.event_map = {
 				creature_dead: () => {
 					game.events.push(

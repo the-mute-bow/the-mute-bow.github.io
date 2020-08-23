@@ -97,6 +97,7 @@ class Game {
 
 		if (this.fog_map) this.fog_map.animate(dtime);
 
+		this.entities.sheeps = this.entities.sheeps.filter(sheep => !sheep.dead);
 		this.entities.humans = this.entities.humans.filter(human => !human.dead);
 		this.entities.creatures = this.entities.creatures.filter(creature => !creature.dead);
 
@@ -325,18 +326,16 @@ class Game {
 				}
 
 				if (!creature.target || !creature.target.obj || creature.target.obj.health.val <= 0) {
-					for (let human of this.entities.humans) {
-						let dx = Math.abs(human.pos.x - creature.pos.x);
-						let dy = Math.abs(human.pos.y - creature.pos.y);
+					for (let mob of [...this.entities.humans, ...this.entities.sheeps]) {
+						let dx = Math.abs(mob.pos.x - creature.pos.x);
+						let dy = Math.abs(mob.pos.y - creature.pos.y);
 						if (dx < trig_dist && dy < trig_dist && Math.sqrt(dx * dx + dy * dy) < trig_dist) {
 							creature.setAlert('exclam', 600);
-							creature.target = { obj: human, x: 0, y: 0 };
+							creature.target = { obj: mob, x: 0, y: 0 };
 						}
 					}
 				}
-			} else {
-				creature.target = null;
-			}
+			} else creature.target = null;
 		}
 
 		for (let event of this.events) event.tick();
@@ -382,6 +381,9 @@ class Game {
 		}
 
 		this.foot_steps = this.foot_steps.filter(fs => fs.time);
+
+		// Events
+		for (let event of this.events) event.draw(gctx);
 
 		// Entities
 		for (let entity of this.ord_ent) entity.draw(gctx, 'shadow');

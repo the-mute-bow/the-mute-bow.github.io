@@ -126,6 +126,15 @@ class Mob extends Entity {
 		this.dead = true;
 	}
 
+	createAura(color, gravity) {
+		let { x, y } = this.getFeet();
+		let r = () => Math.random() - 0.5;
+		x += r() * 8 + 0.5;
+		y += r() * 6;
+		let z = Math.random() * 8 + 4;
+		game.entities.particles.push(new Particle({ x: x, y: y, z: z }, { x: 0, y: 0, z: 0 }, 1, 1, false, color, gravity, -500));
+	}
+
 	getOrient(divs, dir = this.look) {
 		let o = Math.atan2(dir.y, dir.x) + Math.PI;
 		if (divs == 8) o = (o + Math.PI / 8) % (2 * Math.PI);
@@ -284,15 +293,6 @@ class Human extends Mob {
 		for (let i = 0; i < 20; i++) this.createAura('blood', 0);
 		this.view_distance = 0;
 		this.dead = true;
-	}
-
-	createAura(color, gravity) {
-		let { x, y } = this.getFeet();
-		let r = () => Math.random() - 0.5;
-		x += r() * 8 + 0.5;
-		y += r() * 6;
-		let z = Math.random() * 8 + 4;
-		game.entities.particles.push(new Particle({ x: x, y: y, z: z }, { x: 0, y: 0, z: 0 }, 1, 1, false, color, gravity, -500));
 	}
 
 	animate(dtime, solids, mobs) {
@@ -567,7 +567,7 @@ class Sheep extends Mob {
 				main: new Sprite(game.images['sheep' + variant], { x: 0, y: 0, w: 24, h: 24 }),
 				shadow: new Sprite(game.images['sheep-shadow'], { x: 0, y: 0, w: 24, h: 24 })
 			},
-			new Hitbox(7, 21, 11, 5, 9)
+			new Hitbox(7, 21, 11, 5, 10)
 		);
 
 		this.still_tile = Math.floor(Math.random() * 2);
@@ -583,14 +583,10 @@ class Sheep extends Mob {
 		this.moveOn(dtime, solids, mobs);
 
 		if (this.sprites.main.tile.x < 2) {
-			if (time - this.peek_time.lonely > 0) {
-				this.peek_time.lonely = time + Math.random() * 19000 + 1000;
-				this.still_tile = this.still_tile ? 0 : 1;
-			}
-
 			if (time - this.peek_time.people > 0) {
-				this.peek_time.people = time + 100;
+				this.peek_time.people = time + 500 + Math.random() * 500;
 
+				let away = true;
 				for (let mob of mobs) {
 					if (mob instanceof Human) {
 						let h = this.getFeet();
@@ -598,8 +594,17 @@ class Sheep extends Mob {
 						let v = { x: m.x - h.x, y: m.y - h.y };
 						let mag = Math.sqrt(v.x * v.x + v.y * v.y);
 
-						if (mag < 32) this.still_tile = 1;
+						if (mag < 32) {
+							this.still_tile = 1;
+							away = false;
+							break;
+						}
 					}
+				}
+
+				if (away && time - this.peek_time.lonely > 0) {
+					this.peek_time.lonely = time + Math.random() * 19000 + 1000;
+					this.still_tile = this.still_tile ? 0 : 1;
 				}
 			}
 		}
@@ -684,6 +689,14 @@ class Particle {
 			let r = Math.floor(192 + Math.random() * 63);
 			let g = Math.floor(64 + Math.random() * 32);
 			let b = Math.floor(64 + Math.random() * 32);
+			this.color = `rgba(${r}, ${g}, ${b}, 1)`;
+		}
+
+		if (this.color == 'wool') {
+			let c = Math.random();
+			let r = Math.floor(209 * c + 186 * (1 - c));
+			let g = Math.floor(208 * c + 188 * (1 - c));
+			let b = Math.floor(203 * c + 186 * (1 - c));
 			this.color = `rgba(${r}, ${g}, ${b}, 1)`;
 		}
 
@@ -861,41 +874,48 @@ class Arrow extends Trail {
 	}
 
 	onContact(mob) {
-		if (mob.name == 'creature' && !this.victims.includes(mob)) {
+		if ((mob.name == 'creature' || mob instanceof Sheep) && !this.victims.includes(mob)) {
 			let arr_mag = this.getMag();
-			mob.health.val -= arr_mag * 20;
 			this.victims.push(mob);
-
-			if (!mob.target || !mob.target.obj) {
-				mob.setAlert('exclam', 200);
-				mob.target = {
-					x: this.start_coords.x - 12 + (Math.random() - 0.5) * 48,
-					y: this.start_coords.y - 24 + (Math.random() - 0.5) * 48,
-					obj: null
-				};
+			if (!(mob instanceof Sheep)) {
+				mob.health.val -= arr_mag * 20;
+				if (!mob.target || !mob.target.obj) {
+					mob.setAlert('exclam', 200);
+					mob.target = {
+						x: this.start_coords.x - 12 + (Math.random() - 0.5) * 48,
+						y: this.start_coords.y - 24 + (Math.random() - 0.5) * 48,
+						obj: null
+					};
+				}
 			}
+
+			let r = 0.07;
 
 			for (let c of 'xyz') this.vel[c] *= 0.5;
-			for (let i = 0; i < 50 * arr_mag; i++) {
-				game.entities.particles.push(
-					new Trail(
-						{ ...this.pos },
-						{
-							x: this.vel.x + (Math.random() - 0.5) * 0.07,
-							y: this.vel.y + (Math.random() - 0.5) * 0.07,
-							z: this.vel.z + (Math.random() - 0.5) * 0.07
-						},
-						1,
-						1,
-						true,
-						'blood',
-						0.1,
-						true,
-						-1000,
-						0.01
-					)
-				);
-			}
+			game.events.push(
+				new TimeEvent(mob instanceof Sheep ? 100 : 0, event => {
+					for (let i = 0; i < 50 * arr_mag; i++) {
+						game.entities.particles.push(
+							new Trail(
+								{ ...this.pos },
+								{
+									x: this.vel.x + (Math.random() - 0.5) * r,
+									y: this.vel.y + (Math.random() - 0.5) * r,
+									z: this.vel.z + (Math.random() - 0.5) * r
+								},
+								1,
+								1,
+								true,
+								mob instanceof Sheep ? 'wool' : 'blood',
+								0.1,
+								true,
+								-1000,
+								0.01
+							)
+						);
+					}
+				})
+			);
 		}
 	}
 }

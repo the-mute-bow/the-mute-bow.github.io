@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://the-mute-bow.github.io/">
-    <img src="https://the-mute-bow.github.io/img/icon/icon1024.png" alt="App" width="165" height="165">
+  <a href="https://the-mute-bow.com/">
+    <img src="https://the-mute-bow.com/img/icon/icon1024.png" alt="App" width="165" height="165">
   </a>
 </p>
 
@@ -12,9 +12,9 @@
   <a href="https://iconejey.github.io/#the-mute-bow"><strong>See on my portfolio</strong></a>
   <br>
   <br>
-  <a href="https://the-mute-bow.github.io/">Playstore</a>
+  <a href="https://the-mute-bow.com/">Playstore</a>
   ·
-  <a href="https://the-mute-bow.github.io/">Try on web</a>
+  <a href="https://the-mute-bow.com/">Website</a>
   ·
   <a href="https://github.com/the-mute-bow/the-mute-bow">Licence</a>
   ·
@@ -26,6 +26,16 @@
 </p>
 
 ## Change log
+
+### **0.0.32**
+
+-   Custom domain: [the-mute-bow.com](https://the-mute-bow.com/)
+-   Fixed `Sheep` eat grass animation bug.
+-   `Creature` can attack and kill `Sheep`.
+-   Added `'wool'` color for `Particle`.
+-   `Arrow` spread wool when hitting a `Sheep`.
+-   Added `WalkEvent`.
+-   [ ] Google AdSence test 2.
 
 ### **0.0.31**
 
