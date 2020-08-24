@@ -1,3 +1,4 @@
+console.log(location.host, location.host == 'the-mute-bow.github.io');
 if (location.host == 'the-mute-bow.github.io') location.replace('https://the-mute-bow.com');
 
 let onAndroid = /Android/i.test(navigator.userAgent);
