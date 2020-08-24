@@ -1,3 +1,5 @@
+if (location.host == 'the-mute-bow.github.io') location.replace('https://the-mute-bow.com');
+
 let onAndroid = /Android/i.test(navigator.userAgent);
 
 let lang = getCookie('lang');

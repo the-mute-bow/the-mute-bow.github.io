@@ -1,4 +1,4 @@
-pages['chap2'] = game => {
+pages['chap1b'] = game => {
 	game.title = lang == '#fr' ? 'Une mystérieuse créature' : 'A mysterious creature';
 
 	game.images = [];

@@ -81,6 +81,18 @@ class Game {
 		}
 	}
 
+	forTouch(x, y, mobs, callback = mob => {}) {
+		for (let mob of mobs) {
+			if (mob != this.player) {
+				let t = mob.getTargCoords();
+				let pos = t && this.mode == 'strat' ? t : mob.pos;
+				if (mob != this.player && pos.x + 7 < x && x < pos.x + 17 && pos.y + 10 < y && y < pos.y + 24) {
+					callback(mob);
+				}
+			}
+		}
+	}
+
 	tick(dtime) {
 		this.goTarget(dtime);
 
@@ -118,122 +130,132 @@ class Game {
 						for (let id of ['bow', 'axe', 'fence', 'none']) this.getButton(id).kill(100);
 					};
 
+					let { x, y } = this.screenToGameCoords(event.end.x, event.end.y);
+					let touched_human = false;
+
 					if (this.mode == 'strat') {
-						let { x, y } = this.screenToGameCoords(event.end.x, event.end.y);
-						let touched_human = false;
-						for (let human of this.entities.humans) {
-							if (human != this.player) {
-								let t = human.getTargCoords();
-								let pos = t ? t : human.pos;
-								if (human != this.player && pos.x + 7 < x && x < pos.x + 17 && pos.y + 10 < y && y < pos.y + 24) {
-									touched_human = true;
-									if (human.target) {
-										if (human.target.obj) {
-											human.target.x = human.target.obj.pos.x + human.target.x;
-											human.target.y = human.target.obj.pos.y + human.target.y;
-											human.target.obj = null;
-										} else {
-											human.target = null;
-										}
-									} else {
-										human.target = {
-											x: human.pos.x - this.player.pos.x,
-											y: human.pos.y - this.player.pos.y,
-											obj: this.player
-										};
-									}
+						this.forTouch(x, y, this.entities.humans, human => {
+							touched_human = true;
+
+							if (human.target) {
+								if (human.target.obj) {
+									human.target.x = human.target.obj.pos.x + human.target.x;
+									human.target.y = human.target.obj.pos.y + human.target.y;
+									human.target.obj = null;
+								} else {
+									human.target = null;
 								}
+							} else {
+								human.target = {
+									x: human.pos.x - this.player.pos.x,
+									y: human.pos.y - this.player.pos.y,
+									obj: this.player
+								};
 							}
-						}
+						});
 
 						if (!touched_human) {
 							this.mode = 'normal';
 							this.speed = 1;
 						}
-					} else if (event.side == 'L') {
-						if (this.getButton('bow')) hide();
-						this.mode = 'strat';
-						this.speed = 0.1;
-						this.catched = null;
 					} else {
-						if (this.getButton('bow')) hide();
-						else {
-							this.buttons.push(
-								new Button(
-									'bow',
-									'bow-button',
-									'',
-									btn => ({
-										x: event.start.x - (btn.img.width / 2) * game.scale,
-										y: event.start.y - (btn.img.height / 2 + 10) * game.scale
-									}),
-									btn => {
-										hide();
-										game.player.setWeapon('bow');
-									},
-									100,
-									'normal',
-									12,
-									'bow'
-								)
-							);
-							this.buttons.push(
-								new Button(
-									'fence',
-									'fence-button',
-									'',
-									btn => ({
-										x: event.start.x - (btn.img.width / 2 - 10) * game.scale,
-										y: event.start.y - (btn.img.height / 2) * game.scale
-									}),
-									btn => {
-										hide();
-										game.player.setWeapon('fence');
-									},
-									100,
-									'normal',
-									12,
-									'fence'
-								)
-							);
-							this.buttons.push(
-								new Button(
-									'axe',
-									'axe-button',
-									'',
-									btn => ({
-										x: event.start.x - (btn.img.width / 2 + 10) * game.scale,
-										y: event.start.y - (btn.img.height / 2) * game.scale
-									}),
-									btn => {
-										hide();
-										game.player.setWeapon('axe');
-									},
-									100,
-									'normal',
-									12,
-									'axe'
-								)
-							);
-							this.buttons.push(
-								new Button(
-									'none',
-									'none-button',
-									'',
-									btn => ({
-										x: event.start.x - (btn.img.width / 2) * game.scale,
-										y: event.start.y - (btn.img.height / 2 - 10) * game.scale
-									}),
-									btn => {
-										hide();
-										game.player.setWeapon('none');
-									},
-									100,
-									'normal',
-									12,
-									'none'
-								)
-							);
+						this.forTouch(
+							x,
+							y,
+							this.entities.humans.filter(h => h.event),
+							h => {
+								h.event();
+								touched_human = true;
+							}
+						);
+
+						if (!touched_human) {
+							if (event.side == 'L') {
+								if (this.getButton('bow')) hide();
+								this.mode = 'strat';
+								this.speed = 0.1;
+								this.catched = null;
+							} else {
+								if (this.getButton('bow')) hide();
+								else {
+									this.buttons.push(
+										new Button(
+											'bow',
+											'bow-button',
+											'',
+											btn => ({
+												x: event.start.x - (btn.img.width / 2) * game.scale,
+												y: event.start.y - (btn.img.height / 2 + 10) * game.scale
+											}),
+											btn => {
+												hide();
+												game.player.setWeapon('bow');
+											},
+											100,
+											'normal',
+											12,
+											'bow'
+										)
+									);
+									this.buttons.push(
+										new Button(
+											'fence',
+											'fence-button',
+											'',
+											btn => ({
+												x: event.start.x - (btn.img.width / 2 - 10) * game.scale,
+												y: event.start.y - (btn.img.height / 2) * game.scale
+											}),
+											btn => {
+												hide();
+												game.player.setWeapon('fence');
+											},
+											100,
+											'normal',
+											12,
+											'fence'
+										)
+									);
+									this.buttons.push(
+										new Button(
+											'axe',
+											'axe-button',
+											'',
+											btn => ({
+												x: event.start.x - (btn.img.width / 2 + 10) * game.scale,
+												y: event.start.y - (btn.img.height / 2) * game.scale
+											}),
+											btn => {
+												hide();
+												game.player.setWeapon('axe');
+											},
+											100,
+											'normal',
+											12,
+											'axe'
+										)
+									);
+									this.buttons.push(
+										new Button(
+											'none',
+											'none-button',
+											'',
+											btn => ({
+												x: event.start.x - (btn.img.width / 2) * game.scale,
+												y: event.start.y - (btn.img.height / 2 - 10) * game.scale
+											}),
+											btn => {
+												hide();
+												game.player.setWeapon('none');
+											},
+											100,
+											'normal',
+											12,
+											'none'
+										)
+									);
+								}
+							}
 						}
 					}
 				}

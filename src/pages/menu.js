@@ -206,7 +206,7 @@ pages['menu'] = game => {
 										btn.kill(300);
 										game.events.push(
 											new TimeEvent(400, event => {
-												loadPage('chap2');
+												loadPage('chap1b');
 											})
 										);
 									})

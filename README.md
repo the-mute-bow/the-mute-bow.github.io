@@ -27,6 +27,12 @@
 
 ## Change log
 
+### **0.0.33**
+
+-   [the-mute-bow.github.io](https://the-mute-bow.github.io/) redirects to [the-mute-bow.com](https://the-mute-bow.com/).
+-   Modified `'pause'` button.
+-   Allies' events triggered by touch if any.
+
 ### **0.0.32**
 
 -   Custom domain: [the-mute-bow.com](https://the-mute-bow.com/)
