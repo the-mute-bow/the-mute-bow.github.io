@@ -27,11 +27,18 @@
 
 ## Change log
 
+### **0.0.34**
+
+-   Creation of the main website and moved the app in the pwa folder.
+-   Better adaptation of `fog_map` for low-performance devices.
+-   Dialog display.
+
 ### **0.0.33**
 
 -   [the-mute-bow.github.io](https://the-mute-bow.github.io/) redirects to [the-mute-bow.com](https://the-mute-bow.com/).
 -   Modified `'pause'` button.
 -   Allies' events triggered by touch if any.
+-   `forTouch()` checks mobs in foot order.
 
 ### **0.0.32**
 

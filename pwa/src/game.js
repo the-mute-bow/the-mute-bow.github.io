@@ -48,6 +48,8 @@ class Game {
 		this.events = [];
 		this.event_map = {};
 
+		this.dialog = null;
+
 		this.can = document.createElement('canvas');
 		this.borders = null;
 	}
@@ -82,8 +84,8 @@ class Game {
 	}
 
 	forTouch(x, y, mobs, callback = mob => {}) {
-		for (let mob of mobs) {
-			if (mob != this.player) {
+		for (let mob of mobs.sort((a, b) => a.getFeet().y - b.getFeet().y)) {
+			if (mob != this.player && !mob.event) {
 				let t = mob.getTargCoords();
 				let pos = t && this.mode == 'strat' ? t : mob.pos;
 				if (mob != this.player && pos.x + 7 < x && x < pos.x + 17 && pos.y + 10 < y && y < pos.y + 24) {
@@ -96,7 +98,8 @@ class Game {
 	tick(dtime) {
 		this.goTarget(dtime);
 
-		this.average_dtime = (dtime + this.average_dtime * 99) / 100;
+		let coef = this.average_dtime < dtime ? 10 : 100;
+		this.average_dtime = (dtime + this.average_dtime * (coef - 1)) / coef;
 		if (this.average_dtime < this.best_perf) this.best_perf = Math.max(dtime, 16.6);
 
 		this.touches.rin = Math.floor(can.height / 16);

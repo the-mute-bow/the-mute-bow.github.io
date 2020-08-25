@@ -1,4 +1,3 @@
-console.log(location.host, location.host == 'the-mute-bow.github.io');
 if (location.host == 'the-mute-bow.github.io') location.replace('https://the-mute-bow.com');
 
 let onAndroid = /Android/i.test(navigator.userAgent);
@@ -53,7 +52,8 @@ let dpi = 1;
 let resise_time = 0;
 let can = document.querySelector('canvas');
 let over = document.getElementsByClassName('over')[0];
-let gifs = [...document.querySelectorAll('img')];
+let dialog_div = document.getElementById('dialog');
+let gifs = [...document.getElementsByClassName('gif')];
 let gif_text = document.getElementById('message');
 let load_bar = {
 	back: document.getElementById('load-bar-back'),
@@ -79,8 +79,21 @@ const setScreen = (newmode, data) => {
 			over.classList.add('hidden');
 			can.classList.remove('hidden');
 		} else {
-			over.classList.remove('hidden');
 			can.classList.add('hidden');
+			if (mode == 'dialog') over.classList.add('hidden');
+			else over.classList.remove('hidden');
+		}
+
+		if (mode == 'dialog') {
+			game.cam.targ_o = 0.5;
+			dialog_div.classList.remove('hidden');
+			document.getElementById('dialog-img').src = `./img/humans/${data.character}-pp.png`;
+			document.getElementById('dialog-title').innerHTML = data.character;
+			document.getElementById('dialog-text').innerHTML = data.text;
+			document.getElementById('dialog-next').onclick = data.click;
+		} else {
+			dialog_div.classList.add('hidden');
+			game.cam.targ_o = 0;
 		}
 
 		for (let img of gifs) {
@@ -92,10 +105,7 @@ const setScreen = (newmode, data) => {
 		if (mode == 'touch-screen') {
 			gif_text.innerHTML = lang == '#fr' ? "Touche l'écran." : 'Touch the screen.';
 			setTimeout(() => {
-				over.onclick = () => {
-					can.requestFullscreen().catch(error => {});
-					// setTimeout(resize, 500);
-				};
+				over.onclick = () => can.requestFullscreen().catch(error => {});
 			}, 500);
 		}
 
@@ -148,7 +158,8 @@ const mainloop = newtime => {
 		else if (!document.fullscreenElement && allow_fullscreen) setScreen('touch-screen');
 		else if (!game.loop) setScreen('loading');
 		else {
-			setScreen('game');
+			if (game.dialog) setScreen('dialog', game.dialog);
+			else setScreen('game');
 
 			if (time - resise_time >= 100) {
 				resise_time = time;

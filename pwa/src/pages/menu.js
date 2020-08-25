@@ -228,7 +228,7 @@ pages['menu'] = game => {
 							btn => {
 								game.events.push(
 									new TimeEvent(200, event => {
-										location.href = lang == '#fr' ? '/#en' : '/#fr';
+										location.replace(lang == '#fr' ? '#en' : '#fr');
 										location.reload(true);
 									})
 								);

@@ -1,4 +1,4 @@
-let version = '0.0.33';
+let version = '0.0.34';
 
 let files = [
 	// system
@@ -70,12 +70,16 @@ let files = [
 	'./img/humans/human-shadow.png',
 	'./img/humans/eliot.png',
 	'./img/humans/eliot-night.png',
+	'./img/humans/eliot-pp.png',
 	'./img/humans/lea.png',
 	'./img/humans/lea-night.png',
+	'./img/humans/lea-pp.png',
 	'./img/humans/scott.png',
 	'./img/humans/scott-night.png',
+	'./img/humans/scott-pp.png',
 	'./img/humans/karmen.png',
 	'./img/humans/karmen-night.png',
+	'./img/humans/karmen-pp.png',
 	'./img/humans/creature.png',
 
 	'./img/humans/bow-aim.png',
@@ -83,18 +87,19 @@ let files = [
 	'./img/humans/axe-hit.png',
 	'./img/humans/axe-hold.png',
 
-	'humans/icon-stay.png',
-	'humans/icon-follow.png',
-	'humans/icon-bow.png',
-	'humans/icon-axe.png',
-	'humans/icon-fence.png',
-	'humans/icon-none.png',
-	'humans/icon-message.png',
-	'humans/icon-exclam.png',
-	'humans/icon-noamo.png',
-	'humans/icon-plus.png',
-	'humans/icon-stamina-red.png',
-	'humans/icon-stamina-green.png',
+	'./img/humans/icon-null.png',
+	'./img/humans/icon-stay.png',
+	'./img/humans/icon-follow.png',
+	'./img/humans/icon-bow.png',
+	'./img/humans/icon-axe.png',
+	'./img/humans/icon-fence.png',
+	'./img/humans/icon-none.png',
+	'./img/humans/icon-message.png',
+	'./img/humans/icon-exclam.png',
+	'./img/humans/icon-noamo.png',
+	'./img/humans/icon-plus.png',
+	'./img/humans/icon-stamina-red.png',
+	'./img/humans/icon-stamina-green.png',
 
 	'./img/buttons/axe-button.png',
 	'./img/buttons/axe-button-shadow.png',

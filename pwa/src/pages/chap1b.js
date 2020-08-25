@@ -36,8 +36,8 @@ pages['chap1b'] = game => {
 			'humans/scott-night.png',
 			'humans/karmen-night.png',
 			'humans/creature.png',
-			'humans/icon-null.png',
 
+			'humans/icon-null.png',
 			'humans/icon-stay.png',
 			'humans/icon-follow.png',
 			'humans/icon-bow.png',
@@ -260,9 +260,9 @@ pages['chap1b'] = game => {
 					)
 				],
 				trees: [],
-				sheeps: [new Sheep({ x: 285, y: 140, z: 0 }), new Sheep({ x: 296, y: 150, z: 0 })],
+				sheeps: [new Sheep({ x: 285, y: 160, z: 0 }), new Sheep({ x: 296, y: 170, z: 0 })],
 				humans: [
-					new Human('eliot', { x: 315, y: 120, z: 0 }, '-night'),
+					new Human('eliot', { x: 315, y: 150, z: 0 }, '-night'),
 					new Human('lea', { x: 320, y: 126, z: 0 }, '-night'),
 					new Human('karmen', { x: 297, y: 125, z: 0 }, '-night'),
 					new Human('scott', { x: 308, y: 128, z: 0 }, '-night')
@@ -291,6 +291,8 @@ pages['chap1b'] = game => {
 				targ_speed: 400,
 				target: game.player
 			};
+
+			game.dialog = null;
 
 			game.buttons = [
 				new Button(
@@ -426,8 +428,15 @@ pages['chap1b'] = game => {
 					: [];
 
 			game.events = [
-				new WalkEvent(322, 150, 32, game.entities.humans, 'all', 'out', 'white', event => {
-					console.log('all out');
+				new WalkEvent(318, 140, 24, game.entities.humans, 'all', 'in', 'white', event => {
+					game.dialog = {
+						character: 'lea',
+						text:
+							'Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit magni sunt facilis non excepturi quis recusandae ab impedit, nobis ipsum ut nisi, at ullam laborum asperiores blanditiis quisquam, molestiae dicta!',
+						click: dialog => {
+							game.dialog = null;
+						}
+					};
 				})
 			];
 

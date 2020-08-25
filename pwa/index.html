@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+
+		<title>The Mute Bow</title>
+		<meta name="keywords" content="The, Mute, Bow, mobile, game, app, play" />
+		<meta name="description" content="The Mute Bow, fight against dark creatures ! | Play this web game app on mobile." />
+		<meta name="author" content="Nicolas Gouwy" />
+
+		<meta name="google" content="notranslate" />
+		<meta name="googlebot" content="all" />
+		<meta name="robots" content="all" />
+
+		<script data-ad-client="ca-pub-5652123553857654" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+		<meta name="mobile-web-app-capable" content="yes" />
+		<meta name="theme-color" content="#202124" />
+		<link rel="shortcut icon" href="img/icon/icon512.png" type="image/x-icon" />
+		<link rel="apple-touch-icon" href="./img/icon/icon192.png" />
+		<link rel="manifest" href="./manifest.json" />
+		<link rel="stylesheet" href="./styles/style.css" />
+	</head>
+	<body>
+		<canvas> </canvas>
+
+		<div class="hidden" id="dialog">
+			<div class="top">
+				<img id="dialog-img" src="./img/humans/eliot-pp.png" />
+				<p id="dialog-title">Eliot</p>
+			</div>
+
+			<div id="dialog-line"></div>
+			<p id="dialog-text">Dialog.</p>
+			<a id="dialog-next"> Next </a>
+		</div>
+
+		<div class="over">
+			<img class="gif hidden" src="./img/gifs/error.gif" id="error" />
+			<img class="gif hidden" src="./img/gifs/android.gif" id="android" />
+			<img class="gif hidden" src="./img/gifs/loading.gif" id="loading" />
+			<img class="gif hidden" src="./img/gifs/rotate_phone.gif" id="rotate-phone" />
+			<img class="gif hidden" src="./img/gifs/touch_screen.gif" id="touch-screen" />
+
+			<p id="message"></p>
+			<p id="version">0.0.34</p>
+
+			<div class="load-bar" id="load-bar-back"></div>
+			<div class="load-bar" id="load-bar-front"></div>
+		</div>
+
+		<script src="./src/cookie.js"></script>
+		<script src="./src/touch.js"></script>
+		<script src="./src/overlay.js"></script>
+		<script src="./src/button.js"></script>
+		<script src="./src/event.js"></script>
+		<script src="./src/entity.js"></script>
+		<script src="./src/game.js"></script>
+		<script src="./src/pages/menu.js"></script>
+		<script src="./src/pages/chap1b.js"></script>
+		<script src="./src/main.js"></script>
+	</body>
+</html>
