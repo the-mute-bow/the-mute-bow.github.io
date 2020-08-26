@@ -1,4 +1,4 @@
-let version = '0.0.34';
+let version = '0.0.35';
 
 let files = [
 	// system
@@ -82,10 +82,14 @@ let files = [
 	'./img/humans/karmen-pp.png',
 	'./img/humans/creature.png',
 
-	'./img/humans/bow-aim.png',
-	'./img/humans/bow-hold.png',
-	'./img/humans/axe-hit.png',
-	'./img/humans/axe-hold.png',
+	'./img/weapons/axe-hold.png',
+	'./img/weapons/axe-hit.png',
+	'./img/weapons/bow-hold.png',
+	'./img/weapons/bow-aim.png',
+	'./img/weapons/fence.png',
+	'./img/weapons/fence-night.png',
+	'./img/weapons/fence-red.png',
+	'./img/weapons/fence-shadow.png',
 
 	'./img/humans/icon-null.png',
 	'./img/humans/icon-stay.png',
@@ -100,6 +104,11 @@ let files = [
 	'./img/humans/icon-plus.png',
 	'./img/humans/icon-stamina-red.png',
 	'./img/humans/icon-stamina-green.png',
+	'./img/humans/icon-mana0.png',
+	'./img/humans/icon-mana1.png',
+	'./img/humans/icon-mana2.png',
+	'./img/humans/icon-mana3.png',
+	'./img/humans/icon-mana4.png',
 
 	'./img/buttons/axe-button.png',
 	'./img/buttons/axe-button-shadow.png',

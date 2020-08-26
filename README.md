@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://the-mute-bow.com/">
-    <img src="https://the-mute-bow.com/img/icon/icon1024.png" alt="App" width="165" height="165">
+    <img src="https://the-mute-bow.com/pwa/img/icon/icon1024.png" alt="App" width="165" height="165">
   </a>
 </p>
 
@@ -26,6 +26,21 @@
 </p>
 
 ## Change log
+
+### **0.0.35**
+
+-   Link to main website on `'android'` screen.
+-   French version for `#dialog-next` link.
+-   Bug fix for dialog black screen.
+-   Dialog character name shown in title case.
+-   Old version of the game host on https://the-mute-bow.com/old/.
+-   Weapons (axe, bow and fence) now have their own imgage folder.
+-   `House` and `Fence` classes.
+-   `game.variant`.
+-   `game.soundtrack` no longer interrupted by `game.dialog`.
+-   Added `icon-mana#` from 0 to 4 for `Human.alert`.
+-   Modified `icon-stamina-green` and `icon-stamina-red`.
+-   Limited dtime to 100ms max.
 
 ### **0.0.34**
 

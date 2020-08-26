@@ -50,11 +50,20 @@ pages['chap1b'] = game => {
 			'humans/icon-plus.png',
 			'humans/icon-stamina-red.png',
 			'humans/icon-stamina-green.png',
+			'humans/icon-mana0.png',
+			'humans/icon-mana1.png',
+			'humans/icon-mana2.png',
+			'humans/icon-mana3.png',
+			'humans/icon-mana4.png',
 
-			'humans/axe-hold.png',
-			'humans/axe-hit.png',
-			'humans/bow-hold.png',
-			'humans/bow-aim.png',
+			'weapons/axe-hold.png',
+			'weapons/axe-hit.png',
+			'weapons/bow-hold.png',
+			'weapons/bow-aim.png',
+			'weapons/fence.png',
+			'weapons/fence-night.png',
+			'weapons/fence-red.png',
+			'weapons/fence-shadow.png',
 
 			'buttons/pause-button.png',
 			'buttons/pause-button-shadow.png',
@@ -74,8 +83,9 @@ pages['chap1b'] = game => {
 		],
 		0,
 		() => {
-			game.ground = game.images['ground1-night'];
-			game.tree_calc = game.images['tree-calc-night'];
+			game.variant = '-night';
+			game.ground = game.images['ground1' + game.variant];
+			game.tree_calc = game.images['tree-calc' + game.variant];
 
 			game.can.width = game.ground.width;
 			game.can.height = game.ground.height;
@@ -249,29 +259,24 @@ pages['chap1b'] = game => {
 
 			game.entities = {
 				buildings: [
-					new Entity(
-						{ x: 270, y: 90, z: 0 },
-						{
-							main: new Sprite(game.images['small-house1-night'], { x: 0, y: 0, w: 73, h: 49 }),
-							shadow: new Sprite(game.images['small-house1-shadow'], { x: 0, y: 0, w: 73, h: 49 })
-						},
-						new Hitbox(18, 26, 54, 22, 50),
-						{ x: 18, y: 48 }
-					)
+					new House({ x: 270, y: 90, z: 0 }),
+
+					new Fence({ x: 219, y: 121, z: 0 }, 0),
+					new Fence({ x: 263, y: 112, z: 0 }, 1),
+					new Fence({ x: 262, y: 92, z: 0 }, 1),
+					new Fence({ x: 207, y: 112, z: 0 }, 1),
+					new Fence({ x: 206, y: 93, z: 0 }, 1),
+					new Fence({ x: 218, y: 83, z: 0 }, 0),
+					new Fence({ x: 244, y: 82, z: 0 }, 0)
 				],
 				trees: [],
-				sheeps: [new Sheep({ x: 285, y: 160, z: 0 }), new Sheep({ x: 296, y: 170, z: 0 })],
-				humans: [
-					new Human('eliot', { x: 315, y: 150, z: 0 }, '-night'),
-					new Human('lea', { x: 320, y: 126, z: 0 }, '-night'),
-					new Human('karmen', { x: 297, y: 125, z: 0 }, '-night'),
-					new Human('scott', { x: 308, y: 128, z: 0 }, '-night')
-				],
+				sheeps: [new Sheep({ x: 228, y: 104, z: 0 }), new Sheep({ x: 242, y: 90, z: 0 })],
+				humans: [new Human('eliot', { x: 315, y: 150, z: 0 }), new Human('lea', { x: 320, y: 126, z: 0 }), new Human('karmen', { x: 297, y: 125, z: 0 }), new Human('scott', { x: 308, y: 128, z: 0 })],
 				creatures: [new Creature({ x: 190, y: 145, z: 0 }), new Creature({ x: 200, y: 136, z: 0 }), new Creature({ x: 205, y: 148, z: 0 })],
 				particles: []
 			};
 
-			for (let coords of treeList) game.entities.trees.push(new Tree(coords, 0, '-night'));
+			for (let coords of treeList) game.entities.trees.push(new Tree(coords, 0));
 
 			game.player = game.getHuman('eliot');
 			game.player.target = null;

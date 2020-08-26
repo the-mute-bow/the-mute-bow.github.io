@@ -249,7 +249,7 @@ class Mob extends Entity {
 }
 
 class Human extends Mob {
-	constructor(name, pos, variant = '') {
+	constructor(name, pos, variant = name == 'creature' ? '' : game.variant) {
 		super(
 			pos,
 			{
@@ -258,22 +258,33 @@ class Human extends Mob {
 				axe: new Sprite(game.images['axe-hold'], { x: 0, y: 0, w: 24, h: 24 }),
 				axe_hit: new Sprite(game.images['axe-hit'], { x: 0, y: 0, w: 24, h: 24 }),
 				bow: new Sprite(game.images['bow-hold'], { x: 0, y: 0, w: 24, h: 24 }),
-				bow_aim: new Sprite(game.images['bow-aim'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-null': new Sprite(game.images['icon-null'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-stay': new Sprite(game.images['icon-stay'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-follow': new Sprite(game.images['icon-follow'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-bow': new Sprite(game.images['icon-bow'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-axe': new Sprite(game.images['icon-axe'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-fence': new Sprite(game.images['icon-fence'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-noamo': new Sprite(game.images['icon-noamo'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-plus': new Sprite(game.images['icon-plus'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-none': new Sprite(game.images['icon-none'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-exclam': new Sprite(game.images['icon-exclam'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-stamina-red': new Sprite(game.images['icon-stamina-red'], { x: 0, y: 0, w: 24, h: 24 }),
-				'icon-stamina-green': new Sprite(game.images['icon-stamina-green'], { x: 0, y: 0, w: 24, h: 24 })
+				bow_aim: new Sprite(game.images['bow-aim'], { x: 0, y: 0, w: 24, h: 24 })
 			},
 			new Hitbox(9, 21, 6, 5, 13)
 		);
+
+		for (let s of [
+			'icon-null',
+			'icon-stay',
+			'icon-follow',
+			'icon-bow',
+			'icon-axe',
+			'icon-fence',
+			'icon-noamo',
+			'icon-plus',
+			'icon-none',
+			'icon-exclam',
+			'icon-message',
+			'icon-stamina-red',
+			'icon-stamina-green',
+			'icon-mana0',
+			'icon-mana1',
+			'icon-mana2',
+			'icon-mana3',
+			'icon-mana4'
+		]) {
+			this.sprites[s] = new Sprite(game.images[s], { x: 0, y: 0, w: 24, h: 24 });
+		}
 
 		this.name = name;
 		this.health = { val: 12, max: 9 };
@@ -534,7 +545,7 @@ class Creature extends Human {
 		this.aura = { color: '#212423', delay: 100, last: time };
 		this.speed = 1.2;
 		this.target = null;
-		this.can_see = true;
+		this.can_see = false;
 	}
 
 	die() {
@@ -614,7 +625,7 @@ class Sheep extends Mob {
 }
 
 class Tree extends Entity {
-	constructor(pos, type = 0, variant = '') {
+	constructor(pos, type = 0, variant = game.variant) {
 		type = type ? type : Math.floor(Math.random() * 4) + 1;
 
 		pos.x -= 62;
@@ -668,6 +679,42 @@ class Tree extends Entity {
 					{ x: (Math.random() - 0.5) / 50, y: (Math.random() - 0.5) / 50, z: (Math.random() - 0.5) / 50 }
 				)
 			);
+	}
+}
+
+class Fence extends Entity {
+	constructor(pos, orient = 0, variant = game.variant) {
+		super(
+			pos,
+			{
+				main: new Sprite(game.images['fence' + variant], { x: 0, y: 0, w: 32, h: 32 }),
+				shadow: new Sprite(game.images['fence-shadow'], { x: 0, y: 0, w: 32, h: 32 })
+			},
+			orient ? new Hitbox(15, 11, 3, 18, 8) : new Hitbox(7, 19, 24, 2, 8),
+			orient ? { x: 16, y: 28 } : { x: 19, y: 20 }
+		);
+
+		this.sprites.main.tile.x = orient;
+		this.sprites.shadow.tile.x = orient;
+	}
+}
+
+class House extends Entity {
+	constructor(pos, type = 1, variant = game.variant) {
+		let types = {
+			1: { s: { x: 0, y: 0, w: 73, h: 49 }, h: new Hitbox(18, 26, 54, 22, 50), f: { x: 18, y: 48 } }
+		};
+
+		super(
+			pos,
+			{
+				main: new Sprite(game.images['small-house' + type + game.variant], types[type].s),
+				shadow: new Sprite(game.images['small-house' + type + '-shadow'], types[type].s)
+			},
+
+			types[type].h,
+			types[type].f
+		);
 	}
 }
 

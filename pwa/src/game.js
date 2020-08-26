@@ -8,6 +8,8 @@ class Game {
 		this.best_perf = 40;
 		this.average_dtime = 40;
 
+		this.variant = '';
+
 		this.images = [];
 		this.sounds = {};
 		this.soundtrack = null;

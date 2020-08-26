@@ -85,15 +85,14 @@ const setScreen = (newmode, data) => {
 		}
 
 		if (mode == 'dialog') {
-			game.cam.targ_o = 0.5;
 			dialog_div.classList.remove('hidden');
 			document.getElementById('dialog-img').src = `./img/humans/${data.character}-pp.png`;
-			document.getElementById('dialog-title').innerHTML = data.character;
+			document.getElementById('dialog-title').innerHTML = data.character.charAt(0).toUpperCase() + data.character.slice(1);
 			document.getElementById('dialog-text').innerHTML = data.text;
+			document.getElementById('dialog-next').innerHTML = lang == '#fr' ? 'Suivant' : 'Next';
 			document.getElementById('dialog-next').onclick = data.click;
 		} else {
 			dialog_div.classList.add('hidden');
-			game.cam.targ_o = 0;
 		}
 
 		for (let img of gifs) {
@@ -109,7 +108,8 @@ const setScreen = (newmode, data) => {
 			}, 500);
 		}
 
-		if (mode == 'android') gif_text.innerHTML = lang == '#fr' ? 'Jeu disponible uniquement sur Android.' : 'Game only available on Android.';
+		if (mode == 'android')
+			gif_text.innerHTML = lang == '#fr' ? 'Jeu disponible uniquement sur Android.<br/><a href="../">Revenir sur le site principal</a>' : 'Game only available on Android.<br/><a href="../">Go back to main website</a>';
 
 		if (mode == 'error') {
 			if (data) gif_text.innerHTML = data;
@@ -132,8 +132,6 @@ const setScreen = (newmode, data) => {
 	}
 };
 
-addEventListener('resize', event => resize());
-
 const resize = () => {
 	dpi = allow_fullscreen ? window.devicePixelRatio : 1;
 	can.width = innerWidth;
@@ -145,11 +143,13 @@ const resize = () => {
 	}
 };
 
+addEventListener('resize', event => resize());
+
 const mainloop = newtime => {
 	try {
 		if (mode == 'error') return;
 
-		let dtime = Math.min(newtime - oldtime, 200);
+		let dtime = Math.min(newtime - oldtime, 100);
 		oldtime = newtime;
 
 		let sound = false;
@@ -157,9 +157,11 @@ const mainloop = newtime => {
 		if (innerWidth < innerHeight) setScreen('rotate-phone');
 		else if (!document.fullscreenElement && allow_fullscreen) setScreen('touch-screen');
 		else if (!game.loop) setScreen('loading');
-		else {
-			if (game.dialog) setScreen('dialog', game.dialog);
-			else setScreen('game');
+		else if (game.dialog) {
+			setScreen('dialog', game.dialog);
+			sound = true;
+		} else {
+			setScreen('game');
 
 			if (time - resise_time >= 100) {
 				resise_time = time;

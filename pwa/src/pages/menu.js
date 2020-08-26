@@ -1,5 +1,6 @@
 pages['menu'] = game => {
 	game.title = 'menu';
+	game.variant = '-night';
 
 	game.images = [];
 	game.sounds = {
@@ -34,8 +35,8 @@ pages['menu'] = game => {
 		],
 		0,
 		() => {
-			game.ground = game.images['ground1-night'];
-			game.tree_calc = game.images['tree-calc-night'];
+			game.ground = game.images['ground1' + game.variant];
+			game.tree_calc = game.images['tree-calc' + game.variant];
 			game.fog_map = null;
 
 			game.can.height = game.ground.height;
@@ -142,17 +143,7 @@ pages['menu'] = game => {
 			];
 
 			game.entities = {
-				buildings: [
-					new Entity(
-						{ x: 270, y: 90, z: 0 },
-						{
-							main: new Sprite(game.images['small-house1-night'], { x: 0, y: 0, w: 73, h: 49 }),
-							shadow: new Sprite(game.images['small-house1-shadow'], { x: 0, y: 0, w: 73, h: 49 })
-						},
-						new Hitbox(18, 26, 54, 22, 50),
-						{ x: 18, y: 48 }
-					)
-				],
+				buildings: [],
 				trees: [],
 				sheeps: [],
 				humans: [],
@@ -162,7 +153,7 @@ pages['menu'] = game => {
 
 			game.player = null;
 
-			for (let coords of treeList) game.entities.trees.push(new Tree(coords, 0, '-night'));
+			for (let coords of treeList) game.entities.trees.push(new Tree(coords, 0));
 
 			game.cam = {
 				x: 300,
