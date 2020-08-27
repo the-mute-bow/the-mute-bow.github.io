@@ -24,17 +24,43 @@ a {
   color: #ccf;
 }
 
+p {
+  font-family: Pixelar;
+}
+
+.yellow {
+  color: #fd8;
+}
+
+.text {
+  font-size: 8vh;
+  margin: 8px 13vh;
+  text-align: justify;
+}
+
+.pixelated {
+  -ms-interpolation-mode: nearest-neighbor;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: -o-pixelated;
+      image-rendering: pixelated;
+}
+
+.next {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  margin: 3vh 12vh;
+  font-size: 10vh;
+  font-family: Pixelar;
+}
+
 #dialog {
   top: 0px;
   left: 0px;
   position: absolute;
   width: 100%;
   height: 100%;
-}
-
-#dialog p,
-#dialog a {
-  font-family: Pixelar;
 }
 
 #dialog .top {
@@ -66,22 +92,30 @@ a {
   margin: 0px 12vh;
 }
 
-#dialog #dialog-text {
-  font-size: 8vh;
-  margin: 8px 13vh 0px 13vh;
-  text-align: justify;
+#mission-content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
-#dialog #dialog-next {
+#mission-content img {
   position: absolute;
-  right: 0px;
-  bottom: 0px;
-  margin: 6vh 12vh;
-  font-size: 10vh;
+  border-radius: 8vh;
+  -webkit-box-shadow: black 0px 0px 3vh -1vh;
+          box-shadow: black 0px 0px 3vh -1vh;
+  left: 50%;
+  -webkit-transform: translate(-50%);
+          transform: translate(-50%);
+  margin-top: 4vh;
+  height: 60%;
+}
+
+#mission-content .text {
+  position: absolute;
+  bottom: 10vh;
 }
 
 .over {
-  background-color: #202124;
   position: absolute;
   width: 100%;
   height: 100%;
@@ -103,7 +137,6 @@ a {
 
 .over p {
   position: absolute;
-  font-family: Pixelar;
   text-align: center;
   font-size: 24px;
   width: 100%;

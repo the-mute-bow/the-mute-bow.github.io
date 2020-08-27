@@ -27,6 +27,15 @@
 
 ## Change log
 
+### **0.0.36**
+
+-   Added `'Still in development'` warn sign on `'loading'` screen.
+-   Added `'mission'` screen.
+-   Added `game.mission`.
+-   Added `game.initPauseButton()` and `game.initDevOverlays()` to lighten chapters.
+-   Added mission button to trigger `'mission'` screen with `game.mission` as data.
+-   if specified, fixed scale for `Overlay`, `OverText` and `Button`, else `game.scale` is used.
+
 ### **0.0.35**
 
 -   Link to main website on `'android'` screen.

@@ -53,6 +53,8 @@ let resise_time = 0;
 let can = document.querySelector('canvas');
 let over = document.getElementsByClassName('over')[0];
 let dialog_div = document.getElementById('dialog');
+let mission_div = document.getElementById('mission');
+let mission_content_div = document.getElementById('mission-content');
 let gifs = [...document.getElementsByClassName('gif')];
 let gif_text = document.getElementById('message');
 let load_bar = {
@@ -80,7 +82,7 @@ const setScreen = (newmode, data) => {
 			can.classList.remove('hidden');
 		} else {
 			can.classList.add('hidden');
-			if (mode == 'dialog') over.classList.add('hidden');
+			if (mode == 'dialog' || mode == 'mission') over.classList.add('hidden');
 			else over.classList.remove('hidden');
 		}
 
@@ -91,9 +93,18 @@ const setScreen = (newmode, data) => {
 			document.getElementById('dialog-text').innerHTML = data.text;
 			document.getElementById('dialog-next').innerHTML = lang == '#fr' ? 'Suivant' : 'Next';
 			document.getElementById('dialog-next').onclick = data.click;
-		} else {
-			dialog_div.classList.add('hidden');
-		}
+		} else dialog_div.classList.add('hidden');
+
+		if (mode == 'mission' && data) {
+			mission_div.classList.remove('hidden');
+			mission_content_div.innerHTML = '';
+			if ('img' in data) mission_content_div.innerHTML += data.pixelated ? `<img class="pixelated" src="${data.img}" />` : `<img src="${data.img}" />`;
+			if ('text' in data) mission_content_div.innerHTML += `<p class="text">${data.text}</p>`;
+			let next = document.getElementById('mission-next');
+			next.innerHTML = lang == '#fr' ? 'Suivant' : 'Next';
+			next.onclick = data.click;
+			console.log(mission_content_div.innerHTML);
+		} else mission_div.classList.add('hidden');
 
 		for (let img of gifs) {
 			if (img.id == mode) {
@@ -120,7 +131,7 @@ const setScreen = (newmode, data) => {
 
 		if (mode == 'loading') {
 			if (lang == '#dev' && data) gif_text.innerHTML = data;
-			else gif_text.innerHTML = lang == '#fr' ? 'Chargement...' : 'Loading...';
+			else gif_text.innerHTML = lang == '#fr' ? 'Chargement...<br/><br/><span class="yellow">Encore en développement.</span>' : 'Loading...<br/><br/><span class="yellow">Still in development.</span>';
 			load_bar.front.classList.remove('hidden');
 			load_bar.back.classList.remove('hidden');
 		} else {
@@ -159,6 +170,8 @@ const mainloop = newtime => {
 		else if (!game.loop) setScreen('loading');
 		else if (game.dialog) {
 			setScreen('dialog', game.dialog);
+			sound = true;
+		} else if (mode == 'mission') {
 			sound = true;
 		} else {
 			setScreen('game');

@@ -51,6 +51,7 @@ class Game {
 		this.event_map = {};
 
 		this.dialog = null;
+		this.mission = null;
 
 		this.can = document.createElement('canvas');
 		this.borders = null;
@@ -83,6 +84,183 @@ class Game {
 				})
 			);
 		}
+	}
+
+	initPauseButton() {
+		this.buttons.push(
+			new Button(
+				'pause',
+				'pause-button',
+				'',
+				btn => ({
+					x: can.width - (btn.img.width + 3) * btn.scale,
+					y: btn.scale * 3
+				}),
+				btn => {
+					this.pause(true);
+
+					this.overlays.push(
+						new OverText(
+							'pause',
+							overtext => 'Pause',
+							overtext => ({ x: can.width / 2, y: can.height / 3 }),
+							200,
+							18
+						)
+					);
+
+					this.buttons.push(
+						new Button(
+							'resume',
+							'menu2-button',
+							lang == '#fr' ? 'Reprendre' : 'Resume',
+							btn => ({
+								x: (can.width - btn.img.width * this.scale) / 2,
+								y: (can.height / 3) * 2 - btn.img.height * this.scale
+							}),
+							btn => {
+								this.pause();
+								this.getOverlay('pause').kill(400);
+								this.getButton('pause').mode = 'normal';
+								this.getButton('quit').kill(400);
+								btn.kill(400);
+								this.speed = 1;
+							},
+							200,
+							'normal',
+							10
+						)
+					);
+
+					this.buttons.push(
+						new Button(
+							'quit',
+							'menu2-button',
+							lang == '#fr' ? 'Quitter' : 'Quit',
+							btn => ({
+								x: (can.width - btn.img.width * this.scale) / 2,
+								y: (can.height / 3) * 2 + 2 * this.scale
+							}),
+							btn => {
+								this.getOverlay('pause').kill(400);
+								this.getButton('pause').mode = 'normal';
+								this.getButton('pause').kill(400);
+								this.getButton('resume').kill(400);
+								btn.kill(400);
+								this.speed = 1;
+								this.events.push(
+									new TimeEvent(500, event => {
+										this.speed = 1;
+										this.pause(false);
+										loadPage('menu');
+									})
+								);
+							},
+							200,
+							'normal',
+							10
+						)
+					);
+				},
+				400,
+				'normal',
+				12,
+				'white',
+				game.scale
+			)
+		);
+	}
+
+	initDevOverlays() {
+		this.overlays.push(
+			new OverText(
+				'fps',
+				overtext => `${Math.floor(1000 / this.average_dtime)}`,
+				overtext => ({
+					x: 8 * overtext.scale,
+					y: can.height - 2 * overtext.scale
+				}),
+				400,
+				8,
+				'#cdcad3',
+				game.scale
+			),
+			new OverText(
+				'best',
+				overtext => `${Math.floor(1000 / this.best_perf)}`,
+				overtext => ({
+					x: 16 * overtext.scale,
+					y: can.height - 2 * overtext.scale
+				}),
+				400,
+				8,
+				'#cdcad3',
+				game.scale
+			),
+			new OverText(
+				'speed',
+				overtext => `${this.speed}`,
+				overtext => ({
+					x: 24 * overtext.scale,
+					y: can.height - 2 * overtext.scale
+				}),
+				400,
+				8,
+				'#cdcad3',
+				game.scale
+			),
+			new OverText(
+				'fog',
+				overtext => `${this.fog_map.pix_size}`,
+				overtext => ({
+					x: 32 * overtext.scale,
+					y: can.height - 2 * overtext.scale
+				}),
+				400,
+				8,
+				'#cdcad3',
+				game.scale
+			),
+			new OverText(
+				'attack-sprite',
+				overtext => (this.player && this.player.attack ? `[${this.player.sprites.axe_hit.tile.x}, ${this.player.sprites.axe_hit.tile.y}]` : ''),
+				overtext => ({
+					x: 12 * overtext.scale,
+					y: can.height - 8 * overtext.scale
+				}),
+				400,
+				8,
+				'#cdcad3',
+				game.scale
+			)
+		);
+	}
+
+	initMissionButton() {
+		this.buttons.push(
+			new Button(
+				'mission',
+				'mission-button',
+				'mission',
+				btn => ({
+					x: (can.width - btn.img.width * btn.scale) / 2,
+					y: can.height - btn.img.height * btn.scale
+				}),
+				btn => {
+					btn.kill(200);
+					this.events.push(
+						new TimeEvent(300, event => {
+							setScreen('mission', this.mission);
+						})
+					);
+				},
+				200,
+				'normal',
+				10,
+				'#cdcad3',
+				this.scale * 0.6
+			)
+		);
 	}
 
 	forTouch(x, y, mobs, callback = mob => {}) {

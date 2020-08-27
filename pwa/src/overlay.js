@@ -1,5 +1,5 @@
 class Overlay {
-	constructor(id = null, img, getCoords = overlay => ({ x: 0, y: 0 }), fade = 200) {
+	constructor(id = null, img, getCoords = overlay => ({ x: 0, y: 0 }), fade = 400, scale = null) {
 		this.id = id;
 		this.img = img;
 		this.getCoords = getCoords;
@@ -7,13 +7,18 @@ class Overlay {
 		this.time = time;
 		this.die_time = null;
 		this.fade = fade;
+		this.scale = scale;
+	}
+
+	getScale() {
+		return this.scale ? this.scale : game.scale;
 	}
 
 	getXYWH() {
 		return {
 			...this.getCoords(this),
-			w: this.img.width * game.scale,
-			h: this.img.height * game.scale
+			w: this.img.width * this.getScale(),
+			h: this.img.height * this.getScale()
 		};
 	}
 
@@ -38,7 +43,7 @@ class Overlay {
 }
 
 class OverText {
-	constructor(id = null, getText = overtext => 'text', getCoords = overtext => ({ x: 0, y: 0 }), fade = 200, fontsize = 10, color = '#cdcad3') {
+	constructor(id = null, getText = overtext => 'text', getCoords = overtext => ({ x: 0, y: 0 }), fade = 400, fontsize = 10, color = '#cdcad3', scale = null) {
 		this.id = id;
 		this.getText = getText;
 		this.getCoords = getCoords;
@@ -48,6 +53,7 @@ class OverText {
 		this.done = false;
 		this.fontsize = fontsize;
 		this.color = color;
+		this.scale = scale;
 	}
 
 	getOp() {
@@ -60,7 +66,7 @@ class OverText {
 		let mctx = can.getContext('2d');
 		let { x, y } = this.getCoords(this);
 
-		let fs = this.fontsize * game.scale;
+		let fs = this.fontsize * (this.scale ? this.scale : game.scale);
 		mctx.font = `${fs}px Pixelar`;
 		mctx.textAlign = 'center';
 		mctx.fillStyle = this.color;

@@ -1,6 +1,6 @@
 class Button extends Overlay {
-	constructor(id = null, img, text, getCoords = btn => ({ x: 0, y: 0 }), callcack = btn => {}, fade = 400, mode = 'normal', fontsize = 12, textcolor = '#202124') {
-		super(id, game.images[img], getCoords, fade);
+	constructor(id = null, img, text, getCoords = btn => ({ x: 0, y: 0 }), callcack = btn => {}, fade = 400, mode = 'normal', fontsize = 12, textcolor = '#202124', scale = null) {
+		super(id, game.images[img], getCoords, fade, scale);
 		this.shadow = game.images[img + '-shadow'];
 		this.text = text;
 		this.callcack = callcack;
@@ -19,22 +19,19 @@ class Button extends Overlay {
 		if (this.mode == 'disabled') mctx.globalAlpha *= 0.5;
 		if (this.mode == 'pressed') mctx.globalAlpha *= 0.85;
 
-		mctx.drawImage(this.shadow, x, y + game.scale, w, h);
-		mctx.drawImage(this.img, x, this.mode == 'pressed' ? y + game.scale : y, w, h);
+		mctx.drawImage(this.shadow, x, y + this.getScale(), w, h);
+		mctx.drawImage(this.img, x, this.mode == 'pressed' ? y + this.getScale() : y, w, h);
 
-		let fs = this.fontsize * game.scale;
+		let fs = this.fontsize * this.getScale();
 		mctx.font = `${fs}px Pixelar`;
 		mctx.textAlign = 'center';
 		mctx.fillStyle = this.textcolor;
-		mctx.fillText(this.text, x + w / 2, y + h / 2 + fs / 4 + (this.mode == 'pressed' ? game.scale : 0));
+		mctx.fillText(this.text, x + w / 2, y + h / 2 + fs / 4 + (this.mode == 'pressed' ? this.getScale() : 0));
 		mctx.globalAlpha = 1;
 	}
 
 	tick(ex, ey) {
-		let { x, y } = this.getCoords(this);
-
-		let w = this.img.width * game.scale;
-		let h = this.img.height * game.scale;
+		let { x, y, w, h } = this.getXYWH();
 
 		if (x < ex && ex < x + w && y < ey && ey < y + h) {
 			if (this.mode == 'normal') {

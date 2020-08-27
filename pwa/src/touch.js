@@ -9,12 +9,7 @@ const initTouch = () => {
 				end: { x: t.clientX * dpi, y: t.clientY * dpi }
 			};
 
-			if (
-				can.width / 30 < touch.start.x &&
-				can.height / 15 < touch.start.y &&
-				touch.start.x < (can.width / 30) * 29 &&
-				touch.start.y < (can.height / 15) * 14
-			) {
+			if (can.width / 40 < touch.start.x && touch.start.x < (can.width / 40) * 39 && can.height / 20 < touch.start.y) {
 				if (getTouchSide(touch) == 'L') game.touches.L = touch;
 				else game.touches.R = touch;
 			}
@@ -28,11 +23,7 @@ const initTouch = () => {
 				if (touch && touch.id == t.identifier) {
 					touch.end = { x: t.clientX * dpi, y: t.clientY * dpi };
 					let move = getTouchMove(touch);
-					if (
-						game.getButton('bow') &&
-						!game.getButton('bow').die_time &&
-						(move.mag > 0.2 || move.duration > 200)
-					) {
+					if (game.getButton('bow') && !game.getButton('bow').die_time && (move.mag > 0.2 || move.duration > 200)) {
 						for (let id of ['bow', 'axe', 'fence', 'none']) game.getButton(id).die_time = time + 100;
 					}
 					if (move.mag > 1) {

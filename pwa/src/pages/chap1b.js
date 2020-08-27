@@ -71,6 +71,8 @@ pages['chap1b'] = game => {
 			'buttons/menu-button-shadow.png',
 			'buttons/menu2-button.png',
 			'buttons/menu2-button-shadow.png',
+			'buttons/mission-button.png',
+			'buttons/mission-button-shadow.png',
 
 			'buttons/none-button.png',
 			'buttons/none-button-shadow.png',
@@ -298,141 +300,29 @@ pages['chap1b'] = game => {
 			};
 
 			game.dialog = null;
+			game.mission = {
+				text: "Ceci est un test pour voir si l'affichage des missions s'effectue correctement avec une image animée et un texte.",
+				img: './img/missions/the-mute-bow.gif',
+				click: mission => {
+					setScreen('game');
+					game.events.push(
+						new TimeEvent(1000, event => {
+							game.initMissionButton();
+						})
+					);
+				}
+			};
 
-			game.buttons = [
-				new Button(
-					'pause',
-					'pause-button',
-					'',
-					btn => ({
-						x: can.width - (btn.img.width + 3) * game.scale,
-						y: game.scale * 3
-					}),
-					btn => {
-						game.pause(true);
-
-						game.overlays.push(
-							new OverText(
-								'pause',
-								overtext => 'Pause',
-								overtext => ({ x: can.width / 2, y: can.height / 3 }),
-								200,
-								18
-							)
-						);
-
-						game.buttons.push(
-							new Button(
-								'resume',
-								'menu2-button',
-								lang == '#fr' ? 'Reprendre' : 'Resume',
-								btn => ({
-									x: (can.width - btn.img.width * game.scale) / 2,
-									y: (can.height / 3) * 2 - btn.img.height * game.scale
-								}),
-								btn => {
-									game.pause();
-									game.getOverlay('pause').kill(400);
-									game.getButton('pause').mode = 'normal';
-									game.getButton('quit').kill(400);
-									btn.kill(400);
-									game.speed = 1;
-								},
-								200,
-								'normal',
-								10
-							)
-						);
-						game.buttons.push(
-							new Button(
-								'quit',
-								'menu2-button',
-								lang == '#fr' ? 'Quitter' : 'Quit',
-								btn => ({
-									x: (can.width - btn.img.width * game.scale) / 2,
-									y: (can.height / 3) * 2 + 2 * game.scale
-								}),
-								btn => {
-									game.getOverlay('pause').kill(400);
-									game.getButton('pause').mode = 'normal';
-									game.getButton('pause').kill(400);
-									game.getButton('resume').kill(400);
-									btn.kill(400);
-									game.speed = 1;
-									game.events.push(
-										new TimeEvent(500, event => {
-											game.speed = 1;
-											game.pause(false);
-											loadPage('menu');
-										})
-									);
-								},
-								200,
-								'normal',
-								10
-							)
-						);
-					}
-				)
-			];
-
-			game.overlays =
-				lang == '#dev'
-					? [
-							new OverText(
-								'fps',
-								overtext => `${Math.floor(1000 / game.average_dtime)}`,
-								overtext => ({
-									x: 8 * game.scale,
-									y: can.height - 2 * game.scale
-								}),
-								200,
-								8
-							),
-							new OverText(
-								'best',
-								overtext => `${Math.floor(1000 / game.best_perf)}`,
-								overtext => ({
-									x: 16 * game.scale,
-									y: can.height - 2 * game.scale
-								}),
-								200,
-								8
-							),
-							new OverText(
-								'speed',
-								overtext => `${game.speed}`,
-								overtext => ({
-									x: 24 * game.scale,
-									y: can.height - 2 * game.scale
-								}),
-								200,
-								8
-							),
-							new OverText(
-								'fog',
-								overtext => `${game.fog_map.pix_size}`,
-								overtext => ({
-									x: 32 * game.scale,
-									y: can.height - 2 * game.scale
-								}),
-								200,
-								8
-							),
-							new OverText(
-								'attack-sprite',
-								overtext => (game.player && game.player.attack ? `[${game.player.sprites.axe_hit.tile.x}, ${game.player.sprites.axe_hit.tile.y}]` : ''),
-								overtext => ({
-									x: 12 * game.scale,
-									y: can.height - 8 * game.scale
-								}),
-								200,
-								8
-							)
-					  ]
-					: [];
+			game.buttons = [];
+			game.overlays = [];
 
 			game.events = [
+				new TimeEvent(1000, event => {
+					game.initPauseButton();
+					game.initMissionButton();
+					if (lang == '#dev') game.initDevOverlays();
+				}),
+
 				new WalkEvent(318, 140, 24, game.entities.humans, 'all', 'in', 'white', event => {
 					game.dialog = {
 						character: 'lea',
@@ -544,6 +434,7 @@ pages['chap1b'] = game => {
 						new GameEvent(event => {
 							if (game.player.dead) {
 								event.done = true;
+								game.getButton('mission').kill(400);
 								game.events.push(
 									new TimeEvent(1000, event => {
 										game.getButton('pause').mode = 'pressed';

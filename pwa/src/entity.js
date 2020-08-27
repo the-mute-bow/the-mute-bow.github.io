@@ -545,7 +545,7 @@ class Creature extends Human {
 		this.aura = { color: '#212423', delay: 100, last: time };
 		this.speed = 1.2;
 		this.target = null;
-		this.can_see = false;
+		this.can_see = true;
 	}
 
 	die() {
