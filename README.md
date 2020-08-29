@@ -27,6 +27,15 @@
 
 ## Change log
 
+### **0.0.37**
+
+-   Resolved service worker problem.
+-   Revisited `Human` alert icons.
+-   Added `'stamina-use'` alert icon.
+-   Shorter `Human.autoAim()` range and added `Human.aim_distance`.
+-   Mission button will reappear if `'mission'` screen is interrupted.
+-   Added `'coockie'`, `'update-ready'` and `'update-done'` screens.
+
 ### **0.0.36**
 
 -   Added `'Still in development'` warn sign on `'loading'` screen.

@@ -1,4 +1,4 @@
-let version = '0.0.36';
+let version = '0.0.37';
 
 let files = [
 	// system
@@ -14,21 +14,23 @@ let files = [
 	'./src/entity.js',
 	'./src/game.js',
 	'./src/pages/menu.js',
-	'./src/pages/chap1.js',
-	'./src/pages/chap2.js',
+	'./src/pages/chap1b.js',
 	'./src/main.js',
 
 	'./img/icon/icon192.png',
 	'./img/icon/icon512.png',
 	'./img/gifs/android.gif',
 	'./img/gifs/loading.gif',
-	'./img/gifs/rotate_phone.gif',
-	'./img/gifs/touch_screen.gif',
+	'./img/gifs/rotate-phone.gif',
+	'./img/gifs/touch-screen.gif',
+	'./img/gifs/coockie.gif',
+	'./img/gifs/update-ready.gif',
+	'./img/gifs/update-done.gif',
 
 	'./fonts/Pixelar.woff',
 	'./fonts/Pixelar.woff2',
 
-	// gameplay
+	// // gameplay
 	'./sounds/click.mp3',
 	'./sounds/Art Of Silence.mp3',
 	'./sounds/rain-piano.mp3',
@@ -104,11 +106,11 @@ let files = [
 	'./img/humans/icon-plus.png',
 	'./img/humans/icon-stamina-red.png',
 	'./img/humans/icon-stamina-green.png',
+	'./img/humans/icon-stamina-use.png',
 	'./img/humans/icon-mana0.png',
 	'./img/humans/icon-mana1.png',
 	'./img/humans/icon-mana2.png',
 	'./img/humans/icon-mana3.png',
-	'./img/humans/icon-mana4.png',
 
 	'./img/buttons/axe-button.png',
 	'./img/buttons/axe-button-shadow.png',

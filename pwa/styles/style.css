@@ -22,14 +22,11 @@ canvas {
 
 a {
   color: #ccf;
+  text-decoration: none;
 }
 
 p {
   font-family: Pixelar;
-}
-
-.yellow {
-  color: #fd8;
 }
 
 .text {
@@ -139,7 +136,8 @@ p {
   position: absolute;
   text-align: center;
   font-size: 24px;
-  width: 100%;
+  margin: 0px 10%;
+  width: 80%;
 }
 
 .over #message {
@@ -179,5 +177,21 @@ p {
 
 .red {
   color: #e88;
+}
+
+.yellow {
+  color: #fd8;
+}
+
+.blue {
+  color: #ccf;
+}
+
+.green {
+  color: #cfc;
+}
+
+.coockie {
+  color: #cfa278;
 }
 /*# sourceMappingURL=style.css.map */

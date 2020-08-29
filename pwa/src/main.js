@@ -2,20 +2,22 @@ if (location.host == 'the-mute-bow.github.io') location.replace('https://the-mut
 
 let onAndroid = /Android/i.test(navigator.userAgent);
 
-let lang = getCookie('lang');
-if (!lang && onAndroid) alert('🇺🇸 This game uses cookies to save language preferences and progression in game.\n🇫🇷 Ce jeu utilise les cookies pour enregistrer les préférences de langue et la progression du jeu.');
+let version = '0.0.37';
+document.getElementById('version').innerHTML = version;
 
-if (!location.hash) {
-	if (lang) {
-		location.assign(lang);
-	} else {
-		setCookie('lang', '#en');
+let lang = getCookie('lang');
+let onCoockie = lang && onAndroid;
+if (!onCoockie && location.hash) lang = location.hash;
+
+if (onCoockie) {
+	if (!location.hash) location.assign(lang);
+	else if (lang != location.hash) {
+		setCookie('lang', location.hash);
 		location.reload(true);
 	}
-} else if (lang != location.hash) {
-	setCookie('lang', location.hash);
-	location.reload(true);
 }
+
+let onUpdate = false;
 
 let allow_fullscreen = true;
 
@@ -28,8 +30,8 @@ if (lang == '#dev-nfs') {
 window.isUpdateAvailable = new Promise(function (resolve, reject) {
 	if ('serviceWorker' in navigator)
 		navigator.serviceWorker
-			.register('/sw.js', {
-				scope: '/'
+			.register('./sw.js', {
+				scope: './'
 			})
 			.then(reg => {
 				reg.onupdatefound = () => {
@@ -43,7 +45,7 @@ window.isUpdateAvailable = new Promise(function (resolve, reject) {
 				};
 			});
 }).then(isAvailable => {
-	if (isAvailable && confirm(lang == '#fr' ? "Mise à jour disponible ! Recharger l'application?" : 'Update available ! Refresh the app?')) location.reload();
+	if (isAvailable) onUpdate = true;
 });
 
 let time = 0;
@@ -102,8 +104,7 @@ const setScreen = (newmode, data) => {
 			if ('text' in data) mission_content_div.innerHTML += `<p class="text">${data.text}</p>`;
 			let next = document.getElementById('mission-next');
 			next.innerHTML = lang == '#fr' ? 'Suivant' : 'Next';
-			next.onclick = data.click;
-			console.log(mission_content_div.innerHTML);
+			next.onclick = event => data.click(data);
 		} else mission_div.classList.add('hidden');
 
 		for (let img of gifs) {
@@ -119,8 +120,7 @@ const setScreen = (newmode, data) => {
 			}, 500);
 		}
 
-		if (mode == 'android')
-			gif_text.innerHTML = lang == '#fr' ? 'Jeu disponible uniquement sur Android.<br/><a href="../">Revenir sur le site principal</a>' : 'Game only available on Android.<br/><a href="../">Go back to main website</a>';
+		if (mode == 'android') gif_text.innerHTML = lang == '#fr' ? 'Jeu disponible uniquement sur Android.<br/><a href="../">Revenir au site principal</a>' : 'Game only available on Android.<br/><a href="../">Go back to main website</a>';
 
 		if (mode == 'error') {
 			if (data) gif_text.innerHTML = data;
@@ -140,6 +140,24 @@ const setScreen = (newmode, data) => {
 		}
 
 		if (mode == 'rotate-phone') gif_text.innerHTML = lang == '#fr' ? "Tourne l'écran." : 'Turn the screen.';
+
+		if (mode == 'coockie')
+			gif_text.innerHTML =
+				lang == '#fr'
+					? 'Ce jeu utilise les <span class="coockie">cookies</span> pour enregistrer les préférences de langue et la progression du jeu.<br/><br/><a onclick="setCookie(`lang`, `#en`); location.reload(true);">Accepter</a>'
+					: 'This game uses <span class="coockie">cookies</span> to save language preferences and progression in game.<br/><br/><a onclick="setCookie(`lang`, `#en`); location.reload(true);">Accept</a>';
+
+		if (mode == 'update-ready')
+			gif_text.innerHTML =
+				lang == '#fr'
+					? 'Nouvelle mise à jour disponible !<br/><br/><a onclick="onUpdate = false; setScreen(`game`);">Ignorer</a> | <a href="./">Actualiser</a>'
+					: 'New update available !<br/><br/><a onclick="onUpdate = false; setScreen(`game`);">Ignore</a> | <a href="./">Reload</a>';
+
+		if (mode == 'update-done')
+			gif_text.innerHTML =
+				lang == '#fr'
+					? `Bienvenue en <a>${version}</a> !<br/><br/><a onclick="setCookie('version', version); location.reload(true);">Continuer</a>`
+					: `Welcome in <a>${version}</a> !<br/><br/><a onclick="setCookie('version', version); location.reload(true);">Continue</a>`;
 	}
 };
 
@@ -166,12 +184,13 @@ const mainloop = newtime => {
 		let sound = false;
 
 		if (innerWidth < innerHeight) setScreen('rotate-phone');
+		else if (onUpdate) setScreen('update-ready');
 		else if (!document.fullscreenElement && allow_fullscreen) setScreen('touch-screen');
 		else if (!game.loop) setScreen('loading');
 		else if (game.dialog) {
 			setScreen('dialog', game.dialog);
 			sound = true;
-		} else if (mode == 'mission') {
+		} else if (mode == 'mission' || mode == 'update-ready') {
 			sound = true;
 		} else {
 			setScreen('game');
@@ -211,8 +230,12 @@ const loadPage = page_name => {
 
 window.onload = () => {
 	if (onAndroid || lang == '#dev') {
-		initTouch();
-		loadPage('menu');
-		mainloop();
+		if (!onCoockie) setScreen('coockie');
+		else if (getCookie('version') != version) setScreen('update-done');
+		else {
+			initTouch();
+			loadPage('menu');
+			mainloop();
+		}
 	} else setScreen('android');
 };

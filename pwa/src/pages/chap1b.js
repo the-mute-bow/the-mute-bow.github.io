@@ -50,6 +50,7 @@ pages['chap1b'] = game => {
 			'humans/icon-plus.png',
 			'humans/icon-stamina-red.png',
 			'humans/icon-stamina-green.png',
+			'humans/icon-stamina-use.png',
 			'humans/icon-mana0.png',
 			'humans/icon-mana1.png',
 			'humans/icon-mana2.png',
@@ -83,7 +84,6 @@ pages['chap1b'] = game => {
 			'buttons/fence-button.png',
 			'buttons/fence-button-shadow.png'
 		],
-		0,
 		() => {
 			game.variant = '-night';
 			game.ground = game.images['ground1' + game.variant];
@@ -300,16 +300,19 @@ pages['chap1b'] = game => {
 			};
 
 			game.dialog = null;
+
 			game.mission = {
 				text: "Ceci est un test pour voir si l'affichage des missions s'effectue correctement avec une image animée et un texte.",
 				img: './img/missions/the-mute-bow.gif',
 				click: mission => {
-					setScreen('game');
-					game.events.push(
-						new TimeEvent(1000, event => {
-							game.initMissionButton();
-						})
-					);
+					setScreen('mission', {
+						text: "Ceci est un test pour voir si l'affichage des missions s'effectue correctement avec une image fixe et un texte.",
+						img: './img/missions/sprint.png',
+						pixelated: true,
+						click: mission => {
+							setScreen('game');
+						}
+					});
 				}
 			};
 

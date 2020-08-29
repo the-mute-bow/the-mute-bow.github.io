@@ -1,6 +1,9 @@
 $black: #202124;
 $lightgray: #cdcad3;
-// $lightgray: lightblue;
+$blue: #ccf;
+$yellow: #fd8;
+$red: #e88;
+$green: #cfc;
 
 @font-face {
 	font-family: 'Pixelar';
@@ -24,15 +27,12 @@ canvas {
 }
 
 a {
-	color: #ccf;
+	color: $blue;
+	text-decoration: none;
 }
 
 p {
 	font-family: Pixelar;
-}
-
-.yellow {
-	color: #fd8;
 }
 
 .text {
@@ -124,7 +124,8 @@ p {
 		position: absolute;
 		text-align: center;
 		font-size: 24px;
-		width: 100%;
+		margin: 0px 10%;
+		width: 80%;
 	}
 
 	#message {
@@ -162,5 +163,21 @@ p {
 }
 
 .red {
-	color: #e88;
+	color: $red;
+}
+
+.yellow {
+	color: $yellow;
+}
+
+.blue {
+	color: $blue;
+}
+
+.green {
+	color: $green;
+}
+
+.coockie {
+	color: #cfa278;
 }

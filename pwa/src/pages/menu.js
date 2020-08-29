@@ -33,7 +33,6 @@ pages['menu'] = game => {
 			'trees/pine4-shadow-night.png',
 			'trees/tree-calc-night.png'
 		],
-		0,
 		() => {
 			game.ground = game.images['ground1' + game.variant];
 			game.tree_calc = game.images['tree-calc' + game.variant];

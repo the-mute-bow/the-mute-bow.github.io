@@ -277,6 +277,7 @@ class Human extends Mob {
 			'icon-message',
 			'icon-stamina-red',
 			'icon-stamina-green',
+			'icon-stamina-use',
 			'icon-mana0',
 			'icon-mana1',
 			'icon-mana2',
@@ -295,6 +296,7 @@ class Human extends Mob {
 		this.attack = null;
 		this.arrow = null;
 		this.view_distance = 80;
+		this.aim_distance = 40;
 		this.tired = false;
 		this.enemies = null;
 		this.shoot_time = null;
@@ -341,9 +343,9 @@ class Human extends Mob {
 
 		this.moveOn(dtime, solids, mobs);
 
-		if (time - this.stamina.time > 900 / (this.speed * 2 - 1)) {
+		if (this.name != 'creature' && time - this.stamina.time > 900 / (this.speed * 2 - 1)) {
 			this.stamina.time = time;
-			if (this.speed == 2) {
+			if (this.speed != 1) {
 				if (this.stamina.val <= 0 || this.look.aim) this.speed = 1;
 				else this.stamina.val--;
 			} else if (this.stamina.val < this.stamina.max) this.stamina.val++;
@@ -453,7 +455,7 @@ class Human extends Mob {
 				y: mob.getFeet().y - this.getFeet().y
 			};
 
-			let r = 48;
+			let r = this.aim_distance;
 			if (Math.abs(d.x) < r && Math.abs(d.y) < r) {
 				let mag = Math.sqrt(d.x * d.x + d.y * d.y);
 				if (mag < r && (!best || mag < best.mag)) best = { d: d, mag: mag };
@@ -461,17 +463,20 @@ class Human extends Mob {
 		}
 
 		if (best) {
-			this.look = { x: best.d.x / best.mag, y: best.d.y / best.mag, aim: true };
-			if (!this.shoot_time) this.shoot_time = this.shoot_time = time + Math.random() * 1000 + 500;
-			if (this.stamina.val > 0 && time - this.shoot_time > 0) {
-				this.shoot(
-					{
-						x: this.look.x + (Math.random() - 0.5) * 0.5,
-						y: this.look.y + (Math.random() - 0.5) * 0.5
-					},
-					1
-				);
-				this.shoot_time = time + Math.random() * 1000 + 500;
+			if ((this.name = 'creature' && this.can_see)) {
+			} else {
+				this.look = { x: best.d.x / best.mag, y: best.d.y / best.mag, aim: true };
+				if (!this.shoot_time) this.shoot_time = this.shoot_time = time + Math.random() * 1000 + 500;
+				if (this.stamina.val > 0 && time - this.shoot_time > 0) {
+					this.shoot(
+						{
+							x: this.look.x + (Math.random() - 0.5) * 0.5,
+							y: this.look.y + (Math.random() - 0.5) * 0.5
+						},
+						1
+					);
+					this.shoot_time = time + Math.random() * 1000 + 500;
+				}
 			}
 		} else {
 			this.look.aim = false;

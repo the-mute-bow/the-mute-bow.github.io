@@ -55,6 +55,8 @@ class Game {
 
 		this.can = document.createElement('canvas');
 		this.borders = null;
+
+		this.load_num = 0;
 	}
 
 	triggerEvent(name) {
@@ -181,7 +183,7 @@ class Game {
 					y: can.height - 2 * overtext.scale
 				}),
 				400,
-				8,
+				6,
 				'#cdcad3',
 				game.scale
 			),
@@ -193,7 +195,7 @@ class Game {
 					y: can.height - 2 * overtext.scale
 				}),
 				400,
-				8,
+				6,
 				'#cdcad3',
 				game.scale
 			),
@@ -205,7 +207,7 @@ class Game {
 					y: can.height - 2 * overtext.scale
 				}),
 				400,
-				8,
+				6,
 				'#cdcad3',
 				game.scale
 			),
@@ -217,7 +219,7 @@ class Game {
 					y: can.height - 2 * overtext.scale
 				}),
 				400,
-				8,
+				6,
 				'#cdcad3',
 				game.scale
 			),
@@ -229,7 +231,7 @@ class Game {
 					y: can.height - 8 * overtext.scale
 				}),
 				400,
-				8,
+				6,
 				'#cdcad3',
 				game.scale
 			)
@@ -251,6 +253,9 @@ class Game {
 					this.events.push(
 						new TimeEvent(300, event => {
 							setScreen('mission', this.mission);
+						}),
+						new TimeEvent(1000, event => {
+							game.initMissionButton();
 						})
 					);
 				},
@@ -448,7 +453,12 @@ class Game {
 				else if (this.player.look.aim) this.player.shoot(event, 1);
 			}
 			if (event.type == 'special' && this.player) {
-				if (event.side == 'L') this.player.speed = this.player.speed == 2 ? 1 : 2;
+				if (event.side == 'L') {
+					if (this.player.speed == 1) {
+						this.player.speed = 1.6;
+						this.player.setAlert('stamina-use', 600);
+					} else this.player.speed = 1;
+				}
 				if (event.side == 'R' && this.player.look.aim) {
 					this.player.shoot(event, 2);
 					this.player.look.aim = false;
@@ -709,65 +719,38 @@ class Game {
 			}
 		}
 
-		// health, stamina, mana
-		// if (this.player && this.mode != 'pause') {
-		// 	let c = can.height / 50;
-		// 	let offset = { x: c, y: c };
-		// 	let i = this.player.health.val;
-		// 	while (i > 0) {
-		// 		mctx.fillStyle = `rgba(0, 0, 0, 0.2)`;
-		// 		mctx.fillRect(offset.x + 0.5 * c, offset.y + 0.5 * c, 2 * c, 2 * c);
-
-		// 		mctx.fillStyle = i > 1 ? `rgba(192, 48, 48, 0.8)` : `rgba(128, 48, 48, 0.6)`;
-		// 		mctx.fillRect(offset.x, offset.y, 2 * c, 2 * c);
-
-		// 		offset.x += 3 * c;
-		// 		i -= i > 1 ? 2 : 1;
-		// 	}
-
-		// 	mctx.fillStyle = `rgba(0, 0, 0, 0.2)`;
-		// 	mctx.fillRect(offset.x + 0.5 * c, offset.y + 0.5 * c, this.player.stamina.val * c, c);
-		// 	mctx.fillStyle = `rgba(255, 255, 255, 0.6)`;
-		// 	mctx.fillRect(offset.x, offset.y, this.player.stamina.val * c, c);
-
-		// 	offset.y += c;
-
-		// 	mctx.fillStyle = `rgba(0, 0, 0, 0.2)`;
-		// 	mctx.fillRect(offset.x + 0.5 * c, offset.y + 0.5 * c, this.player.mana.val * c, c);
-		// 	mctx.fillStyle = `rgba(96, 64, 192, 0.6)`;
-		// 	mctx.fillRect(offset.x, offset.y, this.player.mana.val * c, c);
-		// }
-
 		// Black screen
 		fill(mctx, `rgba(0, 0, 0, ${this.cam.o})`);
 	}
 
-	loadImg(files, index = 0, callback = () => {}) {
-		let src = './img/' + files[index];
+	loadImg(files, callback = () => {}) {
+		this.load_num = 0;
+		for (let file of files) {
+			let src = './img/' + file;
 
-		load_bar.front.style.width = `${(index / (files.length - 1)) * 128}px`;
-		setScreen('loading', `Loading...<br/><br/>${src}`);
+			let img = new Image();
+			img.src = src;
+
+			img.addEventListener('error', event => {
+				if (lang == '#dev') dev_log = src;
+				setScreen('error', lang == '#fr' ? 'Erreur de chargement.' : 'Loading error.');
+			});
+
+			img.addEventListener('load', event => {
+				if (mode != 'error') {
+					this.load_num++;
+					load_bar.front.style.width = `${(this.load_num / files.length) * 128}px`;
+					setScreen('loading', `Loading...<br/><br/>${src}`);
+
+					let key = src.split('/')[src.split('/').length - 1].split('.')[0];
+					this.images[key] = img;
+
+					if (this.load_num == files.length) callback();
+				}
+			});
+		}
 
 		// console.log(`${index + 1}/${files.length}: loading`, src);
-
-		let img = new Image();
-		img.src = src;
-
-		img.addEventListener('error', event => {
-			if (lang == '#dev') dev_log = src;
-			setScreen('error', lang == '#fr' ? 'Erreur de chargement.' : 'Loading error.');
-		});
-
-		img.addEventListener('load', event => {
-			let key = src.split('/')[src.split('/').length - 1].split('.')[0];
-			this.images[key] = img;
-
-			if (index + 1 < files.length) this.loadImg(files, index + 1, callback);
-			else {
-				// console.log('Loaded', this.images);
-				callback();
-			}
-		});
 	}
 
 	goTarget(dtime) {
