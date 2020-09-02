@@ -450,7 +450,7 @@ class Game {
 			}
 			if (event.type == 'drag' && this.player) {
 				if (event.side == 'L') this.player.speed = 1;
-				else if (this.player.look.aim) this.player.shoot(event, 1);
+				else if (this.player.look.aim) this.player.shoot();
 			}
 			if (event.type == 'special' && this.player) {
 				if (event.side == 'L') {
@@ -459,11 +459,7 @@ class Game {
 						this.player.setAlert('stamina-use', 600);
 					} else this.player.speed = 1;
 				}
-				if (event.side == 'R' && this.player.look.aim) {
-					this.player.shoot(event, 2);
-					this.player.look.aim = false;
-					this.touches.R = null;
-				}
+				if (event.side == 'R' && this.player.look.aim && this.player.look.aim < 3 && (game.player.weapon != 'bow' || game.player.setMana('-'))) this.player.look.aim++;
 			}
 		}
 
@@ -500,31 +496,32 @@ class Game {
 					this.player.pushTo(move.x, move.y, dtime);
 				}
 
-				let aim = false;
+				let aim = 0;
 				if (this.touches.R) {
 					let move = getTouchMove(this.touches.R);
-					if (move.mag > 0.2) {
+					if (move.mag > 0.5) {
 						this.player.look.x = move.x;
 						this.player.look.y = move.y;
 						if (this.player.stamina.val) {
-							if (this.player.weapon == 'axe' || this.player.wood.val) aim = true;
+							if (this.player.weapon == 'axe' || this.player.wood.val) aim = 1;
 							else if (!this.player.alert) this.player.setAlert('noamo', 1800);
 						}
 					}
 				}
-
-				this.player.look.aim = aim;
+				if (!this.player.look.aim || !aim) this.player.look.aim = aim;
 			}
 
-			if (this.player.wood.val < this.player.wood.max) {
-				let { x, y } = this.player.getFeet();
-				for (let part of this.entities.particles) {
-					let dx = part.pos.x - x;
-					let dy = part.pos.y - y;
-					if (part instanceof Arrow && !part.timeout && part.stuck && Math.sqrt(dx * dx + dy * dy) < 5) {
-						part.dead = true;
+			let { x, y } = this.player.getFeet();
+			for (let part of this.entities.particles) {
+				let dx = part.pos.x - x;
+				let dy = part.pos.y - y;
+				if (!part.timeout && part.stuck && Math.sqrt(dx * dx + dy * dy) < 5) {
+					if (part instanceof Arrow) {
 						this.player.wood.val++;
 						this.player.setAlert('plus', 600);
+						part.dead = true;
+					} else if (part instanceof Drop) {
+						if (part.type == 'mana' && this.player.setMana('+')) part.dead = true;
 					}
 				}
 			}
@@ -690,6 +687,7 @@ class Game {
 		// Game canvas draw
 		mctx.drawImage(this.can, -this.cam.x * this.scale + can.width / 2, -this.cam.y * this.scale + can.height / 2, this.ground.width * game.scale, this.ground.height * game.scale);
 
+		// Overlays and buttons
 		for (let overlay of this.overlays) overlay.draw();
 		for (let button of this.buttons) button.draw();
 

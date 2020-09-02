@@ -2,7 +2,7 @@ if (location.host == 'the-mute-bow.github.io') location.replace('https://the-mut
 
 let onAndroid = /Android/i.test(navigator.userAgent);
 
-let version = '0.0.37';
+let version = '0.0.38';
 document.getElementById('version').innerHTML = version;
 
 let lang = getCookie('lang');
@@ -144,8 +144,8 @@ const setScreen = (newmode, data) => {
 		if (mode == 'coockie')
 			gif_text.innerHTML =
 				lang == '#fr'
-					? 'Ce jeu utilise les <span class="coockie">cookies</span> pour enregistrer les préférences de langue et la progression du jeu.<br/><br/><a onclick="setCookie(`lang`, `#en`); location.reload(true);">Accepter</a>'
-					: 'This game uses <span class="coockie">cookies</span> to save language preferences and progression in game.<br/><br/><a onclick="setCookie(`lang`, `#en`); location.reload(true);">Accept</a>';
+					? 'Ce jeu utilise les <span class="coockie">cookies</span> pour enregistrer les préférences de langue et la progression du jeu.<br/><br/><a href="./" onclick="setCookie(`lang`, `#fr`);">Accepter</a>'
+					: 'This game uses <span class="coockie">cookies</span> to save language preferences and progression in game.<br/><br/><a href="./" onclick="setCookie(`lang`, `#en`);">Accept</a>';
 
 		if (mode == 'update-ready')
 			gif_text.innerHTML =
@@ -156,8 +156,8 @@ const setScreen = (newmode, data) => {
 		if (mode == 'update-done')
 			gif_text.innerHTML =
 				lang == '#fr'
-					? `Bienvenue en <a>${version}</a> !<br/><br/><a onclick="setCookie('version', version); location.reload(true);">Continuer</a>`
-					: `Welcome in <a>${version}</a> !<br/><br/><a onclick="setCookie('version', version); location.reload(true);">Continue</a>`;
+					? `Bienvenue en <a>${version}</a> !<br/><br/><a href="./" onclick="setCookie('version', version);">Continuer</a>`
+					: `Welcome in <a>${version}</a> !<br/><br/><a href="./" onclick="setCookie('version', version);">Continue</a>`;
 	}
 };
 

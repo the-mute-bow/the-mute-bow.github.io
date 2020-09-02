@@ -112,7 +112,7 @@ class Mob extends Entity {
 		this.dead = false;
 		this.health = { val: 9, max: 9 };
 		this.move = { x: 0, y: 0, time: null };
-		this.look = { x: 0, y: 1, aim: false };
+		this.look = { x: 0, y: 1, aim: 0 };
 		this.alert = null;
 		this.speed = 1;
 		this.target = { obj: null, x: this.pos.x, y: this.pos.y };
@@ -290,7 +290,7 @@ class Human extends Mob {
 		this.name = name;
 		this.health = { val: 12, max: 9 };
 		this.stamina = { val: 0, max: 9, time: 0 };
-		this.mana = { val: 3, max: 9 };
+		this.mana = { val: 4, max: 4 };
 		this.wood = { val: 16, max: 32 };
 		this.weapon = 'none';
 		this.attack = null;
@@ -300,6 +300,7 @@ class Human extends Mob {
 		this.tired = false;
 		this.enemies = null;
 		this.shoot_time = null;
+		this.aim_level = 0;
 	}
 
 	die() {
@@ -312,6 +313,11 @@ class Human extends Mob {
 		if (this.alert && this.alert.timeout && time > this.alert.timeout) this.alert = null;
 
 		if (this.enemies) this.autoAim(game.entities[this.enemies]);
+
+		if (this.look.aim == 2 && this.weapon == 'axe') {
+			this.shoot();
+			game.touches.R = null;
+		}
 
 		if (this.attack) {
 			if (time > this.attack.next_time) {
@@ -366,6 +372,8 @@ class Human extends Mob {
 			this.tired = false;
 			this.setAlert('stamina-green', 1000);
 		}
+
+		if (this.look.aim > this.aim_level) this.aim_level = this.look.aim;
 
 		this.view_distance = 12 + this.health.val * 5.7;
 		if (this.health.val <= 0) this.die();
@@ -442,6 +450,20 @@ class Human extends Mob {
 		}
 	}
 
+	setMana(mode = '+') {
+		let done = false;
+		if (mode == '+' && this.mana.val < this.mana.max) {
+			this.mana.val++;
+			done = true;
+		} else if (mode == '-' && this.mana.val) {
+			this.mana.val--;
+			done = true;
+		}
+
+		if (done) this.setAlert('mana' + this.mana.val, 1800);
+		return done;
+	}
+
 	setWeapon(weapon) {
 		this.weapon = weapon;
 		this.setAlert(weapon, 1000);
@@ -463,48 +485,43 @@ class Human extends Mob {
 		}
 
 		if (best) {
-			if ((this.name = 'creature' && this.can_see)) {
-			} else {
-				this.look = { x: best.d.x / best.mag, y: best.d.y / best.mag, aim: true };
+			if (this.name != 'creature') {
+				this.look = { x: best.d.x / best.mag, y: best.d.y / best.mag, aim: 1 };
 				if (!this.shoot_time) this.shoot_time = this.shoot_time = time + Math.random() * 1000 + 500;
 				if (this.stamina.val > 0 && time - this.shoot_time > 0) {
-					this.shoot(
-						{
-							x: this.look.x + (Math.random() - 0.5) * 0.5,
-							y: this.look.y + (Math.random() - 0.5) * 0.5
-						},
-						1
-					);
+					this.shoot();
 					this.shoot_time = time + Math.random() * 1000 + 500;
 				}
 			}
 		} else {
-			this.look.aim = false;
+			this.look.aim = 0;
 			this.shoot_time = null;
 		}
 	}
 
-	shoot(dir, level) {
+	shoot(dir = { ...this.look }) {
 		if (!this.dead) {
 			this.stamina.val--;
+
 			if (this.weapon == 'bow') {
-				this.arrow = new Arrow({ ...this.getFeet(), z: 10 }, { x: dir.x / 8, y: dir.y / 8, z: 0 }, this.name == 'eliot' ? null : -5000);
+				let v = this.aim_level > 1 ? 16 : 8;
+				this.arrow = new Arrow({ ...this.getFeet(), z: 10 }, { x: dir.x / v, y: dir.y / v, z: 0 }, this.name == 'eliot' ? null : -5000, this.aim_level);
 				game.entities.particles.push(this.arrow);
 				this.wood.val--;
 			} else if (this.weapon == 'axe' || this.name == 'creature') {
 				this.attack = {
-					dir: { ...this.look },
-					level: level,
+					dir: dir,
+					level: this.aim_level,
 					progression: -1,
 					next_time: 0,
 					delay: 30
 				};
 
 				let pos = this.getFeet();
-				let x1 = pos.x + this.look.x * 2;
-				let y1 = pos.y + this.look.y * 2 - 9;
-				let x2 = pos.x + this.look.x * 9;
-				let y2 = pos.y + this.look.y * 9 - 9;
+				let x1 = pos.x + dir.x * 2;
+				let y1 = pos.y + dir.y * 2 - 9;
+				let x2 = pos.x + dir.x * 9;
+				let y2 = pos.y + dir.y * 9 - 9;
 
 				for (let entity of [...game.entities.creatures, ...game.entities.trees].filter(entity => !entity.dead)) {
 					let d = {
@@ -515,11 +532,11 @@ class Human extends Mob {
 					let r = 9;
 
 					if (Math.abs(d.x) < r && Math.abs(d.y) < r && Math.sqrt(d.x * d.x + d.y * d.y) < r) {
-						let atan = Math.abs(Math.atan2(this.look.x, this.look.y) + Math.PI) - Math.abs(Math.atan2(d.x, d.y) + Math.PI);
-						if (level == 2 || atan < 0.1) {
+						let atan = Math.abs(Math.atan2(dir.x, dir.y) + Math.PI) - Math.abs(Math.atan2(d.x, d.y) + Math.PI);
+						if (this.aim_level == 2 || atan < 0.1) {
 							entity.health.val--;
 							if (entity.name) {
-								entity.pushTo(d.x, d.y, 100 * level);
+								entity.pushTo(d.x, d.y, 100 * this.aim_level);
 								// entity.setAlert('noamo', 500);
 							} else {
 								for (let i = 0; i < 20; i++)
@@ -540,6 +557,8 @@ class Human extends Mob {
 					}
 				}
 			}
+
+			this.aim_level = 0;
 		}
 	}
 }
@@ -556,6 +575,7 @@ class Creature extends Human {
 	die() {
 		for (let i = 0; i < 20; i++) this.createAura('blood', 0);
 		for (let i = 0; i < 10; i++) this.createAura(this.aura.color, 0);
+		if (Math.random() < 0.25) game.entities.particles.push(new Drop({ ...this.getFeet(), z: Math.random() * 3 + 3 }, 'mana'));
 		this.dead = true;
 	}
 
@@ -570,7 +590,7 @@ class Creature extends Human {
 			mob.health.val -= 1;
 			mob.view_distance *= 2;
 			if (mob == game.player) game.cam.h *= 1.016;
-			this.shoot(null, 1);
+			this.shoot();
 		}
 	}
 }
@@ -732,6 +752,7 @@ class Particle {
 		this.shadow = shadow;
 		this.color = color;
 		this.dead = false;
+		this.stuck = false;
 		this.gravity = gravity;
 		this.timeout = timeout;
 		if (timeout && timeout < -1) this.timeout = Math.random() * Math.abs(timeout) + Math.abs(timeout) / 10;
@@ -766,10 +787,13 @@ class Particle {
 	}
 
 	animate(dtime) {
-		if (this.timeout && this.time + this.timeout - time <= 0) this.dead = true;
+		this.stuck = this.pos.z < 0;
+		if (!this.stuck) {
+			for (let c of 'xyz') this.pos[c] += this.vel[c] * dtime * game.speed;
+			this.vel.z -= (this.gravity * dtime * game.speed) / 10000;
+		}
 
-		for (let c of 'xyz') this.pos[c] += this.vel[c] * dtime * game.speed;
-		this.vel.z -= (this.gravity * dtime * game.speed) / 10000;
+		if (this.timeout && this.time + this.timeout - time <= 0) this.dead = true;
 	}
 
 	draw(ctx, mode, alpha = 1) {
@@ -807,7 +831,6 @@ class Trail extends Particle {
 	constructor(pos, vel, width = 10, opacity = 1, shadow = true, color = 'white', gravity = 0, trailing = false, timeout = null, slowness = 0) {
 		super(pos, vel, width, opacity, shadow, color, gravity, timeout);
 		this.endPoint = null;
-		this.stuck = false;
 		this.trailing = trailing;
 		this.trail_time = time;
 		this.slowness = slowness;
@@ -844,12 +867,17 @@ class Trail extends Particle {
 
 			if (this.trailing && !this.stuck && this.trail_time - time < 0) {
 				this.trail_time = time + 30;
-				game.entities.particles.push(new Particle(ex.tail, { x: 0, y: 0, z: 0 }, 1, Math.random() / 2 + 0.5, true, this instanceof Arrow ? 'white' : this.color, 0, -500));
+				let color = this instanceof Arrow ? this.endPoint : this.color;
+				if (color) game.entities.particles.push(new Particle(ex.tail, { x: 0, y: 0, z: 0 }, 1, Math.random() / 2 + 0.5, true, color, 0, -500));
 			}
+
+			this.onLevel();
 		}
 	}
 
 	onContact(mob) {}
+
+	onLevel() {}
 
 	get3DEx() {
 		let mag = this.getMag();
@@ -918,11 +946,12 @@ class Trail extends Particle {
 }
 
 class Arrow extends Trail {
-	constructor(pos, vel, timeout = null) {
+	constructor(pos, vel, timeout = null, level = 0) {
 		super(pos, vel, 8, 1, true, '#4e443a', 0.5, true, timeout, 0.0001);
-		this.endPoint = 'white';
+		this.endPoint = [null, 'white', '#ccf', '#ccf'][level];
 		this.victims = [];
 		this.start_coords = { ...pos };
+		this.level = level;
 	}
 
 	onContact(mob) {
@@ -930,7 +959,7 @@ class Arrow extends Trail {
 			let arr_mag = this.getMag();
 			this.victims.push(mob);
 			if (!(mob instanceof Sheep)) {
-				mob.health.val -= arr_mag * 20;
+				mob.health.val -= arr_mag * 20 * this.level * this.level;
 				if (!mob.target || !mob.target.obj) {
 					mob.setAlert('exclam', 200);
 					mob.target = {
@@ -969,5 +998,57 @@ class Arrow extends Trail {
 				})
 			);
 		}
+	}
+
+	onLevel() {
+		if (!this.stuck) {
+			if (this.level == 2) {
+				if (game.touches.R) {
+					let move = getTouchMove(game.touches.R);
+
+					let maxv = 1;
+					let d = { ...this.vel };
+
+					d.x += move.x / 300;
+					d.y += move.y / 300;
+					d.z = 0;
+
+					let v = Math.sqrt(d.x * d.x + d.y * d.y);
+
+					if (v <= maxv) this.vel = d;
+				}
+			}
+
+			if (this.level == 3 && this.victims.length < 4) {
+				let best = null;
+				for (let creature of game.entities.creatures.filter(mob => !this.victims.includes(mob))) {
+					let d = {
+						mob: creature,
+						x: creature.getFeet().x - this.pos.x,
+						y: creature.getFeet().y - this.pos.y
+					};
+
+					d.m = Math.sqrt(d.x * d.x + d.y * d.y);
+
+					if (d.m < 64 && (!best || d.m < best.m)) best = d;
+				}
+
+				if (best) {
+					this.vel.x = this.vel.x * 0.99 + best.x / best.m / 300;
+					this.vel.y = this.vel.y * 0.99 + best.y / best.m / 300;
+					this.vel.z = 0;
+				}
+			}
+		}
+	}
+}
+
+class Drop extends Particle {
+	constructor(pos, type) {
+		let vel = { x: (Math.random() - 0.5) * 0.02, y: (Math.random() - 0.5) * 0.02, z: Math.random() * 0.01 + 0.01 };
+		let color = type == 'mana' ? '#ccf' : '#fd8';
+
+		super(pos, vel, 1, 1, true, color, 0.8);
+		this.type = type;
 	}
 }

@@ -27,6 +27,18 @@
 
 ## Change log
 
+### **0.0.38**
+
+-   Now using `href="./"` to reload the page via a link.
+-   French version of `'coockie'` screen sets `'lang'` coockie to `'#fr'`.
+-   Better aiming / shooting logic.
+-   `Arrow` look like wood sticks when spawned by `Tree.die()`.
+-   blue head and trail color for special `Arrow`.
+-   `Creature.die()` has 25% chances to drop mana.
+-   `Game.player` can harvest mana drops.
+-   Level 2 `Arrow` follows `Game.player.look`. (beta)
+-   Level 3 `Arrow` tracks `Creature`. (beta)
+
 ### **0.0.37**
 
 -   Resolved service worker problem.
