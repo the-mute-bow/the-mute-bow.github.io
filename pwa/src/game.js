@@ -270,12 +270,11 @@ class Game {
 
 	forTouch(x, y, mobs, callback = mob => {}) {
 		for (let mob of mobs.sort((a, b) => a.getFeet().y - b.getFeet().y)) {
-			if (mob != this.player && !mob.event) {
+			if (mob != this.player) {
 				let t = mob.getTargCoords();
 				let pos = t && this.mode == 'strat' ? t : mob.pos;
-				if (mob != this.player && pos.x + 7 < x && x < pos.x + 17 && pos.y + 10 < y && y < pos.y + 24) {
-					callback(mob);
-				}
+				console.log(mob.name, pos);
+				if (mob != this.player && pos.x + 7 < x && x < pos.x + 17 && pos.y + 10 < y && y < pos.y + 24) callback(mob);
 			}
 		}
 	}
@@ -322,25 +321,30 @@ class Game {
 					let touched_human = false;
 
 					if (this.mode == 'strat') {
-						this.forTouch(x, y, this.entities.humans, human => {
-							touched_human = true;
+						this.forTouch(
+							x,
+							y,
+							this.entities.humans.filter(h => !h.event),
+							human => {
+								touched_human = true;
 
-							if (human.target) {
-								if (human.target.obj) {
-									human.target.x = human.target.obj.pos.x + human.target.x;
-									human.target.y = human.target.obj.pos.y + human.target.y;
-									human.target.obj = null;
+								if (human.target) {
+									if (human.target.obj) {
+										human.target.x = human.target.obj.pos.x + human.target.x;
+										human.target.y = human.target.obj.pos.y + human.target.y;
+										human.target.obj = null;
+									} else {
+										human.target = null;
+									}
 								} else {
-									human.target = null;
+									human.target = {
+										x: human.pos.x - this.player.pos.x,
+										y: human.pos.y - this.player.pos.y,
+										obj: this.player
+									};
 								}
-							} else {
-								human.target = {
-									x: human.pos.x - this.player.pos.x,
-									y: human.pos.y - this.player.pos.y,
-									obj: this.player
-								};
 							}
-						});
+						);
 
 						if (!touched_human) {
 							this.mode = 'normal';
@@ -497,7 +501,7 @@ class Game {
 				}
 
 				let aim = 0;
-				if (this.touches.R) {
+				if (this.touches.R && !(this.player.arrow && this.player.arrow.level > 1 && !this.player.arrow.stuck)) {
 					let move = getTouchMove(this.touches.R);
 					if (move.mag > 0.5) {
 						this.player.look.x = move.x;
@@ -692,9 +696,10 @@ class Game {
 		for (let button of this.buttons) button.draw();
 
 		// Joysticks
+		let onSpecial = this.player && this.player.arrow && this.player.arrow.level > 1 && !this.player.arrow.stuck;
 		let touch_colors = {
 			L: `rgba(255, 255, 255, 0.3)`,
-			R: `rgba(255, 255, 255, 0.3)`
+			R: onSpecial ? `rgba(154, 154, 255, 0.4)` : `rgba(255, 255, 255, 0.3)`
 		};
 
 		for (let side of ['L', 'R']) {
@@ -705,7 +710,7 @@ class Game {
 			mctx.lineWidth = this.touches.rin / 16;
 
 			if (touch) {
-				if (game.player && this.mode == 'normal') {
+				if (game.player && this.mode == 'normal' && !onSpecial) {
 					mctx.beginPath();
 					mctx.arc(touch.start.x, touch.start.y, game.touches.rout, 0, 2 * Math.PI);
 					mctx.stroke();

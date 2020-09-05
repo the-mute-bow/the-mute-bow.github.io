@@ -27,6 +27,15 @@
 
 ## Change log
 
+### **0.0.39**
+
+-   Better homing for level 3 `Arrow`.
+-   mana drop rate set to 10%.
+-   hidden load bar on lunch.
+-   Better mind control for level 2 `Arrow`.
+-   Fixed `Human.event` not being called on touch.
+-   Any `Human` death triggers death screen with `'Name is dead.'`.
+
 ### **0.0.38**
 
 -   Now using `href="./"` to reload the page via a link.

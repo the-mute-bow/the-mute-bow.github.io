@@ -34,7 +34,7 @@ pages['chap1b'] = game => {
 			'humans/eliot-night.png',
 			'humans/lea-night.png',
 			'humans/scott-night.png',
-			'humans/karmen-night.png',
+			'humans/shabyn-night.png',
 			'humans/creature.png',
 
 			'humans/icon-null.png',
@@ -273,8 +273,19 @@ pages['chap1b'] = game => {
 				],
 				trees: [],
 				sheeps: [new Sheep({ x: 228, y: 104, z: 0 }), new Sheep({ x: 242, y: 90, z: 0 })],
-				humans: [new Human('eliot', { x: 315, y: 150, z: 0 }), new Human('lea', { x: 320, y: 126, z: 0 }), new Human('karmen', { x: 297, y: 125, z: 0 }), new Human('scott', { x: 308, y: 128, z: 0 })],
-				creatures: [new Creature({ x: 190, y: 145, z: 0 }), new Creature({ x: 200, y: 136, z: 0 }), new Creature({ x: 205, y: 148, z: 0 })],
+				humans: [new Human('eliot', { x: 315, y: 150, z: 0 }), new Human('lea', { x: 320, y: 126, z: 0 }), new Human('shabyn', { x: 297, y: 125, z: 0 }), new Human('scott', { x: 308, y: 128, z: 0 })],
+				creatures: [
+					new Creature({ x: 191, y: 145, z: 0 }),
+					new Creature({ x: 190, y: 146, z: 0 }),
+					new Creature({ x: 192, y: 144, z: 0 }),
+					new Creature({ x: 191, y: 145, z: 0 }),
+					new Creature({ x: 188, y: 145, z: 0 }),
+					new Creature({ x: 189, y: 145, z: 0 }),
+					new Creature({ x: 191, y: 146, z: 0 }),
+					new Creature({ x: 190, y: 141, z: 0 }),
+					new Creature({ x: 200, y: 136, z: 0 }),
+					new Creature({ x: 205, y: 148, z: 0 })
+				],
 				particles: []
 			};
 
@@ -327,13 +338,15 @@ pages['chap1b'] = game => {
 				}),
 
 				new WalkEvent(318, 140, 24, game.entities.humans, 'all', 'in', 'white', event => {
-					game.dialog = {
-						character: 'lea',
-						text:
-							'Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit magni sunt facilis non excepturi quis recusandae ab impedit, nobis ipsum ut nisi, at ullam laborum asperiores blanditiis quisquam, molestiae dicta!',
-						click: dialog => {
-							game.dialog = null;
-						}
+					game.getHuman('shabyn').event = () => {
+						game.getHuman('shabyn').event = null;
+						game.dialog = {
+							character: 'shabyn',
+							text: "j'aime pas les moutons. Tsheeeep.",
+							click: dialog => {
+								game.dialog = null;
+							}
+						};
 					};
 				})
 			];
@@ -354,7 +367,7 @@ pages['chap1b'] = game => {
 				creature_nearby: () => {
 					game.events.push(
 						new GameEvent(event => {
-							if (game.player.dead) event.done = true;
+							if (game.entities.humans.length < 4) event.done = true;
 							else {
 								for (let creature of game.entities.creatures) {
 									let dx = creature.pos.x - game.player.pos.x;
@@ -386,7 +399,7 @@ pages['chap1b'] = game => {
 				creature_chase: () => {
 					game.events.push(
 						new GameEvent(event => {
-							if (!game.entities.creatures.length || game.player.dead) event.done = true;
+							if (!game.entities.creatures.length || game.entities.humans.length < 4) event.done = true;
 							else {
 								for (let creature of game.entities.creatures) {
 									if (creature.target && creature.target.obj && creature.target.obj.name != 'creature') {
@@ -409,7 +422,7 @@ pages['chap1b'] = game => {
 						new TimeEvent(1000, event => {
 							game.events.push(
 								new GameEvent(event => {
-									if (!game.entities.creatures.length || game.player.dead) event.done = true;
+									if (!game.entities.creatures.length || game.entities.humans.length < 4) event.done = true;
 									else {
 										let far = true;
 										for (let creature of game.entities.creatures) {
@@ -432,59 +445,62 @@ pages['chap1b'] = game => {
 						})
 					);
 				},
-				dead_player: () => {
+				dead_human: () => {
 					game.events.push(
 						new GameEvent(event => {
-							if (game.player.dead) {
-								event.done = true;
-								game.getButton('mission').kill(400);
-								game.events.push(
-									new TimeEvent(1000, event => {
-										game.getButton('pause').mode = 'pressed';
-										game.player = null;
-										game.pause(false);
+							for (let name of ['eliot', 'shabyn', 'scott', 'lea']) {
+								if (!game.getHuman(name)) {
+									event.done = true;
+									game.end_caption = name.charAt(0).toUpperCase() + name.slice(1) + (lang == '#fr' ? ' est mort.' : ' is dead.');
+									game.getButton('mission').kill(400);
+									game.events.push(
+										new TimeEvent(1000, event => {
+											game.getButton('pause').mode = 'pressed';
+											game.player = null;
+											game.pause(false);
 
-										game.overlays = [
-											new OverText(
-												'dead',
-												overtext => (lang == '#fr' ? 'Tu es mort.' : 'You are dead.'),
-												overtext => ({
-													x: can.width / 2,
-													y: can.height / 2
-												}),
-												1000,
-												18
-											)
-										];
+											game.overlays = [
+												new OverText(
+													'dead',
+													overtext => game.end_caption,
+													overtext => ({
+														x: can.width / 2,
+														y: can.height / 2
+													}),
+													1000,
+													18
+												)
+											];
 
-										game.buttons.push(
-											new Button(
-												'next',
-												'menu-button',
-												lang == '#fr' ? 'Suite' : 'Next',
-												btn => ({
-													x: (can.width - btn.img.width * game.scale) / 2,
-													y: can.height - (btn.img.height + 5) * game.scale
-												}),
-												btn => {
-													game.getOverlay('dead').kill(400);
-													btn.kill(400);
-													game.speed = 1;
-													game.events.push(
-														new TimeEvent(500, event => {
-															game.speed = 1;
-															game.pause(false);
-															loadPage('menu');
-														})
-													);
-												},
-												200,
-												'normal',
-												10
-											)
-										);
-									})
-								);
+											game.buttons.push(
+												new Button(
+													'next',
+													'menu-button',
+													lang == '#fr' ? 'Suite' : 'Next',
+													btn => ({
+														x: (can.width - btn.img.width * game.scale) / 2,
+														y: can.height - (btn.img.height + 5) * game.scale
+													}),
+													btn => {
+														game.getOverlay('dead').kill(400);
+														btn.kill(400);
+														game.speed = 1;
+														game.events.push(
+															new TimeEvent(500, event => {
+																game.speed = 1;
+																game.pause(false);
+																loadPage('menu');
+															})
+														);
+													},
+													200,
+													'normal',
+													10
+												)
+											);
+										})
+									);
+								}
 							}
 						})
 					);
@@ -493,7 +509,7 @@ pages['chap1b'] = game => {
 
 			game.triggerEvent('creature_dead');
 			game.triggerEvent('creature_nearby');
-			game.triggerEvent('dead_player');
+			game.triggerEvent('dead_human');
 
 			game.loop = true;
 

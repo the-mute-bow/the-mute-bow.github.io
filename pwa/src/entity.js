@@ -311,6 +311,8 @@ class Human extends Mob {
 
 	animate(dtime, solids, mobs) {
 		if (this.alert && this.alert.timeout && time > this.alert.timeout) this.alert = null;
+		if (this.event && !this.alert) this.setAlert('message');
+		if (!this.event && this.alert && this.alert.icon == 'icon-message' && !this.alert.timeout) this.setAlert('message', 200);
 
 		if (this.enemies) this.autoAim(game.entities[this.enemies]);
 
@@ -575,7 +577,7 @@ class Creature extends Human {
 	die() {
 		for (let i = 0; i < 20; i++) this.createAura('blood', 0);
 		for (let i = 0; i < 10; i++) this.createAura(this.aura.color, 0);
-		if (Math.random() < 0.25) game.entities.particles.push(new Drop({ ...this.getFeet(), z: Math.random() * 3 + 3 }, 'mana'));
+		if (Math.random() < 0.1) game.entities.particles.push(new Drop({ ...this.getFeet(), z: Math.random() * 3 + 3 }, 'mana'));
 		this.dead = true;
 	}
 
@@ -590,6 +592,7 @@ class Creature extends Human {
 			mob.health.val -= 1;
 			mob.view_distance *= 2;
 			if (mob == game.player) game.cam.h *= 1.016;
+			this.aim_level = 1;
 			this.shoot();
 		}
 	}
@@ -959,7 +962,9 @@ class Arrow extends Trail {
 			let arr_mag = this.getMag();
 			this.victims.push(mob);
 			if (!(mob instanceof Sheep)) {
-				mob.health.val -= arr_mag * 20 * this.level * this.level;
+				if (this.level > 1) mob.health.val = 0;
+				else mob.health.val -= arr_mag * 20;
+
 				if (!mob.target || !mob.target.obj) {
 					mob.setAlert('exclam', 200);
 					mob.target = {
@@ -1002,24 +1007,20 @@ class Arrow extends Trail {
 
 	onLevel() {
 		if (!this.stuck) {
-			if (this.level == 2) {
+			if (this.level == 2 && this.victims.length < 3) {
 				if (game.touches.R) {
-					let move = getTouchMove(game.touches.R);
+					let move = {
+						x: game.touches.R.end.x - game.touches.R.prev.x,
+						y: game.touches.R.end.y - game.touches.R.prev.y
+					};
 
-					let maxv = 1;
-					let d = { ...this.vel };
-
-					d.x += move.x / 300;
-					d.y += move.y / 300;
-					d.z = 0;
-
-					let v = Math.sqrt(d.x * d.x + d.y * d.y);
-
-					if (v <= maxv) this.vel = d;
+					this.vel.x = this.vel.x * 0.8 + move.x / 1000;
+					this.vel.y = this.vel.y * 0.8 + move.y / 1000;
+					this.vel.z = 0;
 				}
 			}
 
-			if (this.level == 3 && this.victims.length < 4) {
+			if (this.level == 3 && this.victims.length < 6) {
 				let best = null;
 				for (let creature of game.entities.creatures.filter(mob => !this.victims.includes(mob))) {
 					let d = {
@@ -1034,11 +1035,14 @@ class Arrow extends Trail {
 				}
 
 				if (best) {
-					this.vel.x = this.vel.x * 0.99 + best.x / best.m / 300;
-					this.vel.y = this.vel.y * 0.99 + best.y / best.m / 300;
+					this.vel.x = this.vel.x * 0.5 + best.x / best.m / 20;
+					this.vel.y = this.vel.y * 0.5 + best.y / best.m / 20;
 					this.vel.z = 0;
 				}
 			}
+		} else if (this.level > 1 && this == game.player.arrow) {
+			game.player.arrow = null;
+			game.touches.R = null;
 		}
 	}
 }

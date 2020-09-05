@@ -6,7 +6,8 @@ const initTouch = () => {
 				time: time,
 				id: t.identifier,
 				start: { x: t.clientX * dpi, y: t.clientY * dpi },
-				end: { x: t.clientX * dpi, y: t.clientY * dpi }
+				end: { x: t.clientX * dpi, y: t.clientY * dpi },
+				prev: { x: t.clientX * dpi, y: t.clientY * dpi }
 			};
 
 			if (can.width / 40 < touch.start.x && touch.start.x < (can.width / 40) * 39 && can.height / 20 < touch.start.y) {
@@ -21,11 +22,15 @@ const initTouch = () => {
 		for (let t of event.changedTouches) {
 			for (let touch of [game.touches.L, game.touches.R]) {
 				if (touch && touch.id == t.identifier) {
+					touch.prev = { ...touch.end };
 					touch.end = { x: t.clientX * dpi, y: t.clientY * dpi };
+
 					let move = getTouchMove(touch);
+
 					if (game.getButton('bow') && !game.getButton('bow').die_time && (move.mag > 0.2 || move.duration > 200)) {
 						for (let id of ['bow', 'axe', 'fence', 'none']) game.getButton(id).die_time = time + 100;
 					}
+
 					if (move.mag > 1) {
 						touch.start.x = touch.end.x - (move.x * game.touches.rout) / move.mag;
 						touch.start.y = touch.end.y - (move.y * game.touches.rout) / move.mag;
