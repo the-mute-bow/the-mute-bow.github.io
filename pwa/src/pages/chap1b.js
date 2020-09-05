@@ -17,6 +17,8 @@ pages['chap1b'] = game => {
 			'buildings/small-house1-night.png',
 			'buildings/small-house1-shadow.png',
 
+			'coin.png',
+
 			'trees/pine1-night.png',
 			'trees/pine1-shadow-night.png',
 			'trees/pine2-night.png',
@@ -96,6 +98,8 @@ pages['chap1b'] = game => {
 			game.leave_color = '#293d48';
 			game.speed = 1;
 			game.fps = { frames: 0, duration: 0, value: 0 };
+
+			game.coins = 0;
 
 			let treeList = [
 				{ x: 131, y: 19, z: 0 },
@@ -334,6 +338,7 @@ pages['chap1b'] = game => {
 				new TimeEvent(1000, event => {
 					game.initPauseButton();
 					game.initMissionButton();
+					game.initCoinOverlays();
 					if (lang == '#dev') game.initDevOverlays();
 				}),
 
@@ -451,7 +456,7 @@ pages['chap1b'] = game => {
 							for (let name of ['eliot', 'shabyn', 'scott', 'lea']) {
 								if (!game.getHuman(name)) {
 									event.done = true;
-									game.end_caption = name.charAt(0).toUpperCase() + name.slice(1) + (lang == '#fr' ? ' est mort.' : ' is dead.');
+									game.end_caption = name.charAt(0).toUpperCase() + name.slice(1) + (lang == '#fr' ? ' est mort' + (['lea', 'shabyn'].includes(name) ? 'e.' : '.') : ' is dead.');
 									game.getButton('mission').kill(400);
 									game.events.push(
 										new TimeEvent(1000, event => {

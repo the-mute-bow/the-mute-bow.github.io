@@ -577,7 +577,10 @@ class Creature extends Human {
 	die() {
 		for (let i = 0; i < 20; i++) this.createAura('blood', 0);
 		for (let i = 0; i < 10; i++) this.createAura(this.aura.color, 0);
+
 		if (Math.random() < 0.1) game.entities.particles.push(new Drop({ ...this.getFeet(), z: Math.random() * 3 + 3 }, 'mana'));
+		for (let i = 0; i < Math.random() * 5; i++) game.entities.particles.push(new Drop({ ...this.getFeet(), z: Math.random() * 3 + 3 }, 'coin'));
+
 		this.dead = true;
 	}
 

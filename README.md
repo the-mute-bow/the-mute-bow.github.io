@@ -27,6 +27,13 @@
 
 ## Change log
 
+### **0.0.40**
+
+-   Added `'coins'` coockie.
+-   Feminine version for french death screen.
+-   `Creature.die()` drops 0 to 5 coins.
+-   game.coins and counter on screen.
+
 ### **0.0.39**
 
 -   Better homing for level 3 `Arrow`.

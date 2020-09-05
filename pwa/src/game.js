@@ -57,6 +57,7 @@ class Game {
 		this.borders = null;
 
 		this.load_num = 0;
+		this.coins = 0;
 	}
 
 	triggerEvent(name) {
@@ -265,6 +266,41 @@ class Game {
 				'#cdcad3',
 				this.scale * 0.6
 			)
+		);
+	}
+
+	initCoinOverlays() {
+		this.events.push(
+			new GameEvent(event => {
+				if (this.coins) {
+					event.done = true;
+					this.overlays.push(
+						new Overlay(
+							'coins_img',
+							this.images['coin'],
+							overlay => ({
+								x: 4 * overlay.scale,
+								y: 1.5 * overlay.scale
+							}),
+							800,
+							game.scale * 0.64
+						),
+						new OverText(
+							'coins_text',
+							overtext => `${this.coins}`,
+							overtext => ({
+								x: 7.2 * overtext.scale,
+								y: 6 * overtext.scale
+							}),
+							800,
+							6,
+							'#fd8',
+							game.scale,
+							'left'
+						)
+					);
+				}
+			})
 		);
 	}
 
@@ -526,6 +562,10 @@ class Game {
 						part.dead = true;
 					} else if (part instanceof Drop) {
 						if (part.type == 'mana' && this.player.setMana('+')) part.dead = true;
+						if (part.type == 'coin') {
+							game.coins++;
+							part.dead = true;
+						}
 					}
 				}
 			}

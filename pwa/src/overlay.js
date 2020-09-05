@@ -43,7 +43,7 @@ class Overlay {
 }
 
 class OverText {
-	constructor(id = null, getText = overtext => 'text', getCoords = overtext => ({ x: 0, y: 0 }), fade = 400, fontsize = 10, color = '#cdcad3', scale = null) {
+	constructor(id = null, getText = overtext => 'text', getCoords = overtext => ({ x: 0, y: 0 }), fade = 400, fontsize = 10, color = '#cdcad3', scale = null, align = 'center') {
 		this.id = id;
 		this.getText = getText;
 		this.getCoords = getCoords;
@@ -54,6 +54,7 @@ class OverText {
 		this.fontsize = fontsize;
 		this.color = color;
 		this.scale = scale;
+		this.align = align;
 	}
 
 	getOp() {
@@ -68,7 +69,7 @@ class OverText {
 
 		let fs = this.fontsize * (this.scale ? this.scale : game.scale);
 		mctx.font = `${fs}px Pixelar`;
-		mctx.textAlign = 'center';
+		mctx.textAlign = this.align;
 		mctx.fillStyle = this.color;
 
 		mctx.globalAlpha = this.getOp();
