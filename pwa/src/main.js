@@ -2,7 +2,7 @@ if (location.host == 'the-mute-bow.github.io') location.replace('https://the-mut
 
 let onAndroid = /Android/i.test(navigator.userAgent);
 
-let version = '0.0.40';
+let version = '0.0.41';
 document.getElementById('version').innerHTML = version;
 
 let lang = getCookie('lang');
@@ -122,6 +122,12 @@ const setScreen = (newmode, data) => {
 
 		if (mode == 'android') gif_text.innerHTML = lang == '#fr' ? 'Jeu disponible uniquement sur Android.<br/><a href="../">Revenir au site principal</a>' : 'Game only available on Android.<br/><a href="../">Go back to main website</a>';
 
+		if (mode == 'stop-sign')
+			gif_text.innerHTML =
+				lang == '#fr'
+					? '<span class="red">Bloqueur de pubs détecté.</span><br/>Les pubs permettent de financer le développement du jeu. Désactiver le bloqueur de pubs nous aiderait grandement.<br/><a class="red" href="./" onclick="setCookie(`ads`, 1)">Ignorer</a>'
+					: '<span class="red">Ad blocker detected.</span><br/>Ads are used to fund the development of the game. Turning off the ad blocker would help us a lot.<br/><a class="red" href="./" onclick="setCookie(`ads`, 1)">Ignore</a>';
+
 		if (mode == 'error') {
 			if (data) gif_text.innerHTML = data;
 			else gif_text.innerHTML = lang == '#fr' ? 'Erreur.' : 'Error.';
@@ -141,10 +147,10 @@ const setScreen = (newmode, data) => {
 
 		if (mode == 'rotate-phone') gif_text.innerHTML = lang == '#fr' ? "Tourne l'écran." : 'Turn the screen.';
 
-		if (mode == 'coockie')
+		if (mode == 'cookie')
 			gif_text.innerHTML =
 				lang == '#fr'
-					? 'Ce jeu utilise les <span class="coockie">cookies</span> pour enregistrer les préférences de langue et la progression du jeu.<br/><br/><a href="./" onclick="setCookie(`lang`, `#fr`);">Accepter</a>'
+					? 'Ce jeu utilise les <span class="cookies">cookies</span> pour enregistrer les préférences de langue et la progression du jeu.<br/><br/><a href="./" onclick="setCookie(`lang`, `#fr`);">Accepter</a>'
 					: 'This game uses <span class="coockie">cookies</span> to save language preferences and progression in game.<br/><br/><a href="./" onclick="setCookie(`lang`, `#en`);">Accept</a>';
 
 		if (mode == 'update-ready')
@@ -230,7 +236,8 @@ const loadPage = page_name => {
 
 window.onload = () => {
 	if (onAndroid || lang == '#dev') {
-		if (!onCoockie) setScreen('coockie');
+		if (!onCoockie) setScreen('cookie');
+		else if (!getCookie('ads') && !ads) setScreen('stop-sign');
 		else if (getCookie('version') != version) setScreen('update-done');
 		else {
 			if (!getCookie('coins')) setCookie('coins', 0);

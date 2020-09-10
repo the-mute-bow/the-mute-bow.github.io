@@ -1,6 +1,4 @@
-pages['chap1b'] = game => {
-	game.title = lang == '#fr' ? 'Une mystérieuse créature' : 'A mysterious creature';
-
+pages['chap2'] = game => {
 	game.images = [];
 	game.sounds = {
 		click: new Audio('./sounds/click.mp3'),
@@ -278,18 +276,7 @@ pages['chap1b'] = game => {
 				trees: [],
 				sheeps: [new Sheep({ x: 228, y: 104, z: 0 }), new Sheep({ x: 242, y: 90, z: 0 })],
 				humans: [new Human('eliot', { x: 315, y: 150, z: 0 }), new Human('lea', { x: 320, y: 126, z: 0 }), new Human('shabyn', { x: 297, y: 125, z: 0 }), new Human('scott', { x: 308, y: 128, z: 0 })],
-				creatures: [
-					new Creature({ x: 191, y: 145, z: 0 }),
-					new Creature({ x: 190, y: 146, z: 0 }),
-					new Creature({ x: 192, y: 144, z: 0 }),
-					new Creature({ x: 191, y: 145, z: 0 }),
-					new Creature({ x: 188, y: 145, z: 0 }),
-					new Creature({ x: 189, y: 145, z: 0 }),
-					new Creature({ x: 191, y: 146, z: 0 }),
-					new Creature({ x: 190, y: 141, z: 0 }),
-					new Creature({ x: 200, y: 136, z: 0 }),
-					new Creature({ x: 205, y: 148, z: 0 })
-				],
+				creatures: [new Creature({ x: 191, y: 145, z: 0 }), new Creature({ x: 200, y: 136, z: 0 }), new Creature({ x: 205, y: 148, z: 0 })],
 				particles: []
 			};
 
@@ -309,7 +296,7 @@ pages['chap1b'] = game => {
 				o: 1,
 				targ_h: 86,
 				default_h: 86,
-				targ_o: 0,
+				targ_o: 1,
 				targ_speed: 400,
 				target: game.player
 			};
@@ -331,32 +318,82 @@ pages['chap1b'] = game => {
 				}
 			};
 
+			game.mode = 'title';
+
 			game.buttons = [];
 			game.overlays = [];
 
-			game.events = [
-				new TimeEvent(1000, event => {
-					game.initPauseButton();
-					game.initMissionButton();
-					game.initCoinOverlays();
-					if (lang == '#dev') game.initDevOverlays();
-				}),
-
-				new WalkEvent(318, 140, 24, game.entities.humans, 'all', 'in', 'white', event => {
-					game.getHuman('shabyn').event = () => {
-						game.getHuman('shabyn').event = null;
-						game.dialog = {
-							character: 'shabyn',
-							text: "j'aime pas les moutons. Tsheeeep.",
-							click: dialog => {
-								game.dialog = null;
-							}
-						};
-					};
-				})
-			];
-
+			game.events = [];
 			game.event_map = {
+				title: () => {
+					game.events.push(
+						new TimeEvent(1000, event => {
+							game.overlays.push(
+								new OverText(
+									'title',
+									overtext => (lang == '#fr' ? 'Chapitre 2' : 'Chapter 2'),
+									overtext => ({
+										x: can.width / 2,
+										y: can.height / 2
+									}),
+									1800,
+									10,
+									'#cdcad3'
+								)
+							);
+						}),
+
+						new TimeEvent(2000, event => {
+							game.overlays.push(
+								new OverText(
+									'title2',
+									overtext => (lang == '#fr' ? 'Une étrange créature.' : 'A strange creature.'),
+									overtext => ({
+										x: can.width / 2,
+										y: can.height / 2 + 6 * game.scale
+									}),
+									1800,
+									6,
+									'#cdcad3'
+								)
+							);
+						}),
+
+						new TimeEvent(4800, event => {
+							for (let o of game.overlays) o.kill(1000);
+						}),
+
+						new TimeEvent(6000, event => {
+							game.triggerEvent('start');
+						})
+					);
+				},
+				start: () => {
+					game.mode = 'normal';
+					for (let event of ['creature_dead', 'creature_nearby', 'dead_human']) game.triggerEvent(event);
+
+					game.events.push(
+						new TimeEvent(1000, event => {
+							game.initPauseButton();
+							game.initMissionButton();
+							game.initCoinOverlays();
+							if (lang == '#dev') game.initDevOverlays();
+						}),
+
+						new WalkEvent(318, 140, 24, game.entities.humans, 'all', 'in', 'white', event => {
+							game.getHuman('shabyn').event = () => {
+								game.getHuman('shabyn').event = null;
+								game.dialog = {
+									character: 'shabyn',
+									text: "j'aime pas les moutons. Tsheeeep.",
+									click: dialog => {
+										game.dialog = null;
+									}
+								};
+							};
+						})
+					);
+				},
 				creature_dead: () => {
 					game.events.push(
 						new GameEvent(event => {
@@ -512,9 +549,7 @@ pages['chap1b'] = game => {
 				}
 			};
 
-			game.triggerEvent('creature_dead');
-			game.triggerEvent('creature_nearby');
-			game.triggerEvent('dead_human');
+			game.initShop();
 
 			game.loop = true;
 

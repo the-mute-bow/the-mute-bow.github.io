@@ -1,4 +1,5 @@
 var pages = [];
+var ads = false;
 
 class Game {
 	constructor() {
@@ -56,7 +57,6 @@ class Game {
 		this.can = document.createElement('canvas');
 		this.borders = null;
 
-		this.load_num = 0;
 		this.coins = 0;
 	}
 
@@ -244,7 +244,7 @@ class Game {
 			new Button(
 				'mission',
 				'mission-button',
-				'mission',
+				lang == '#fr' ? 'Aide' : 'Help',
 				btn => ({
 					x: (can.width - btn.img.width * btn.scale) / 2,
 					y: can.height - btn.img.height * btn.scale
@@ -304,12 +304,34 @@ class Game {
 		);
 	}
 
+	initShop() {
+		game.events = [
+			new TimeEvent(1000, event => {
+				game.cam.targ_o = 0;
+			})
+		];
+		// this.overlays.push(
+		// 	new OverText(
+		// 		'shop-title',
+		// 		overtext => (lang == '#fr' ? 'Magasin' : 'Shop'),
+		// 		overtext => ({
+		// 			x: can.width / 2,
+		// 			y: game.scale * 8
+		// 		}),
+		// 		1000,
+		// 		8,
+		// 		'#cdcad3'
+		// 	)
+		// );
+
+		this.triggerEvent('title');
+	}
+
 	forTouch(x, y, mobs, callback = mob => {}) {
 		for (let mob of mobs.sort((a, b) => a.getFeet().y - b.getFeet().y)) {
 			if (mob != this.player) {
 				let t = mob.getTargCoords();
 				let pos = t && this.mode == 'strat' ? t : mob.pos;
-				console.log(mob.name, pos);
 				if (mob != this.player && pos.x + 7 < x && x < pos.x + 17 && pos.y + 10 < y && y < pos.y + 24) callback(mob);
 			}
 		}
@@ -326,7 +348,7 @@ class Game {
 		this.touches.rout = Math.floor(can.height / 7);
 
 		if (this.soundtrack) {
-			if (this.mode == 'normal') this.soundtrack.volume = 1;
+			if (['normal', 'title'].includes(this.mode)) this.soundtrack.volume = 1;
 			else if (this.title != 'menu') this.soundtrack.volume = 0.3;
 		}
 
@@ -348,7 +370,7 @@ class Game {
 					if (button.tick(event.end.x, event.end.y)) wasButton = true;
 				}
 
-				if (!wasButton && this.player && game.mode != 'pause') {
+				if (!wasButton && this.player && this.mode != 'pause' && this.mode != 'title') {
 					let hide = () => {
 						for (let id of ['bow', 'axe', 'fence', 'none']) this.getButton(id).kill(100);
 					};
@@ -651,9 +673,9 @@ class Game {
 		// fog_map
 		if (this.fog_map) gctx.drawImage(this.fog_map.img, 0, 0);
 
-		// Strat fog
-		fill(gctx, `rgba(0, 0, 0, ${this.strat_fog * 0.6})`);
-		if (this.mode == 'strat') this.strat_fog = this.strat_fog * 0.8 + 0.2;
+		// strat/title calc
+		fill(gctx, `rgba(0, 0, 0, ${this.strat_fog * (this.mode == 'title' ? 1 : 0.6)})`);
+		if (['strat', 'title'].includes(this.mode)) this.strat_fog = this.strat_fog * 0.8 + 0.2;
 		else this.strat_fog = this.strat_fog * 0.8;
 
 		// Particle ghost
@@ -662,7 +684,9 @@ class Game {
 		// Human ghost
 		if (game.getHuman('eliot')) {
 			for (let human of [...this.entities.humans].sort((a, b) => a.getFeet().y - b.getFeet().y)) {
-				gctx.globalAlpha = 0.2 + 0.8 * this.strat_fog;
+				if (this.mode == 'title') gctx.globalAlpha = 0.2 * (1 - this.strat_fog);
+				else gctx.globalAlpha = 0.2 + 0.8 * this.strat_fog;
+
 				if (game.mode == 'strat' && human.target) {
 					let { x, y } = human.getTargCoords();
 					human.draw(gctx, 'main', { x: Math.floor(x + 0.5), y: Math.floor(y + 0.5), z: human.pos.z });
@@ -750,7 +774,7 @@ class Game {
 			mctx.lineWidth = this.touches.rin / 16;
 
 			if (touch) {
-				if (game.player && this.mode == 'normal' && !onSpecial) {
+				if (game.player && this.mode == 'normal' && !(onSpecial && side == 'R')) {
 					mctx.beginPath();
 					mctx.arc(touch.start.x, touch.start.y, game.touches.rout, 0, 2 * Math.PI);
 					mctx.stroke();
@@ -767,7 +791,7 @@ class Game {
 	}
 
 	loadImg(files, callback = () => {}) {
-		this.load_num = 0;
+		let load_num = 0;
 		for (let file of files) {
 			let src = './img/' + file;
 
@@ -781,14 +805,14 @@ class Game {
 
 			img.addEventListener('load', event => {
 				if (mode != 'error') {
-					this.load_num++;
-					load_bar.front.style.width = `${(this.load_num / files.length) * 128}px`;
+					load_num++;
+					load_bar.front.style.width = `${(load_num / files.length) * 128}px`;
 					setScreen('loading', `Loading...<br/><br/>${src}`);
 
 					let key = src.split('/')[src.split('/').length - 1].split('.')[0];
 					this.images[key] = img;
 
-					if (this.load_num == files.length) callback();
+					if (load_num == files.length) callback();
 				}
 			});
 		}
@@ -798,6 +822,7 @@ class Game {
 
 	goTarget(dtime) {
 		if (this.mode == 'pause') this.cam.targ_h = 100;
+		else if (this.mode == 'title') this.cam.targ_h = 64;
 		else if (this.fog_map && this.player) this.cam.targ_h = Math.min(Math.max(64, this.player.view_distance * 2), 72);
 		else this.cam.targ_h = this.cam.default_h;
 

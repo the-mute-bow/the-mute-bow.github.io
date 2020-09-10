@@ -290,8 +290,8 @@ class Human extends Mob {
 		this.name = name;
 		this.health = { val: 12, max: 9 };
 		this.stamina = { val: 0, max: 9, time: 0 };
-		this.mana = { val: 4, max: 4 };
-		this.wood = { val: 16, max: 32 };
+		this.mana = { val: 0, max: 4 };
+		this.wood = { val: 8, max: 32 };
 		this.weapon = 'none';
 		this.attack = null;
 		this.arrow = null;
@@ -301,6 +301,7 @@ class Human extends Mob {
 		this.enemies = null;
 		this.shoot_time = null;
 		this.aim_level = 0;
+		this.armor = 0;
 	}
 
 	die() {
@@ -958,15 +959,17 @@ class Arrow extends Trail {
 		this.victims = [];
 		this.start_coords = { ...pos };
 		this.level = level;
+		this.hits = 0;
 	}
 
 	onContact(mob) {
 		if ((mob.name == 'creature' || mob instanceof Sheep) && !this.victims.includes(mob)) {
 			let arr_mag = this.getMag();
 			this.victims.push(mob);
+			this.hits++;
 			if (!(mob instanceof Sheep)) {
-				if (this.level > 1) mob.health.val = 0;
-				else mob.health.val -= arr_mag * 20;
+				if (this.level > 2) mob.health.val = 0;
+				else mob.health.val -= arr_mag * 20 * this.level;
 
 				if (!mob.target || !mob.target.obj) {
 					mob.setAlert('exclam', 200);
@@ -1009,18 +1012,21 @@ class Arrow extends Trail {
 	}
 
 	onLevel() {
-		if (!this.stuck) {
-			if (this.level == 2 && this.victims.length < 3) {
+		if (!this.stuck && game.player) {
+			if (this.level == 2 && this.hits < 8) {
 				if (game.touches.R) {
 					let move = {
 						x: game.touches.R.end.x - game.touches.R.prev.x,
 						y: game.touches.R.end.y - game.touches.R.prev.y
 					};
 
-					this.vel.x = this.vel.x * 0.8 + move.x / 1000;
-					this.vel.y = this.vel.y * 0.8 + move.y / 1000;
-					this.vel.z = 0;
+					this.vel.x = this.vel.x * 0.95 + game.player.move.x / 8000 + move.x / 1500;
+					this.vel.y = this.vel.y * 0.95 + game.player.move.y / 8000 + move.y / 1500;
+					this.vel.z = this.pos.z < 9 ? 0.001 : 0;
 				}
+
+				let h = this.get3DEx().head;
+				this.victims = this.victims.filter(v => v.collidePoint(h.x, h.y, h.z));
 			}
 
 			if (this.level == 3 && this.victims.length < 6) {
@@ -1043,7 +1049,7 @@ class Arrow extends Trail {
 					this.vel.z = 0;
 				}
 			}
-		} else if (this.level > 1 && this == game.player.arrow) {
+		} else if (this.level > 1 && game.player && this == game.player.arrow) {
 			game.player.arrow = null;
 			game.touches.R = null;
 		}

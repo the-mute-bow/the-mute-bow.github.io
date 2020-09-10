@@ -9,14 +9,14 @@
 <p align="center">
   A mobile pixel-art game made with web thecnologies.
   <br>
-  <a href="https://iconejey.github.io/#the-mute-bow"><strong>See on my portfolio</strong></a>
+  <a href="https://the-mute-bow.com/"><strong>Main Website</strong></a>
   <br>
   <br>
-  <a href="https://the-mute-bow.com/">Playstore</a>
+  <span style="opacity:0.5"><a href="https://the-mute-bow.com/">Playstore</a></span>
   ·
-  <a href="https://the-mute-bow.com/">Website</a>
+  <a href="https://the-mute-bow.com/pwa/">Web app</a>
   ·
-  <a href="https://github.com/the-mute-bow/the-mute-bow">Licence</a>
+  <a href="https://github.com/the-mute-bow/the-mute-bow/blob/master/README.md">Licence</a>
   ·
   <a href="https://iconejey.github.io/">Other projects</a>
 </p>
@@ -26,6 +26,13 @@
 </p>
 
 ## Change log
+
+### **0.0.41**
+
+-   Added `'title'` mode.
+-   Chapter title on start.
+-   Better homing for level 3 `Arrow`.
+-   Added `'stop-sign'` screen if an ad blocker is used.
 
 ### **0.0.40**
 
