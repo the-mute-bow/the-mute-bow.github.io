@@ -1,4 +1,4 @@
-pages['chap2'] = game => {
+pages['chp2'] = game => {
 	game.images = [];
 	game.sounds = {
 		click: new Audio('./sounds/click.mp3'),
@@ -16,6 +16,7 @@ pages['chap2'] = game => {
 			'buildings/small-house1-shadow.png',
 
 			'coin.png',
+			'arrow-bonus.png',
 
 			'trees/pine1-night.png',
 			'trees/pine1-shadow-night.png',
@@ -72,6 +73,8 @@ pages['chap2'] = game => {
 			'buttons/menu-button-shadow.png',
 			'buttons/menu2-button.png',
 			'buttons/menu2-button-shadow.png',
+			'buttons/buy-button.png',
+			'buttons/buy-button-shadow.png',
 			'buttons/mission-button.png',
 			'buttons/mission-button-shadow.png',
 
@@ -88,7 +91,6 @@ pages['chap2'] = game => {
 			game.variant = '-night';
 			game.ground = game.images['ground1' + game.variant];
 			game.tree_calc = game.images['tree-calc' + game.variant];
-
 			game.can.width = game.ground.width;
 			game.can.height = game.ground.height;
 
@@ -293,10 +295,10 @@ pages['chap2'] = game => {
 				x: game.player.pos.x + 12,
 				y: game.player.pos.y + 12,
 				h: 80,
-				o: 1,
+				o: 0,
 				targ_h: 86,
 				default_h: 86,
-				targ_o: 1,
+				targ_o: 0,
 				targ_speed: 400,
 				target: game.player
 			};
@@ -326,6 +328,9 @@ pages['chap2'] = game => {
 			game.events = [];
 			game.event_map = {
 				title: () => {
+					game.mode = 'title';
+					game.strat_fog = 1;
+
 					game.events.push(
 						new TimeEvent(1000, event => {
 							game.overlays.push(

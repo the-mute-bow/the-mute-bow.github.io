@@ -301,7 +301,7 @@ class Human extends Mob {
 		this.enemies = null;
 		this.shoot_time = null;
 		this.aim_level = 0;
-		this.armor = 0;
+		this.damage = 1;
 	}
 
 	die() {
@@ -508,7 +508,7 @@ class Human extends Mob {
 
 			if (this.weapon == 'bow') {
 				let v = this.aim_level > 1 ? 16 : 8;
-				this.arrow = new Arrow({ ...this.getFeet(), z: 10 }, { x: dir.x / v, y: dir.y / v, z: 0 }, this.name == 'eliot' ? null : -5000, this.aim_level);
+				this.arrow = new Arrow({ ...this.getFeet(), z: 10 }, { x: dir.x / v, y: dir.y / v, z: 0 }, this.name == 'eliot' ? null : -5000, this.aim_level, this.damage);
 				game.entities.particles.push(this.arrow);
 				this.wood.val--;
 			} else if (this.weapon == 'axe' || this.name == 'creature') {
@@ -953,12 +953,13 @@ class Trail extends Particle {
 }
 
 class Arrow extends Trail {
-	constructor(pos, vel, timeout = null, level = 0) {
+	constructor(pos, vel, timeout = null, level = 0, damage = 1) {
 		super(pos, vel, 8, 1, true, '#4e443a', 0.5, true, timeout, 0.0001);
 		this.endPoint = [null, 'white', '#ccf', '#ccf'][level];
 		this.victims = [];
 		this.start_coords = { ...pos };
 		this.level = level;
+		this.damage = damage;
 		this.hits = 0;
 	}
 
@@ -969,7 +970,7 @@ class Arrow extends Trail {
 			this.hits++;
 			if (!(mob instanceof Sheep)) {
 				if (this.level > 2) mob.health.val = 0;
-				else mob.health.val -= arr_mag * 20 * this.level;
+				else mob.health.val -= arr_mag * 20 * this.level * this.damage;
 
 				if (!mob.target || !mob.target.obj) {
 					mob.setAlert('exclam', 200);

@@ -27,6 +27,12 @@
 
 ## Change log
 
+### **0.0.42**
+
+-   Google search console and indexation in search results.
+-   Soundtrack starts on `'title'` screen.
+-   Shop for arrow, stamina, mana and damage bonuses.
+
 ### **0.0.41**
 
 -   Added `'title'` mode.

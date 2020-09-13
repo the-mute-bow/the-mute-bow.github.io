@@ -10,8 +10,11 @@
           box-sizing: border-box;
 }
 
-body {
+html {
   background-color: #202124;
+}
+
+body {
   color: #cdcad3;
 }
 
@@ -58,6 +61,7 @@ p {
   position: absolute;
   width: 100%;
   height: 100%;
+  background-color: #202124;
 }
 
 #dialog .top {
@@ -90,6 +94,7 @@ p {
 }
 
 #mission-content {
+  background-color: #202124;
   position: absolute;
   width: 100%;
   height: 100%;
@@ -113,6 +118,7 @@ p {
 }
 
 .over {
+  background-color: #202124;
   position: absolute;
   width: 100%;
   height: 100%;

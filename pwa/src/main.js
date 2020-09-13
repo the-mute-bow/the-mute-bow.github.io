@@ -2,7 +2,7 @@ if (location.host == 'the-mute-bow.github.io') location.replace('https://the-mut
 
 let onAndroid = /Android/i.test(navigator.userAgent);
 
-let version = '0.0.41';
+let version = '0.0.42';
 document.getElementById('version').innerHTML = version;
 
 let lang = getCookie('lang');
@@ -21,8 +21,11 @@ let onUpdate = false;
 
 let allow_fullscreen = true;
 
-if (lang == '#dev-nfs') {
-	lang = '#dev';
+let options = lang.split('-');
+lang = options[0];
+console.log(options, lang);
+
+if (options.includes('nfs')) {
 	allow_fullscreen = false;
 	console.log('disabled fullscreen');
 }
@@ -214,7 +217,7 @@ const mainloop = newtime => {
 		}
 
 		if (game.soundtrack) {
-			if (sound) game.soundtrack.play();
+			if (sound && game.play_soundtrack) game.soundtrack.play();
 			else game.soundtrack.pause();
 		}
 
@@ -227,7 +230,7 @@ const mainloop = newtime => {
 };
 
 const loadPage = page_name => {
-	// console.warn(`load ${page_name}`);
+	game.play_soundtrack = false;
 	if (game.soundtrack) game.soundtrack.pause();
 	game.loop = false;
 	setScreen('loading');
@@ -243,7 +246,7 @@ window.onload = () => {
 			if (!getCookie('coins')) setCookie('coins', 0);
 
 			initTouch();
-			loadPage('menu');
+			loadPage(lang == '#dev' ? 'chp2' : 'menu');
 			mainloop();
 		}
 	} else setScreen('android');
