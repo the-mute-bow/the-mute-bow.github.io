@@ -27,6 +27,11 @@
 
 ## Change log
 
+### **0.0.43**
+
+-   Main website update.
+-   Added pLay button that links to `./pwa`.
+
 ### **0.0.42**
 
 -   Google search console and indexation in search results.

@@ -4,6 +4,16 @@
 		<meta charset="UTF-8" />
 
 		<title>The Mute Bow</title>
+
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "Application",
+				"url": "https://the-mute-bow.com",
+				"logo": "https://the-mute-bow.com/pwa/img/icon/icon192.png"
+			}
+		</script>
+
 		<meta name="keywords" content="The, Mute, Bow, mobile, game, app, play" />
 		<meta name="description" content="The Mute Bow, fight against dark creatures !" />
 		<meta name="author" content="Nicolas Gouwy" />
@@ -17,11 +27,25 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="mobile-web-app-capable" content="yes" />
 		<meta name="theme-color" content="#202124" />
-		<link rel="shortcut icon" href="./pwa/img/icon/icon512.png" type="image/x-icon" />
+		<link rel="shortcut icon" href="./pwa/img/icon/icon512.png" />
 		<link rel="stylesheet" href="./styles/style.css" />
 	</head>
 	<body>
-		<h1>Main site.</h1>
-		<h3><a href="./pwa/">The mute bow</a></h3>
+		<img id="background" src="./img/background.png" />
+
+		<main>
+			<header>
+				<img id="title" src="./pwa/img/title.png" />
+
+				<a id="play-btn" href="./pwa/" class="button" onclick="document.querySelector('#play-btn').classList.add('pressed')">
+					<img class="down" src="./pwa/img/buttons/menu-button-shadow.png" />
+					<img src="./pwa/img/buttons/menu-button.png" />
+					<p id="play-text">Play</p>
+				</a>
+			</header>
+		</main>
+
+		<script src="./cookie.js"></script>
+		<script src="./main.js"></script>
 	</body>
 </html>

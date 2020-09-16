@@ -2,20 +2,19 @@ if (location.host == 'the-mute-bow.github.io') location.replace('https://the-mut
 
 let onAndroid = /Android/i.test(navigator.userAgent);
 
-let version = '0.0.42';
+let version = '0.0.43';
 document.getElementById('version').innerHTML = version;
 
-let lang = getCookie('lang');
-let onCoockie = lang && onAndroid;
-if (!onCoockie && location.hash) lang = location.hash;
+let lang = getCookie('lang-pwa');
 
-if (onCoockie) {
-	if (!location.hash) location.assign(lang);
-	else if (lang != location.hash) {
-		setCookie('lang', location.hash);
-		location.reload(true);
+if (lang) {
+	if (!location.hash) location.replace(lang);
+
+	if (lang != location.hash) {
+		setCookie('lang-pwa', location.hash);
+		location.reload();
 	}
-}
+} else if (location.hash) lang = location.hash;
 
 let onUpdate = false;
 
@@ -153,8 +152,8 @@ const setScreen = (newmode, data) => {
 		if (mode == 'cookie')
 			gif_text.innerHTML =
 				lang == '#fr'
-					? 'Ce jeu utilise les <span class="cookies">cookies</span> pour enregistrer les préférences de langue et la progression du jeu.<br/><br/><a href="./" onclick="setCookie(`lang`, `#fr`);">Accepter</a>'
-					: 'This game uses <span class="coockie">cookies</span> to save language preferences and progression in game.<br/><br/><a href="./" onclick="setCookie(`lang`, `#en`);">Accept</a>';
+					? 'Ce jeu utilise les <span class="cookies">cookies</span> pour enregistrer les préférences de langue et la progression du jeu.<br/><br/><a href="./" onclick="setCookie(`lang-pwa`, `#fr`);">Accepter</a>'
+					: 'This game uses <span class="coockie">cookies</span> to save language preferences and progression in game.<br/><br/><a href="./" onclick="setCookie(`lang-pwa`, `#en`);">Accept</a>';
 
 		if (mode == 'update-ready')
 			gif_text.innerHTML =
@@ -239,7 +238,7 @@ const loadPage = page_name => {
 
 window.onload = () => {
 	if (onAndroid || lang == '#dev') {
-		if (!onCoockie) setScreen('cookie');
+		if (!getCookie('lang-pwa')) setScreen('cookie');
 		else if (!getCookie('ads') && !ads) setScreen('stop-sign');
 		else if (getCookie('version') != version) setScreen('update-done');
 		else {

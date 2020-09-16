@@ -1,5 +1,87 @@
+$black: #202124;
+$lightgray: #cdcad3;
+$blue: #ccf;
+$yellow: #fd8;
+$red: #e88;
+$green: #cfc;
+
+@font-face {
+	font-family: 'Pixelar';
+	src: url('../fonts/Pixelar.woff2') format('woff2'), url('../fonts/Pixelar.woff') format('woff');
+}
+
+html,
+body {
+	background-color: $black;
+}
+
 * {
 	padding: 0px;
 	margin: 0px;
 	box-sizing: border-box;
+}
+
+p,
+a,
+h1 {
+	font-family: Pixelar;
+}
+
+img {
+	image-rendering: pixelated;
+}
+
+.button {
+	position: absolute;
+	left: 50%;
+	top: 35vw;
+	width: 14vw;
+	opacity: 1;
+	transition: opacity 0.5s;
+
+	.shadow {
+		top: 0.4vw;
+	}
+
+	img {
+		transform: translateX(-50%);
+		width: 100%;
+		position: absolute;
+	}
+
+	p {
+		transform: translate(-50%, -0.1vw);
+		position: absolute;
+		font-size: 4.7vw;
+		color: $black;
+	}
+}
+
+.pressed {
+	transition: none;
+
+	opacity: 0.5;
+	img {
+		top: 0.4vw;
+	}
+
+	p {
+		transform: translate(-50%, 0.35vw);
+	}
+}
+
+#background {
+	position: absolute;
+	width: 100%;
+	z-index: -1;
+}
+
+#title {
+	position: absolute;
+	width: 40vw;
+	opacity: 1;
+	transition: opacity 0.5s;
+	left: 50%;
+	top: 20vw;
+	transform: translateX(-50%);
 }

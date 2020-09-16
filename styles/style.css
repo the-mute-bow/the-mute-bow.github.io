@@ -1,7 +1,93 @@
+@font-face {
+  font-family: 'Pixelar';
+  src: url("../fonts/Pixelar.woff2") format("woff2"), url("../fonts/Pixelar.woff") format("woff");
+}
+
+html,
+body {
+  background-color: #202124;
+}
+
 * {
   padding: 0px;
   margin: 0px;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+}
+
+p,
+a,
+h1 {
+  font-family: Pixelar;
+}
+
+img {
+  -ms-interpolation-mode: nearest-neighbor;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: -o-pixelated;
+      image-rendering: pixelated;
+}
+
+.button {
+  position: absolute;
+  left: 50%;
+  top: 35vw;
+  width: 14vw;
+  opacity: 1;
+  -webkit-transition: opacity 0.5s;
+  transition: opacity 0.5s;
+}
+
+.button .shadow {
+  top: 0.4vw;
+}
+
+.button img {
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  width: 100%;
+  position: absolute;
+}
+
+.button p {
+  -webkit-transform: translate(-50%, -0.1vw);
+          transform: translate(-50%, -0.1vw);
+  position: absolute;
+  font-size: 4.7vw;
+  color: #202124;
+}
+
+.pressed {
+  -webkit-transition: none;
+  transition: none;
+  opacity: 0.5;
+}
+
+.pressed img {
+  top: 0.4vw;
+}
+
+.pressed p {
+  -webkit-transform: translate(-50%, 0.35vw);
+          transform: translate(-50%, 0.35vw);
+}
+
+#background {
+  position: absolute;
+  width: 100%;
+  z-index: -1;
+}
+
+#title {
+  position: absolute;
+  width: 40vw;
+  opacity: 1;
+  -webkit-transition: opacity 0.5s;
+  transition: opacity 0.5s;
+  left: 50%;
+  top: 20vw;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
 }
 /*# sourceMappingURL=style.css.map */
