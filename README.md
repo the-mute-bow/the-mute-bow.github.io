@@ -27,6 +27,13 @@
 
 ## Change log
 
+### **0.0.44**
+
+-   Main website update.
+-   Google Play button.
+-   Styling for mobile devices.
+-   QR code.
+
 ### **0.0.43**
 
 -   Main website update.

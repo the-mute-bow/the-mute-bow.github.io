@@ -31,18 +31,39 @@
 		<link rel="stylesheet" href="./styles/style.css" />
 	</head>
 	<body>
-		<img id="background" src="./img/background.png" />
+		<img class="hidden" id="load" src="./pwa/img/gifs/loading.gif" />
 
-		<main>
+		<main class="">
+			<img class="bg" id="background-top-desk" src="./img/background-top-desk.png" />
+			<img style="display: none" class="bg" id="background-top-mobile" src="./img/background-top-mobile.png" />
 			<header>
 				<img id="title" src="./pwa/img/title.png" />
 
-				<a id="play-btn" href="./pwa/" class="button" onclick="document.querySelector('#play-btn').classList.add('pressed')">
-					<img class="down" src="./pwa/img/buttons/menu-button-shadow.png" />
+				<a id="flag" class="button" href="">
+					<img id="flag-shad" src="" class="shadow" />
+					<img id="flag-img" src="" />
+				</a>
+
+				<a id="play-btn" class="button" href="#links">
+					<img class="shadow" src="./pwa/img/buttons/menu-button-shadow.png" />
 					<img src="./pwa/img/buttons/menu-button.png" />
-					<p id="play-text">Play</p>
+					<p class="translate">Play|Jouer</p>
 				</a>
 			</header>
+
+			<section id="links">
+				<img id="QR" src="./img/QR.png" />
+				<a href="./pwa/" id="google-play" class="button">
+					<img src="./pwa/img/buttons/google-button-shadow.png" class="shadow" />
+					<img src="./pwa/img/buttons/google-button.png" />
+					<p>Google Play</p>
+				</a>
+
+				<a id="web-app" class="button">
+					<img src="./pwa/img/buttons/menu2-button-shadow.png" class="shadow" />
+					<img src="./pwa/img/buttons/menu2-button.png" />
+				</a>
+			</section>
 		</main>
 
 		<script src="./cookie.js"></script>
