@@ -10,6 +10,11 @@ if (lang != location.hash) {
 	location.reload();
 }
 
+const show = () => {
+	document.querySelector('main').classList.remove('hidden');
+	document.querySelector('#load').classList.add('hidden');
+};
+
 for (let text of document.querySelectorAll('.translate')) {
 	text.innerHTML = text.innerHTML.split('|')[Math.floor(lang == '#fr')];
 }
@@ -20,7 +25,17 @@ document.querySelector('#flag-shad').src = `./pwa/img/buttons/${lang == '#fr' ? 
 
 let imgs = document.querySelectorAll('img');
 console.log(imgs);
-for (img of imgs) img.addEventListener('load', event => console.log(imgs.length, img.src));
+let imgs_len = imgs.length;
+
+setTimeout(() => show(), 3000);
+
+for (img of imgs) {
+	img.addEventListener('load', event => {
+		imgs_len--;
+		console.log(imgs_len);
+		if (!imgs_len) show();
+	});
+}
 
 for (let button of document.querySelectorAll('.button')) {
 	button.addEventListener('click', event => {
@@ -31,10 +46,9 @@ for (let button of document.querySelectorAll('.button')) {
 			location.replace(ref);
 			location.reload();
 		} else if (ref.includes('#')) document.querySelector(ref).scrollIntoView({ behavior: 'smooth' });
+		else location.replace(ref);
 
 		button.classList.add('pressed');
 		setTimeout(() => button.classList.remove('pressed'), 1000);
-
-		// location.replace(lang);
 	});
 }

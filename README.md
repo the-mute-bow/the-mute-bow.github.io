@@ -12,7 +12,7 @@
   <a href="https://the-mute-bow.com/"><strong>Main Website</strong></a>
   <br>
   <br>
-  <span style="opacity:0.5"><a href="https://the-mute-bow.com/">Playstore</a></span>
+  <a href="https://the-mute-bow.com/">Playstore</a>
   ·
   <a href="https://the-mute-bow.com/pwa/">Web app</a>
   ·

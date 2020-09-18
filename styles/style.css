@@ -34,6 +34,9 @@ img {
   opacity: 1;
   -webkit-transition: opacity 0.5s;
   transition: opacity 0.5s;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  height: 1vw;
 }
 
 .button .shadow {
@@ -41,15 +44,15 @@ img {
 }
 
 .button img {
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
   width: 100%;
   position: absolute;
 }
 
 .button p {
-  -webkit-transform: translate(-50%, -0.1vw);
-          transform: translate(-50%, -0.1vw);
+  -webkit-transform: translateY(-0.1vw);
+          transform: translateY(-0.1vw);
+  text-align: center;
+  width: 100%;
   position: absolute;
   font-size: 4.7vw;
   color: #202124;
@@ -66,8 +69,8 @@ img {
 }
 
 .pressed p {
-  -webkit-transform: translate(-50%, 0.35vw);
-          transform: translate(-50%, 0.35vw);
+  -webkit-transform: translateY(0.35vw);
+          transform: translateY(0.35vw);
 }
 
 .hidden {
@@ -116,29 +119,26 @@ img {
 
 #links {
   position: absolute;
-  top: 54vw;
-  width: 100%;
-  height: 18vw;
+  top: 58vw;
+  height: 28vw;
 }
 
 #links #QR {
-  width: 18vw;
+  width: 22vw;
   position: absolute;
-  left: 20%;
-  top: 1vw;
+  left: 20vw;
 }
 
 #links #google-play {
   position: absolute;
   width: 30vw;
-  left: 65%;
-  top: 6vw;
+  left: 65vw;
+  top: 8vw;
 }
 
 #links #google-play p {
   color: #cdcad3;
-  left: 2.5vw;
-  top: 0.5vw;
+  padding: 0.7vw 0vw 0vw 4vw;
 }
 
 @media (max-width: 600px) {
@@ -157,8 +157,8 @@ img {
     top: 0.8vw;
   }
   .pressed p {
-    -webkit-transform: translate(-50%, 0.35vw);
-            transform: translate(-50%, 0.35vw);
+    -webkit-transform: translateY(0.35vw);
+            transform: translateY(0.35vw);
   }
   #background-top-desk {
     display: none;
@@ -177,29 +177,29 @@ img {
     -webkit-transition: opacity 0.5s;
     transition: opacity 0.5s;
     left: 50%;
-    top: 20vw;
+    top: 40vw;
     -webkit-transform: translateX(-50%);
             transform: translateX(-50%);
   }
   #play-btn {
     left: 50%;
-    top: 50vw;
+    top: 70vw;
     width: 28vw;
   }
   #links {
-    top: 80vw;
+    top: 130vw;
     height: 80vw;
   }
   #links #QR {
-    width: 44vw;
+    width: 50vw;
     left: 25vw;
-    top: 5vw;
   }
   #links #google-play {
     position: absolute;
     width: 60vw;
-    left: 50%;
-    top: 50vw;
+    height: 5px;
+    top: 56vw;
+    left: 50vw;
   }
   #links #google-play p {
     left: 4vw;

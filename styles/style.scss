@@ -35,19 +35,22 @@ img {
 	position: absolute;
 	opacity: 1;
 	transition: opacity 0.5s;
+	transform: translateX(-50%);
+	height: 1vw;
 
 	.shadow {
 		top: 0.4vw !important;
 	}
 
 	img {
-		transform: translateX(-50%);
 		width: 100%;
 		position: absolute;
 	}
 
 	p {
-		transform: translate(-50%, -0.1vw);
+		transform: translateY(-0.1vw);
+		text-align: center;
+		width: 100%;
 		position: absolute;
 		font-size: 4.7vw;
 		color: $black;
@@ -63,7 +66,7 @@ img {
 	}
 
 	p {
-		transform: translate(-50%, 0.35vw);
+		transform: translateY(0.35vw);
 	}
 }
 
@@ -110,27 +113,24 @@ img {
 
 #links {
 	position: absolute;
-	top: 54vw;
-	width: 100%;
-	height: 18vw;
+	top: 58vw;
+	height: 28vw;
 
 	#QR {
-		width: 18vw;
+		width: 22vw;
 		position: absolute;
-		left: 20%;
-		top: 1vw;
+		left: 20vw;
 	}
 
 	#google-play {
 		position: absolute;
 		width: 30vw;
-		left: 65%;
-		top: 6vw;
+		left: 65vw;
+		top: 8vw;
 
 		p {
 			color: $lightgray;
-			left: 2.5vw;
-			top: 0.5vw;
+			padding: 0.7vw 0vw 0vw 4vw;
 		}
 	}
 }
@@ -155,7 +155,7 @@ img {
 		}
 
 		p {
-			transform: translate(-50%, 0.35vw);
+			transform: translateY(0.35vw);
 		}
 	}
 
@@ -178,31 +178,31 @@ img {
 		opacity: 1;
 		transition: opacity 0.5s;
 		left: 50%;
-		top: 20vw;
+		top: 40vw;
 		transform: translateX(-50%);
 	}
 
 	#play-btn {
 		left: 50%;
-		top: 50vw;
+		top: 70vw;
 		width: 28vw;
 	}
 
 	#links {
-		top: 80vw;
+		top: 130vw;
 		height: 80vw;
 
 		#QR {
-			width: 44vw;
+			width: 50vw;
 			left: 25vw;
-			top: 5vw;
 		}
 
 		#google-play {
 			position: absolute;
 			width: 60vw;
-			left: 50%;
-			top: 50vw;
+			height: 5px;
+			top: 56vw;
+			left: 50vw;
 
 			p {
 				left: 4vw;
