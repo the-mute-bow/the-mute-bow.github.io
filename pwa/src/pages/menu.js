@@ -197,7 +197,7 @@ pages['menu'] = game => {
 										btn.kill(300);
 										game.events.push(
 											new TimeEvent(400, event => {
-												loadPage('chp2');
+												loadPage('chp1');
 											})
 										);
 									})
@@ -220,7 +220,7 @@ pages['menu'] = game => {
 								game.events.push(
 									new TimeEvent(200, event => {
 										location.replace(lang == '#fr' ? '#en' : '#fr');
-										location.reload(true);
+										location.reload();
 									})
 								);
 							}

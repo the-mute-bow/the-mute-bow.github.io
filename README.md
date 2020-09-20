@@ -27,12 +27,19 @@
 
 ## Change log
 
+### **0.0.45**
+
+-   Init shop only if player has coins.
+-   Chapter 1.
+
 ### **0.0.44**
 
 -   Main website update.
 -   Google Play button.
 -   Styling for mobile devices.
 -   QR code.
+-   lang and lang-pwa coockies.
+-   lang button.
 
 ### **0.0.43**
 

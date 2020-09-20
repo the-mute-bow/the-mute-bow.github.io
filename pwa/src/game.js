@@ -306,378 +306,385 @@ class Game {
 	}
 
 	initShop() {
-		this.mode = 'pause';
-		this.pause_time = time - 200;
+		if (getCookie('coins') != '0') {
+			console.log(getCookie('coins'));
+			this.mode = 'pause';
+			this.pause_time = time - 200;
 
-		this.events = [
-			new TimeEvent(500, event => {
-				this.overlays.push(
-					new OverText(
-						'shop-title',
-						overtext => (lang == '#fr' ? 'Magasin' : 'Shop'),
-						overtext => ({
-							x: can.width / 2,
-							y: this.scale * 14
-						}),
-						1000,
-						16,
-						'#cdcad3'
-					),
-					new Overlay(
-						'coins_img',
-						this.images['coin'],
-						overlay => ({
-							x: 4 * overlay.scale,
-							y: 1.5 * overlay.scale
-						}),
-						800,
-						game.scale * 0.64
-					),
-					new OverText(
-						'coins_text',
-						overtext => getCookie('coins'),
-						overtext => ({
-							x: 7.2 * overtext.scale,
-							y: 6 * overtext.scale
-						}),
-						800,
-						6,
-						'#fd8',
-						game.scale,
-						'left'
-					)
-				);
-			}),
+			this.events = [
+				new TimeEvent(500, event => {
+					this.overlays.push(
+						new OverText(
+							'shop-title',
+							overtext => (lang == '#fr' ? 'Magasin' : 'Shop'),
+							overtext => ({
+								x: can.width / 2,
+								y: this.scale * 14
+							}),
+							1000,
+							16,
+							'#cdcad3'
+						),
+						new Overlay(
+							'coins_img',
+							this.images['coin'],
+							overlay => ({
+								x: 4 * overlay.scale,
+								y: 1.5 * overlay.scale
+							}),
+							800,
+							game.scale * 0.64
+						),
+						new OverText(
+							'coins_text',
+							overtext => getCookie('coins'),
+							overtext => ({
+								x: 7.2 * overtext.scale,
+								y: 6 * overtext.scale
+							}),
+							800,
+							6,
+							'#fd8',
+							game.scale,
+							'left'
+						)
+					);
+				}),
 
-			new TimeEvent(1000, event => {
-				this.overlays.push(
-					new Overlay(
-						'arrow-bonus-img',
-						this.images['arrow-bonus'],
-						overlay => ({
-							x: can.width * 0.06,
-							y: this.scale * 18.3
-						}),
-						800,
-						this.scale * 0.86
-					),
+				new TimeEvent(1000, event => {
+					this.overlays.push(
+						new Overlay(
+							'arrow-bonus-img',
+							this.images['arrow-bonus'],
+							overlay => ({
+								x: can.width * 0.06,
+								y: this.scale * 18.3
+							}),
+							800,
+							this.scale * 0.86
+						),
 
-					new OverText(
-						'arrow-bonus-text',
-						overtext => (lang == '#fr' ? '32 flèches au lieu de 8.' : '32 arrows instead of 8.'),
-						overtext => ({
-							x: can.width * 0.37,
-							y: this.scale * 25
-						}),
-						1000,
-						8,
-						'#cdcad3'
-					),
+						new OverText(
+							'arrow-bonus-text',
+							overtext => (lang == '#fr' ? '32 flèches au lieu de 8.' : '32 arrows instead of 8.'),
+							overtext => ({
+								x: can.width * 0.37,
+								y: this.scale * 25
+							}),
+							1000,
+							8,
+							'#cdcad3'
+						),
 
-					new Overlay(
-						'arrow-bonus-coins-img',
-						this.images['coin'],
-						overlay => ({
-							x: can.width * 0.66 - this.scale * 6.5,
-							y: this.scale * 18.3
-						}),
-						800,
-						this.scale * 0.86
-					),
+						new Overlay(
+							'arrow-bonus-coins-img',
+							this.images['coin'],
+							overlay => ({
+								x: can.width * 0.66 - this.scale * 6.5,
+								y: this.scale * 18.3
+							}),
+							800,
+							this.scale * 0.86
+						),
 
-					new OverText(
-						'arrow-bonus-coins-text',
-						overtext => '35',
-						overtext => ({
-							x: can.width * 0.66,
-							y: this.scale * 25
-						}),
-						800,
-						8,
-						'#fd8',
-						null,
-						'left'
-					)
-				);
+						new OverText(
+							'arrow-bonus-coins-text',
+							overtext => '35',
+							overtext => ({
+								x: can.width * 0.66,
+								y: this.scale * 25
+							}),
+							800,
+							8,
+							'#fd8',
+							null,
+							'left'
+						)
+					);
 
-				this.buttons.push(
-					new Button(
-						'arrow-buy',
-						'buy-button',
-						lang == '#fr' ? 'Acheter' : 'Buy',
-						btn => {
-							if (btn.mode == 'normal' && Math.floor(getCookie('coins')) < 35) btn.mode = 'disabled';
+					this.buttons.push(
+						new Button(
+							'arrow-buy',
+							'buy-button',
+							lang == '#fr' ? 'Acheter' : 'Buy',
+							btn => {
+								if (btn.mode == 'normal' && Math.floor(getCookie('coins')) < 35) btn.mode = 'disabled';
 
-							return {
-								x: can.width * 0.85 - (btn.img.width * this.scale) / 2,
-								y: this.scale * 17.4
-							};
-						},
-						btn => {
-							this.getHuman('eliot').wood.val = 32;
-							setCookie('coins', Math.floor(getCookie('coins')) - 35);
-							btn.kill(400);
-						},
-						200,
-						'normal',
-						10
-					)
-				);
-			}),
+								return {
+									x: can.width * 0.85 - (btn.img.width * this.scale) / 2,
+									y: this.scale * 17.4
+								};
+							},
+							btn => {
+								this.getHuman('eliot').wood.val = 32;
+								setCookie('coins', Math.floor(getCookie('coins')) - 35);
+								btn.kill(400);
+							},
+							200,
+							'normal',
+							10
+						)
+					);
+				}),
 
-			new TimeEvent(1250, event => {
-				this.overlays.push(
-					new Overlay(
-						'mana-bonus-img',
-						this.images['icon-mana4'],
-						overlay => ({
-							x: can.width * 0.06 - this.scale * 14,
-							y: this.scale * (12 + 15)
-						}),
-						800,
-						this.scale * 1.6
-					),
+				new TimeEvent(1250, event => {
+					this.overlays.push(
+						new Overlay(
+							'mana-bonus-img',
+							this.images['icon-mana4'],
+							overlay => ({
+								x: can.width * 0.06 - this.scale * 14,
+								y: this.scale * (12 + 15)
+							}),
+							800,
+							this.scale * 1.6
+						),
 
-					new OverText(
-						'mana-bonus-text',
-						overtext => (lang == '#fr' ? 'Mana complet.' : 'Full mana.'),
-						overtext => ({
-							x: can.width * 0.37,
-							y: this.scale * (25 + 15)
-						}),
-						1000,
-						8,
-						'#cdcad3'
-					),
+						new OverText(
+							'mana-bonus-text',
+							overtext => (lang == '#fr' ? 'Mana complet.' : 'Full mana.'),
+							overtext => ({
+								x: can.width * 0.37,
+								y: this.scale * (25 + 15)
+							}),
+							1000,
+							8,
+							'#cdcad3'
+						),
 
-					new Overlay(
-						'mana-bonus-coins-img',
-						this.images['coin'],
-						overlay => ({
-							x: can.width * 0.66 - this.scale * 6.5,
-							y: this.scale * (18.3 + 15)
-						}),
-						800,
-						this.scale * 0.86
-					),
+						new Overlay(
+							'mana-bonus-coins-img',
+							this.images['coin'],
+							overlay => ({
+								x: can.width * 0.66 - this.scale * 6.5,
+								y: this.scale * (18.3 + 15)
+							}),
+							800,
+							this.scale * 0.86
+						),
 
-					new OverText(
-						'mana-bonus-coins-text',
-						overtext => '40',
-						overtext => ({
-							x: can.width * 0.66,
-							y: this.scale * (25 + 15)
-						}),
-						800,
-						8,
-						'#fd8',
-						null,
-						'left'
-					)
-				);
+						new OverText(
+							'mana-bonus-coins-text',
+							overtext => '40',
+							overtext => ({
+								x: can.width * 0.66,
+								y: this.scale * (25 + 15)
+							}),
+							800,
+							8,
+							'#fd8',
+							null,
+							'left'
+						)
+					);
 
-				this.buttons.push(
-					new Button(
-						'mana-buy',
-						'buy-button',
-						lang == '#fr' ? 'Acheter' : 'Buy',
-						btn => {
-							if (btn.mode == 'normal' && Math.floor(getCookie('coins')) < 40) btn.mode = 'disabled';
+					this.buttons.push(
+						new Button(
+							'mana-buy',
+							'buy-button',
+							lang == '#fr' ? 'Acheter' : 'Buy',
+							btn => {
+								if (btn.mode == 'normal' && Math.floor(getCookie('coins')) < 40) btn.mode = 'disabled';
 
-							return {
-								x: can.width * 0.85 - (btn.img.width * this.scale) / 2,
-								y: this.scale * (17.4 + 15)
-							};
-						},
-						btn => {
-							this.getHuman('eliot').mana.val = 4;
-							setCookie('coins', Math.floor(getCookie('coins')) - 40);
-							btn.kill(400);
-						},
-						200,
-						'normal',
-						10
-					)
-				);
-			}),
+								return {
+									x: can.width * 0.85 - (btn.img.width * this.scale) / 2,
+									y: this.scale * (17.4 + 15)
+								};
+							},
+							btn => {
+								this.getHuman('eliot').mana.val = 4;
+								setCookie('coins', Math.floor(getCookie('coins')) - 40);
+								btn.kill(400);
+							},
+							200,
+							'normal',
+							10
+						)
+					);
+				}),
 
-			new TimeEvent(1500, event => {
-				this.overlays.push(
-					new Overlay(
-						'stamina-bonus-img',
-						this.images['icon-stamina-green'],
-						overlay => ({
-							x: can.width * 0.06 - this.scale * 14,
-							y: this.scale * (12 + 30)
-						}),
-						800,
-						this.scale * 1.6
-					),
+				new TimeEvent(1500, event => {
+					this.overlays.push(
+						new Overlay(
+							'stamina-bonus-img',
+							this.images['icon-stamina-green'],
+							overlay => ({
+								x: can.width * 0.06 - this.scale * 14,
+								y: this.scale * (12 + 30)
+							}),
+							800,
+							this.scale * 1.6
+						),
 
-					new OverText(
-						'stamina-bonus-text',
-						overtext => (lang == '#fr' ? 'Double endurance.' : 'Double stamina.'),
-						overtext => ({
-							x: can.width * 0.37,
-							y: this.scale * (25 + 30)
-						}),
-						1000,
-						8,
-						'#cdcad3'
-					),
+						new OverText(
+							'stamina-bonus-text',
+							overtext => (lang == '#fr' ? 'Double endurance.' : 'Double stamina.'),
+							overtext => ({
+								x: can.width * 0.37,
+								y: this.scale * (25 + 30)
+							}),
+							1000,
+							8,
+							'#cdcad3'
+						),
 
-					new Overlay(
-						'stamina-bonus-coins-img',
-						this.images['coin'],
-						overlay => ({
-							x: can.width * 0.66 - this.scale * 6.5,
-							y: this.scale * (18.3 + 30)
-						}),
-						800,
-						this.scale * 0.86
-					),
+						new Overlay(
+							'stamina-bonus-coins-img',
+							this.images['coin'],
+							overlay => ({
+								x: can.width * 0.66 - this.scale * 6.5,
+								y: this.scale * (18.3 + 30)
+							}),
+							800,
+							this.scale * 0.86
+						),
 
-					new OverText(
-						'stamina-bonus-coins-text',
-						overtext => '30',
-						overtext => ({
-							x: can.width * 0.66,
-							y: this.scale * (25 + 30)
-						}),
-						800,
-						8,
-						'#fd8',
-						null,
-						'left'
-					)
-				);
+						new OverText(
+							'stamina-bonus-coins-text',
+							overtext => '30',
+							overtext => ({
+								x: can.width * 0.66,
+								y: this.scale * (25 + 30)
+							}),
+							800,
+							8,
+							'#fd8',
+							null,
+							'left'
+						)
+					);
 
-				this.buttons.push(
-					new Button(
-						'stamina-buy',
-						'buy-button',
-						lang == '#fr' ? 'Acheter' : 'Buy',
-						btn => {
-							if (btn.mode == 'normal' && Math.floor(getCookie('coins')) < 30) btn.mode = 'disabled';
+					this.buttons.push(
+						new Button(
+							'stamina-buy',
+							'buy-button',
+							lang == '#fr' ? 'Acheter' : 'Buy',
+							btn => {
+								if (btn.mode == 'normal' && Math.floor(getCookie('coins')) < 30) btn.mode = 'disabled';
 
-							return {
-								x: can.width * 0.85 - (btn.img.width * this.scale) / 2,
-								y: this.scale * (17.4 + 30)
-							};
-						},
-						btn => {
-							this.getHuman('eliot').stamina.max *= 2;
-							setCookie('coins', Math.floor(getCookie('coins')) - 30);
-							btn.kill(400);
-						},
-						200,
-						'normal',
-						10
-					)
-				);
-			}),
+								return {
+									x: can.width * 0.85 - (btn.img.width * this.scale) / 2,
+									y: this.scale * (17.4 + 30)
+								};
+							},
+							btn => {
+								this.getHuman('eliot').stamina.max *= 2;
+								setCookie('coins', Math.floor(getCookie('coins')) - 30);
+								btn.kill(400);
+							},
+							200,
+							'normal',
+							10
+						)
+					);
+				}),
 
-			new TimeEvent(1750, event => {
-				this.overlays.push(
-					new Overlay(
-						'damage-bonus-img',
-						this.images['icon-bow'],
-						overlay => ({
-							x: can.width * 0.06 - this.scale * 14,
-							y: this.scale * (13 + 45)
-						}),
-						800,
-						this.scale * 1.6
-					),
+				new TimeEvent(1750, event => {
+					this.overlays.push(
+						new Overlay(
+							'damage-bonus-img',
+							this.images['icon-bow'],
+							overlay => ({
+								x: can.width * 0.06 - this.scale * 14,
+								y: this.scale * (13 + 45)
+							}),
+							800,
+							this.scale * 1.6
+						),
 
-					new OverText(
-						'damage-bonus-text',
-						overtext => (lang == '#fr' ? "2x dégats à l'arc." : '2x bow damages.'),
-						overtext => ({
-							x: can.width * 0.37,
-							y: this.scale * (25 + 45)
-						}),
-						1000,
-						8,
-						'#cdcad3'
-					),
+						new OverText(
+							'damage-bonus-text',
+							overtext => (lang == '#fr' ? "2x dégats à l'arc." : '2x bow damages.'),
+							overtext => ({
+								x: can.width * 0.37,
+								y: this.scale * (25 + 45)
+							}),
+							1000,
+							8,
+							'#cdcad3'
+						),
 
-					new Overlay(
-						'damage-bonus-coins-img',
-						this.images['coin'],
-						overlay => ({
-							x: can.width * 0.66 - this.scale * 6.5,
-							y: this.scale * (18.3 + 45)
-						}),
-						800,
-						this.scale * 0.86
-					),
+						new Overlay(
+							'damage-bonus-coins-img',
+							this.images['coin'],
+							overlay => ({
+								x: can.width * 0.66 - this.scale * 6.5,
+								y: this.scale * (18.3 + 45)
+							}),
+							800,
+							this.scale * 0.86
+						),
 
-					new OverText(
-						'damage-bonus-coins-text',
-						overtext => '50',
-						overtext => ({
-							x: can.width * 0.66,
-							y: this.scale * (25 + 45)
-						}),
-						800,
-						8,
-						'#fd8',
-						null,
-						'left'
-					)
-				);
+						new OverText(
+							'damage-bonus-coins-text',
+							overtext => '50',
+							overtext => ({
+								x: can.width * 0.66,
+								y: this.scale * (25 + 45)
+							}),
+							800,
+							8,
+							'#fd8',
+							null,
+							'left'
+						)
+					);
 
-				this.buttons.push(
-					new Button(
-						'damage-buy',
-						'buy-button',
-						lang == '#fr' ? 'Acheter' : 'Buy',
-						btn => {
-							if (btn.mode == 'normal' && Math.floor(getCookie('coins')) < 50) btn.mode = 'disabled';
+					this.buttons.push(
+						new Button(
+							'damage-buy',
+							'buy-button',
+							lang == '#fr' ? 'Acheter' : 'Buy',
+							btn => {
+								if (btn.mode == 'normal' && Math.floor(getCookie('coins')) < 50) btn.mode = 'disabled';
 
-							return {
-								x: can.width * 0.85 - (btn.img.width * this.scale) / 2,
-								y: this.scale * (17.4 + 45)
-							};
-						},
-						btn => {
-							this.getHuman('eliot').damage = 2;
-							setCookie('coins', Math.floor(getCookie('coins')) - 50);
-							btn.kill(400);
-						},
-						200,
-						'normal',
-						10
-					)
-				);
-			}),
+								return {
+									x: can.width * 0.85 - (btn.img.width * this.scale) / 2,
+									y: this.scale * (17.4 + 45)
+								};
+							},
+							btn => {
+								this.getHuman('eliot').damage = 2;
+								setCookie('coins', Math.floor(getCookie('coins')) - 50);
+								btn.kill(400);
+							},
+							200,
+							'normal',
+							10
+						)
+					);
+				}),
 
-			new TimeEvent(2000, event => {
-				this.buttons.push(
-					new Button(
-						'play',
-						'menu-button',
-						lang == '#fr' ? 'Jouer' : 'Play',
-						btn => ({
-							x: (can.width - btn.img.width * game.scale) / 2,
-							y: can.height - (btn.img.height + 5) * game.scale
-						}),
-						btn => {
-							for (let overlay of [...this.overlays, ...this.buttons]) overlay.kill(300);
+				new TimeEvent(2000, event => {
+					this.buttons.push(
+						new Button(
+							'play',
+							'menu-button',
+							lang == '#fr' ? 'Jouer' : 'Play',
+							btn => ({
+								x: (can.width - btn.img.width * game.scale) / 2,
+								y: can.height - (btn.img.height + 5) * game.scale
+							}),
+							btn => {
+								for (let overlay of [...this.overlays, ...this.buttons]) overlay.kill(300);
 
-							game.events.push(
-								new TimeEvent(200, event => {
-									this.pause(false);
-									this.triggerEvent('title');
-									this.play_soundtrack = true;
-								})
-							);
-						}
-					)
-				);
-			})
-		];
+								game.events.push(
+									new TimeEvent(200, event => {
+										this.pause(false);
+										this.triggerEvent('title');
+										this.play_soundtrack = true;
+									})
+								);
+							}
+						)
+					);
+				})
+			];
+		} else {
+			this.pause(false);
+			this.triggerEvent('title');
+			this.play_soundtrack = true;
+		}
 	}
 
 	forTouch(x, y, mobs, callback = mob => {}) {

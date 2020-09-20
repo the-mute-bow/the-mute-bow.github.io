@@ -2,19 +2,26 @@ if (location.host == 'the-mute-bow.github.io') location.replace('https://the-mut
 
 let onAndroid = /Android/i.test(navigator.userAgent);
 
-let version = '0.0.44';
+let version = '0.0.45';
 document.getElementById('version').innerHTML = version;
 
 let lang = getCookie('lang-pwa');
 
 if (lang) {
-	if (!location.hash) location.replace(lang);
+	if (!location.hash) {
+		location.replace(lang);
+		location.reload();
+	}
 
 	if (lang != location.hash) {
 		setCookie('lang-pwa', location.hash);
 		location.reload();
 	}
 } else if (location.hash) lang = location.hash;
+else if (getCookie('lang')) {
+	location.replace(getCookie('lang'));
+	location.reload();
+}
 
 let onUpdate = false;
 
@@ -245,7 +252,7 @@ window.onload = () => {
 			if (!getCookie('coins')) setCookie('coins', 0);
 
 			initTouch();
-			loadPage(lang == '#dev' ? 'chp2' : 'menu');
+			loadPage(lang == '#dev' ? 'chp1' : 'menu');
 			mainloop();
 		}
 	} else setScreen('android');
