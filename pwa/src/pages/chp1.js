@@ -31,7 +31,7 @@ pages['chp1'] = game => {
 			'humans/human-shadow.png',
 			'humans/eliot.png',
 			'humans/lea.png',
-			'humans/scott.png',
+			'humans/piet.png',
 			'humans/shabyn.png',
 			'humans/creature.png',
 
@@ -274,7 +274,7 @@ pages['chp1'] = game => {
 				],
 				trees: [],
 				sheeps: [new Sheep({ x: 228, y: 104, z: 0 }), new Sheep({ x: 242, y: 90, z: 0 })],
-				humans: [new Human('eliot', { x: 114, y: 615, z: 0 }), new Human('lea', { x: 320, y: 126, z: 0 }), new Human('shabyn', { x: 297, y: 125, z: 0 }), new Human('scott', { x: 308, y: 128, z: 0 })],
+				humans: [new Human('eliot', { x: 114, y: 615, z: 0 }), new Human('lea', { x: 320, y: 126, z: 0 }), new Human('shabyn', { x: 297, y: 125, z: 0 }), new Human('piet', { x: 308, y: 128, z: 0 })],
 				creatures: [],
 				particles: []
 			};

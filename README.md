@@ -30,7 +30,8 @@
 ### **0.0.45**
 
 -   Init shop only if player has coins.
--   Chapter 1.
+-   Chapter 1 in game & script writing.
+-   Rename Scott to Piet.
 
 ### **0.0.44**
 
