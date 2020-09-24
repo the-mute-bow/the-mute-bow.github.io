@@ -52,3 +52,13 @@ _Eliot et Shabyn arrivent chez Piet._
 -> Le mana est une énergie qui te permet de faire des choses impressionnantes, ramasse les pastilles au sol pour en gagner.
 
 -> Pendant que tu vises, tapote à gauche de l'écran pour transférer un point de mana à ta flèche. | Ensuite replace ton doigt sur la droite de l'écran après avoir décoché. La flèche suivra les mouvements de ton doigt. | Touche les trois moutons avec une seule flèche.
+
+[si tire raté]
+
+> Piet: Pas grave, ça fait longtemps. Tiens, réessaye.
+
+[si tire réussi]
+
+> Léa: Wow... comment tu fais ça?
+>
+> Shabyn: Personne ne sait, même pas lui-même. Un jour il lui est arrivé quelque chose et...
