@@ -61,4 +61,4 @@ _Eliot et Shabyn arrivent chez Piet._
 
 > Léa: Wow... comment tu fais ça?
 >
-> Shabyn: Personne ne sait, même pas lui-même. Un jour il lui est arrivé quelque chose et...
+> Shabyn: Personne ne sait, pas même Eliot. Il y a une dizaine d'années, on nous a signalé

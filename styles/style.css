@@ -36,7 +36,6 @@ img {
   transition: opacity 0.5s;
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%);
-  height: 1vw;
 }
 
 .button .shadow {

@@ -856,7 +856,16 @@ class Game {
 											}),
 											btn => {
 												hide();
-												game.player.setWeapon('none');
+												for (let c of game.entities.creatures.filter(c => c.inScreen())) {
+													let d = { x: c.pos.x - game.player.pos.x, y: c.pos.y - game.player.pos.y };
+													this.events.push(
+														new TimeEvent(Math.sqrt(d.x * d.x + d.y * d.y) * 10, event => {
+															c.sprites.light.tile.x = c.sprites.main.tile.x;
+															c.sprites.light.tile.y = c.sprites.main.tile.y;
+															c.sprites.light.draw(this.fog_map.img.getContext('2d'), { x: Math.floor(c.pos.x + 0.5), y: Math.floor(c.pos.y + 0.5) });
+														})
+													);
+												}
 											},
 											100,
 											'normal',
@@ -1039,7 +1048,9 @@ class Game {
 		else this.strat_fog = this.strat_fog * 0.8;
 
 		// Particle ghost
-		for (let particle of [...this.entities.particles].sort((a, b) => a.getFeet().y - b.getFeet().y)) particle.draw(gctx, 'main', this.fog_map ? 0.5 : 0.1);
+		for (let particle of [...this.entities.particles].sort((a, b) => a.getFeet().y - b.getFeet().y)) {
+			if (particle.color != '#202124') particle.draw(gctx, 'main', this.fog_map ? 0.5 : 0.1);
+		}
 
 		// Human ghost
 		if (game.getHuman('eliot')) {
@@ -1062,10 +1073,11 @@ class Game {
 				x += 0.5;
 				y += 0.5;
 
-				if (game.mode == 'normal' && human.alert) {
+				if (human.alert && game.mode != 'title') {
 					gctx.globalAlpha = human.alert.duration ? (human.alert.timeout - time) / human.alert.duration : 1;
+					if (human.event && game.mode != 'normal') gctx.globalAlpha = 1 - gctx.globalAlpha;
 					human.draw(gctx, human.alert.icon, { x: x, y: y, z: z });
-				} else if (human.target && human != this.player) {
+				} else if (game.mode == 'strat' && human.target && human != this.player) {
 					if (human.target.obj == this.player) human.draw(gctx, 'icon-follow', { x: x, y: y, z: z });
 					else human.draw(gctx, 'icon-stay', { x: x, y: y, z: z });
 				} else human.draw(gctx, 'icon-null', { x: x, y: y, z: z });
@@ -1311,13 +1323,13 @@ class FogMap {
 	}
 
 	fill() {
-		this.ctx().fillStyle = '#212423';
+		this.ctx().fillStyle = '#202124';
 		this.ctx().fillRect(0, 0, this.img.width, this.img.height);
 	}
 
 	animate(dtime) {
 		let ctx = this.ctx();
-		ctx.fillStyle = '#212423';
+		ctx.fillStyle = '#202124';
 
 		let drawPix = (pixel, mag, view_distance) => {
 			ctx.globalAlpha = 1;

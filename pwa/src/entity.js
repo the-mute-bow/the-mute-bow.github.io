@@ -569,7 +569,8 @@ class Human extends Mob {
 class Creature extends Human {
 	constructor(pos) {
 		super('creature', pos);
-		this.aura = { color: '#212423', delay: 100, last: time };
+		this.sprites.light = new Sprite(game.images['creature-light'], { x: 0, y: 0, w: 24, h: 24 });
+		this.aura = { color: '#202124', delay: 100, last: time };
 		this.speed = 1.2;
 		this.target = null;
 		this.can_see = true;

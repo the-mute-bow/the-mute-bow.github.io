@@ -34,9 +34,10 @@ pages['chp2'] = game => {
 			'humans/human-shadow.png',
 			'humans/eliot-night.png',
 			'humans/lea-night.png',
-			'humans/scott-night.png',
+			'humans/piet-night.png',
 			'humans/shabyn-night.png',
 			'humans/creature.png',
+			'humans/creature-light.png',
 
 			'humans/icon-null.png',
 			'humans/icon-stay.png',
@@ -277,7 +278,7 @@ pages['chp2'] = game => {
 				],
 				trees: [],
 				sheeps: [new Sheep({ x: 228, y: 104, z: 0 }), new Sheep({ x: 242, y: 90, z: 0 })],
-				humans: [new Human('eliot', { x: 315, y: 150, z: 0 }), new Human('lea', { x: 320, y: 126, z: 0 }), new Human('shabyn', { x: 297, y: 125, z: 0 }), new Human('scott', { x: 308, y: 128, z: 0 })],
+				humans: [new Human('eliot', { x: 315, y: 150, z: 0 }), new Human('lea', { x: 320, y: 126, z: 0 }), new Human('shabyn', { x: 297, y: 125, z: 0 }), new Human('piet', { x: 308, y: 128, z: 0 })],
 				creatures: [new Creature({ x: 191, y: 145, z: 0 }), new Creature({ x: 200, y: 136, z: 0 }), new Creature({ x: 205, y: 148, z: 0 })],
 				particles: []
 			};
@@ -495,7 +496,7 @@ pages['chp2'] = game => {
 				dead_human: () => {
 					game.events.push(
 						new GameEvent(event => {
-							for (let name of ['eliot', 'shabyn', 'scott', 'lea']) {
+							for (let name of ['eliot', 'shabyn', 'piet', 'lea']) {
 								if (!game.getHuman(name)) {
 									event.done = true;
 									game.end_caption = name.charAt(0).toUpperCase() + name.slice(1) + (lang == '#fr' ? ' est mort' + (['lea', 'shabyn'].includes(name) ? 'e.' : '.') : ' is dead.');

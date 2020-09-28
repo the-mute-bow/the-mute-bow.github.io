@@ -27,6 +27,13 @@
 
 ## Change log
 
+### **0.0.46**
+
+-   `game.fog_map` and dark background colors are both `#202124`.
+-   `'message'` alert icon not shown on `'strat'` mode.
+-   `Creature.aura` is no longer visible to prevent player from seing them on `'strat'` mode.
+-   High vision
+
 ### **0.0.45**
 
 -   Init shop only if player has coins.
