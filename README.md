@@ -22,10 +22,19 @@
 </p>
 
 <p align="center">
-<img src="https://iconejey.github.io/img/the-mute-bow.gif"/>
+  <img src="https://iconejey.github.io/img/the-mute-bow.gif"/>
 </p>
 
 ## Change log
+
+### **0.0.47**
+
+-   Changed Shabyn skin and hair color.
+-   Continued chapter 1 script.
+-   Started chapter 1 code.
+-   Added `'tv-snow.gif'`.
+-   Added `'reload'` link on `'error'` screen.
+-   `'tv-snow.gif'` shown while mission image not loaded.
 
 ### **0.0.46**
 

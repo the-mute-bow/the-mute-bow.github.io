@@ -7,11 +7,11 @@ _Eliot et Shabyn marchent dans la forêt en destination de la maison de Piet._
 
 -> Utilise le joystick gauche pour te déplacer et rattrape Shabyn. | Tu peux cliquer sur le bouton **aide** pour revoir ce message.
 
+-> Pendant que tu te déplaces, tapote à droite de l'écran pour courrir. Un symbole <font color="#ccf">bleu</font> apparaît au dessus de toi. | Courrir épuise ton endurance. Si tu es à bout de souffle, un symbole <font color="#e88">rouge</font> apparaît au dessus de toi. | Quand tu as repris ton souffle, un symbole <font color="#cfc">vert</font> apparaît au dessus de toi.
+
 -> Tapote à gauche de l'écran pour activer le mode stratégie et contrôler tes amis. | Tapote une fois sur Shabyn pour lui demander d'aller quelque part. Fais la glisser avec ton doigt pour lui indiquer où aller et amène-la dans le cercle. | Pour quitter le mode stratégie tapotte à nouveau sur l'écran.
 
 -> Tapote une seconde fois sur Shabyn pour lui demander de te suivre et continue jusqu'au prochain cerlce.
-
--> Pendant que tu te déplaces, tapote à droite de l'écran pour courrir jusqu'au prochain cercle. Un symbole bleu apparaît au dessus de toi. | Courrir épuise ton endurance. Si tu es à bout de souffle, un symbole rouge apparaît au dessus de toi. | Quand tu as repris ton souffle, un symbole vert apparaît au dessus de toi.
 
 > Shabyn: On est arrivés! Allez viens!
 
@@ -25,7 +25,7 @@ _Eliot et Shabyn arrivent chez Piet._
 >
 > Piet: Je vous présente Léa, ma cousine.
 >
-> Léa: Salut! Piet m'a beaucoup parlé de vous. Surtout de toi Eliot... Il dit que t'es très doué à l'arc.
+> Léa: Salut! Piet m'a beaucoup parlé de vous. Surtout de toi Eliot... Il dit que tu es très doué à l'arc.
 >
 > Eliot: ...
 >
@@ -44,21 +44,57 @@ _Eliot et Shabyn arrivent chez Piet._
 > Léa: Mais vous risquez de les blesser!
 >
 > Piet: Mais non on sait où viser! Et puis dans le pire des cas on a une vétérinaire sur le terrain!
+>
+> Léa: Très rassurant...
+>
+> Piet: Tiens je vais te montrer.
+
+_Piet tire sur le mouton._
+
+> Shabyn: Sa té Piet.
+>
+> Piet: Vas-y Eliot, montre lui.
 
 -> Tapote à droite de l'écran pour changer d'arme et sélectionne l'arc. | Utilise le joystick gauche pour viser un mouton et lâche pour décocher.
 
+**[ si plus de bois ]**
+
+> Piet: Tu n'as plus de flèches, va les ramasser.
+
+**[ si tire réussi ]**
+
+> Piet: N'oublie pas de rammasser tes flèches pour ne pas en manquer.
+>
 > Piet: Tiens, des pastilles de mana, on va s'amuser.
 
 -> Le mana est une énergie qui te permet de faire des choses impressionnantes, ramasse les pastilles au sol pour en gagner.
 
 -> Pendant que tu vises, tapote à gauche de l'écran pour transférer un point de mana à ta flèche. | Ensuite replace ton doigt sur la droite de l'écran après avoir décoché. La flèche suivra les mouvements de ton doigt. | Touche les trois moutons avec une seule flèche.
 
-[si tire raté]
+**[ si tire raté ]**
 
 > Piet: Pas grave, ça fait longtemps. Tiens, réessaye.
 
-[si tire réussi]
+**[ si tire réussi ]**
 
 > Léa: Wow... comment tu fais ça?
 >
-> Shabyn: Personne ne sait, pas même Eliot. Il y a une dizaine d'années, on nous a signalé
+> Shabyn: Personne ne sait, pas même Eliot. Il y a une dizaine d'années, on nous a signalé du bétail mort dévoré par une bête étrange. Au départ on avait pensé à des loups mais ça fait des années qu'ils ont disparus de la région du coup on est allés voir sur place avec un vétérinaire.
+>
+> Léa: Et alors? C'était quoi?
+>
+> Piet: On ne sait pas, on ne se souvient de rien. On s'est réveillés dans un endroit étrange sans aucun souvenir.
+>
+> Shabyn: C'est là qu'on s'est rendus compte qu'Eliot n'entendais plus rien... Et dans les semaines qui on suivi Eliot s'est découvert des talents spéciaux.
+>
+> Léa: Et le vetérinaire?
+>
+> Shabyn: Disparu... D'ailleurs pourquoi il manque une barrière à ton enclos Piet?
+>
+> Piet: Des villageois ont signalé du bétail mort dévoré et moi même j'ai perdu un de mes moutons cette nuit. Ça ressemble beaucoup au scénario d'il y a dix ans, c'est pour ça que je vous ai demandé de venir.
+>
+> Piet: D'ailleurs Eliot tu peux m'aider à réparer mon enclos? Il faudrait que tu coupes du bois.
+
+-> Tapote à droite de l'écran pour changer d'arme et sélectionne la hache. Approche-toi d'un arbre, vise et relâche pour donner un coup de hache.
+
+-> Tu as une réserve limitée de bois. Une flèche te coûte un bois, et pour poser une barrière il t'en faut 10. Ramasses tes flèches pour ne pas tomber à court de bois.

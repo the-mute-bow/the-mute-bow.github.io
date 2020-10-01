@@ -274,7 +274,7 @@ pages['chp1'] = game => {
 				],
 				trees: [],
 				sheeps: [new Sheep({ x: 228, y: 104, z: 0 }), new Sheep({ x: 242, y: 90, z: 0 })],
-				humans: [new Human('eliot', { x: 114, y: 615, z: 0 }), new Human('lea', { x: 320, y: 126, z: 0 }), new Human('shabyn', { x: 297, y: 125, z: 0 }), new Human('piet', { x: 308, y: 128, z: 0 })],
+				humans: [new Human('eliot', { x: 114, y: 615, z: 0 }), new Human('lea', { x: 320, y: 126, z: 0 }), new Human('shabyn', { x: 240, y: 570, z: 0 }), new Human('piet', { x: 308, y: 128, z: 0 })],
 				creatures: [],
 				particles: []
 			};
@@ -299,21 +299,7 @@ pages['chp1'] = game => {
 			};
 
 			game.dialog = null;
-
-			game.mission = {
-				text: "Ceci est un test pour voir si l'affichage des missions s'effectue correctement avec une image animée et un texte.",
-				img: './img/missions/the-mute-bow.gif',
-				click: mission => {
-					setScreen('mission', {
-						text: "Ceci est un test pour voir si l'affichage des missions s'effectue correctement avec une image fixe et un texte.",
-						img: './img/missions/sprint.png',
-						pixelated: true,
-						click: mission => {
-							setScreen('game');
-						}
-					});
-				}
-			};
+			game.mission = null;
 
 			game.mode = 'title';
 
@@ -465,26 +451,114 @@ pages['chp1'] = game => {
 				},
 				start: () => {
 					game.getHuman('eliot').target = { x: 185, y: 590, obj: null };
-					console.log(game.getHuman('eliot').target);
 					game.mode = 'normal';
 					game.events.push(
 						new TimeEvent(1000, event => {
 							game.initPauseButton();
-							game.initMissionButton();
 							game.initCoinOverlays();
-							if (lang == '#dev') game.initDevOverlays();
+							// if (lang == '#dev') game.initDevOverlays();
 						}),
-
-						new WalkEvent(318, 140, 24, game.entities.humans, 'all', 'in', 'white', event => {
+						new TimeEvent(6000, event => {
+							game.player = game.getHuman('eliot');
 							game.getHuman('shabyn').event = () => {
 								game.getHuman('shabyn').event = null;
 								game.dialog = {
 									character: 'shabyn',
-									text: "j'aime pas les moutons. Tsheeeep.",
+									text: lang == '#fr' ? 'Dépèche-toi Eliot! Je suis pressée de revoir Piet!' : "Hurry up Eliot! I can't wait to see Scott again!",
 									click: dialog => {
-										game.dialog = null;
+										game.triggerEvent('walk');
 									}
 								};
+							};
+						})
+					);
+				},
+				walk: () => {
+					game.dialog = null;
+					game.player.target = null;
+
+					game.mission = {
+						text: lang == '#fr' ? 'Utilise le joystick gauche pour te déplacer et rejoins Shabyn.' : 'Use the left joystick to move and meet Shabyn.',
+						img: './img/missions/move.gif',
+						pixelated: true,
+						click: mission => {
+							setScreen('mission', {
+								text: lang == '#fr' ? 'Clique sur le bouton <b>aide</b> pour revoir ce message.' : 'Click on the <b>help</b> button to see this message again.',
+								img: './img/missions/move.gif',
+								pixelated: true,
+								click: mission => {
+									setScreen('game');
+								}
+							});
+						}
+					};
+
+					setScreen('mission', game.mission);
+
+					game.events.push(
+						new TimeEvent(1000, event => {
+							game.initMissionButton();
+						}),
+
+						new WalkEvent(250, 597, 16, 0.7, [game.player, game.getHuman('shabyn')], 'all', 'in', 'white', event => {
+							game.triggerEvent('run');
+						})
+					);
+				},
+				run: () => {
+					game.getHuman('shabyn').target = { x: 266, y: 562, obj: null };
+					game.cam.target = game.getHuman('shabyn');
+					game.player.target = { x: 242, y: 580, obj: null };
+					game.player = null;
+
+					game.events.push(
+						new TimeEvent(2300, event => {
+							game.getHuman('shabyn').target = { x: 290, y: 560, obj: null };
+							game.cam.target = game.getHuman('eliot');
+
+							game.dialog = {
+								character: 'shabyn',
+								text: lang == '#fr' ? 'Je suis plus rapide que toi!' : "I'm faster than you!",
+								click: dialog => {
+									game.dialog = null;
+									game.getHuman('shabyn').target = { x: 310, y: 450, obj: null };
+									game.player = game.getHuman('eliot');
+									game.player.target = null;
+
+									game.mission = {
+										text:
+											lang == '#fr'
+												? `Pendant que tu te déplaces, tapote à droite de l'écran pour courrir. Un symbole <font color="#ccf">bleu</font> apparaît au dessus de toi.`
+												: `Tap on the left of the screen while you're moving to run. A <font color="#ccf">blue</font> symbol will appear above you.`,
+										img: './img/missions/tv-snow.gif',
+										pixelated: true,
+										click: mission => {
+											setScreen('mission', {
+												text:
+													lang == '#fr'
+														? `Courrir épuise ton endurance. Si tu es à bout de souffle, un symbole <font color="#e88">rouge</font> apparaît au dessus de toi.`
+														: `Running uses your stamina. When out of breath, a <font color="#e88">red</font> symbol appears above you.`,
+												img: './img/missions/tv-snow.gif',
+												pixelated: true,
+												click: mission => {
+													setScreen('mission', {
+														text:
+															lang == '#fr'
+																? `Quand tu as repris ton souffle, un symbole <font color="#cfc">vert</font> apparaît au dessus de toi.`
+																: `When you have caught your breath, a <font color="#cfc">green</font> symbol appears above you.`,
+														img: './img/missions/tv-snow.gif',
+														pixelated: true,
+														click: mission => {
+															setScreen('game');
+														}
+													});
+												}
+											});
+										}
+									};
+
+									setScreen('mission', game.mission);
+								}
 							};
 						})
 					);

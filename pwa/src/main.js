@@ -2,7 +2,7 @@ if (location.host == 'the-mute-bow.github.io') location.replace('https://the-mut
 
 let onAndroid = /Android/i.test(navigator.userAgent);
 
-let version = '0.0.46';
+let version = '0.0.47';
 document.getElementById('version').innerHTML = version;
 
 let lang = getCookie('lang-pwa');
@@ -109,7 +109,17 @@ const setScreen = (newmode, data) => {
 		if (mode == 'mission' && data) {
 			mission_div.classList.remove('hidden');
 			mission_content_div.innerHTML = '';
-			if ('img' in data) mission_content_div.innerHTML += data.pixelated ? `<img class="pixelated" src="${data.img}" />` : `<img src="${data.img}" />`;
+			if ('img' in data) {
+				mission_content_div.innerHTML += `
+					<img class="pixelated" src="./img/missions/tv-snow.gif" id="mission-snow"/>
+					<img class="hidden ${data.pixelated ? 'pixelated' : ''}" src="${data.img}" id="mission-img"/>
+				`;
+
+				document.querySelector('#mission-img').addEventListener('load', event => {
+					document.querySelector('#mission-snow').classList.add('hidden');
+					document.querySelector('#mission-img').classList.remove('hidden');
+				});
+			}
 			if ('text' in data) mission_content_div.innerHTML += `<p class="text">${data.text}</p>`;
 			let next = document.getElementById('mission-next');
 			next.innerHTML = lang == '#fr' ? 'Suivant' : 'Next';
@@ -141,6 +151,7 @@ const setScreen = (newmode, data) => {
 			if (data) gif_text.innerHTML = data;
 			else gif_text.innerHTML = lang == '#fr' ? 'Erreur.' : 'Error.';
 			if (lang == '#dev') gif_text.innerHTML += `<br/>${dev_log}`;
+			gif_text.innerHTML += `<br/><a href="./">Reload</a>`;
 			gif_text.classList.add('red');
 		}
 
@@ -252,7 +263,7 @@ window.onload = () => {
 			if (!getCookie('coins')) setCookie('coins', 0);
 
 			initTouch();
-			loadPage(lang == '#dev' ? 'chp2' : 'menu');
+			loadPage(lang == '#dev' ? 'chp1' : 'menu');
 			mainloop();
 		}
 	} else setScreen('android');

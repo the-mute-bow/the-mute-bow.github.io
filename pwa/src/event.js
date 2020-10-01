@@ -26,9 +26,10 @@ class TimeEvent extends GameEvent {
 }
 
 class WalkEvent extends GameEvent {
-	constructor(x, y, r, mobs, trigger = 'any', mode = 'in', color = null, callback = event => {}) {
+	constructor(x, y, r, rs, mobs, trigger = 'any', mode = 'in', color = null, callback = event => {}) {
 		super(callback);
 		this.pos = { x: x, y: y, r: r };
+		this.rs = rs;
 		this.mobs = mobs;
 		this.trigger = trigger;
 		this.mode = mode;
@@ -44,7 +45,7 @@ class WalkEvent extends GameEvent {
 				y: mob.getFeet().y - this.pos.y
 			};
 
-			if (Math.abs(d.x) < this.pos.r && Math.abs(d.y) < this.pos.r && Math.sqrt(d.x * d.x + d.y * d.y) < this.pos.r) {
+			if (Math.abs(d.x) < this.pos.r * this.rs && Math.abs(d.y) < this.pos.r * this.rs && Math.sqrt(d.x * d.x + d.y * d.y) < this.pos.r * this.rs) {
 				if (this.mode == 'in' && this.trigger == 'any') {
 					good = true;
 					break;
@@ -68,15 +69,15 @@ class WalkEvent extends GameEvent {
 		}
 
 		if (good) {
-			this.callback(this);
 			this.done = true;
+			this.callback(this);
 		}
 	}
 
 	draw(ctx) {
 		if (this.color) {
 			ctx.fillStyle = this.color;
-			ctx.globalAlpha = 0.8;
+			ctx.globalAlpha = 0.5;
 
 			let { x, y, r } = this.pos;
 			for (let i = 0; i < r; i++) {

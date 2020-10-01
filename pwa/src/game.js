@@ -1265,7 +1265,7 @@ class Game {
 		};
 	}
 
-	screenshot() {
+	Screenshot() {
 		document.documentElement.innerHTML = `<img src='${this.can.toDataURL()}'></img>`;
 	}
 
