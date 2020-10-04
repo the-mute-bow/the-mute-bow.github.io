@@ -274,7 +274,7 @@ pages['chp1'] = game => {
 				],
 				trees: [],
 				sheeps: [new Sheep({ x: 228, y: 104, z: 0 }), new Sheep({ x: 242, y: 90, z: 0 })],
-				humans: [new Human('eliot', { x: 114, y: 615, z: 0 }), new Human('lea', { x: 320, y: 126, z: 0 }), new Human('shabyn', { x: 240, y: 570, z: 0 }), new Human('piet', { x: 308, y: 128, z: 0 })],
+				humans: [new Human('eliot', { x: 114, y: 615, z: 0 }), new Human('lea', { x: 240, y: 136, z: 0 }), new Human('shabyn', { x: 240, y: 570, z: 0 }), new Human('piet', { x: 250, y: 130, z: 0 })],
 				creatures: [],
 				particles: []
 			};
@@ -309,11 +309,11 @@ pages['chp1'] = game => {
 			game.events = [];
 			game.event_map = {
 				title: () => {
-					game.player = null;
-					game.mode = 'title';
-					game.strat_fog = 1;
-
 					if (lang != '#dev') {
+						game.player = null;
+						game.mode = 'title';
+						game.strat_fog = 1;
+
 						game.events.push(
 							new TimeEvent(1000, event => {
 								game.overlays.push(
@@ -447,7 +447,11 @@ pages['chp1'] = game => {
 								game.triggerEvent('start');
 							})
 						);
-					} else game.triggerEvent('start');
+					} else {
+						game.triggerEvent('reunion');
+						game.player.pos = { x: 250, y: 200, z: 0 };
+						game.getHuman('shabyn').pos = { x: 280, y: 180, z: 0 };
+					}
 				},
 				start: () => {
 					game.getHuman('eliot').target = { x: 185, y: 590, obj: null };
@@ -466,7 +470,13 @@ pages['chp1'] = game => {
 									character: 'shabyn',
 									text: lang == '#fr' ? 'Dépèche-toi Eliot! Je suis pressée de revoir Piet!' : "Hurry up Eliot! I can't wait to see Scott again!",
 									click: dialog => {
-										game.triggerEvent('walk');
+										game.dialog = {
+											character: 'eliot',
+											text: '...',
+											click: dialog => {
+												game.triggerEvent('walk');
+											}
+										};
 									}
 								};
 							};
@@ -521,7 +531,7 @@ pages['chp1'] = game => {
 								text: lang == '#fr' ? 'Je suis plus rapide que toi!' : "I'm faster than you!",
 								click: dialog => {
 									game.dialog = null;
-									game.getHuman('shabyn').target = { x: 310, y: 450, obj: null };
+									game.getHuman('shabyn').target = { x: 320, y: 450, obj: null };
 									game.player = game.getHuman('eliot');
 									game.player.target = null;
 
@@ -529,8 +539,8 @@ pages['chp1'] = game => {
 										text:
 											lang == '#fr'
 												? `Pendant que tu te déplaces, tapote à droite de l'écran pour courrir. Un symbole <font color="#ccf">bleu</font> apparaît au dessus de toi.`
-												: `Tap on the left of the screen while you're moving to run. A <font color="#ccf">blue</font> symbol will appear above you.`,
-										img: './img/missions/tv-snow.gif',
+												: `Tap on the left side of the screen while you're moving to run. A <font color="#ccf">blue</font> symbol will appear above you.`,
+										img: './img/missions/run.gif',
 										pixelated: true,
 										click: mission => {
 											setScreen('mission', {
@@ -538,7 +548,7 @@ pages['chp1'] = game => {
 													lang == '#fr'
 														? `Courrir épuise ton endurance. Si tu es à bout de souffle, un symbole <font color="#e88">rouge</font> apparaît au dessus de toi.`
 														: `Running uses your stamina. When out of breath, a <font color="#e88">red</font> symbol appears above you.`,
-												img: './img/missions/tv-snow.gif',
+												img: './img/missions/run.gif',
 												pixelated: true,
 												click: mission => {
 													setScreen('mission', {
@@ -546,7 +556,7 @@ pages['chp1'] = game => {
 															lang == '#fr'
 																? `Quand tu as repris ton souffle, un symbole <font color="#cfc">vert</font> apparaît au dessus de toi.`
 																: `When you have caught your breath, a <font color="#cfc">green</font> symbol appears above you.`,
-														img: './img/missions/tv-snow.gif',
+														img: './img/missions/run.gif',
 														pixelated: true,
 														click: mission => {
 															setScreen('game');
@@ -558,7 +568,241 @@ pages['chp1'] = game => {
 									};
 
 									setScreen('mission', game.mission);
+
+									game.events.push(
+										new WalkEvent(324, 470, 16, 0.7, [game.player, game.getHuman('shabyn')], 'all', 'in', 'white', event => {
+											game.triggerEvent('strat');
+										})
+									);
 								}
+							};
+						})
+					);
+				},
+				strat: () => {
+					game.player.target = { x: 308, y: 448, obj: null };
+					game.player = null;
+
+					game.events.push(
+						new TimeEvent(1000, event => {
+							game.dialog = {
+								character: 'shabyn',
+								text: lang == '#fr' ? "C'est pas juste! Tu cours trop vite! Bref, c'est dans quelle direction?" : "It's not fair! You run too fast! Anyway, which direction is it?",
+								click: dialog => {
+									game.dialog = null;
+									game.player = game.getHuman('eliot');
+									game.player.target = { x: 305, y: 425, obj: null };
+									game.getHuman('shabyn').target = null;
+
+									game.mission = {
+										text:
+											lang == '#fr'
+												? `Tapote à gauche de l'écran quand tu ne bouges pas pour activer le mode stratégie et indiquer à tes amis où aller.`
+												: `Tap the left side of the screen when you're not moving to trun on strategy mode and tell your friends where to go.`,
+										img: './img/missions/strat.gif',
+										pixelated: true,
+										click: mission => {
+											setScreen('mission', {
+												text:
+													lang == '#fr'
+														? `Tapote une fois sur Shabyn pour lui demander d'aller quelque part. Fais la glisser avec ton doigt pour lui indiquer où aller et amène-la dans le cercle.`
+														: `Tap Shabyn once to ask her to go somewhere. Slide her with your finger to tell her where to go and bring her into the circle.`,
+												img: './img/missions/strat.gif',
+												pixelated: true,
+												click: mission => {
+													setScreen('mission', {
+														text: lang == '#fr' ? `Pour quitter le mode stratégie tapotte à nouveau sur l'écran.` : `To exit strategy mode tap again on the screen.`,
+														img: './img/missions/strat.gif',
+														pixelated: true,
+														click: mission => {
+															setScreen('game');
+														}
+													});
+												}
+											});
+										}
+									};
+
+									game.events.push(
+										new WalkEvent(346, 410, 14, 0.7, [game.getHuman('shabyn')], 'all', 'in', 'white', event => {
+											game.triggerEvent('follow');
+										})
+									);
+
+									setScreen('mission', game.mission);
+								}
+							};
+						})
+					);
+				},
+				follow: () => {
+					game.events.push(
+						new WalkEvent(346, 410, 14, 0.7, [game.player, game.getHuman('shabyn')], 'all', 'in', 'white', event => {
+							game.dialog = {
+								character: 'shabyn',
+								text: lang == '#fr' ? 'Bon, je te suis.' : 'Well, I follow you.',
+								click: dialog => {
+									game.dialog = null;
+									game.player = game.getHuman('eliot');
+									game.player.target = null;
+
+									game.mission = {
+										text:
+											lang == '#fr'
+												? `Utilise à nouveau le mode stratégie pour demander à Shabyn de te suivre en tapotant un nouvelle fois sur elle.`
+												: `Use strategy mode again to ask Shabyn to follow you by tapping on her again.`,
+										img: './img/missions/follow.gif',
+										pixelated: true,
+										click: mission => {
+											setScreen('game');
+										}
+									};
+
+									game.events.push(
+										new WalkEvent(330, 300, 14, 0.9, [game.getHuman('shabyn')], 'all', 'in', 'white', event => {
+											game.triggerEvent('reunion');
+										})
+									);
+
+									setScreen('mission', game.mission);
+								}
+							};
+						})
+					);
+					game.getHuman('shabyn').target = { x: 340, y: 394, obj: null };
+					game.player.target = { x: 328, y: 388, obj: null };
+					game.player = null;
+				},
+				reunion: () => {
+					game.cam.target = game.getHuman('piet');
+					game.events.push(
+						new TimeEvent(3000, event => {
+							game.cam.target = game.player;
+						}),
+
+						new TimeEvent(5000, event => {
+							game.dialog = {
+								character: 'shabyn',
+								text: lang == '#fr' ? 'On est arrivés! Allez viens!' : 'We arrived! Come on!',
+								click: dialog => {
+									game.dialog = null;
+									game.getHuman('shabyn').target = { x: 268, y: 138, obj: null };
+								}
+							};
+						}),
+
+						new WalkEvent(266, 160, 34, 1, game.entities.humans, 'all', 'in', null, event => {
+							game.getHuman('piet').event = () => {
+								game.getHuman('piet').event = null;
+								game.dialog = {
+									character: 'piet',
+									text: lang == '#fr' ? 'Shabyn! Eliot! Content de vous revoir!' : 'Shabyn! Eliot! Happy to see you again!',
+									click: dialog => {
+										game.dialog = {
+											character: 'shabyn',
+											text: lang == '#fr' ? `Piet! Tu m'as... <b>hum</b> Tu <i>nous</i> as manqués!` : `Piet! I... <b>hum</b> <i>we</i> missed you!`,
+											click: dialog => {
+												game.dialog = {
+													character: 'piet',
+													text: lang == '#fr' ? `Je vous présente Léa, ma cousine.` : `This is Léa, my cousin.`,
+													click: dialog => {
+														game.dialog = {
+															character: 'lea',
+															text:
+																lang == '#fr'
+																	? `Salut! Piet m'a beaucoup parlé de vous. Surtout de toi Eliot... Il dit que tu es très doué à l'arc.`
+																	: `Hi! Piet told me a lot about you. Especially about you Eliot... He says you're very good at archery.`,
+															click: dialog => {
+																game.dialog = {
+																	character: 'eliot',
+																	text: '...',
+																	click: dialog => {
+																		game.dialog = {
+																			character: 'shabyn',
+																			text:
+																				lang == '#fr'
+																					? `C'est vrai, il est le meilleur! Mais ne t'attend pas à ce qu'il te réponde. Il ne parle pas, il est sourd-muet...`
+																					: `That's right, he's the best! But don't expect him to answer you. He does not speak, he is deaf and mute...`,
+																			click: dialog => {
+																				game.dialog = {
+																					character: 'piet',
+																					text:
+																						lang == '#fr'
+																							? `Dans la région tout le monde le surnomme "l'arc muet". Mais ne t'inquiète pas il lit sur les lèvres.`
+																							: `In the region everyone call him "the mute bow". But don't worry he reads lips.`,
+																					click: dialog => {
+																						game.dialog = {
+																							character: 'piet',
+																							text:
+																								lang == '#fr'
+																									? `D'ailleurs pourquoi ne pas lui montrer tes talents à tire-mouton?`
+																									: `By the way, why not show him your talents at shoot-sheep?`,
+																							click: dialog => {
+																								game.dialog = {
+																									character: 'shabyn',
+																									text: lang == '#fr' ? `On n'y a pas joué depuis plus de dix ans...` : `We haven't played it for over ten years...`,
+																									click: dialog => {
+																										game.dialog = {
+																											character: 'lea',
+																											text: lang == '#fr' ? `En quoi ça consiste?` : `What is it about?`,
+																											click: dialog => {
+																												game.dialog = {
+																													character: 'piet',
+																													text:
+																														lang == '#fr'
+																															? `On tire à l'arc sur les moutons en ne touchant que la laine.`
+																															: `We shoot the sheeps with a bow, touching only the wool.`,
+																													click: dialog => {
+																														game.dialog = {
+																															character: 'lea',
+																															text: lang == '#fr' ? `Mais vous risquez de les blesser!` : `But you risk hurting them!`,
+																															click: dialog => {
+																																game.dialog = {
+																																	character: 'piet',
+																																	text:
+																																		lang == '#fr'
+																																			? `Mais non, on sait où viser! Et puis dans le pire des cas on a une vétérinaire sur le terrain!`
+																																			: `Come on, we know where to aim! And in the worst case we have a veterinarian on place!`,
+																																	click: dialog => {
+																																		game.dialog = {
+																																			character: 'lea',
+																																			text: lang == '#fr' ? `Très rassurant...` : `Very reassuring...`,
+																																			click: dialog => {
+																																				game.dialog = {
+																																					character: 'piet',
+																																					text: lang == '#fr' ? `Tiens, je vais te montrer.` : `Here, I will show you.`,
+																																					click: dialog => {
+																																						game.dialog = null;
+																																					}
+																																				};
+																																			}
+																																		};
+																																	}
+																																};
+																															}
+																														};
+																													}
+																												};
+																											}
+																										};
+																									}
+																								};
+																							}
+																						};
+																					}
+																				};
+																			}
+																		};
+																	}
+																};
+															}
+														};
+													}
+												};
+											}
+										};
+									}
+								};
 							};
 						})
 					);
@@ -569,7 +813,13 @@ pages['chp1'] = game => {
 
 			game.loop = true;
 
-			// for (let mob of [...game.entities.humans, ...game.entities.sheeps]) mob.target = null;
+			for (let mob of [...game.entities.humans, ...game.entities.sheeps])
+				mob.weapons = {
+					bow: false,
+					axe: false,
+					fence: false,
+					echo: false
+				};
 		}
 	);
 };

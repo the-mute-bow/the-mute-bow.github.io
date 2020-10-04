@@ -302,6 +302,13 @@ class Human extends Mob {
 		this.shoot_time = null;
 		this.aim_level = 0;
 		this.damage = 1;
+
+		this.weapons = {
+			bow: true,
+			axe: true,
+			fence: true,
+			echo: true
+		};
 	}
 
 	die() {

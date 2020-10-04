@@ -748,18 +748,16 @@ class Game {
 
 								if (human.target) {
 									if (human.target.obj) {
-										human.target.x = human.target.obj.pos.x + human.target.x;
-										human.target.y = human.target.obj.pos.y + human.target.y;
-										human.target.obj = null;
-									} else {
 										human.target = null;
+									} else {
+										human.target = {
+											x: human.target.x - this.player.pos.x,
+											y: human.target.y - this.player.pos.y,
+											obj: this.player
+										};
 									}
 								} else {
-									human.target = {
-										x: human.pos.x - this.player.pos.x,
-										y: human.pos.y - this.player.pos.y,
-										obj: this.player
-									};
+									human.target = { x: human.pos.x, y: human.pos.y, obj: null };
 								}
 							}
 						);
@@ -802,7 +800,7 @@ class Game {
 												game.player.setWeapon('bow');
 											},
 											100,
-											'normal',
+											this.player.weapons.bow ? 'normal' : 'disabled',
 											12,
 											'bow'
 										)
@@ -821,7 +819,7 @@ class Game {
 												game.player.setWeapon('fence');
 											},
 											100,
-											'normal',
+											this.player.weapons.fence ? 'normal' : 'disabled',
 											12,
 											'fence'
 										)
@@ -840,7 +838,7 @@ class Game {
 												game.player.setWeapon('axe');
 											},
 											100,
-											'normal',
+											this.player.weapons.axe ? 'normal' : 'disabled',
 											12,
 											'axe'
 										)
@@ -868,7 +866,7 @@ class Game {
 												}
 											},
 											100,
-											'normal',
+											this.player.weapons.echo ? 'normal' : 'disabled',
 											12,
 											'none'
 										)
@@ -908,7 +906,7 @@ class Game {
 								touch.catch.target.y += dy;
 							}
 						} else {
-							for (let human of this.entities.humans) {
+							for (let human of this.entities.humans.filter(h => !h.event)) {
 								let t = human.getTargCoords();
 								let pos = t ? t : human.pos;
 								if (human != this.player && pos.x + 7 < x && x < pos.x + 17 && pos.y + 10 < y && y < pos.y + 24) {
@@ -1263,6 +1261,28 @@ class Game {
 			x: this.cam.x + (x - can.width / 2) / this.scale + 0.5,
 			y: this.cam.y + (y - can.height / 2) / this.scale + 0.5
 		};
+	}
+
+	TvSnow() {
+		let light = { r: 205, g: 202, b: 211 };
+		let dark = { r: 32, g: 33, b: 36 };
+
+		this.can.width = 128;
+		this.can.height = 64 * 8;
+
+		let ctx = this.can.getContext('2d');
+
+		for (let y = 0; y < this.can.height; y++) {
+			for (let x = 0; x < this.can.width; x++) {
+				let color = { r: 0, g: 0, b: 0 };
+				let c = Math.random();
+				for (let p of 'rgb') color[p] = light[p] * c + dark[p] * (1 - c);
+
+				ctx.fillStyle = `rgba(${color.r}, ${color.g}, ${color.b}, 255)`;
+				ctx.fillRect(x, y, 1, 1);
+			}
+		}
+		this.Screenshot();
 	}
 
 	Screenshot() {

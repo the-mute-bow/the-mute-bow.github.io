@@ -9,7 +9,11 @@ _Eliot et Shabyn marchent dans la forêt en destination de la maison de Piet._
 
 -> Pendant que tu te déplaces, tapote à droite de l'écran pour courrir. Un symbole <font color="#ccf">bleu</font> apparaît au dessus de toi. | Courrir épuise ton endurance. Si tu es à bout de souffle, un symbole <font color="#e88">rouge</font> apparaît au dessus de toi. | Quand tu as repris ton souffle, un symbole <font color="#cfc">vert</font> apparaît au dessus de toi.
 
+> Shabyn: C'est pas juste! Tu cours trop vite! Bref, c'est dans quelle direction?
+
 -> Tapote à gauche de l'écran pour activer le mode stratégie et contrôler tes amis. | Tapote une fois sur Shabyn pour lui demander d'aller quelque part. Fais la glisser avec ton doigt pour lui indiquer où aller et amène-la dans le cercle. | Pour quitter le mode stratégie tapotte à nouveau sur l'écran.
+
+> Shabyn: Bon, je te suis.
 
 -> Tapote une seconde fois sur Shabyn pour lui demander de te suivre et continue jusqu'au prochain cerlce.
 
@@ -93,7 +97,8 @@ _Piet tire sur le mouton._
 >
 > Piet: Des villageois ont signalé du bétail mort dévoré et moi même j'ai perdu un de mes moutons cette nuit. Ça ressemble beaucoup au scénario d'il y a dix ans, c'est pour ça que je vous ai demandé de venir.
 >
-> Piet: D'ailleurs Eliot tu peux m'aider à réparer mon enclos? Il faudrait que tu coupes du bois.
+> Piet: D'ailleurs Eliot tu peux m'aider à réparer mon enclos? Il faudrait que tu pousses les moutons dans l'enclos.
+> Piet: Mince on n'a pas assez de bois. Il faut aller en chercher.
 
 -> Tapote à droite de l'écran pour changer d'arme et sélectionne la hache. Approche-toi d'un arbre, vise et relâche pour donner un coup de hache.
 

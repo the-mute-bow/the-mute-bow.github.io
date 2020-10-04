@@ -27,6 +27,12 @@
 
 ## Change log
 
+### **0.0.48**
+
+-   Weapon disabling.
+-   Strat target order changed to `[null -> place -> player]`.
+-   Player can't move `Human` on `'strat'` mode if `Human.event` is not null.
+
 ### **0.0.47**
 
 -   Changed Shabyn skin and hair color.

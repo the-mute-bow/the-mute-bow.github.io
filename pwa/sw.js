@@ -1,4 +1,4 @@
-let version = '0.0.46';
+let version = '0.0.48';
 
 let files = [
 	// system
@@ -6,7 +6,7 @@ let files = [
 	'./index.html',
 	'./styles/style.css',
 
-	'./src/cookie.js',
+	'../cookie.js',
 	'./src/touch.js',
 	'./src/overlay.js',
 	'./src/button.js',
@@ -14,7 +14,8 @@ let files = [
 	'./src/entity.js',
 	'./src/game.js',
 	'./src/pages/menu.js',
-	'./src/pages/chap1b.js',
+	'./src/pages/chp1.js',
+	'./src/pages/chp2.js',
 	'./src/main.js',
 
 	'./img/icon/icon192.png',
@@ -23,14 +24,14 @@ let files = [
 	'./img/gifs/loading.gif',
 	'./img/gifs/rotate-phone.gif',
 	'./img/gifs/touch-screen.gif',
-	'./img/gifs/coockie.gif',
+	'./img/gifs/cookie.gif',
 	'./img/gifs/update-ready.gif',
 	'./img/gifs/update-done.gif',
 
-	'./fonts/Pixelar.woff',
-	'./fonts/Pixelar.woff2',
+	'../fonts/Pixelar.woff',
+	'../fonts/Pixelar.woff2',
 
-	// // gameplay
+	// gameplay
 	'./sounds/click.mp3',
 	'./sounds/Art Of Silence.mp3',
 	'./sounds/rain-piano.mp3',
@@ -76,13 +77,14 @@ let files = [
 	'./img/humans/lea.png',
 	'./img/humans/lea-night.png',
 	'./img/humans/lea-pp.png',
-	'./img/humans/scott.png',
-	'./img/humans/scott-night.png',
-	'./img/humans/scott-pp.png',
+	'./img/humans/piet.png',
+	'./img/humans/piet-night.png',
+	'./img/humans/piet-pp.png',
 	'./img/humans/shabyn.png',
 	'./img/humans/shabyn-night.png',
 	'./img/humans/shabyn-pp.png',
 	'./img/humans/creature.png',
+	'./img/humans/creature-light.png',
 
 	'./img/weapons/axe-hold.png',
 	'./img/weapons/axe-hit.png',
@@ -133,7 +135,15 @@ let files = [
 	'./img/buttons/pause-button.png',
 	'./img/buttons/pause-button-shadow.png',
 	'./img/buttons/mission-button.png',
-	'./img/buttons/mission-button-shadow.png'
+	'./img/buttons/mission-button-shadow.png',
+	'./img/buttons/buy-button.png',
+	'./img/buttons/buy-button-shadow.png',
+
+	'./img/missions/tv-snow.gif',
+	'./img/missions/follow.gif',
+	'./img/missions/move.gif',
+	'./img/missions/run.gif',
+	'./img/missions/strat.gif'
 ];
 
 self.addEventListener('install', event => {
