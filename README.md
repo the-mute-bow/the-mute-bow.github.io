@@ -27,6 +27,15 @@
 
 ## Change log
 
+### **0.0.49**
+
+-   `Sheep` dialog (Meh).
+
+**[ main site ]**
+
+-   Bottom background image.
+-   Characters highlight on hover with `'strat'` mode like presentation.
+
 ### **0.0.48**
 
 -   Weapon disabling.
@@ -57,7 +66,8 @@
 
 ### **0.0.44**
 
--   Main website update.
+**[ main site ]**
+
 -   Google Play button.
 -   Styling for mobile devices.
 -   QR code.
@@ -66,14 +76,18 @@
 
 ### **0.0.43**
 
--   Main website update.
--   Added pLay button that links to `./pwa`.
+**[ main site ]**
+
+-   Added play button that links to `./pwa`.
 
 ### **0.0.42**
 
--   Google search console and indexation in search results.
 -   Soundtrack starts on `'title'` screen.
 -   Shop for arrow, stamina, mana and damage bonuses.
+
+**[ main site ]**
+
+-   Google search console and indexation in search results.
 
 ### **0.0.41**
 

@@ -32,6 +32,8 @@ class Entity {
 	}
 
 	inScreen() {
+		if (options.includes('all')) return true;
+
 		if (game.borders) {
 			let { l, t, w, h } = game.borders;
 			let tile = this.sprites.main.tile;

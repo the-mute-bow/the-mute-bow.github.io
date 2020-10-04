@@ -273,7 +273,7 @@ pages['chp1'] = game => {
 					new Fence({ x: 244, y: 82, z: 0 }, 0)
 				],
 				trees: [],
-				sheeps: [new Sheep({ x: 228, y: 104, z: 0 }), new Sheep({ x: 242, y: 90, z: 0 })],
+				sheeps: [new Sheep({ x: 218, y: 152, z: 0 }), new Sheep({ x: 232, y: 168, z: 0 }), new Sheep({ x: 208, y: 168, z: 0 })],
 				humans: [new Human('eliot', { x: 114, y: 615, z: 0 }), new Human('lea', { x: 240, y: 136, z: 0 }), new Human('shabyn', { x: 240, y: 570, z: 0 }), new Human('piet', { x: 250, y: 130, z: 0 })],
 				creatures: [],
 				particles: []
@@ -806,7 +806,8 @@ pages['chp1'] = game => {
 							};
 						})
 					);
-				}
+				},
+				piet_shoot: () => {}
 			};
 
 			game.initShop();

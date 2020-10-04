@@ -1,4 +1,4 @@
-let version = '0.0.48';
+let version = '0.0.49';
 
 let files = [
 	// system
@@ -69,6 +69,8 @@ let files = [
 
 	'./img/mobs/sheep.png',
 	'./img/mobs/sheep-shadow.png',
+	'./img/humans/sheep-pp.png',
+	'./img/humans/mouton-pp.png',
 
 	'./img/humans/human-shadow.png',
 	'./img/humans/eliot.png',

@@ -74,10 +74,70 @@ img {
 	display: none;
 }
 
+.transparent {
+	opacity: 0;
+}
+
 .bg {
 	position: absolute;
 	width: 100%;
 	z-index: -1;
+}
+
+.optrans {
+	transition: opacity 0.5s;
+}
+
+.hovering {
+	position: absolute;
+}
+
+.highlight {
+	opacity: 0;
+}
+
+.highlight:hover {
+	opacity: 1;
+}
+
+#eliot-hover {
+	width: 5.36vw;
+	top: 107.78vw;
+	left: 33.08vw;
+}
+
+#shabyn-hover {
+	width: 5.36vw;
+	top: 104.2vw;
+	left: 37.7vw;
+}
+
+#piet-hover {
+	width: 5.36vw;
+	top: 101.4vw;
+	left: 31.3vw;
+}
+
+#lea-hover {
+	width: 5.36vw;
+	top: 103.5vw;
+	left: 27.75vw;
+}
+
+#sheep1-hover {
+	width: 6.5vw;
+	top: 112vw;
+	left: 22vw;
+}
+
+#background-bottom-desk,
+#background-bottom-strat-desk {
+	top: 74vw;
+}
+
+#background-bottom-strat-desk {
+	position: absolute;
+	width: 100%;
 }
 
 #load {
@@ -113,7 +173,7 @@ img {
 
 #links {
 	position: absolute;
-	top: 58vw;
+	top: 53vw;
 	height: 28vw;
 
 	#QR {
@@ -200,7 +260,6 @@ img {
 		#google-play {
 			position: absolute;
 			width: 60vw;
-			height: 5px;
 			top: 56vw;
 			left: 50vw;
 

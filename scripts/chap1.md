@@ -55,6 +55,8 @@ _Eliot et Shabyn arrivent chez Piet._
 
 _Piet tire sur le mouton._
 
+> Mouton: Meh.
+>
 > Shabyn: Sa té Piet.
 >
 > Piet: Vas-y Eliot, montre lui.
@@ -83,7 +85,7 @@ _Piet tire sur le mouton._
 
 > Léa: Wow... comment tu fais ça?
 >
-> Shabyn: Personne ne sait, pas même Eliot. Il y a une dizaine d'années, on nous a signalé du bétail mort dévoré par une bête étrange. Au départ on avait pensé à des loups mais ça fait des années qu'ils ont disparus de la région du coup on est allés voir sur place avec un vétérinaire.
+> Shabyn: Il y a environ trois ans, des fermiers ont signalé du bétail dévoré par une bête étrange dificile à identifier. Au départ on avait pensé à des loups mais ça fait des années qu'ils ont disparus de la région du coup on est allés voir sur place avec un vétérinaire.
 >
 > Léa: Et alors? C'était quoi?
 >
@@ -95,7 +97,7 @@ _Piet tire sur le mouton._
 >
 > Shabyn: Disparu... D'ailleurs pourquoi il manque une barrière à ton enclos Piet?
 >
-> Piet: Des villageois ont signalé du bétail mort dévoré et moi même j'ai perdu un de mes moutons cette nuit. Ça ressemble beaucoup au scénario d'il y a dix ans, c'est pour ça que je vous ai demandé de venir.
+> Piet: Des fermiers de la région ont signalé la mort de leur bétail. et moi même j'ai perdu un de mes moutons cette nuit. Encore une fois, cela semble être la faute d'une bête inconnue. Ça ressemble beaucoup au scénario d'il y a trois ans, c'est pour ça que je vous ai demandé de venir.
 >
 > Piet: D'ailleurs Eliot tu peux m'aider à réparer mon enclos? Il faudrait que tu pousses les moutons dans l'enclos.
 > Piet: Mince on n'a pas assez de bois. Il faut aller en chercher.
