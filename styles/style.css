@@ -105,42 +105,77 @@ img {
 
 #eliot-hover {
   width: 5.36vw;
-  top: 107.78vw;
-  left: 33.08vw;
+  top: 99vw;
+  left: 22vw;
 }
 
 #shabyn-hover {
   width: 5.36vw;
-  top: 104.2vw;
-  left: 37.7vw;
+  top: 95vw;
+  left: 28vw;
 }
 
 #piet-hover {
   width: 5.36vw;
-  top: 101.4vw;
-  left: 31.3vw;
+  top: 92vw;
+  left: 21vw;
 }
 
 #lea-hover {
   width: 5.36vw;
-  top: 103.5vw;
-  left: 27.75vw;
+  top: 95vw;
+  left: 15vw;
 }
 
-#sheep1-hover {
+#sheep-hover {
   width: 6.5vw;
-  top: 112vw;
-  left: 22vw;
+  top: 82vw;
+  left: 18vw;
+}
+
+#creature {
+  width: 5.3vw;
+  top: 96vw;
+  left: 4vw;
+}
+
+#presentation,
+#info1 {
+  -webkit-transition: color 0.5s;
+  transition: color 0.5s;
+  position: absolute;
+  font-size: 2.8vw;
+  color: #cdcad3;
+  text-align: justify;
+}
+
+#presentation {
+  top: 76.4vw;
+  left: 50vw;
+  right: 2vw;
+}
+
+#info1 {
+  top: 111vw;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20vw;
+  opacity: 0.4;
 }
 
 #background-bottom-desk,
 #background-bottom-strat-desk {
+  position: absolute;
+  width: 50vw;
   top: 74vw;
 }
 
-#background-bottom-strat-desk {
-  position: absolute;
-  width: 100%;
+#donate {
+  width: 19vw;
+  left: 50%;
+  top: 121vw;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
 }
 
 #load {

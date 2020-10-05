@@ -34,7 +34,8 @@
 **[ main site ]**
 
 -   Bottom background image.
--   Characters highlight on hover with `'strat'` mode like presentation.
+-   Characters highlight on hover with `'strat'` mode like presentation with text.
+-   Donate button linking to https://paypal.me/nicolasgouwy
 
 ### **0.0.48**
 
