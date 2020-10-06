@@ -263,7 +263,7 @@ window.onload = () => {
 			if (!getCookie('coins')) setCookie('coins', 0);
 
 			initTouch();
-			loadPage(lang == '#dev' ? 'chp1' : 'menu');
+			loadPage(lang == '#dev' ? 'chp2' : 'menu');
 			mainloop();
 		}
 	} else setScreen('android');

@@ -44,7 +44,7 @@ for (let button of document.querySelectorAll('.button')) {
 			location.replace(ref);
 			location.reload();
 		} else if (ref.includes('#')) document.querySelector(ref).scrollIntoView({ behavior: 'smooth' });
-		else location.replace(ref);
+		else location.assign(ref);
 
 		button.classList.add('pressed');
 		setTimeout(() => button.classList.remove('pressed'), 1000);
@@ -73,18 +73,20 @@ let quotes = {
 			? `Léa:<br/>La meilleure vétérinaire de la région. Face à la complexité de la situation, Piet a préféré la contacter pour les aider à identifier la bête qui dévore le bétail des fermiers. Piet lui a beaucoup vanté les talents d'Eliot avec un arc. En le voyant pour la première fois, elle était impressionnée.`
 			: `Léa:<br/>The best veterinarian in the region. Faced with the complexity of the situation, Piet preferred to contact her to help them identify the beast that devours the farmers' cattle. Piet praised her a lot about Eliot's talents with a bow. Seeing him for the first time, she was impressed.`,
 	sheep: lang == '#fr' ? `Mouton:<br/>Meh.` : `Sheep:<br/>Meh.`,
-	creature: ''
+	creature: `¤ŽÅ °–£] =ÛYf mÛ2 ›6í …º[4¬ ÌÎí £ ¢òš fì 1Ôx 3ÝË cÂ ™ÕT4 d ê€)À È¾– Üc„° ”‰¨¯pÅb ÅØ<’ B¹$‚ uh¡_ý oæ C!ä šm¼ Õê AÈ:¸ ;c‚‚†8_äÉŠ s 5”)3 d «ów× ›X á T%ƒž¨/¦ AB<1 4H*ƒ(n R–b¯îÕ 5Í YÄ‘’2#% 4Y §AÅ ìŠWå|’<  …Çò# .ö/¥ ^K"zq ;ÿL ÷¦? Ðï ð2¿ ÿ ÿÿÿ ÿ], ‘ ì% €€= ñà¶T ¸¢ áe‹=Æ_ Ý6Kp»^3‚}›-°ù­xT ;ã0 ß¼ »‰Î Æ àÖ }…Îž žA Ë‰ ÛÃ û”. »ˆ« ã‹š âdY ‘û ,ª¡õj¯ÛSØ à9 ü£T g76 ÿûd‹ÐaVÛ b9â ëoa"Le Y¬,oÈ Ím tõ‰6«” ˜X fêU B† :åð Ã·: zd L8V Y(Û‰¸ @›{ ™âr– 9ÆÐ cíï Qž[[ as·Á)D 9 Ðý }_¿Á 1™Hp‘ #º œC] C– h£À$ ka°Â«l¸NÉ PWZ FÅÕ ±B< œ>_ûÙÓ Cè–žÉb µ¿?Ö# í8Í}W> ó4á ÁÆƒ .êEâ 1{TŸqx…$³Êz¤ ¶“%A…³t q4•`
 };
 
 for (let element of document.querySelectorAll('.hovering')) {
 	element.addEventListener('mouseover', event => {
 		document.querySelector('#background-bottom-strat-desk').classList.remove('transparent');
+		document.querySelector('#background-bottom-strat-mobile').classList.remove('transparent');
 		let id = element.getAttribute('id').split('-')[0];
 		document.querySelector('#presentation').innerHTML = quotes[id];
 	});
 
 	element.addEventListener('mouseout', event => {
 		document.querySelector('#background-bottom-strat-desk').classList.add('transparent');
+		document.querySelector('#background-bottom-strat-mobile').classList.add('transparent');
 		document.querySelector('#presentation').innerHTML = quotes.default;
 	});
 }

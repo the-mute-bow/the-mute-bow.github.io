@@ -140,37 +140,45 @@ img {
 #info1 {
 	transition: color 0.5s;
 	position: absolute;
-	font-size: 2.8vw;
+	font-size: 2.6vw;
 	color: $lightgray;
 	text-align: justify;
 }
 
 #presentation {
-	top: 76.4vw;
-	left: 50vw;
-	right: 2vw;
+	top: 79vw;
+	left: 51vw;
+	right: 3vw;
 }
 
 #info1 {
-	top: 111vw;
-	width: 100%;
+	top: 74vw;
+	left: 5vw;
+	right: 5vw;
 	text-align: center;
-	margin-bottom: 20vw;
 	opacity: 0.4;
 }
 
 #background-bottom-desk,
 #background-bottom-strat-desk {
+	margin-bottom: 12vw;
 	position: absolute;
 	width: 50vw;
-	top: 74vw;
+	top: 76vw;
+}
+
+#background-bottom-mobile,
+#background-bottom-strat-mobile {
+	position: absolute;
+	width: 100%;
+	top: 220vw;
+	display: none;
 }
 
 #donate {
 	width: 19vw;
 	left: 50%;
-	top: 121vw;
-	transform: translateX(-50%);
+	top: 117vw;
 }
 
 #load {
@@ -301,5 +309,73 @@ img {
 				top: 1vw;
 			}
 		}
+	}
+
+	#eliot-hover {
+		width: 12vw;
+		top: 272vw;
+		left: 45vw;
+	}
+
+	#shabyn-hover {
+		width: 12vw;
+		top: 264vw;
+		left: 60vw;
+	}
+
+	#piet-hover {
+		width: 12vw;
+		top: 257vw;
+		left: 44vw;
+	}
+
+	#lea-hover {
+		width: 12vw;
+		top: 262vw;
+		left: 30vw;
+	}
+
+	#sheep-hover {
+		width: 14.2vw;
+		top: 234vw;
+		left: 37vw;
+	}
+
+	#creature {
+		width: 11vw;
+		top: 268vw;
+		left: 8vw;
+	}
+
+	#presentation,
+	#info1 {
+		font-size: 6vw;
+		left: 5vw;
+		right: 5vw;
+	}
+
+	#presentation {
+		top: 310vw;
+	}
+
+	#info1 {
+		top: 210vw;
+	}
+
+	#background-bottom-desk,
+	#background-bottom-strat-desk {
+		display: none;
+	}
+
+	#background-bottom-mobile,
+	#background-bottom-strat-mobile {
+		display: inline !important;
+	}
+
+	#donate {
+		width: 38vw;
+		left: 50%;
+		top: 410vw;
+		margin-bottom: 24vw;
 	}
 }

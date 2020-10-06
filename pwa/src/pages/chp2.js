@@ -386,7 +386,7 @@ pages['chp2'] = game => {
 							if (lang == '#dev') game.initDevOverlays();
 						}),
 
-						new WalkEvent(318, 140, 24, game.entities.humans, 'all', 'in', 'white', event => {
+						new WalkEvent(318, 140, 24, 0.8, game.entities.humans, 'all', 'in', 'white', event => {
 							game.getHuman('shabyn').event = () => {
 								game.getHuman('shabyn').event = null;
 								game.dialog = {
@@ -560,6 +560,8 @@ pages['chp2'] = game => {
 			game.loop = true;
 
 			for (let mob of [...game.entities.humans, ...game.entities.sheeps]) mob.target = null;
+
+			game.player.mana.val = 4;
 		}
 	);
 };
