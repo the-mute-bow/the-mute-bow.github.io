@@ -27,6 +27,12 @@
 
 ## Change log
 
+### **0.0.50**
+
+-   Chapter 1 Piet shoot.
+
+**[ ... ]**
+
 ### **0.0.49**
 
 -   `Sheep` dialog (Meh).

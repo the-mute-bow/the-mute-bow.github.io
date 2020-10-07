@@ -448,9 +448,12 @@ pages['chp1'] = game => {
 							})
 						);
 					} else {
-						game.triggerEvent('reunion');
-						game.player.pos = { x: 250, y: 200, z: 0 };
-						game.getHuman('shabyn').pos = { x: 280, y: 180, z: 0 };
+						game.triggerEvent('piet_shoot');
+						game.getHuman('eliot').pos = { x: 250, y: 160, z: 0 };
+						game.getHuman('shabyn').pos = { x: 270, y: 140, z: 0 };
+						game.getHuman('shabyn').target = { x: 270, y: 140, obj: null };
+						game.cam.x = 250;
+						game.cam.y = 160;
 					}
 				},
 				start: () => {
@@ -773,6 +776,7 @@ pages['chp1'] = game => {
 																																					text: lang == '#fr' ? `Tiens, je vais te montrer.` : `Here, I will show you.`,
 																																					click: dialog => {
 																																						game.dialog = null;
+																																						game.triggerEvent('piet_shoot');
 																																					}
 																																				};
 																																			}
@@ -807,7 +811,52 @@ pages['chp1'] = game => {
 						})
 					);
 				},
-				piet_shoot: () => {}
+				piet_shoot: () => {
+					game.player = null;
+					game.getHuman('shabyn').target = { x: 280, y: 140, obj: null };
+					game.getHuman('eliot').target = { x: 284, y: 156, obj: null };
+					game.getHuman('piet').target = { x: 256, y: 148, obj: null };
+					game.cam.target = game.getHuman('piet');
+					game.events.push(
+						new TimeEvent(1000, event => {
+							game.getHuman('piet').setWeapon('bow');
+						}),
+						new TimeEvent(2000, event => {
+							game.getHuman('piet').enemies = 'sheeps';
+						}),
+						new TimeEvent(4000, event => {
+							game.getHuman('piet').enemies = 'creatures';
+						}),
+						new TimeEvent(5000, event => {
+							game.dialog = {
+								character: lang == '#fr' ? 'mouton' : 'sheep',
+								text: `Meh.`,
+								click: dialog => {
+									game.dialog = {
+										character: 'shabyn',
+										text: 'Sa té Piet.',
+										click: dialog => {
+											game.dialog = {
+												character: 'piet',
+												text: lang == '#fr' ? `Vas-y Eliot, Montre-lui.` : `Come on Eliot, Show her.`,
+												click: dialog => {
+													game.dialog = null;
+													game.triggerEvent('eliot_shoot');
+												}
+											};
+										}
+									};
+								}
+							};
+						})
+					);
+				},
+				eliot_shoot: () => {
+					game.player = game.getHuman('eliot');
+					game.cam.target = game.player;
+					game.getHuman('eliot').target = { x: 258, y: 154, obj: null };
+					game.getHuman('piet').target = { x: 255, y: 136, obj: null };
+				}
 			};
 
 			game.initShop();
