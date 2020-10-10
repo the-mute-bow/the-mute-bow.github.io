@@ -448,12 +448,13 @@ pages['chp1'] = game => {
 							})
 						);
 					} else {
-						game.triggerEvent('piet_shoot');
-						game.getHuman('eliot').pos = { x: 250, y: 160, z: 0 };
+						game.triggerEvent('eliot_shoot');
+						game.getHuman('eliot').pos = { x: 284, y: 156, z: 0 };
+						game.getHuman('piet').pos = { x: 256, y: 148, z: 0 };
 						game.getHuman('shabyn').pos = { x: 270, y: 140, z: 0 };
 						game.getHuman('shabyn').target = { x: 270, y: 140, obj: null };
-						game.cam.x = 250;
-						game.cam.y = 160;
+						game.cam.x = game.getHuman('eliot').pos.x;
+						game.cam.y = game.getHuman('eliot').pos.y;
 					}
 				},
 				start: () => {
@@ -856,6 +857,112 @@ pages['chp1'] = game => {
 					game.cam.target = game.player;
 					game.getHuman('eliot').target = { x: 258, y: 154, obj: null };
 					game.getHuman('piet').target = { x: 255, y: 136, obj: null };
+
+					game.mission = {
+						text: lang == '#fr' ? `Tapote à droite de l'écran pour changer d'arme et sélectionne ton arc.` : `Tap on the right side of the screen to change weapons and select your bow.`,
+						img: './img/missions/shoot.gif',
+						pixelated: true,
+						click: mission => {
+							setScreen('mission', {
+								text: lang == '#fr' ? `Utilise le joystick droit pour viser un mouton et lâche pour décocher.` : `Use the right joystick to aim at a sheep and let go to shoot.`,
+								img: './img/missions/shoot.gif',
+								pixelated: true,
+								click: mission => {
+									setScreen('mission', {
+										text: lang == '#fr' ? `Tu peux ramasser tes flèches pour les réutiliser.` : `You can pick up your arrows to reuse them.`,
+										img: './img/missions/shoot.gif',
+										pixelated: true,
+										click: mission => {
+											setScreen('game');
+										}
+									});
+								}
+							});
+						}
+					};
+
+					game.events.push(
+						new TimeEvent(3000, event => {
+							setScreen('mission', game.mission);
+							game.initMissionButton();
+							game.player.target = null;
+							game.player.weapons.bow = true;
+						}),
+						new GameEvent(event => {
+							if (game.player.arrow && game.player.arrow.victims.length) {
+								event.done = true;
+								game.events.push(
+									new TimeEvent(1000, event => {
+										game.dialog = {
+											character: 'piet',
+											text: lang == '#fr' ? `N'oublie pas de rammasser tes flèches pour ne pas en manquer.` : `Don't forget to pick your arrows up so you don't run out.`,
+											click: dialog => {
+												game.dialog = null;
+											}
+										};
+									}),
+									new GameEvent(event => {
+										if (game.player.wood.val >= 8) {
+											event.done = true;
+											game.events.push(
+												new TimeEvent(1000, event => {
+													game.triggerEvent('special_shoot');
+												})
+											);
+										}
+									})
+								);
+							}
+						}),
+						new GameEvent(event => {
+							if (game.getHuman('eliot').wood.val == 0) {
+								event.done = true;
+								game.events.push(
+									new TimeEvent(1000, event => {
+										game.dialog = {
+											character: 'piet',
+											text: lang == '#fr' ? `Tu n'as plus de flèches. N'oublie pas de les rammasser pour ne pas en manquer.` : `You have no more arrows. Don't forget to pick them up so you don't run out.`,
+											click: dialog => {
+												game.dialog = null;
+											}
+										};
+									})
+								);
+							}
+						})
+					);
+				},
+				special_shoot: () => {
+					game.mission = {
+						text: lang == '#fr' ? `Tapote à droite de l'écran pour changer d'arme et sélectionne ton arc.` : `Tap on the right side of the screen to change weapons and select your bow.`,
+						img: './img/missions/shoot.gif',
+						pixelated: true,
+						click: mission => {
+							setScreen('mission', {
+								text: lang == '#fr' ? `Utilise le joystick droit pour viser un mouton et lâche pour décocher.` : `Use the right joystick to aim at a sheep and let go to shoot.`,
+								img: './img/missions/shoot.gif',
+								pixelated: true,
+								click: mission => {
+									setScreen('mission', {
+										text: lang == '#fr' ? `Tu peux ramasser tes flèches pour les réutiliser.` : `You can pick up your arrows to reuse them.`,
+										img: './img/missions/shoot.gif',
+										pixelated: true,
+										click: mission => {
+											setScreen('game');
+										}
+									});
+								}
+							});
+						}
+					};
+
+					game.dialog = {
+						character: 'piet',
+						text: lang == '#fr' ? `Tiens, des perles de mana, on va s'amuser.` : `Here, mana pearls, let's have fun.`,
+						click: dialog => {
+							game.dialog = null;
+						}
+					};
 				}
 			};
 

@@ -61,7 +61,7 @@ _Piet tire sur le mouton._
 >
 > Piet: Vas-y Eliot, montre lui.
 
--> Tapote à droite de l'écran pour changer d'arme et sélectionne l'arc. | Utilise le joystick gauche pour viser un mouton et lâche pour décocher.
+-> Tapote à droite de l'écran pour changer d'arme et sélectionne l'arc. | Utilise le joystick droit pour viser un mouton et lâche pour décocher. | Tu peux ramasser tes flèches pour les réutiliser.
 
 **[ si plus de bois ]**
 
@@ -71,9 +71,9 @@ _Piet tire sur le mouton._
 
 > Piet: N'oublie pas de rammasser tes flèches pour ne pas en manquer.
 >
-> Piet: Tiens, des pastilles de mana, on va s'amuser.
+> Piet: Tiens, des perles de mana, on va s'amuser.
 
--> Le mana est une énergie qui te permet de faire des choses impressionnantes, ramasse les pastilles au sol pour en gagner.
+-> Le mana est une énergie qui te permet de faire des choses impressionnantes, ramasse les perles au sol pour en gagner.
 
 -> Pendant que tu vises, tapote à gauche de l'écran pour transférer un point de mana à ta flèche. | Ensuite replace ton doigt sur la droite de l'écran après avoir décoché. La flèche suivra les mouvements de ton doigt. | Touche les trois moutons avec une seule flèche.
 

@@ -236,6 +236,37 @@ img {
 	}
 }
 
+a {
+	color: $blue;
+	text-decoration: none;
+}
+
+#meh-img {
+	position: absolute;
+	left: 50%;
+	width: 20%;
+	transform: translateX(-50%);
+}
+
+#meh,
+#text-404 {
+	position: absolute;
+	color: $lightgray;
+	text-align: center;
+	width: 100%;
+}
+
+#meh {
+	font-size: 6vw;
+	top: 22vw;
+}
+
+#text-404 {
+	font-size: 4vw;
+	top: 30vw;
+	margin-bottom: 5vw;
+}
+
 @media (max-width: 600px) {
 	.button {
 		.shadow {
@@ -377,5 +408,19 @@ img {
 		left: 50%;
 		top: 410vw;
 		margin-bottom: 24vw;
+	}
+
+	#meh-img {
+		width: 40%;
+	}
+
+	#meh {
+		font-size: 12vw;
+		top: 42vw;
+	}
+
+	#text-404 {
+		font-size: 6vw;
+		top: 70vw;
 	}
 }

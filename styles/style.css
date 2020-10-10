@@ -243,6 +243,38 @@ img {
   padding: 0.7vw 0vw 0vw 4vw;
 }
 
+a {
+  color: #ccf;
+  text-decoration: none;
+}
+
+#meh-img {
+  position: absolute;
+  left: 50%;
+  width: 20%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+
+#meh,
+#text-404 {
+  position: absolute;
+  color: #cdcad3;
+  text-align: center;
+  width: 100%;
+}
+
+#meh {
+  font-size: 6vw;
+  top: 22vw;
+}
+
+#text-404 {
+  font-size: 4vw;
+  top: 30vw;
+  margin-bottom: 5vw;
+}
+
 @media (max-width: 600px) {
   .button .shadow {
     top: 0.8vw !important;
@@ -361,6 +393,17 @@ img {
     left: 50%;
     top: 410vw;
     margin-bottom: 24vw;
+  }
+  #meh-img {
+    width: 40%;
+  }
+  #meh {
+    font-size: 12vw;
+    top: 42vw;
+  }
+  #text-404 {
+    font-size: 6vw;
+    top: 70vw;
   }
 }
 /*# sourceMappingURL=style.css.map */

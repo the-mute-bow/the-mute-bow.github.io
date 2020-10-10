@@ -1,3 +1,7 @@
+---
+permalink: /README.html
+---
+
 <p align="center">
   <a href="https://the-mute-bow.com/">
     <img src="https://the-mute-bow.com/pwa/img/icon/icon1024.png" alt="App" width="165" height="165">
@@ -29,7 +33,12 @@
 
 ### **0.0.50**
 
--   Chapter 1 Piet shoot.
+-   Chapter 1 Piet and Eliot shoots.
+
+**[ main site ]**
+
+-   Custom 404 page.
+-   Edited characters presentation text.
 
 **[ ... ]**
 
