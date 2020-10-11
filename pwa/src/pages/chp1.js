@@ -904,11 +904,7 @@ pages['chp1'] = game => {
 									new GameEvent(event => {
 										if (game.player.wood.val >= 8) {
 											event.done = true;
-											game.events.push(
-												new TimeEvent(1000, event => {
-													game.triggerEvent('special_shoot');
-												})
-											);
+											game.triggerEvent('special_shoot');
 										}
 									})
 								);
@@ -934,21 +930,31 @@ pages['chp1'] = game => {
 				},
 				special_shoot: () => {
 					game.mission = {
-						text: lang == '#fr' ? `Tapote à droite de l'écran pour changer d'arme et sélectionne ton arc.` : `Tap on the right side of the screen to change weapons and select your bow.`,
-						img: './img/missions/shoot.gif',
+						text: lang == '#fr' ? `Ramasse les perles de mana, elles sont précieuses.` : `Pick up the mana pearls, they are precious.`,
+						img: './img/missions/tv-snow.gif',
 						pixelated: true,
 						click: mission => {
 							setScreen('mission', {
-								text: lang == '#fr' ? `Utilise le joystick droit pour viser un mouton et lâche pour décocher.` : `Use the right joystick to aim at a sheep and let go to shoot.`,
-								img: './img/missions/shoot.gif',
+								text: lang == '#fr' ? `Pendant que tu vises, tapote à gauche de l'écran pour transférer du mana à ta flèche.` : `While aiming, tap the left side of the screen to transfer mana to your arrow.`,
+								img: './img/missions/tv-snow.gif',
 								pixelated: true,
 								click: mission => {
 									setScreen('mission', {
-										text: lang == '#fr' ? `Tu peux ramasser tes flèches pour les réutiliser.` : `You can pick up your arrows to reuse them.`,
-										img: './img/missions/shoot.gif',
+										text:
+											lang == '#fr'
+												? `Ensuite replace ton doigt sur la droite de l'écran après avoir décoché. La flèche suivra les mouvements de ton doigt.`
+												: `Then replace your finger on the right of the screen after letting go. The arrow will follow the movements of your finger.`,
+										img: './img/missions/tv-snow.gif',
 										pixelated: true,
 										click: mission => {
-											setScreen('game');
+											setScreen('mission', {
+												text: lang == '#fr' ? `Touche plusieurs fois les moutons avec une seule flèche pour continuer.` : `Hit the sheeps several times with one arrow to continue.`,
+												img: './img/missions/tv-snow.gif',
+												pixelated: true,
+												click: mission => {
+													setScreen('game');
+												}
+											});
 										}
 									});
 								}
@@ -956,13 +962,28 @@ pages['chp1'] = game => {
 						}
 					};
 
-					game.dialog = {
-						character: 'piet',
-						text: lang == '#fr' ? `Tiens, des perles de mana, on va s'amuser.` : `Here, mana pearls, let's have fun.`,
-						click: dialog => {
-							game.dialog = null;
-						}
-					};
+					game.events.push(
+						new TimeEvent(1000, event => {
+							game.dialog = {
+								character: 'piet',
+								text: lang == '#fr' ? `Tiens, des perles de mana, on va s'amuser.` : `Here, mana pearls, let's have fun.`,
+								click: dialog => {
+									game.dialog = null;
+									setScreen('mission', game.mission);
+									let pos = game.getHuman('piet').getFeet();
+									game.entities.particles.push(new Drop({ x: pos.x, y: pos.y + 10, z: Math.random() * 3 + 3 }, 'mana'));
+
+									game.events.push(
+										new GameEvent(event => {
+											if (game.player.arrow && game.player.arrow.hits >= 4) {
+												event.done = true;
+											}
+										})
+									);
+								}
+							};
+						})
+					);
 				}
 			};
 

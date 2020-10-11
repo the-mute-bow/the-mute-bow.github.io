@@ -1,0 +1,21 @@
+{
+	"name": "The Mute Bow Web",
+	"short_name": "The Mute Bow Web",
+	"start_url": "https://the-mute-bow.com/",
+	"background_color": "#35363a",
+	"theme_color": "#202124",
+	"display": "fullscreen",
+	"orientation": "any",
+	"icons": [
+		{
+			"src": "img/icon512.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		},
+		{
+			"src": "img/icon1024.png",
+			"sizes": "1024x1024",
+			"type": "image/png"
+		}
+	]
+}

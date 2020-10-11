@@ -70,12 +70,10 @@ _Piet tire sur le mouton._
 **[ si tire réussi ]**
 
 > Piet: N'oublie pas de rammasser tes flèches pour ne pas en manquer.
->
+
 > Piet: Tiens, des perles de mana, on va s'amuser.
 
--> Le mana est une énergie qui te permet de faire des choses impressionnantes, ramasse les perles au sol pour en gagner.
-
--> Pendant que tu vises, tapote à gauche de l'écran pour transférer un point de mana à ta flèche. | Ensuite replace ton doigt sur la droite de l'écran après avoir décoché. La flèche suivra les mouvements de ton doigt. | Touche les trois moutons avec une seule flèche.
+-> Ramasse les perles de mana, elles sont précieuses. | Pendant que tu vises, tapote à gauche de l'écran pour transférer du mana à ta flèche. | Ensuite replace ton doigt sur la droite de l'écran après avoir décoché. La flèche suivra les mouvements de ton doigt. | Touche les trois moutons avec une seule flèche pour continuer.
 
 **[ si tire raté ]**
 

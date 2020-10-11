@@ -34,11 +34,13 @@ permalink: /README.html
 ### **0.0.50**
 
 -   Chapter 1 Piet and Eliot shoots.
+-   New maskable icon.
 
 **[ main site ]**
 
 -   Custom 404 page.
 -   Edited characters presentation text.
+-   New manifest and Icon for main site.
 
 **[ ... ]**
 
