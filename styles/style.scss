@@ -27,6 +27,16 @@ h1 {
 	font-family: Pixelar;
 }
 
+*::selection {
+	background-color: transparent;
+	color: transparent;
+}
+
+p::selection {
+	background: white;
+	color: $black;
+}
+
 img {
 	image-rendering: pixelated;
 }

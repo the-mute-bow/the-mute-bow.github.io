@@ -886,7 +886,7 @@ class Game {
 					if (this.player.speed == 1) {
 						this.player.speed = 1.6;
 						this.player.setAlert('stamina-use', 600);
-					} else this.player.speed = 1;
+					}
 				}
 				if (event.side == 'R' && this.player.look.aim && this.player.look.aim < 3 && (game.player.weapon != 'bow' || game.player.setMana('-'))) this.player.look.aim++;
 			}
@@ -926,6 +926,7 @@ class Game {
 				}
 
 				let aim = 0;
+
 				if (this.touches.R && !(this.player.arrow && this.player.arrow.level > 1 && !this.player.arrow.stuck)) {
 					let move = getTouchMove(this.touches.R);
 					if (move.mag > 0.5) {

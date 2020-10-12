@@ -21,6 +21,26 @@ h1 {
   font-family: Pixelar;
 }
 
+*::-moz-selection {
+  background-color: transparent;
+  color: transparent;
+}
+
+*::selection {
+  background-color: transparent;
+  color: transparent;
+}
+
+p::-moz-selection {
+  background: white;
+  color: #202124;
+}
+
+p::selection {
+  background: white;
+  color: #202124;
+}
+
 img {
   -ms-interpolation-mode: nearest-neighbor;
       image-rendering: -webkit-optimize-contrast;

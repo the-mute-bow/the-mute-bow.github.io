@@ -1,3 +1,7 @@
+---
+permalink: /chap1.html
+---
+
 # Chapitre 1
 
 _Eliot et Shabyn marchent dans la forêt en destination de la maison de Piet._
@@ -83,21 +87,26 @@ _Piet tire sur le mouton._
 
 > Léa: Wow... comment tu fais ça?
 >
-> Shabyn: Il y a environ trois ans, des fermiers ont signalé du bétail dévoré par une bête étrange dificile à identifier. Au départ on avait pensé à des loups mais ça fait des années qu'ils ont disparus de la région du coup on est allés voir sur place avec un vétérinaire.
+> Shabyn: Il y a environ trois ans, des fermiers ont signalé qu'une partie de leur bétail avait été tué par une ou plusieurs bêtes. Au départ on avait pensé à des loups mais ça fait des années qu'ils ont disparus de la région du coup on est allés voir sur place avec un vétérinaire.
 >
 > Léa: Et alors? C'était quoi?
 >
-> Piet: On ne sait pas, on ne se souvient de rien. On s'est réveillés dans un endroit étrange sans aucun souvenir.
+> Piet: On ne se souvient de rien. On s'est réveillés dans un endroit étrange sans aucun souvenir.
 >
-> Shabyn: C'est là qu'on s'est rendus compte qu'Eliot n'entendais plus rien... Et dans les semaines qui on suivi Eliot s'est découvert des talents spéciaux.
+> Shabyn: C'est là qu'on s'est rendus compte qu'Eliot n'entendais plus rien... Et dans les semaines qui on suivi il s'est découvert des talents spéciaux. Comme ce qu'il vient de faire avec cette perle violette.
 >
 > Léa: Et le vetérinaire?
 >
-> Shabyn: Disparu... D'ailleurs pourquoi il manque une barrière à ton enclos Piet?
+> Shabyn: Disparu... On ne se souvient même plus de qui il était. Au fait Piet, pourquoi il manque une barrière à ton enclos?
 >
-> Piet: Des fermiers de la région ont signalé la mort de leur bétail. et moi même j'ai perdu un de mes moutons cette nuit. Encore une fois, cela semble être la faute d'une bête inconnue. Ça ressemble beaucoup au scénario d'il y a trois ans, c'est pour ça que je vous ai demandé de venir.
+> Piet: Justement c'est pour ça que je nous ai réunis. J'ai perdu un mouton cette nuit et je ne suis pas le seul dans la région. Encore une fois, on dirait qu'ils ont étés tués par une bête mais impossible de dire laquelle. Tout ce que je sais c'est qu'elle a pu casser la barrière.
 >
-> Piet: D'ailleurs Eliot tu peux m'aider à réparer mon enclos? Il faudrait que tu pousses les moutons dans l'enclos.
+> Léa: J'ai examiné le cadavre, il y a un détail qui m'a laissée perplexe: ses yeux sont blancs.
+>
+> Shabyn: Étrange...
+>
+> Piet: Eliot tu peux m'aider à réparer mon enclos? Il faudrait pousser les moutons à l'interieur pour le refermer.
+
 > Piet: Mince on n'a pas assez de bois. Il faut aller en chercher.
 
 -> Tapote à droite de l'écran pour changer d'arme et sélectionne la hache. Approche-toi d'un arbre, vise et relâche pour donner un coup de hache.

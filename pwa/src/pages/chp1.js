@@ -448,13 +448,20 @@ pages['chp1'] = game => {
 							})
 						);
 					} else {
-						game.triggerEvent('eliot_shoot');
+						game.triggerEvent('special_shoot');
 						game.getHuman('eliot').pos = { x: 284, y: 156, z: 0 };
 						game.getHuman('piet').pos = { x: 256, y: 148, z: 0 };
 						game.getHuman('shabyn').pos = { x: 270, y: 140, z: 0 };
 						game.getHuman('shabyn').target = { x: 270, y: 140, obj: null };
+
 						game.cam.x = game.getHuman('eliot').pos.x;
 						game.cam.y = game.getHuman('eliot').pos.y;
+
+						game.events.push(
+							new TimeEvent(500, event => {
+								game.getHuman('eliot').weapons.bow = true;
+							})
+						);
 					}
 				},
 				start: () => {
@@ -931,12 +938,12 @@ pages['chp1'] = game => {
 				special_shoot: () => {
 					game.mission = {
 						text: lang == '#fr' ? `Ramasse les perles de mana, elles sont précieuses.` : `Pick up the mana pearls, they are precious.`,
-						img: './img/missions/tv-snow.gif',
+						img: './img/missions/mana.gif',
 						pixelated: true,
 						click: mission => {
 							setScreen('mission', {
 								text: lang == '#fr' ? `Pendant que tu vises, tapote à gauche de l'écran pour transférer du mana à ta flèche.` : `While aiming, tap the left side of the screen to transfer mana to your arrow.`,
-								img: './img/missions/tv-snow.gif',
+								img: './img/missions/mana.gif',
 								pixelated: true,
 								click: mission => {
 									setScreen('mission', {
@@ -944,12 +951,12 @@ pages['chp1'] = game => {
 											lang == '#fr'
 												? `Ensuite replace ton doigt sur la droite de l'écran après avoir décoché. La flèche suivra les mouvements de ton doigt.`
 												: `Then replace your finger on the right of the screen after letting go. The arrow will follow the movements of your finger.`,
-										img: './img/missions/tv-snow.gif',
+										img: './img/missions/mana.gif',
 										pixelated: true,
 										click: mission => {
 											setScreen('mission', {
 												text: lang == '#fr' ? `Touche plusieurs fois les moutons avec une seule flèche pour continuer.` : `Hit the sheeps several times with one arrow to continue.`,
-												img: './img/missions/tv-snow.gif',
+												img: './img/missions/mana.gif',
 												pixelated: true,
 												click: mission => {
 													setScreen('game');
@@ -976,7 +983,34 @@ pages['chp1'] = game => {
 									game.events.push(
 										new GameEvent(event => {
 											if (game.player.arrow && game.player.arrow.hits >= 4) {
-												event.done = true;
+												game.touches.R = null;
+												game.events.push(
+													new TimeEvent(1000, event => {
+														game.events = [];
+														game.triggerEvent('explanations');
+													})
+												);
+											}
+										}),
+
+										new GameEvent(event => {
+											if (game.player.arrow) event.arrow = game.player.arrow;
+
+											if (event.arrow && event.arrow.level == 2 && event.arrow.stuck) {
+												event.arrow = null;
+												game.events.push(
+													new TimeEvent(1000, event => {
+														game.dialog = {
+															character: 'piet',
+															text: lang == '#fr' ? `Pas grave, ça fait longtemps. Tiens, réessaye.` : `It's okay, it's been a long time. Here, try again.`,
+															click: dialog => {
+																game.dialog = null;
+																let pos = game.getHuman('piet').getFeet();
+																game.entities.particles.push(new Drop({ x: pos.x, y: pos.y + 10, z: Math.random() * 3 + 3 }, 'mana'));
+															}
+														};
+													})
+												);
 											}
 										})
 									);
@@ -984,6 +1018,13 @@ pages['chp1'] = game => {
 							};
 						})
 					);
+				},
+				explanations: () => {
+					game.dialog = {
+						character: 'lea',
+						text: lang == '#fr' ? 'Wow... comment tu fais ça?' : 'Wow... how do you do that?',
+						click: dialog => {}
+					};
 				}
 			};
 
@@ -991,7 +1032,7 @@ pages['chp1'] = game => {
 
 			game.loop = true;
 
-			for (let mob of [...game.entities.humans, ...game.entities.sheeps])
+			for (let mob of game.entities.humans)
 				mob.weapons = {
 					bow: false,
 					axe: false,

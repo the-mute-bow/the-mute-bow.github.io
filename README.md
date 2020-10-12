@@ -1,5 +1,5 @@
 ---
-permalink: /README.html
+permalink: /readme.html
 ---
 
 <p align="center">
@@ -20,7 +20,7 @@ permalink: /README.html
   ·
   <a href="https://the-mute-bow.com/pwa/">Web app</a>
   ·
-  <a href="https://github.com/the-mute-bow/the-mute-bow/blob/master/README.md">Licence</a>
+  <a href="https://the-mute-bow.com/licence.html">Licence</a>
   ·
   <a href="https://iconejey.github.io/">Other projects</a>
 </p>
@@ -33,7 +33,7 @@ permalink: /README.html
 
 ### **0.0.50**
 
--   Chapter 1 Piet and Eliot shoots.
+-   Piet and Eliot shoots.
 -   New maskable icon.
 
 **[ main site ]**
@@ -41,8 +41,8 @@ permalink: /README.html
 -   Custom 404 page.
 -   Edited characters presentation text.
 -   New manifest and Icon for main site.
-
-**[ ... ]**
+-   [LICENCE.md](LICENCE.md) and [chap1.md](scripts/chap1.md) permalinks.
+-   Selection color.
 
 ### **0.0.49**
 
