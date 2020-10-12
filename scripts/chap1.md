@@ -1,5 +1,5 @@
 ---
-permalink: /chap1.html
+permalink: /scripts/chap1.html
 ---
 
 # Chapitre 1
@@ -9,13 +9,13 @@ _Eliot et Shabyn marchent dans la forêt en destination de la maison de Piet._
 > Shabyn: Dépèche-toi Eliot! Je suis pressée de revoir Piet!\
 > Eliot: ...
 
--> Utilise le joystick gauche pour te déplacer et rattrape Shabyn. | Tu peux cliquer sur le bouton **aide** pour revoir ce message.
+-> Utilise le joystick gauche pour te déplacer et rattrape Shabyn. / Tu peux cliquer sur le bouton **aide** pour revoir ce message.
 
--> Pendant que tu te déplaces, tapote à droite de l'écran pour courrir. Un symbole <font color="#ccf">bleu</font> apparaît au dessus de toi. | Courrir épuise ton endurance. Si tu es à bout de souffle, un symbole <font color="#e88">rouge</font> apparaît au dessus de toi. | Quand tu as repris ton souffle, un symbole <font color="#cfc">vert</font> apparaît au dessus de toi.
+-> Pendant que tu te déplaces, tapote à droite de l'écran pour courrir. Un symbole <font color="#ccf">bleu</font> apparaît au dessus de toi. / Courrir épuise ton endurance. Si tu es à bout de souffle, un symbole <font color="#e88">rouge</font> apparaît au dessus de toi. / Quand tu as repris ton souffle, un symbole <font color="#cfc">vert</font> apparaît au dessus de toi.
 
 > Shabyn: C'est pas juste! Tu cours trop vite! Bref, c'est dans quelle direction?
 
--> Tapote à gauche de l'écran pour activer le mode stratégie et contrôler tes amis. | Tapote une fois sur Shabyn pour lui demander d'aller quelque part. Fais la glisser avec ton doigt pour lui indiquer où aller et amène-la dans le cercle. | Pour quitter le mode stratégie tapotte à nouveau sur l'écran.
+-> Tapote à gauche de l'écran pour activer le mode stratégie et contrôler tes amis. / Tapote une fois sur Shabyn pour lui demander d'aller quelque part. Fais la glisser avec ton doigt pour lui indiquer où aller et amène-la dans le cercle. / Pour quitter le mode stratégie tapotte à nouveau sur l'écran.
 
 > Shabyn: Bon, je te suis.
 
@@ -65,7 +65,7 @@ _Piet tire sur le mouton._
 >
 > Piet: Vas-y Eliot, montre lui.
 
--> Tapote à droite de l'écran pour changer d'arme et sélectionne l'arc. | Utilise le joystick droit pour viser un mouton et lâche pour décocher. | Tu peux ramasser tes flèches pour les réutiliser.
+-> Tapote à droite de l'écran pour changer d'arme et sélectionne l'arc. / Utilise le joystick droit pour viser un mouton et lâche pour décocher. / Tu peux ramasser tes flèches pour les réutiliser.
 
 **[ si plus de bois ]**
 
@@ -77,7 +77,7 @@ _Piet tire sur le mouton._
 
 > Piet: Tiens, des perles de mana, on va s'amuser.
 
--> Ramasse les perles de mana, elles sont précieuses. | Pendant que tu vises, tapote à gauche de l'écran pour transférer du mana à ta flèche. | Ensuite replace ton doigt sur la droite de l'écran après avoir décoché. La flèche suivra les mouvements de ton doigt. | Touche les trois moutons avec une seule flèche pour continuer.
+-> Ramasse les perles de mana, elles sont précieuses. / Pendant que tu vises, tapote à gauche de l'écran pour transférer du mana à ta flèche. / Ensuite replace ton doigt sur la droite de l'écran après avoir décoché. La flèche suivra les mouvements de ton doigt. / Touche les trois moutons avec une seule flèche pour continuer.
 
 **[ si tire raté ]**
 
