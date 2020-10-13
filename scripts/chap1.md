@@ -9,7 +9,11 @@ _Eliot et Shabyn marchent dans la forêt en destination de la maison de Piet._
 > Shabyn: Dépèche-toi Eliot! Je suis pressée de revoir Piet!\
 > Eliot: ...
 
--> Utilise le joystick gauche pour te déplacer et rattrape Shabyn. / Tu peux cliquer sur le bouton **aide** pour revoir ce message.
+| <img src="https://the-mute-bow.com/pwa/img/missions/move.gif" alt="">                                                               |
+| ----------------------------------------------------------------------------------------------------------------------------------- |
+| -> Utilise le joystick gauche pour te déplacer et rattrape Shabyn. / Tu peux cliquer sur le bouton **aide** pour revoir ce message. |
+
+> Shabyn: Je cours plus vite que toi!
 
 -> Pendant que tu te déplaces, tapote à droite de l'écran pour courrir. Un symbole <font color="#ccf">bleu</font> apparaît au dessus de toi. / Courrir épuise ton endurance. Si tu es à bout de souffle, un symbole <font color="#e88">rouge</font> apparaît au dessus de toi. / Quand tu as repris ton souffle, un symbole <font color="#cfc">vert</font> apparaît au dessus de toi.
 
@@ -99,13 +103,15 @@ _Piet tire sur le mouton._
 >
 > Shabyn: Disparu... On ne se souvient même plus de qui il était. Au fait Piet, pourquoi il manque une barrière à ton enclos?
 >
-> Piet: Justement c'est pour ça que je nous ai réunis. J'ai perdu un mouton cette nuit et je ne suis pas le seul dans la région. Encore une fois, on dirait qu'ils ont étés tués par une bête mais impossible de dire laquelle. Tout ce que je sais c'est qu'elle a pu casser la barrière.
+> Piet: Justement c'est pour ça que je nous ai réunis. J'ai perdu un mouton cette nuit et je ne suis pas le seul dans la région. Encore une fois, on dirait qu'ils ont étés tués par une bête mais impossible de dire laquelle. Tout ce que je sais c'est qu'elle a réussi à casser la barrière.
 >
 > Léa: J'ai examiné le cadavre, il y a un détail qui m'a laissée perplexe: ses yeux sont blancs.
 >
 > Shabyn: Étrange...
 >
 > Piet: Eliot tu peux m'aider à réparer mon enclos? Il faudrait pousser les moutons à l'interieur pour le refermer.
+
+-> Pousse les moutons dans l'enclos pour le refermer.
 
 > Piet: Mince on n'a pas assez de bois. Il faut aller en chercher.
 

@@ -309,7 +309,7 @@ pages['chp1'] = game => {
 			game.events = [];
 			game.event_map = {
 				title: () => {
-					if (lang != '#dev') {
+					if (lang != '#bruh') {
 						game.player = null;
 						game.mode = 'title';
 						game.strat_fog = 1;
@@ -448,9 +448,9 @@ pages['chp1'] = game => {
 							})
 						);
 					} else {
-						game.triggerEvent('special_shoot');
 						game.getHuman('eliot').pos = { x: 284, y: 156, z: 0 };
 						game.getHuman('piet').pos = { x: 256, y: 148, z: 0 };
+						game.getHuman('piet').target = { x: 256, y: 148, obj: null };
 						game.getHuman('shabyn').pos = { x: 270, y: 140, z: 0 };
 						game.getHuman('shabyn').target = { x: 270, y: 140, obj: null };
 
@@ -460,8 +460,11 @@ pages['chp1'] = game => {
 						game.events.push(
 							new TimeEvent(500, event => {
 								game.getHuman('eliot').weapons.bow = true;
+								game.getHuman('eliot').weapons.axe = true;
 							})
 						);
+
+						game.triggerEvent('cut_tree');
 					}
 				},
 				start: () => {
@@ -501,12 +504,10 @@ pages['chp1'] = game => {
 					game.mission = {
 						text: lang == '#fr' ? 'Utilise le joystick gauche pour te déplacer et rejoins Shabyn.' : 'Use the left joystick to move and meet Shabyn.',
 						img: './img/missions/move.gif',
-						pixelated: true,
 						click: mission => {
 							setScreen('mission', {
 								text: lang == '#fr' ? 'Clique sur le bouton <b>aide</b> pour revoir ce message.' : 'Click on the <b>help</b> button to see this message again.',
 								img: './img/missions/move.gif',
-								pixelated: true,
 								click: mission => {
 									setScreen('game');
 								}
@@ -552,7 +553,6 @@ pages['chp1'] = game => {
 												? `Pendant que tu te déplaces, tapote à droite de l'écran pour courrir. Un symbole <font color="#ccf">bleu</font> apparaît au dessus de toi.`
 												: `Tap on the left side of the screen while you're moving to run. A <font color="#ccf">blue</font> symbol will appear above you.`,
 										img: './img/missions/run.gif',
-										pixelated: true,
 										click: mission => {
 											setScreen('mission', {
 												text:
@@ -560,7 +560,6 @@ pages['chp1'] = game => {
 														? `Courrir épuise ton endurance. Si tu es à bout de souffle, un symbole <font color="#e88">rouge</font> apparaît au dessus de toi.`
 														: `Running uses your stamina. When out of breath, a <font color="#e88">red</font> symbol appears above you.`,
 												img: './img/missions/run.gif',
-												pixelated: true,
 												click: mission => {
 													setScreen('mission', {
 														text:
@@ -568,7 +567,6 @@ pages['chp1'] = game => {
 																? `Quand tu as repris ton souffle, un symbole <font color="#cfc">vert</font> apparaît au dessus de toi.`
 																: `When you have caught your breath, a <font color="#cfc">green</font> symbol appears above you.`,
 														img: './img/missions/run.gif',
-														pixelated: true,
 														click: mission => {
 															setScreen('game');
 														}
@@ -611,7 +609,6 @@ pages['chp1'] = game => {
 												? `Tapote à gauche de l'écran quand tu ne bouges pas pour activer le mode stratégie et indiquer à tes amis où aller.`
 												: `Tap the left side of the screen when you're not moving to trun on strategy mode and tell your friends where to go.`,
 										img: './img/missions/strat.gif',
-										pixelated: true,
 										click: mission => {
 											setScreen('mission', {
 												text:
@@ -619,12 +616,10 @@ pages['chp1'] = game => {
 														? `Tapote une fois sur Shabyn pour lui demander d'aller quelque part. Fais la glisser avec ton doigt pour lui indiquer où aller et amène-la dans le cercle.`
 														: `Tap Shabyn once to ask her to go somewhere. Slide her with your finger to tell her where to go and bring her into the circle.`,
 												img: './img/missions/strat.gif',
-												pixelated: true,
 												click: mission => {
 													setScreen('mission', {
 														text: lang == '#fr' ? `Pour quitter le mode stratégie tapotte à nouveau sur l'écran.` : `To exit strategy mode tap again on the screen.`,
 														img: './img/missions/strat.gif',
-														pixelated: true,
 														click: mission => {
 															setScreen('game');
 														}
@@ -663,7 +658,6 @@ pages['chp1'] = game => {
 												? `Utilise à nouveau le mode stratégie pour demander à Shabyn de te suivre en tapotant un nouvelle fois sur elle.`
 												: `Use strategy mode again to ask Shabyn to follow you by tapping on her again.`,
 										img: './img/missions/follow.gif',
-										pixelated: true,
 										click: mission => {
 											setScreen('game');
 										}
@@ -685,6 +679,7 @@ pages['chp1'] = game => {
 					game.player = null;
 				},
 				reunion: () => {
+					game.getButton('mission').kill(500);
 					game.cam.target = game.getHuman('piet');
 					game.events.push(
 						new TimeEvent(3000, event => {
@@ -868,17 +863,14 @@ pages['chp1'] = game => {
 					game.mission = {
 						text: lang == '#fr' ? `Tapote à droite de l'écran pour changer d'arme et sélectionne ton arc.` : `Tap on the right side of the screen to change weapons and select your bow.`,
 						img: './img/missions/shoot.gif',
-						pixelated: true,
 						click: mission => {
 							setScreen('mission', {
 								text: lang == '#fr' ? `Utilise le joystick droit pour viser un mouton et lâche pour décocher.` : `Use the right joystick to aim at a sheep and let go to shoot.`,
 								img: './img/missions/shoot.gif',
-								pixelated: true,
 								click: mission => {
 									setScreen('mission', {
 										text: lang == '#fr' ? `Tu peux ramasser tes flèches pour les réutiliser.` : `You can pick up your arrows to reuse them.`,
 										img: './img/missions/shoot.gif',
-										pixelated: true,
 										click: mission => {
 											setScreen('game');
 										}
@@ -939,12 +931,10 @@ pages['chp1'] = game => {
 					game.mission = {
 						text: lang == '#fr' ? `Ramasse les perles de mana, elles sont précieuses.` : `Pick up the mana pearls, they are precious.`,
 						img: './img/missions/mana.gif',
-						pixelated: true,
 						click: mission => {
 							setScreen('mission', {
 								text: lang == '#fr' ? `Pendant que tu vises, tapote à gauche de l'écran pour transférer du mana à ta flèche.` : `While aiming, tap the left side of the screen to transfer mana to your arrow.`,
 								img: './img/missions/mana.gif',
-								pixelated: true,
 								click: mission => {
 									setScreen('mission', {
 										text:
@@ -952,12 +942,10 @@ pages['chp1'] = game => {
 												? `Ensuite replace ton doigt sur la droite de l'écran après avoir décoché. La flèche suivra les mouvements de ton doigt.`
 												: `Then replace your finger on the right of the screen after letting go. The arrow will follow the movements of your finger.`,
 										img: './img/missions/mana.gif',
-										pixelated: true,
 										click: mission => {
 											setScreen('mission', {
 												text: lang == '#fr' ? `Touche plusieurs fois les moutons avec une seule flèche pour continuer.` : `Hit the sheeps several times with one arrow to continue.`,
 												img: './img/missions/mana.gif',
-												pixelated: true,
 												click: mission => {
 													setScreen('game');
 												}
@@ -1023,8 +1011,130 @@ pages['chp1'] = game => {
 					game.dialog = {
 						character: 'lea',
 						text: lang == '#fr' ? 'Wow... comment tu fais ça?' : 'Wow... how do you do that?',
-						click: dialog => {}
+						click: dialog => {
+							game.dialog = {
+								character: 'shabyn',
+								text:
+									lang == '#fr'
+										? `Il y a environ trois ans, des fermiers ont signalé qu'une partie de leur bétail avait été tué par une ou plusieurs bêtes. Au départ on avait pensé à des loups mais ça fait des années qu'ils ont disparus de la région du coup on est allés voir sur place avec un vétérinaire.`
+										: `About three years ago, farmers reported that part of their cattle had been killed by one or more animals. At first we thought of wolves but it's been years since they disappeared from the region so we went to see on site with a veterinarian.`,
+								click: dialog => {
+									game.dialog = {
+										character: 'lea',
+										text: lang == '#fr' ? `Et alors? C'était quoi?` : `So? What was it?`,
+										click: dialog => {
+											game.dialog = {
+												character: 'piet',
+												text:
+													lang == '#fr' ? `On ne se souvient de rien. On s'est réveillés dans un endroit étrange sans aucun souvenir.` : `We don't remember anything. We woke up in a strange place with no memory.`,
+												click: dialog => {
+													game.dialog = {
+														character: 'shabyn',
+														text:
+															lang == '#fr'
+																? `C'est là qu'on s'est rendus compte qu'Eliot n'entendais plus rien... Et dans les semaines qui on suivi il s'est découvert des talents spéciaux. Comme ce qu'il vient de faire avec cette perle violette.`
+																: `That's when we realized that Eliot couldn't hear anything anymore... And in the weeks that followed he discovered himself some special talents. Like what he just did with that purple pearl.`,
+														click: dialog => {
+															game.dialog = {
+																character: 'lea',
+																text: lang == '#fr' ? `Et le vetérinaire?` : `What about the vet?`,
+																click: dialog => {
+																	game.dialog = {
+																		character: 'shabyn',
+																		text:
+																			lang == '#fr'
+																				? `Disparu... On ne se souvient même plus de qui il était. Au fait Piet, pourquoi il manque une barrière à ton enclos?`
+																				: `Gone... We don't even remember who he was. By the way Piet, why is your fence missing a part?`,
+																		click: dialog => {
+																			game.dialog = {
+																				character: 'piet',
+																				text:
+																					lang == '#fr'
+																						? `Justement c'est pour ça que je nous ai réunis. J'ai perdu un mouton cette nuit et je ne suis pas le seul dans la région. Encore une fois, on dirait qu'ils ont étés tués par une bête mais impossible de dire laquelle. Tout ce que je sais c'est qu'elle a réussi à casser la barrière.`
+																						: `That's why I brought us together. I lost a sheep last night and I'm not the only one in the area. Again it looks like they were killed by a beast but can't tell which one. All I know is that it was able to break the fence.`,
+																				click: dialog => {
+																					game.dialog = {
+																						character: 'lea',
+																						text:
+																							lang == '#fr'
+																								? `J'ai examiné le cadavre, il y a un détail qui m'a laissée perplexe: ses yeux sont blancs.`
+																								: `I examined the corpse, there is one detail that left me perplexed: its eyes are white.`,
+																						click: dialog => {
+																							game.dialog = {
+																								character: 'shabyn',
+																								text: lang == '#fr' ? `Étrange...` : `That's stange...`,
+																								click: dialog => {
+																									game.dialog = {
+																										character: 'piet',
+																										text:
+																											lang == '#fr'
+																												? `Eliot tu peux m'aider à réparer mon enclos? Il faudrait pousser les moutons à l'interieur pour le refermer.`
+																												: `Eliot can you help me fix the fence? Sheep would have to be pushed inside to close it.`,
+																										click: dialog => {
+																											game.dialog = null;
+																											game.triggerEvent('push_sheep');
+																										}
+																									};
+																								}
+																							};
+																						}
+																					};
+																				}
+																			};
+																		}
+																	};
+																}
+															};
+														}
+													};
+												}
+											};
+										}
+									};
+								}
+							};
+						}
 					};
+				},
+				push_sheep: () => {
+					game.getHuman('lea').target = { x: 214, y: 130, obj: null };
+					game.getHuman('piet').target = { x: 230, y: 128, obj: null };
+					game.getHuman('shabyn').target = { x: 274, y: 132, obj: null };
+
+					for (let s of game.entities.sheeps) s.target = null;
+
+					game.events.push(
+						new WalkEvent(251, 121, 26, 0.7, game.entities.sheeps, 'all', 'in', 'white', event => {
+							game.triggerEvent('cut_tree');
+						})
+					);
+				},
+				cut_tree: () => {
+					game.mission = {
+						text:
+							lang == '#fr'
+								? `Tapote à droite de l'écran pour changer d'arme et sélectionne la hache. Approche-toi d'un arbre, vise et relâche pour donner un coup de hache.`
+								: `Tap to the right side of the screen to change weapons and select the axe. Approach a tree, aim and release to chop it.`,
+						img: './img/missions/tv-snow.gif',
+						click: mission => {
+							setScreen('game');
+						}
+					};
+
+					game.player.weapons.axe = true;
+
+					game.events.push(
+						new TimeEvent(1000, event => {
+							game.dialog = {
+								character: 'piet',
+								text: lang == '#fr' ? `Mince on n'a pas assez de bois. Il faut aller en chercher.` : `Oh crap, we don't have enough wood. You have to go get some.`,
+								click: dialog => {
+									game.dialog = null;
+									setScreen('mission', game.mission);
+								}
+							};
+						})
+					);
 				}
 			};
 
