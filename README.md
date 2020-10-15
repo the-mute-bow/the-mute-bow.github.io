@@ -31,13 +31,15 @@ permalink: /readme.html
 
 ## Change log
 
+## 0.1.0
+
+-   Fence aiming draw.
+-   Fence placing with 10 wood cost.
+-   <font color="lightgreen">**Chapter 1 ready.**</font>
+
 ### **0.0.51**
 
--   -
-
-**[ main site ]**
-
--
+-   Chapter 1 push sheep and cut tree.
 
 ### **0.0.50**
 

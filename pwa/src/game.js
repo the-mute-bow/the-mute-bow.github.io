@@ -888,7 +888,7 @@ class Game {
 						this.player.setAlert('stamina-use', 600);
 					}
 				}
-				if (event.side == 'R' && this.player.look.aim && this.player.look.aim < 3 && (game.player.weapon != 'bow' || game.player.setMana('-'))) this.player.look.aim++;
+				if (event.side == 'R' && this.player.look.aim && this.player.look.aim < 3 && (this.player.weapon != 'bow' || this.player.setMana('-'))) this.player.look.aim++;
 			}
 		}
 
@@ -933,8 +933,8 @@ class Game {
 						this.player.look.x = move.x;
 						this.player.look.y = move.y;
 						if (this.player.stamina.val) {
-							if (this.player.weapon == 'axe' || this.player.wood.val) aim = 1;
-							else if (!this.player.alert) this.player.setAlert('noamo', 1800);
+							if (this.player.weapon == 'axe' || this.player.weapon == 'none' || (this.player.weapon == 'bow' && this.player.wood.val) || (this.player.weapon == 'fence' && this.player.wood.val >= 10)) aim = 1;
+							else if (!this.player.alert) this.player.setAlert('noamo', 300);
 						}
 					}
 				}
@@ -1081,7 +1081,7 @@ class Game {
 					else human.draw(gctx, 'icon-stay', { x: x, y: y, z: z });
 				} else human.draw(gctx, 'icon-null', { x: x, y: y, z: z });
 
-				if (human.look.aim) {
+				if (human.look.aim && human.weapon != 'fence') {
 					gctx.globalAlpha = 0.5;
 					gctx.fillStyle = `white`;
 
