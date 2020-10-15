@@ -35,7 +35,7 @@ _Eliot et Shabyn marchent dans la forêt en destination de la maison de Piet._
 
 > Shabyn: On est arrivés! Allez viens!
 
--> Diable help button.
+-> Disable help button.
 
 _Eliot et Shabyn arrivent chez Piet._
 
