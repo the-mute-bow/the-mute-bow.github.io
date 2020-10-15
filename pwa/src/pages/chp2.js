@@ -329,6 +329,8 @@ pages['chp2'] = game => {
 			game.events = [];
 			game.event_map = {
 				title: () => {
+					game.triggerEvent('start');
+					return;
 					game.mode = 'title';
 					game.strat_fog = 1;
 
@@ -377,6 +379,7 @@ pages['chp2'] = game => {
 				start: () => {
 					game.mode = 'normal';
 					for (let event of ['creature_dead', 'creature_nearby', 'dead_human']) game.triggerEvent(event);
+					game.fog_map.fill();
 
 					game.events.push(
 						new TimeEvent(1000, event => {

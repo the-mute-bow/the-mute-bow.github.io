@@ -309,7 +309,7 @@ pages['chp1'] = game => {
 			game.events = [];
 			game.event_map = {
 				title: () => {
-					if (lang != '#bruh') {
+					if (lang != '#dev') {
 						game.player = null;
 						game.mode = 'title';
 						game.strat_fog = 1;
@@ -464,13 +464,15 @@ pages['chp1'] = game => {
 							})
 						);
 
-						game.triggerEvent('cut_tree');
+						game.triggerEvent('fence');
 					}
 				},
 				start: () => {
 					game.getHuman('eliot').target = { x: 185, y: 590, obj: null };
-					game.mode = 'normal';
 					game.events.push(
+						new TimeEvent(200, event => {
+							game.mode = 'normal';
+						}),
 						new TimeEvent(1000, event => {
 							game.initPauseButton();
 							game.initCoinOverlays();
@@ -531,7 +533,6 @@ pages['chp1'] = game => {
 					game.getHuman('shabyn').target = { x: 266, y: 562, obj: null };
 					game.cam.target = game.getHuman('shabyn');
 					game.player.target = { x: 242, y: 580, obj: null };
-					game.player = null;
 
 					game.events.push(
 						new TimeEvent(2300, event => {
@@ -544,7 +545,6 @@ pages['chp1'] = game => {
 								click: dialog => {
 									game.dialog = null;
 									game.getHuman('shabyn').target = { x: 320, y: 450, obj: null };
-									game.player = game.getHuman('eliot');
 									game.player.target = null;
 
 									game.mission = {
@@ -590,7 +590,32 @@ pages['chp1'] = game => {
 				},
 				strat: () => {
 					game.player.target = { x: 308, y: 448, obj: null };
-					game.player = null;
+
+					game.mission = {
+						text:
+							lang == '#fr'
+								? `Tapote à gauche de l'écran quand tu ne bouges pas pour activer le mode stratégie et indiquer à tes amis où aller.`
+								: `Tap the left side of the screen when you're not moving to trun on strategy mode and tell your friends where to go.`,
+						img: './img/missions/strat.gif',
+						click: mission => {
+							setScreen('mission', {
+								text:
+									lang == '#fr'
+										? `Tapote une fois sur Shabyn pour lui demander d'aller quelque part. Fais la glisser avec ton doigt pour lui indiquer où aller et amène-la dans le cercle.`
+										: `Tap Shabyn once to ask her to go somewhere. Slide her with your finger to tell her where to go and bring her into the circle.`,
+								img: './img/missions/strat.gif',
+								click: mission => {
+									setScreen('mission', {
+										text: lang == '#fr' ? `Pour quitter le mode stratégie tapotte à nouveau sur l'écran.` : `To exit strategy mode tap again on the screen.`,
+										img: './img/missions/strat.gif',
+										click: mission => {
+											setScreen('game');
+										}
+									});
+								}
+							});
+						}
+					};
 
 					game.events.push(
 						new TimeEvent(1000, event => {
@@ -599,49 +624,30 @@ pages['chp1'] = game => {
 								text: lang == '#fr' ? "C'est pas juste! Tu cours trop vite! Bref, c'est dans quelle direction?" : "It's not fair! You run too fast! Anyway, which direction is it?",
 								click: dialog => {
 									game.dialog = null;
-									game.player = game.getHuman('eliot');
 									game.player.target = { x: 305, y: 425, obj: null };
 									game.getHuman('shabyn').target = null;
-
-									game.mission = {
-										text:
-											lang == '#fr'
-												? `Tapote à gauche de l'écran quand tu ne bouges pas pour activer le mode stratégie et indiquer à tes amis où aller.`
-												: `Tap the left side of the screen when you're not moving to trun on strategy mode and tell your friends where to go.`,
-										img: './img/missions/strat.gif',
-										click: mission => {
-											setScreen('mission', {
-												text:
-													lang == '#fr'
-														? `Tapote une fois sur Shabyn pour lui demander d'aller quelque part. Fais la glisser avec ton doigt pour lui indiquer où aller et amène-la dans le cercle.`
-														: `Tap Shabyn once to ask her to go somewhere. Slide her with your finger to tell her where to go and bring her into the circle.`,
-												img: './img/missions/strat.gif',
-												click: mission => {
-													setScreen('mission', {
-														text: lang == '#fr' ? `Pour quitter le mode stratégie tapotte à nouveau sur l'écran.` : `To exit strategy mode tap again on the screen.`,
-														img: './img/missions/strat.gif',
-														click: mission => {
-															setScreen('game');
-														}
-													});
-												}
-											});
-										}
-									};
-
-									game.events.push(
-										new WalkEvent(346, 410, 14, 0.7, [game.getHuman('shabyn')], 'all', 'in', 'white', event => {
-											game.triggerEvent('follow');
-										})
-									);
 
 									setScreen('mission', game.mission);
 								}
 							};
+						}),
+						new WalkEvent(346, 410, 14, 0.9, [game.getHuman('shabyn')], 'all', 'in', 'white', event => {
+							game.triggerEvent('follow');
 						})
 					);
 				},
 				follow: () => {
+					game.getHuman('shabyn').target = { x: 340, y: 394, obj: null };
+					game.player.target = { x: 328, y: 388, obj: null };
+
+					game.mission = {
+						text: lang == '#fr' ? `Utilise à nouveau le mode stratégie pour demander à Shabyn de te suivre en tapotant un nouvelle fois sur elle.` : `Use strategy mode again to ask Shabyn to follow you by tapping on her again.`,
+						img: './img/missions/follow.gif',
+						click: mission => {
+							setScreen('game');
+						}
+					};
+
 					game.events.push(
 						new WalkEvent(346, 410, 14, 0.7, [game.player, game.getHuman('shabyn')], 'all', 'in', 'white', event => {
 							game.dialog = {
@@ -649,34 +655,16 @@ pages['chp1'] = game => {
 								text: lang == '#fr' ? 'Bon, je te suis.' : 'Well, I follow you.',
 								click: dialog => {
 									game.dialog = null;
-									game.player = game.getHuman('eliot');
 									game.player.target = null;
-
-									game.mission = {
-										text:
-											lang == '#fr'
-												? `Utilise à nouveau le mode stratégie pour demander à Shabyn de te suivre en tapotant un nouvelle fois sur elle.`
-												: `Use strategy mode again to ask Shabyn to follow you by tapping on her again.`,
-										img: './img/missions/follow.gif',
-										click: mission => {
-											setScreen('game');
-										}
-									};
-
-									game.events.push(
-										new WalkEvent(330, 300, 14, 0.9, [game.getHuman('shabyn')], 'all', 'in', 'white', event => {
-											game.triggerEvent('reunion');
-										})
-									);
 
 									setScreen('mission', game.mission);
 								}
 							};
+						}),
+						new WalkEvent(330, 300, 16, 0.9, [game.player, game.getHuman('shabyn')], 'all', 'in', 'white', event => {
+							game.triggerEvent('reunion');
 						})
 					);
-					game.getHuman('shabyn').target = { x: 340, y: 394, obj: null };
-					game.player.target = { x: 328, y: 388, obj: null };
-					game.player = null;
 				},
 				reunion: () => {
 					game.getButton('mission').kill(500);
@@ -1044,7 +1032,7 @@ pages['chp1'] = game => {
 																		text:
 																			lang == '#fr'
 																				? `Disparu... On ne se souvient même plus de qui il était. Au fait Piet, pourquoi il manque une barrière à ton enclos?`
-																				: `Gone... We don't even remember who he was. By the way Piet, why is your fence missing a part?`,
+																				: `Gone... We don't even remember who he was. By the way Piet, why is a fence missing to your pen?`,
 																		click: dialog => {
 																			game.dialog = {
 																				character: 'piet',
@@ -1068,11 +1056,17 @@ pages['chp1'] = game => {
 																										character: 'piet',
 																										text:
 																											lang == '#fr'
-																												? `Eliot tu peux m'aider à réparer mon enclos? Il faudrait pousser les moutons à l'interieur pour le refermer.`
-																												: `Eliot can you help me fix the fence? Sheep would have to be pushed inside to close it.`,
+																												? `Eliot tu peux m'aider à réparer l'enclos? Je vais faire entrer les moutons.`
+																												: `Eliot can you help me fix the pen? I'll bring in the sheep.`,
 																										click: dialog => {
-																											game.dialog = null;
-																											game.triggerEvent('push_sheep');
+																											game.dialog = {
+																												character: 'piet',
+																												text: lang == '#fr' ? `<b>Siffle</b> Allez les moutons on rentre!` : `<b>Whistles</b> Come on sheep, get in!`,
+																												click: dialog => {
+																													game.dialog = null;
+																													game.triggerEvent('push_sheep');
+																												}
+																											};
 																										}
 																									};
 																								}
@@ -1097,15 +1091,42 @@ pages['chp1'] = game => {
 					};
 				},
 				push_sheep: () => {
+					game.mission = {
+						text: lang == '#fr' ? `Pousse le mouton dans l'enclos pour le refermer.` : `Push the sheep into the pen in order to close it.`,
+						img: './img/missions/sheep.gif',
+						click: mission => {
+							setScreen('game');
+						}
+					};
+
 					game.getHuman('lea').target = { x: 214, y: 130, obj: null };
 					game.getHuman('piet').target = { x: 230, y: 128, obj: null };
 					game.getHuman('shabyn').target = { x: 274, y: 132, obj: null };
 
-					for (let s of game.entities.sheeps) s.target = null;
+					game.entities.sheeps[0].target = { x: 260, y: 132, obj: null };
+					game.entities.sheeps[2].target = null;
 
 					game.events.push(
 						new WalkEvent(251, 121, 26, 0.7, game.entities.sheeps, 'all', 'in', 'white', event => {
 							game.triggerEvent('cut_tree');
+						}),
+						new TimeEvent(1000, event => {
+							game.entities.sheeps[1].target = { x: 260, y: 130, obj: null };
+						}),
+						new TimeEvent(3000, event => {
+							game.entities.sheeps[0].target = { x: 246, y: 92, obj: null };
+							game.entities.sheeps[1].target = { x: 246, y: 92, obj: null };
+						}),
+						new TimeEvent(5000, event => {
+							game.entities.sheeps[1].target = { x: 226, y: 96, obj: null };
+							game.dialog = {
+								character: 'piet',
+								text: lang == '#fr' ? `Tiens... On dirait qu'il y en a un qui n'entend pas. Tu peux le pousser à l'intérieur?` : `Look... Seems like this one doesn't hear. Can you push him inside?`,
+								click: dialog => {
+									game.dialog = null;
+									setScreen('mission', game.mission);
+								}
+							};
 						})
 					);
 				},
@@ -1114,10 +1135,16 @@ pages['chp1'] = game => {
 						text:
 							lang == '#fr'
 								? `Tapote à droite de l'écran pour changer d'arme et sélectionne la hache. Approche-toi d'un arbre, vise et relâche pour donner un coup de hache.`
-								: `Tap to the right side of the screen to change weapons and select the axe. Approach a tree, aim and release to chop it.`,
-						img: './img/missions/tv-snow.gif',
+								: `Tap to the right side of the screen to change weapons and select the axe. Approach a tree then aim and release to chop it.`,
+						img: './img/missions/axe1.gif',
 						click: mission => {
-							setScreen('game');
+							setScreen('mission', {
+								text: lang == '#fr' ? `Continue jusqu'à ce que l'arbre soit coupé puis ramasse les branches au sol.` : `Continue until the tree is cut, then pick up the branches on the ground.`,
+								img: './img/missions/axe2.gif',
+								click: mission => {
+									setScreen('game');
+								}
+							});
 						}
 					};
 
@@ -1131,6 +1158,123 @@ pages['chp1'] = game => {
 								click: dialog => {
 									game.dialog = null;
 									setScreen('mission', game.mission);
+								}
+							};
+						}),
+						new GameEvent(event => {
+							if (game.player.wood.val >= 10) {
+								event.done = true;
+								game.events.push(
+									new TimeEvent(1000, event => {
+										game.dialog = {
+											character: 'piet',
+											text: lang == '#fr' ? `Je crois que ça va suffire, reviens!` : `I think that's enough, come back!`,
+											click: dialog => {
+												game.dialog = null;
+												game.triggerEvent('fence');
+											}
+										};
+									})
+								);
+							}
+						})
+					);
+				},
+				fence: () => {
+					game.mission = {
+						text:
+							lang == '#fr'
+								? `Tu as une réserve limitée de bois. Une flèche te coûte 1 bout de bois, et pour poser une barrière il t'en faut 10.`
+								: `You have a limited supply of wood. An arrow costs you 1 piece of wood, and to place a fence you need 10.`,
+						img: './img/missions/fence.gif',
+						click: mission => {
+							setScreen('mission', {
+								text: lang == '#fr' ? `Vise l'endroit où tu veux mettre la barrière avec le joystick droit et relâche pour poser.` : `Aim where you want the fence to be with the right joystick and let go to place it.`,
+								img: './img/missions/fence.gif',
+								click: mission => {
+									setScreen('game');
+								}
+							});
+						}
+					};
+
+					game.player.weapons.fence = true;
+					game.player.wood.val = 10;
+
+					game.events.push(
+						new WalkEvent(260, 160, 32, 1, [game.player], 'all', 'in', null, event => {
+							game.getHuman('piet').event = () => {
+								game.getHuman('piet').event = null;
+								game.getHuman('eliot').weapons.fence = true;
+
+								game.dialog = {
+									character: 'piet',
+									text: lang == '#fr' ? `Bien, maintenant tu peux refermer l'enclos.` : 'Okay, now you can close the pen.',
+									click: dialog => {
+										game.dialog = null;
+										setScreen('mission', game.mission);
+									}
+								};
+							};
+						})
+					);
+
+					game.events.push(
+						new GameEvent(event => {
+							if (game.entities.buildings.length > 8) {
+								event.done = true;
+								game.triggerEvent('end');
+							}
+						})
+					);
+				},
+				end: () => {
+					game.events.push(
+						new TimeEvent(1000, event => {
+							game.events.push(
+								new TimeEvent(1500, event => {
+									game.cam.targ_o = 1;
+								}),
+								new TimeEvent(4000, event => {
+									loadPage('menu');
+								})
+							);
+
+							for (let h of game.entities.humans) {
+								game.events.push(
+									new TimeEvent(Math.random() * 1000, event => {
+										h.target = { x: 400, y: 130, obj: null };
+									})
+								);
+							}
+
+							game.dialog = {
+								character: 'piet',
+								text: lang == '#fr' ? `Parfait! Ou presque...` : `Perfect! Or almost...`,
+								click: dialog => {
+									game.dialog = {
+										character: 'shabyn',
+										text: lang == '#fr' ? `C'est bien tout ça mais moi j'ai faim!` : `All that is good but I'm hungry!`,
+										click: dialog => {
+											game.dialog = {
+												character: 'lea',
+												text: lang == '#fr' ? `Je suis d'accord! Venez à l'intérieur, Piet a tenté de cuisiner.` : `I agree! Come inside, Piet tried to cook.`,
+												click: dialog => {
+													game.dialog = null;
+													game.dialog = {
+														character: 'Piet',
+														text:
+															lang == '#fr'
+																? `Elle m'a empêché de brûler la cuisine... Prenons des forces, demain on va voir le vieux M. Vandebroek. Il a le plus grand troupeau de moutons du village. C'est là qu'on devrait avoir le plus de chances de trouver la bête.`
+																: `She kept me from burning the kitchen... Let's get some strength, tomorrow we're going to see old Mr. Vandebroek. He has the largest flock of sheep in the village. This is where we should have the best chance of finding the beast.`,
+														click: dialog => {
+															game.dialog = null;
+														}
+													};
+												}
+											};
+										}
+									};
 								}
 							};
 						})

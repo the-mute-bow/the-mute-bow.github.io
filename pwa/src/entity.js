@@ -411,7 +411,7 @@ class Human extends Mob {
 				let body = this.sprites[sprite_name];
 				body.tile.y = Math.min(Math.max(0, body.tile.y), 3);
 
-				if (this.weapon == 'bow' || this.weapon == 'axe' || (this.name == 'creature' && this.attack)) {
+				if (['bow', 'axe', 'fence'].includes(this.weapon) || (this.name == 'creature' && this.attack)) {
 					if (this.look.aim) {
 						if (this.weapon == 'bow') {
 							this.sprites.bow_aim.tile.x = this.getOrient(8);
@@ -422,6 +422,14 @@ class Human extends Mob {
 								body.draw(ctx, { x: x, y: y, z: z });
 								this.sprites.bow_aim.draw(ctx, { x: x, y: y, z: z });
 							}
+						} else if (this.weapon == 'fence') {
+							let fence = this.getFence();
+							let alpha = ctx.globalAlpha;
+
+							ctx.globalAlpha *= fence.red ? 0.2 : 0.6;
+							fence.draw(ctx, 'main');
+							ctx.globalAlpha = alpha;
+							body.draw(ctx, { x: x, y: y, z: z });
 						} else {
 							body.draw(ctx, { x: x, y: y, z: z });
 						}
@@ -448,6 +456,8 @@ class Human extends Mob {
 								body.draw(ctx, { x: x, y: y, z: z });
 								weapon.draw(ctx, { x: x, y: y, z: z });
 							}
+						} else if (this.weapon == 'fence') {
+							body.draw(ctx, { x: x, y: y, z: z });
 						}
 					}
 				} else body.draw(ctx, { x: x, y: y, z: z });
@@ -460,6 +470,23 @@ class Human extends Mob {
 				sprite.draw(ctx, { x: x, y: y, z: z });
 			}
 		}
+	}
+
+	getFence() {
+		let side = Math.abs(this.look.x) > Math.abs(this.look.y);
+		let pos = {
+			x: this.pos.x + (side ? -5 : -7) + this.look.x * 16,
+			y: this.pos.y + (side ? 4 : 3) + this.look.y * 16,
+			z: 0
+		};
+
+		let fence = new Fence(pos, side);
+
+		for (let build of game.entities.buildings) {
+			if (fence.collideGround(build)) fence.setRed();
+		}
+
+		return fence;
 	}
 
 	setMana(mode = '+') {
@@ -547,10 +574,8 @@ class Human extends Mob {
 						let atan = Math.abs(Math.atan2(dir.x, dir.y) + Math.PI) - Math.abs(Math.atan2(d.x, d.y) + Math.PI);
 						if (this.aim_level == 2 || atan < 0.1) {
 							entity.health.val--;
-							if (entity.name) {
-								entity.pushTo(d.x, d.y, 100 * this.aim_level);
-								// entity.setAlert('noamo', 500);
-							} else {
+							if (entity.name) entity.pushTo(d.x, d.y, 100 * this.aim_level);
+							else {
 								for (let i = 0; i < 20; i++)
 									game.entities.particles.push(
 										new Particle(
@@ -567,6 +592,12 @@ class Human extends Mob {
 							}
 						}
 					}
+				}
+			} else if (this.weapon == 'fence') {
+				let fence = this.getFence();
+				if (!fence.red) {
+					game.entities.buildings.push(fence);
+					this.wood.val -= 0;
 				}
 			}
 
@@ -730,6 +761,7 @@ class Fence extends Entity {
 			pos,
 			{
 				main: new Sprite(game.images['fence' + variant], { x: 0, y: 0, w: 32, h: 32 }),
+				red: new Sprite(game.images['fence-red'], { x: 0, y: 0, w: 32, h: 32 }),
 				shadow: new Sprite(game.images['fence-shadow'], { x: 0, y: 0, w: 32, h: 32 })
 			},
 			orient ? new Hitbox(15, 11, 3, 18, 8) : new Hitbox(7, 19, 24, 2, 8),
@@ -737,7 +769,14 @@ class Fence extends Entity {
 		);
 
 		this.sprites.main.tile.x = orient;
+		this.sprites.red.tile.x = orient;
 		this.sprites.shadow.tile.x = orient;
+		this.red = false;
+	}
+
+	setRed() {
+		this.sprites.main = this.sprites.red;
+		this.red = true;
 	}
 }
 

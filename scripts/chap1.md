@@ -9,25 +9,33 @@ _Eliot et Shabyn marchent dans la forêt en destination de la maison de Piet._
 > Shabyn: Dépèche-toi Eliot! Je suis pressée de revoir Piet!\
 > Eliot: ...
 
-| <img src="https://the-mute-bow.com/pwa/img/missions/move.gif" alt="">                                                               |
-| ----------------------------------------------------------------------------------------------------------------------------------- |
-| -> Utilise le joystick gauche pour te déplacer et rattrape Shabyn. / Tu peux cliquer sur le bouton **aide** pour revoir ce message. |
+| <img src="https://the-mute-bow.com/pwa/img/missions/move.gif">                                                                   |
+| -------------------------------------------------------------------------------------------------------------------------------- |
+| Utilise le joystick gauche pour te déplacer et rattrape Shabyn. / Tu peux cliquer sur le bouton **aide** pour revoir ce message. |
+
+-> Enable help button.
 
 > Shabyn: Je cours plus vite que toi!
 
--> Pendant que tu te déplaces, tapote à droite de l'écran pour courrir. Un symbole <font color="#ccf">bleu</font> apparaît au dessus de toi. / Courrir épuise ton endurance. Si tu es à bout de souffle, un symbole <font color="#e88">rouge</font> apparaît au dessus de toi. / Quand tu as repris ton souffle, un symbole <font color="#cfc">vert</font> apparaît au dessus de toi.
+| <img src="https://the-mute-bow.com/pwa/img/missions/run.gif">                                                                                                                                                                                                                                                                                                                      |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Pendant que tu te déplaces, tapote à droite de l'écran pour courrir. Un symbole <font color="#ccf">bleu</font> apparaît au dessus de toi. / Courrir épuise ton endurance. Si tu es à bout de souffle, un symbole <font color="#e88">rouge</font> apparaît au dessus de toi. / Quand tu as repris ton souffle, un symbole <font color="#cfc">vert</font> apparaît au dessus de toi. |
 
 > Shabyn: C'est pas juste! Tu cours trop vite! Bref, c'est dans quelle direction?
 
--> Tapote à gauche de l'écran pour activer le mode stratégie et contrôler tes amis. / Tapote une fois sur Shabyn pour lui demander d'aller quelque part. Fais la glisser avec ton doigt pour lui indiquer où aller et amène-la dans le cercle. / Pour quitter le mode stratégie tapotte à nouveau sur l'écran.
+| <img src="https://the-mute-bow.com/pwa/img/missions/strat.gif">                                                                                                                                                                                                                                             |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Tapote à gauche de l'écran pour activer le mode stratégie et contrôler tes amis. / Tapote une fois sur Shabyn pour lui demander d'aller quelque part. Fais la glisser avec ton doigt pour lui indiquer où aller et amène-la dans le cercle. / Pour quitter le mode stratégie tapotte à nouveau sur l'écran. |
 
 > Shabyn: Bon, je te suis.
 
--> Tapote une seconde fois sur Shabyn pour lui demander de te suivre et continue jusqu'au prochain cerlce.
+| <img src="https://the-mute-bow.com/pwa/img/missions/follow.gif">                                        |
+| ------------------------------------------------------------------------------------------------------- |
+| Tapote une seconde fois sur Shabyn pour lui demander de te suivre et continue jusqu'au prochain cerlce. |
 
 > Shabyn: On est arrivés! Allez viens!
 
--> null
+-> Diable help button.
 
 _Eliot et Shabyn arrivent chez Piet._
 
@@ -69,7 +77,9 @@ _Piet tire sur le mouton._
 >
 > Piet: Vas-y Eliot, montre lui.
 
--> Tapote à droite de l'écran pour changer d'arme et sélectionne l'arc. / Utilise le joystick droit pour viser un mouton et lâche pour décocher. / Tu peux ramasser tes flèches pour les réutiliser.
+| <img src="https://the-mute-bow.com/pwa/img/missions/shoot.gif">                                                                                                                                   |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Tapote à droite de l'écran pour changer d'arme et sélectionne l'arc. / Utilise le joystick droit pour viser un mouton et lâche pour décocher. / Tu peux ramasser tes flèches pour les réutiliser. |
 
 **[ si plus de bois ]**
 
@@ -81,7 +91,9 @@ _Piet tire sur le mouton._
 
 > Piet: Tiens, des perles de mana, on va s'amuser.
 
--> Ramasse les perles de mana, elles sont précieuses. / Pendant que tu vises, tapote à gauche de l'écran pour transférer du mana à ta flèche. / Ensuite replace ton doigt sur la droite de l'écran après avoir décoché. La flèche suivra les mouvements de ton doigt. / Touche les trois moutons avec une seule flèche pour continuer.
+| <img src="https://the-mute-bow.com/pwa/img/missions/mana.gif">                                                                                                                                                                                                                                                                      |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Ramasse les perles de mana, elles sont précieuses. / Pendant que tu vises, tapote à gauche de l'écran pour transférer du mana à ta flèche. / Ensuite replace ton doigt sur la droite de l'écran après avoir décoché. La flèche suivra les mouvements de ton doigt. / Touche les trois moutons avec une seule flèche pour continuer. |
 
 **[ si tire raté ]**
 
@@ -109,12 +121,40 @@ _Piet tire sur le mouton._
 >
 > Shabyn: Étrange...
 >
-> Piet: Eliot tu peux m'aider à réparer mon enclos? Il faudrait pousser les moutons à l'interieur pour le refermer.
+> Piet: Eliot tu peux m'aider à réparer l'enclos? Je vais faire entrer les moutons.
+>
+> Piet: **Siffle** Allez les moutons on rentre.
 
--> Pousse les moutons dans l'enclos pour le refermer.
+_Seulement deux moutons entrent._
+
+> Piet: Tiens... On dirait qu'il y en a un qui n'entend pas. Tu peux le pousser à l'intérieur?
+
+| <img src="https://the-mute-bow.com/pwa/img/missions/sheep.gif"> |
+| --------------------------------------------------------------- |
+| Pousse le mouton dans l'enclos pour le refermer.                |
 
 > Piet: Mince on n'a pas assez de bois. Il faut aller en chercher.
 
--> Tapote à droite de l'écran pour changer d'arme et sélectionne la hache. Approche-toi d'un arbre, vise et relâche pour donner un coup de hache.
+| <img src="https://the-mute-bow.com/pwa/img/missions/axe1.gif">                                                                                     |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Tapote à droite de l'écran pour changer d'arme et sélectionne la hache. Approche-toi d'un arbre puis vise et relâche pour donner un coup de hache. |
+| <img src="https://the-mute-bow.com/pwa/img/missions/axe2.gif">                                                                                     |
+| Continue jusqu'à ce que l'arbre soit coupé puis ramasse les branches au sol.                                                                       |
 
--> Tu as une réserve limitée de bois. Une flèche te coûte un bois, et pour poser une barrière il t'en faut 10. Ramasses tes flèches pour ne pas tomber à court de bois.
+> Piet: Je crois que ça va suffire, reviens!
+
+> Piet: Bien, maintenant tu peux refermer l'enclos.
+
+| <img src="https://the-mute-bow.com/pwa/img/missions/fence.gif">                                                                                                               |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Vise l'endroit où tu veux mettre la barrière avec le joystick droit et relâche pour poser. / Vise l'endroit où tu veux la poser avec le joystick droit et relâche pour poser. |
+
+> Piet: Parfait! Ou presque...
+>
+> Shabyn: C'est bien tout ça mais moi j'ai faim!
+>
+> Léa: Je suis d'accord! Venez à l'intérieur, Piet a tenté de cuisiner.
+>
+> Piet: Elle m'a empêché de brûler ma cuisine... Prenons des forces, demain on va voir le vieux M. Vandebroek. Il a le plus grand troupeau de moutons du village. C'est là qu'on devrait avoir le plus de chances de trouver la bête.
+
+_Tout le monde rentre dans la maison._
