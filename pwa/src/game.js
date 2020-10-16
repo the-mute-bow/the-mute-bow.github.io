@@ -708,7 +708,8 @@ class Game {
 		this.touches.rout = Math.floor(can.height / 7);
 
 		if (this.soundtrack) {
-			if (['normal', 'title'].includes(this.mode)) this.soundtrack.volume = 1;
+			if (options.includes('nsound')) this.soundtrack.volume = 0;
+			else if (['normal', 'title'].includes(this.mode)) this.soundtrack.volume = 1;
 			else if (this.title != 'menu') this.soundtrack.volume = 0.3;
 		}
 
@@ -1036,7 +1037,7 @@ class Game {
 		for (let entity of this.ord_ent) entity.draw(gctx, 'main');
 
 		// Tree calc
-		gctx.drawImage(this.tree_calc, 0, 0);
+		if (this.tree_calc) gctx.drawImage(this.tree_calc, 0, 0);
 
 		// fog_map
 		if (this.fog_map) gctx.drawImage(this.fog_map.img, 0, 0);

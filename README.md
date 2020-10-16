@@ -31,11 +31,17 @@ permalink: /readme.html
 
 ## Change log
 
+### 0.1.1
+
+-   Starting chapter 2 script and code.
+-   Gamemode selection.
+-   Chapter selection.
+
 ## 0.1.0
 
 -   Fence aiming draw.
 -   Fence placing with 10 wood cost.
--   <font color="lightgreen">**Chapter 1 ready.**</font>
+-   <font color="#cfc">**Chapter 1 ready.**</font>
 
 ### **0.0.51**
 

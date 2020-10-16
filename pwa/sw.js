@@ -1,4 +1,4 @@
-let version = '0.1.0';
+let version = '0.1.1';
 
 let files = [
 	// system
@@ -13,7 +13,9 @@ let files = [
 	'./src/event.js',
 	'./src/entity.js',
 	'./src/game.js',
+	'./src/pages/test.js',
 	'./src/pages/menu.js',
+	'./src/pages/chplist.js',
 	'./src/pages/chp1.js',
 	'./src/pages/chp2.js',
 	'./src/main.js',
@@ -40,6 +42,8 @@ let files = [
 	'./sounds/tense-ambience.mp3',
 
 	'./img/title.png',
+	'./img/chapters.png',
+
 	'./img/ground1.png',
 	'./img/ground1-night.png',
 
@@ -134,6 +138,8 @@ let files = [
 	'./img/buttons/menu-button-shadow.png',
 	'./img/buttons/menu2-button.png',
 	'./img/buttons/menu2-button-shadow.png',
+	'./img/buttons/small-button.png',
+	'./img/buttons/small-button-shadow.png',
 	'./img/buttons/pause-button.png',
 	'./img/buttons/pause-button-shadow.png',
 	'./img/buttons/mission-button.png',

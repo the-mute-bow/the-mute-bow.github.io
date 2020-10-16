@@ -1262,7 +1262,7 @@ pages['chp1'] = game => {
 												click: dialog => {
 													game.dialog = null;
 													game.dialog = {
-														character: 'Piet',
+														character: 'piet',
 														text:
 															lang == '#fr'
 																? `Elle m'a empêché de brûler la cuisine... Prenons des forces, demain on va voir le vieux M. Vandebroek. Il a le plus grand troupeau de moutons du village. C'est là qu'on devrait avoir le plus de chances de trouver la bête.`

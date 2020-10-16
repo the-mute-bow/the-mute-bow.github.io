@@ -1,0 +1,183 @@
+pages['chplist'] = game => {
+	game.variant = '';
+
+	game.images = [];
+	game.sounds = {
+		click: new Audio('./sounds/click.mp3')
+	};
+
+	game.soundtrack = game.sounds.menu;
+	game.play_soundtrack = true;
+	game.loadImg(['chapters.png', 'buttons/menu-button.png', 'buttons/menu-button-shadow.png', 'buttons/menu2-button.png', 'buttons/menu2-button-shadow.png', 'buttons/small-button.png', 'buttons/small-button-shadow.png'], () => {
+		game.ground = game.images['chapters'];
+		game.tree_calc = null;
+		game.fog_map = null;
+
+		game.can.height = game.ground.height;
+		game.can.width = game.ground.width;
+		game.bg_color = '#202124';
+		game.speed = 1;
+
+		treeList = [];
+
+		game.entities = {
+			buildings: [],
+			trees: [],
+			sheeps: [],
+			humans: [],
+			creatures: [],
+			particles: []
+		};
+
+		game.player = null;
+
+		for (let coords of treeList) game.entities.trees.push(new Tree(coords, 0));
+
+		game.cam = {
+			x: 108,
+			y: 40,
+			h: 128,
+			o: 1,
+			targ_h: 100,
+			default_h: 110,
+			targ_o: 0,
+			targ_speed: 400,
+			target: { x: 108, y: 40 }
+		};
+
+		game.buttons = [
+			new Button(
+				'play',
+				'menu-button',
+				lang == '#fr' ? 'Jouer' : 'Play',
+				btn => ({
+					x: (can.width - btn.img.width * game.scale) / 2,
+					y: can.height - (btn.img.height + 5) * game.scale
+				}),
+				btn => {
+					game.events.push(
+						new TimeEvent(200, event => {
+							btn.kill(300);
+						}),
+						new TimeEvent(700, event => {
+							loadPage('chp' + game.cursor);
+						})
+					);
+				}
+			),
+			new Button(
+				'prev',
+				'small-button',
+				'<',
+				btn => ({
+					x: (can.width - btn.img.width * game.scale) / 2 - 26 * game.scale,
+					y: can.height - (btn.img.height + 5) * game.scale
+				}),
+				btn => {
+					game.triggerEvent('chp' + (game.cursor - 1));
+
+					if (game.cursor > 1) {
+						game.events.push(
+							new TimeEvent(400, event => {
+								btn.mode = 'normal';
+							})
+						);
+					}
+				}
+			),
+			new Button(
+				'next',
+				'small-button',
+				'>',
+				btn => ({
+					x: (can.width - btn.img.width * game.scale) / 2 + 26 * game.scale,
+					y: can.height - (btn.img.height + 5) * game.scale
+				}),
+				btn => {
+					game.triggerEvent('chp' + (game.cursor + 1));
+
+					if (game.cursor < 2) {
+						game.events.push(
+							new TimeEvent(400, event => {
+								btn.mode = 'normal';
+							})
+						);
+					}
+				}
+			),
+			new Button(
+				'quit',
+				'small-button',
+				'<',
+				btn => ({
+					x: 5 * game.scale,
+					y: 5 * game.scale
+				}),
+				btn => {
+					game.events.push(
+						new TimeEvent(200, event => {
+							btn.kill(300);
+						}),
+						new TimeEvent(700, event => {
+							loadPage('menu');
+						})
+					);
+				}
+			)
+		];
+
+		game.overlays = [
+			new OverText(
+				'title',
+				overtext => '',
+				overtext => ({
+					x: can.width / 2,
+					y: 16 * game.scale
+				}),
+				1800,
+				12,
+				'#cdcad3'
+			),
+			new OverText(
+				'info',
+				overtext => '',
+				overtext => ({
+					x: can.width / 2,
+					y: can.height / 2 + 8 * game.scale
+				}),
+				1800,
+				12,
+				'#202124'
+			)
+		];
+
+		game.events = [];
+
+		game.cursor = 1;
+
+		game.event_map = {
+			chp1: () => {
+				game.cam.target.x = 108;
+				game.cursor = 1;
+				game.getOverlay('title').getText = overtext => (lang == '#fr' ? 'Chapitre 1: Retrouvailles.' : 'Chapter 1: Reunion.');
+				game.getOverlay('info').getText = overtext => '';
+				game.getButton('prev').mode = 'disabled';
+				game.getButton('play').mode = 'normal';
+				game.getButton('next').mode = 'normal';
+			},
+			chp2: () => {
+				game.cam.target.x = 108 + 192;
+				game.cursor = 2;
+				game.getOverlay('title').getText = overtext => (lang == '#fr' ? 'Chapitre 2: Une étrange créature.' : 'Chapter 2: A strange creature.');
+				game.getOverlay('info').getText = overtext => (lang == '#fr' ? 'Bientôt disponible.' : 'Coming soon.');
+				game.getButton('prev').mode = 'normal';
+				game.getButton('play').mode = lang == '#dev' ? 'normal' : 'disabled';
+				game.getButton('next').mode = 'disabled';
+			}
+		};
+
+		game.triggerEvent('chp1');
+
+		game.loop = true;
+	});
+};

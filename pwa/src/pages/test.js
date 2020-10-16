@@ -1,4 +1,4 @@
-pages['chp2'] = game => {
+pages['test'] = game => {
 	game.images = [];
 	game.sounds = {
 		click: new Audio('./sounds/click.mp3'),
@@ -278,7 +278,7 @@ pages['chp2'] = game => {
 				],
 				trees: [],
 				sheeps: [new Sheep({ x: 228, y: 104, z: 0 }), new Sheep({ x: 242, y: 90, z: 0 })],
-				humans: [new Human('eliot', { x: 325, y: 119, z: 0 }), new Human('lea', { x: 315, y: 118, z: 0 }), new Human('shabyn', { x: 308, y: 119, z: 0 }), new Human('piet', { x: 318, y: 124, z: 0 })],
+				humans: [new Human('eliot', { x: 315, y: 150, z: 0 }), new Human('lea', { x: 320, y: 126, z: 0 }), new Human('shabyn', { x: 297, y: 125, z: 0 }), new Human('piet', { x: 308, y: 128, z: 0 })],
 				creatures: [new Creature({ x: 191, y: 145, z: 0 }), new Creature({ x: 200, y: 136, z: 0 }), new Creature({ x: 205, y: 148, z: 0 })],
 				particles: []
 			};
@@ -378,13 +378,8 @@ pages['chp2'] = game => {
 				},
 				start: () => {
 					game.mode = 'normal';
+					for (let event of ['creature_dead', 'creature_nearby', 'dead_human']) game.triggerEvent(event);
 					game.fog_map.fill();
-					// for (let event of ['creature_dead', 'creature_nearby', 'dead_human']) game.triggerEvent(event);
-
-					game.getHuman('eliot').target = { x: 321, y: 128, obj: null };
-					game.getHuman('lea').target = { x: 312, y: 118, obj: null };
-					game.getHuman('shabyn').target = { x: 300, y: 122, obj: null };
-					game.getHuman('piet').target = { x: 304, y: 133, obj: null };
 
 					game.events.push(
 						new TimeEvent(1000, event => {
@@ -392,6 +387,19 @@ pages['chp2'] = game => {
 							game.initMissionButton();
 							game.initCoinOverlays();
 							if (lang == '#dev') game.initDevOverlays();
+						}),
+
+						new WalkEvent(318, 140, 24, 0.8, game.entities.humans, 'all', 'in', 'white', event => {
+							game.getHuman('shabyn').event = () => {
+								game.getHuman('shabyn').event = null;
+								game.dialog = {
+									character: 'shabyn',
+									text: "j'aime pas les moutons. Tsheeeep.",
+									click: dialog => {
+										game.dialog = null;
+									}
+								};
+							};
 						})
 					);
 				},
@@ -554,7 +562,7 @@ pages['chp2'] = game => {
 
 			game.loop = true;
 
-			// for (let mob of [...game.entities.humans, ...game.entities.sheeps]) mob.target = null;
+			for (let mob of [...game.entities.humans, ...game.entities.sheeps]) mob.target = null;
 
 			game.player.mana.val = 4;
 		}
