@@ -31,6 +31,15 @@ permalink: /readme.html
 
 ## Change log
 
+### 0.1.2
+
+-   Chapter 2 title.
+
+**[ main site ]**
+
+-   New presentation.
+-   Twitter & email links.
+
 ### 0.1.1
 
 -   Starting chapter 2 script and code.
@@ -41,7 +50,7 @@ permalink: /readme.html
 
 -   Fence aiming draw.
 -   Fence placing with 10 wood cost.
--   <font color="#cfc">**Chapter 1 ready.**</font>
+-   <font color="#cfc"><b>Chapter 1 ready.</b></font>
 
 ### **0.0.51**
 

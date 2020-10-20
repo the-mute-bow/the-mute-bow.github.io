@@ -5,15 +5,6 @@
 
 		<title>The Mute Bow</title>
 
-		<script type="application/ld+json">
-			{
-				"@context": "https://schema.org",
-				"@type": "Application",
-				"url": "https://the-mute-bow.com",
-				"logo": "https://the-mute-bow.com/pwa/img/icon/icon192.png"
-			}
-		</script>
-
 		<meta name="keywords" content="The, Mute, Bow, mobile, game, app, play" />
 		<meta name="description" content="The Mute Bow, fight against dark creatures !" />
 		<meta name="author" content="Nicolas Gouwy" />
@@ -34,8 +25,9 @@
 		<img id="load" src="./pwa/img/gifs/loading.gif" />
 
 		<main class="hidden">
-			<img class="bg" id="background-top-desk" src="./img/background-top-desk.png" />
-			<img style="display: none" class="bg" id="background-top-mobile" src="./img/background-top-mobile.png" />
+			<img class="desk bg" id="background-top-desk" src="./img/background-top-desk.png" />
+			<img class="mobile bg" id="background-top-mobile" src="./img/background-top-mobile.png" />
+
 			<header>
 				<img id="title" src="./pwa/img/title.png" />
 
@@ -44,14 +36,19 @@
 					<img id="flag-img" src="" />
 				</a>
 
-				<a id="play-btn" class="button" href="#play-btn">
+				<a id="play-btn" class="button" href="#chapters">
 					<img class="shadow" src="./pwa/img/buttons/menu-button-shadow.png" />
 					<img src="./pwa/img/buttons/menu-button.png" />
 					<p class="translate">Play|Jouer</p>
 				</a>
 			</header>
 
-			<section id="links">
+			<section id="chapters">
+				<h1 class="translate">Available Soon|Bientôt Disponible</h1>
+
+				<img class="desk bg" id="chapters-bg-desk" src="./img/chap1-desk.png" />
+				<img class="mobile bg" id="chapters-bg-mobile" src="./img/chap1-mobile.png" />
+
 				<img id="QR" src="./img/QR.png" />
 
 				<a href="./pwa/" id="google-play" class="button">
@@ -61,33 +58,48 @@
 				</a>
 			</section>
 
-			<img class="bg" id="background-bottom-desk" src="./img/background-bottom-desk.png" />
-			<img class="bg" id="background-bottom-mobile" src="./img/background-bottom-mobile.png" />
+			<section id="about">
+				<h1 class="translate">Story Mode|Mode Histoire</h1>
 
-			<img class="hovering optrans" id="eliot-hover" src="./img/eliot-out.png" />
-			<img class="hovering optrans" id="shabyn-hover" src="./img/shabyn-out.png" />
-			<img class="hovering optrans" id="piet-hover" src="./img/piet-out.png" />
-			<img class="hovering optrans" id="lea-hover" src="./img/lea-out.png" />
-			<img class="hovering optrans" id="sheep-hover" src="./img/sheep1-hover.png" />
+				<img class="desk bg" id="background-about-desk" src="./img/background-about-desk.png" />
+				<img class="mobile bg" id="background-about-mobile" src="./img/background-about-mobile.png" />
 
-			<img class="optrans transparent" id="background-bottom-strat-desk" src="./img/background-bottom-strat-desk.png" />
-			<img class="optrans transparent" id="background-bottom-strat-mobile" src="./img/background-bottom-strat-mobile.png" />
+				<img class="hovering optrans" id="eliot-hover" src="./img/eliot-out.png" />
+				<img class="hovering optrans" id="shabyn-hover" src="./img/shabyn-out.png" />
+				<img class="hovering optrans" id="piet-hover" src="./img/piet-out.png" />
+				<img class="hovering optrans" id="lea-hover" src="./img/lea-out.png" />
+				<img class="hovering optrans" id="sheep-hover" src="./img/sheep1-hover.png" />
 
-			<img class="hovering highlight optrans" id="eliot-hover" src="./img/eliot-hover.png" />
-			<img class="hovering highlight optrans" id="shabyn-hover" src="./img/shabyn-hover.png" />
-			<img class="hovering highlight optrans" id="piet-hover" src="./img/piet-hover.png" />
-			<img class="hovering highlight optrans" id="lea-hover" src="./img/lea-hover.png" />
-			<img class="hovering highlight optrans" id="sheep-hover" src="./img/sheep1-hover.png" />
-			<img class="hovering highlight optrans" id="creature" src="./pwa/img/gifs/loading.gif" />
+				<img class="desk optrans transparent" id="background-about-strat-desk" src="./img/background-about-strat-desk.png" />
+				<img class="mobile optrans transparent" id="background-about-strat-mobile" src="./img/background-about-strat-mobile.png" />
 
-			<p id="presentation">Loading...</p>
-			<p id="info1">Loading...</p>
+				<img class="hovering highlight optrans" id="eliot-hover" src="./img/eliot-hover.png" />
+				<img class="hovering highlight optrans" id="shabyn-hover" src="./img/shabyn-hover.png" />
+				<img class="hovering highlight optrans" id="piet-hover" src="./img/piet-hover.png" />
+				<img class="hovering highlight optrans" id="lea-hover" src="./img/lea-hover.png" />
+				<img class="hovering highlight optrans" id="sheep-hover" src="./img/sheep1-hover.png" />
+				<img class="hovering highlight optrans" id="creature" src="./pwa/img/gifs/loading.gif" />
 
-			<a href="https://paypal.me/nicolasgouwy" id="donate" class="button">
-				<img src="./pwa/img/buttons/menu2-button-shadow.png" class="shadow" />
-				<img src="./pwa/img/buttons/donate-button.png" />
-				<p class="translate">Donate|Donner</p>
-			</a>
+				<p id="presentation">Loading...</p>
+			</section>
+
+			<section id="contact">
+				<p class="footer-text translate">Contact Us:|Nous Contacter:</p>
+				<p class="footer-text"><a href="mailto:the-mute-bow@outlook.fr">contact@the-mute-bow.com</a></p>
+				<p class="footer-text"><a href="https://twitter.com/BowMute">@BowMute</a></p>
+				<div class="separator"></div>
+				<p class="footer-text"><a href="./licence.html">Licence</a></p>
+			</section>
+
+			<section id="donate">
+				<p class="footer-text translate">To support the project, you can donate below:|Pour soutenir le projet, vous pouvez faire un don ci-dessous:</p>
+
+				<a href="https://paypal.me/nicolasgouwy" id="donate-button" class="button">
+					<img src="./pwa/img/buttons/menu2-button-shadow.png" class="shadow" />
+					<img src="./pwa/img/buttons/donate-button.png" />
+					<p>Donate</p>
+				</a>
+			</section>
 		</main>
 
 		<script src="./cookie.js"></script>

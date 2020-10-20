@@ -4,6 +4,12 @@ permalink: /scripts/chap1.html
 
 # Chapitre 1
 
+> Quand je tire une flèche...\
+> et que je sens la corde de mon arc...\
+> vibrer jusque dans mon bras...\
+> c'est comme si je pouvais entendre...\
+> la flèche prendre son envol.
+
 _Eliot et Shabyn marchent dans la forêt en destination de la maison de Piet._
 
 > Shabyn: Dépèche-toi Eliot! Je suis pressée de revoir Piet!\

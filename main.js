@@ -54,8 +54,8 @@ for (let button of document.querySelectorAll('.button')) {
 let quotes = {
 	default:
 		lang == '#fr'
-			? `Il y a environ trois ans, des fermiers ont signalé du bétail dévoré par une bête étrange et dificile à identifier. Eliot, ses amis ainsi qu'un vétérinaire, sont allés voir sur place. Ils se sont réveillés dans un endroit étrange sans aucun souvenir.<br/><br/>Aujourd'hui, des fermiers de la région ont signalé la mort de leur bétail et Piet lui-même a perdu un de ses moutons cette nuit. Encore une fois, cela semble être la faute d'une bête inconnue. Ça ressemble beaucoup au scénario d'il y a trois ans, et cette fois, ils comptent bien découvrir ce qui s'est passé.`
-			: `About three years ago, farmers reported cattle being eaten by a strange beast that is difficult to identify. Eliot, his friends and a veterinarian, went to see on the spot. They woke up in a strange place with no memory.<br/><br/>Nowadays, farmers in the area reported the deaths of their cattle and Piet himself lost one of his sheep that night. Again, this seems to be the fault of an unknown beast. It is similar to the scenario from three years ago, and this time, they intend to find out what happened.`,
+			? `Il y a environ trois ans, des fermiers ont signalé qu'une partie de leur bétail avait été tué par une ou plusieurs bêtes mais impossible d'identifier l'espèce. Eliot, ses amis ainsi qu'un vétérinaire, sont allés voir sur place. Ils se sont réveillés dans un endroit étrange sans aucun souvenir.<br/><br/>Aujourd'hui, des fermiers de la région ont signalé la mort de leur bétail et Piet lui-même a perdu un de ses moutons cette nuit. Encore une fois, cela semble être la faute d'une bête inconnue. Ça ressemble beaucoup au scénario d'il y a trois ans, et cette fois, ils comptent bien découvrir ce qui s'est passé.<br/><br/><span style="opacity:0.5">Survole les personnages pour plus d'infos sur eux.</span>`
+			: `About three years ago, farmers reported that part of their cattle had been killed by one or more animals but could not identify the species. Eliot, his friends and a veterinarian, went to see on the spot. They woke up in a strange place with no memory.<br/><br/>Nowadays, farmers in the area reported the deaths of their cattle and Piet himself lost one of his sheep that night. Again, this seems to be the fault of an unknown beast. It is similar to the scenario from three years ago, and this time, they intend to find out what happened.<br/><br/><span style="opacity:0.5">Hover over the characters for more information about them.</span>`,
 	eliot:
 		lang == '#fr'
 			? `Eliot:<br/>Depuis les évènements d'il y a trois ans, Eliot n'entend plus et ne peut plus parler. Mais ses talents au maniment de l'arc, eux, n'ont pas dépéri. Au contraire, il s'est découvert des talent encore plus impressionnants que mystérieux.<br/><br/>Grâce à ce que Piet a nommé des perles de mana - des perles violettes trouvées dans les poches de nos amis après avoir repris conscience il y a trois ans - Eliot est capable de manier ses flèches dans les airs. Depuis, les gens de la région l'ont surnommé "l'arc muet".`
@@ -78,18 +78,17 @@ let quotes = {
 
 for (let element of document.querySelectorAll('.hovering')) {
 	element.addEventListener('mouseover', event => {
-		document.querySelector('#background-bottom-strat-desk').classList.remove('transparent');
-		document.querySelector('#background-bottom-strat-mobile').classList.remove('transparent');
+		document.querySelector('#background-about-strat-desk').classList.remove('transparent');
+		document.querySelector('#background-about-strat-mobile').classList.remove('transparent');
 		let id = element.getAttribute('id').split('-')[0];
 		document.querySelector('#presentation').innerHTML = quotes[id];
 	});
 
 	element.addEventListener('mouseout', event => {
-		document.querySelector('#background-bottom-strat-desk').classList.add('transparent');
-		document.querySelector('#background-bottom-strat-mobile').classList.add('transparent');
+		document.querySelector('#background-about-strat-desk').classList.add('transparent');
+		document.querySelector('#background-about-strat-mobile').classList.add('transparent');
 		document.querySelector('#presentation').innerHTML = quotes.default;
 	});
 }
 
 document.querySelector('#presentation').innerHTML = quotes.default;
-document.querySelector('#info1').innerHTML = lang == '#fr' ? `Survole les personnages pour plus d'infos sur eux.` : `Hover over the characters for more information about them.`;

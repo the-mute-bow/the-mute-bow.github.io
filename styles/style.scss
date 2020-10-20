@@ -23,8 +23,22 @@ body {
 
 p,
 a,
-h1 {
+h1,
+h2,
+h3 {
 	font-family: Pixelar;
+	color: $lightgray;
+}
+
+a {
+	color: $blue;
+	text-decoration: none;
+}
+
+h1 {
+	font-size: 5vw;
+	font-weight: normal;
+	margin-left: 5vw;
 }
 
 *::selection {
@@ -94,103 +108,6 @@ img {
 	z-index: -1;
 }
 
-.optrans {
-	transition: opacity 0.5s;
-}
-
-.hovering {
-	position: absolute;
-}
-
-.highlight {
-	opacity: 0;
-}
-
-.highlight:hover {
-	opacity: 1;
-}
-
-#eliot-hover {
-	width: 5.36vw;
-	top: 99vw;
-	left: 22vw;
-}
-
-#shabyn-hover {
-	width: 5.36vw;
-	top: 95vw;
-	left: 28vw;
-}
-
-#piet-hover {
-	width: 5.36vw;
-	top: 92vw;
-	left: 21vw;
-}
-
-#lea-hover {
-	width: 5.36vw;
-	top: 95vw;
-	left: 15vw;
-}
-
-#sheep-hover {
-	width: 6.5vw;
-	top: 82vw;
-	left: 18vw;
-}
-
-#creature {
-	width: 5.3vw;
-	top: 96vw;
-	left: 4vw;
-}
-
-#presentation,
-#info1 {
-	transition: color 0.5s;
-	position: absolute;
-	font-size: 2.6vw;
-	color: $lightgray;
-	text-align: justify;
-}
-
-#presentation {
-	top: 79vw;
-	left: 51vw;
-	right: 3vw;
-}
-
-#info1 {
-	top: 74vw;
-	left: 5vw;
-	right: 5vw;
-	text-align: center;
-	opacity: 0.4;
-}
-
-#background-bottom-desk,
-#background-bottom-strat-desk {
-	margin-bottom: 12vw;
-	position: absolute;
-	width: 50vw;
-	top: 76vw;
-}
-
-#background-bottom-mobile,
-#background-bottom-strat-mobile {
-	position: absolute;
-	width: 100%;
-	top: 220vw;
-	display: none;
-}
-
-#donate {
-	width: 19vw;
-	left: 50%;
-	top: 117vw;
-}
-
 #load {
 	position: absolute;
 	z-index: -2;
@@ -222,33 +139,140 @@ img {
 	width: 14vw;
 }
 
-#links {
+#chapters {
 	position: absolute;
-	top: 53vw;
+	top: 54.5vw;
 	height: 28vw;
+	width: 100%;
 
 	#QR {
 		width: 22vw;
 		position: absolute;
-		left: 20vw;
+		left: 8vw;
+		top: 14.5vw;
 	}
 
 	#google-play {
 		position: absolute;
 		width: 30vw;
-		left: 65vw;
-		top: 8vw;
+		left: 50vw;
+		top: 38vw;
 
 		p {
-			color: $lightgray;
 			padding: 0.7vw 0vw 0vw 4vw;
+			color: $lightgray;
 		}
 	}
 }
 
-a {
-	color: $blue;
-	text-decoration: none;
+#about {
+	position: absolute;
+	top: 100vw;
+	width: 100%;
+
+	.optrans {
+		transition: opacity 0.5s;
+	}
+
+	.hovering {
+		position: absolute;
+	}
+
+	.highlight {
+		opacity: 0;
+	}
+
+	.highlight:hover {
+		opacity: 1;
+	}
+
+	#eliot-hover {
+		width: 5.36vw;
+		top: 36vw;
+		left: 18vw;
+	}
+
+	#shabyn-hover {
+		width: 5.36vw;
+		top: 31vw;
+		left: 22vw;
+	}
+
+	#piet-hover {
+		width: 5.36vw;
+		top: 29vw;
+		left: 16vw;
+	}
+
+	#lea-hover {
+		width: 5.36vw;
+		top: 32vw;
+		left: 10vw;
+	}
+
+	#sheep-hover {
+		width: 6.5vw;
+		top: 18vw;
+		left: 12vw;
+	}
+
+	#creature {
+		width: 5.3vw;
+		top: 40vw;
+		left: 4vw;
+	}
+
+	#presentation {
+		transition: color 0.5s;
+		position: absolute;
+		font-size: 2.6vw;
+
+		text-align: justify;
+		top: 12.5vw;
+		left: 43vw;
+		right: 3vw;
+	}
+
+	#background-about-mobile,
+	#background-about-desk,
+	#background-about-strat-mobile,
+	#background-about-strat-desk {
+		position: absolute;
+		width: 100%;
+	}
+}
+
+.footer-text {
+	font-size: 2.6vw;
+}
+
+#contact {
+	position: absolute;
+	width: 40%;
+	top: 160vw;
+	left: 3vw;
+	margin-bottom: 6vw;
+
+	.separator {
+		height: 0.3vw;
+		width: 60%;
+		background-color: $lightgray;
+		opacity: 0.2;
+		margin: 1.5vw 0vw 0.5vw 0vw;
+	}
+}
+
+#donate {
+	position: absolute;
+	width: 40%;
+	top: 160vw;
+	left: 50vw;
+
+	#donate-button {
+		width: 19vw;
+		left: 50%;
+		top: 8vw;
+	}
 }
 
 #meh-img {
@@ -261,7 +285,6 @@ a {
 #meh,
 #text-404 {
 	position: absolute;
-	color: $lightgray;
 	text-align: center;
 	width: 100%;
 }
@@ -277,7 +300,27 @@ a {
 	margin-bottom: 5vw;
 }
 
+.desk {
+	display: inline;
+}
+
+.mobile {
+	display: none;
+}
+
 @media (max-width: 600px) {
+	h1 {
+		font-size: 11vw;
+	}
+
+	.desk {
+		display: none;
+	}
+
+	.mobile {
+		display: inline;
+	}
+
 	.button {
 		.shadow {
 			top: 0.8vw !important;
@@ -301,14 +344,6 @@ a {
 		}
 	}
 
-	#background-top-desk {
-		display: none;
-	}
-
-	#background-top-mobile {
-		display: inline !important;
-	}
-
 	#flag {
 		width: 10vw;
 		margin: 5vw 0vw;
@@ -330,94 +365,109 @@ a {
 		width: 28vw;
 	}
 
-	#links {
-		top: 130vw;
-		height: 80vw;
+	#chapters {
+		top: 128vw;
+		height: 28vw;
+		width: 100%;
 
 		#QR {
-			width: 50vw;
-			left: 25vw;
+			width: 56vw;
+			left: 50%;
+			transform: translateX(-50%);
+			top: 84vw;
 		}
 
 		#google-play {
-			position: absolute;
 			width: 60vw;
-			top: 56vw;
 			left: 50vw;
+			top: 140vw;
 
 			p {
-				left: 4vw;
-				top: 1vw;
+				padding: 1.4vw 0vw 0vw 8vw;
 			}
 		}
 	}
 
-	#eliot-hover {
-		width: 12vw;
-		top: 272vw;
-		left: 45vw;
+	#about {
+		top: 300vw;
+		width: 100%;
+
+		#eliot-hover {
+			width: 12vw;
+			top: 68vw;
+			left: 52vw;
+		}
+
+		#shabyn-hover {
+			width: 12vw;
+			top: 55vw;
+			left: 62vw;
+		}
+
+		#piet-hover {
+			width: 12vw;
+			top: 52vw;
+			left: 46vw;
+		}
+
+		#lea-hover {
+			width: 12vw;
+			top: 61vw;
+			left: 32vw;
+		}
+
+		#sheep-hover {
+			width: 14vw;
+			top: 30vw;
+			left: 40vw;
+		}
+
+		#creature {
+			width: 11vw;
+			top: 60vw;
+			left: 12vw;
+		}
+
+		#presentation {
+			font-size: 6vw;
+			top: 100vw;
+			left: 6vw;
+			right: 6vw;
+		}
 	}
 
-	#shabyn-hover {
-		width: 12vw;
-		top: 264vw;
-		left: 60vw;
-	}
-
-	#piet-hover {
-		width: 12vw;
-		top: 257vw;
-		left: 44vw;
-	}
-
-	#lea-hover {
-		width: 12vw;
-		top: 262vw;
-		left: 30vw;
-	}
-
-	#sheep-hover {
-		width: 14.2vw;
-		top: 234vw;
-		left: 37vw;
-	}
-
-	#creature {
-		width: 11vw;
-		top: 268vw;
-		left: 8vw;
-	}
-
-	#presentation,
-	#info1 {
+	.footer-text {
 		font-size: 6vw;
-		left: 5vw;
-		right: 5vw;
 	}
 
-	#presentation {
-		top: 310vw;
-	}
+	#contact {
+		top: 572vw;
+		margin-bottom: 20vw;
+		left: 6vw;
+		right: 6vw;
+		width: auto;
 
-	#info1 {
-		top: 210vw;
-	}
-
-	#background-bottom-desk,
-	#background-bottom-strat-desk {
-		display: none;
-	}
-
-	#background-bottom-mobile,
-	#background-bottom-strat-mobile {
-		display: inline !important;
+		.separator {
+			left: 6vw;
+			right: 6vw;
+			margin-top: 4vw;
+			margin-bottom: 3vw;
+			height: 0.6vw;
+			width: auto;
+		}
 	}
 
 	#donate {
-		width: 38vw;
-		left: 50%;
-		top: 410vw;
-		margin-bottom: 24vw;
+		top: 534vw;
+		left: 6vw;
+		right: 6vw;
+		width: auto;
+
+		#donate-button {
+			width: 38vw;
+			left: 50%;
+			top: 20vw;
+		}
 	}
 
 	#meh-img {

@@ -277,9 +277,9 @@ pages['chp2'] = game => {
 					new Fence({ x: 244, y: 82, z: 0 }, 0)
 				],
 				trees: [],
-				sheeps: [new Sheep({ x: 228, y: 104, z: 0 }), new Sheep({ x: 242, y: 90, z: 0 })],
+				sheeps: [new Sheep({ x: 220, y: 150, z: 0 }), new Sheep({ x: 202, y: 130, z: 0 })],
 				humans: [new Human('eliot', { x: 325, y: 119, z: 0 }), new Human('lea', { x: 315, y: 118, z: 0 }), new Human('shabyn', { x: 308, y: 119, z: 0 }), new Human('piet', { x: 318, y: 124, z: 0 })],
-				creatures: [new Creature({ x: 191, y: 145, z: 0 }), new Creature({ x: 200, y: 136, z: 0 }), new Creature({ x: 205, y: 148, z: 0 })],
+				creatures: [],
 				particles: []
 			};
 
@@ -338,6 +338,64 @@ pages['chp2'] = game => {
 						new TimeEvent(1000, event => {
 							game.overlays.push(
 								new OverText(
+									'text',
+									overtext => (lang == '#fr' ? `C'est étrange.` : `It's strange.`),
+									overtext => ({
+										x: can.width / 2,
+										y: can.height / 2
+									}),
+									1800,
+									6,
+									'#cdcad3'
+								)
+							);
+						}),
+
+						new TimeEvent(4000, event => {
+							for (let o of game.overlays) o.kill(500);
+
+							game.overlays.push(
+								new OverText(
+									'text',
+									overtext => (lang == '#fr' ? `Mes oreilles bourdonnent et mes yeux me font mal.` : `My ears are ringing and my eyes are aching.`),
+									overtext => ({
+										x: can.width / 2,
+										y: can.height / 2
+									}),
+									1800,
+									6,
+									'#cdcad3'
+								)
+							);
+						}),
+
+						new TimeEvent(7000, event => {
+							for (let o of game.overlays) o.kill(500);
+
+							game.overlays.push(
+								new OverText(
+									'text',
+									overtext => (lang == '#fr' ? `Il se passe quelque chose.` : `Something is happening.`),
+									overtext => ({
+										x: can.width / 2,
+										y: can.height / 2
+									}),
+									1800,
+									6,
+									'#cdcad3'
+								)
+							);
+						}),
+
+						new TimeEvent(9000, event => {
+							for (let o of game.overlays) o.kill(500);
+						}),
+
+						new TimeEvent(10000, event => {
+							for (let o of game.overlays) o.kill(500);
+
+							game.overlays.push(
+								new OverText(
 									'title',
 									overtext => (lang == '#fr' ? 'Chapitre 2' : 'Chapter 2'),
 									overtext => ({
@@ -351,7 +409,7 @@ pages['chp2'] = game => {
 							);
 						}),
 
-						new TimeEvent(2000, event => {
+						new TimeEvent(11000, event => {
 							game.overlays.push(
 								new OverText(
 									'title2',
@@ -367,11 +425,11 @@ pages['chp2'] = game => {
 							);
 						}),
 
-						new TimeEvent(4800, event => {
+						new TimeEvent(14800, event => {
 							for (let o of game.overlays) o.kill(1000);
 						}),
 
-						new TimeEvent(6000, event => {
+						new TimeEvent(16000, event => {
 							game.triggerEvent('start');
 						})
 					);
@@ -387,13 +445,61 @@ pages['chp2'] = game => {
 					game.getHuman('piet').target = { x: 304, y: 133, obj: null };
 
 					game.events.push(
-						new TimeEvent(1000, event => {
+						new TimeEvent(2000, event => {
+							game.getHuman('shabyn').event = () => {
+								game.getHuman('shabyn').event = null;
+								game.dialog = {
+									character: 'shabyn',
+									text: lang == '#fr' ? `On est censé être en pleine lune, mais je ne la vois pas, le ciel est complètement noir.` : `We're supposed to be on a full moon, but I can't see it, the sky is completely dark.`,
+									click: dialog => {
+										game.dialog = {
+											character: 'lea',
+											text: lang == '#fr' ? `Pareil, c'est comme si j'avais un brouillard noir devant les yeux.` : `Same, it's like I have a black fog in front of my eyes.`,
+											click: dialog => {
+												game.dialog = {
+													character: 'piet',
+													text: lang == '#fr' ? `Les moutons s'agitent, c'est peut-être la bête.` : `The sheep are agitated, it is perhaps the beast.`,
+													click: dialog => {
+														game.dialog = {
+															character: 'lea',
+															text: lang == '#fr' ? `J'en ai entendu un crier!` : `I heard one screaming!`,
+															click: dialog => {
+																game.dialog = {
+																	character: 'shabyn',
+																	text: lang == '#fr' ? `Très étrange comme cri... Il s'est arrêté.` : `Very strange as a cry... It stopped.`,
+																	click: dialog => {
+																		game.dialog = {
+																			character: 'piet',
+																			text: lang == '#fr' ? `Ils ne font plus aucun bruit. Allons voir.` : `They no longer make any noise. Lets go see.`,
+																			click: dialog => {
+																				game.dialog = null;
+																				game.player.target = null;
+																				game.triggerEvent('lets_see');
+																			}
+																		};
+																	}
+																};
+															}
+														};
+													}
+												};
+											}
+										};
+									}
+								};
+							};
+
 							game.initPauseButton();
 							game.initMissionButton();
 							game.initCoinOverlays();
 							if (lang == '#dev') game.initDevOverlays();
 						})
 					);
+
+					game.triggerEvent('dead_human');
+				},
+				lets_see: () => {
+					game.getHuman('piet').target = { x: 250, y: 150 };
 				},
 				creature_dead: () => {
 					game.events.push(
@@ -532,7 +638,7 @@ pages['chp2'] = game => {
 															new TimeEvent(500, event => {
 																game.speed = 1;
 																game.pause(false);
-																loadPage('menu');
+																loadPage('chplist');
 															})
 														);
 													},
