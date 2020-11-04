@@ -31,6 +31,17 @@ permalink: /readme.html
 
 ## Change log
 
+### 0.1.3
+
+-   Added `game.dimention`.
+-   Dimensional sprint.
+-   best perf fps set by average dtime.
+-   `'chapter'` cookie for chapter list page.
+
+**[ main site ]**
+
+-   Official [contact@the-mute-bow.com](mailto:contact@the-mute-bow.com) email.
+
 ### 0.1.2
 
 -   Chapter 2 title.
@@ -46,7 +57,7 @@ permalink: /readme.html
 -   Gamemode selection.
 -   Chapter selection.
 
-## 0.1.0
+## 0.1.0 - Chapter 1 release
 
 -   Fence aiming draw.
 -   Fence placing with 10 wood cost.

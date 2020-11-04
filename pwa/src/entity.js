@@ -256,6 +256,7 @@ class Human extends Mob {
 			pos,
 			{
 				main: new Sprite(game.images[name + variant], { x: 0, y: 0, w: 24, h: 24 }),
+				ghost: new Sprite(game.images['creature-light'], { x: 0, y: 0, w: 24, h: 24 }),
 				shadow: new Sprite(game.images['human-shadow'], { x: 0, y: 0, w: 24, h: 24 }),
 				axe: new Sprite(game.images['axe-hold'], { x: 0, y: 0, w: 24, h: 24 }),
 				axe_hit: new Sprite(game.images['axe-hit'], { x: 0, y: 0, w: 24, h: 24 }),
@@ -304,6 +305,8 @@ class Human extends Mob {
 		this.shoot_time = null;
 		this.aim_level = 0;
 		this.damage = 1;
+
+		this.aura = { color: '#202124', delay: 100, last: time };
 
 		this.weapons = {
 			bow: true,
@@ -361,19 +364,26 @@ class Human extends Mob {
 
 		this.moveOn(dtime, solids, mobs);
 
-		if (this.name != 'creature' && time - this.stamina.time > 900 / (this.speed * 2 - 1)) {
+		let stamina_dtime = 900 / (this.speed * 2 - 1);
+		if (game.dimension > 2) stamina_dtime *= 2;
+
+		if (this.name != 'creature' && time - this.stamina.time > stamina_dtime) {
 			this.stamina.time = time;
-			if (this.speed != 1) {
-				if (this.stamina.val <= 0 || this.look.aim) this.speed = 1;
-				else this.stamina.val--;
+			if (this.speed > 1) {
+				if (this.stamina.val <= 0 || this.look.aim) {
+					this.speed = 1;
+					if (game.dimension > 1) game.dimension = 0;
+				} else this.stamina.val--;
 			} else if (this.stamina.val < this.stamina.max) this.stamina.val++;
 		}
 
-		if (this.aura && time - this.aura.last > this.aura.delay && this.inScreen()) {
-			this.createAura(this.aura.color, 0);
+		if (this.aura && (this.name == 'creature' || game.dimension > 2) && time - this.aura.last > this.aura.delay && this.inScreen()) {
+			this.createAura(game.dimension > 1 ? '#cdcad3' : this.aura.color, 0);
 			this.aura.last = time + this.aura.delay * Math.random() * 0.5;
-			if (this.name == 'creature' && game.fog_map) this.aura.delay = 10;
 		}
+
+		if (game.fog_map || game.dimension > 1) this.aura.delay = 10;
+		else this.aura.delay = 100;
 
 		if (!this.tired && this.stamina.val < 1) {
 			this.tired = true;
@@ -392,9 +402,12 @@ class Human extends Mob {
 	}
 
 	draw(ctx, sprite_name = 'main', coords = null) {
+		this.sprites.ghost.tile.x = this.sprites.main.tile.x;
+		this.sprites.ghost.tile.y = this.sprites.main.tile.y;
+
 		let { x, y, z } = coords ? coords : { x: Math.floor(this.pos.x + 0.5), y: Math.floor(this.pos.y + 0.5), z: this.pos.z };
 
-		if (this.name != 'creature' || (game.fog_map && game.player && game.player.view_distance < 80)) {
+		if (this.name != 'creature' || game.dimension > 1 || (game.fog_map && game.player && game.player.view_distance < 80)) {
 			if (sprite_name == 'shadow') {
 				let shadow = this.sprites[sprite_name];
 				y -= z * 0.5;
@@ -408,7 +421,7 @@ class Human extends Mob {
 				x = Math.floor(x);
 				y = Math.floor(y);
 				z = Math.floor(z);
-				let body = this.sprites[sprite_name];
+				let body = this.sprites[game.dimension > 1 ? 'ghost' : sprite_name];
 				body.tile.y = Math.min(Math.max(0, body.tile.y), 3);
 
 				if (['bow', 'axe', 'fence'].includes(this.weapon) || (this.name == 'creature' && this.attack)) {
@@ -609,7 +622,6 @@ class Human extends Mob {
 class Creature extends Human {
 	constructor(pos) {
 		super('creature', pos);
-		this.sprites.light = new Sprite(game.images['creature-light'], { x: 0, y: 0, w: 24, h: 24 });
 		this.aura = { color: '#202124', delay: 100, last: time };
 		this.speed = 1.2;
 		this.target = null;

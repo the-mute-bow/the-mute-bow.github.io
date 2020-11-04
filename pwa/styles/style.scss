@@ -38,6 +38,10 @@ p {
 	font-family: Pixelar;
 }
 
+.grayscale {
+	filter: grayscale(1) invert(1);
+}
+
 .text {
 	font-size: 8vh;
 	margin: 8px 13vh;

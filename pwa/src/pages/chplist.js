@@ -176,7 +176,7 @@ pages['chplist'] = game => {
 			}
 		};
 
-		game.triggerEvent('chp1');
+		game.triggerEvent('chp' + getCookie('chapter'));
 
 		game.loop = true;
 	});

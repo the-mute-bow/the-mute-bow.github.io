@@ -284,7 +284,8 @@ pages['chp1'] = game => {
 			game.player = game.getHuman('eliot');
 			game.player.target = null;
 
-			game.fog_map = null;
+			game.fog = false;
+			game.dimension = 0;
 
 			game.cam = {
 				x: game.player.pos.x + 12,
@@ -306,7 +307,11 @@ pages['chp1'] = game => {
 			game.buttons = [];
 			game.overlays = [];
 
-			game.events = [];
+			game.events = [
+				new TimeEvent(1000, event => {
+					if (lang == '#dev') game.initDevOverlays();
+				})
+			];
 			game.event_map = {
 				title: () => {
 					if (lang != '#dev') {
@@ -476,7 +481,6 @@ pages['chp1'] = game => {
 						new TimeEvent(1000, event => {
 							game.initPauseButton();
 							game.initCoinOverlays();
-							// if (lang == '#dev') game.initDevOverlays();
 						}),
 						new TimeEvent(6000, event => {
 							game.player = game.getHuman('eliot');
@@ -1236,7 +1240,8 @@ pages['chp1'] = game => {
 									game.cam.targ_o = 1;
 								}),
 								new TimeEvent(4000, event => {
-									loadPage('menu');
+									if (getCookie('chapter') < 2) setCookie('chapter', 2);
+									loadPage('chplist');
 								})
 							);
 

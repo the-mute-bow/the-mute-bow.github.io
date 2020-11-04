@@ -279,7 +279,7 @@ pages['chp2'] = game => {
 				trees: [],
 				sheeps: [new Sheep({ x: 220, y: 150, z: 0 }), new Sheep({ x: 202, y: 130, z: 0 })],
 				humans: [new Human('eliot', { x: 325, y: 119, z: 0 }), new Human('lea', { x: 315, y: 118, z: 0 }), new Human('shabyn', { x: 308, y: 119, z: 0 }), new Human('piet', { x: 318, y: 124, z: 0 })],
-				creatures: [],
+				creatures: [new Creature({ x: 150, y: 160, z: 0 })],
 				particles: []
 			};
 
@@ -288,9 +288,7 @@ pages['chp2'] = game => {
 			game.player = game.getHuman('eliot');
 			game.player.target = null;
 
-			game.fog_map = new FogMap(game.ground.width, game.ground.height);
-			game.fog_map.humans.push(game.player);
-			game.fog_map.fill();
+			game.fog = true;
 
 			game.cam = {
 				x: game.player.pos.x + 12,
@@ -322,6 +320,9 @@ pages['chp2'] = game => {
 			};
 
 			game.mode = 'title';
+
+			game.dimension = 0;
+			game.fog = true;
 
 			game.buttons = [];
 			game.overlays = [];
@@ -436,10 +437,10 @@ pages['chp2'] = game => {
 				},
 				start: () => {
 					game.mode = 'normal';
-					game.fog_map.fill();
 					// for (let event of ['creature_dead', 'creature_nearby', 'dead_human']) game.triggerEvent(event);
 
-					game.getHuman('eliot').target = { x: 321, y: 128, obj: null };
+					// game.getHuman('eliot').target = { x: 321, y: 128, obj: null };
+					game.getHuman('eliot').target = null;
 					game.getHuman('lea').target = { x: 312, y: 118, obj: null };
 					game.getHuman('shabyn').target = { x: 300, y: 122, obj: null };
 					game.getHuman('piet').target = { x: 304, y: 133, obj: null };
@@ -500,12 +501,15 @@ pages['chp2'] = game => {
 				},
 				lets_see: () => {
 					game.getHuman('piet').target = { x: 250, y: 150 };
+					game.getHuman('shabyn').target = { x: 250, y: 150 };
+					game.getHuman('lea').target = { x: 250, y: 150 };
 				},
 				creature_dead: () => {
 					game.events.push(
 						new GameEvent(event => {
 							if (!game.entities.creatures.length) {
 								event.done = true;
+								game.dimension = 0;
 								game.soundtrack.pause();
 								game.soundtrack = game.sounds.night;
 								for (let human of game.entities.humans) human.health.val = 12;
@@ -602,11 +606,12 @@ pages['chp2'] = game => {
 									event.done = true;
 									game.end_caption = name.charAt(0).toUpperCase() + name.slice(1) + (lang == '#fr' ? ' est mort' + (['lea', 'shabyn'].includes(name) ? 'e.' : '.') : ' is dead.');
 									game.getButton('mission').kill(400);
+									game.dimension = 0;
 									game.events.push(
 										new TimeEvent(1000, event => {
 											game.getButton('pause').mode = 'pressed';
-											game.player = null;
 											game.pause(false);
+											game.player = null;
 
 											game.overlays = [
 												new OverText(

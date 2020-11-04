@@ -25,6 +25,8 @@ class Game {
 		this.scale = 1;
 		this.speed = 1;
 		this.mode = 'normal';
+		this.dimension = 0;
+		this.fog = false;
 		this.pause_time = 0;
 		this.fps = { frames: 0, duration: 0, value: 0 };
 
@@ -702,7 +704,7 @@ class Game {
 
 		let coef = this.average_dtime < dtime ? 10 : 100;
 		this.average_dtime = (dtime + this.average_dtime * (coef - 1)) / coef;
-		if (this.average_dtime < this.best_perf) this.best_perf = Math.max(dtime, 16.6);
+		if (this.average_dtime < this.best_perf) this.best_perf = Math.max(this.average_dtime, 16.6);
 
 		this.touches.rin = Math.floor(can.height / 16);
 		this.touches.rout = Math.floor(can.height / 7);
@@ -859,9 +861,7 @@ class Game {
 													let d = { x: c.pos.x - game.player.pos.x, y: c.pos.y - game.player.pos.y };
 													this.events.push(
 														new TimeEvent(Math.sqrt(d.x * d.x + d.y * d.y) * 10, event => {
-															c.sprites.light.tile.x = c.sprites.main.tile.x;
-															c.sprites.light.tile.y = c.sprites.main.tile.y;
-															c.sprites.light.draw(this.fog_map.img.getContext('2d'), { x: Math.floor(c.pos.x + 0.5), y: Math.floor(c.pos.y + 0.5) });
+															c.sprites.ghost.draw(this.fog_map.img.getContext('2d'), { x: Math.floor(c.pos.x + 0.5), y: Math.floor(c.pos.y + 0.5) });
 														})
 													);
 												}
@@ -887,6 +887,9 @@ class Game {
 					if (this.player.speed == 1) {
 						this.player.speed = 1.6;
 						this.player.setAlert('stamina-use', 600);
+					} else if (this.player.speed < 2 && this.player.setMana('-')) {
+						this.player.speed = 2.2;
+						this.dimension = 2;
 					}
 				}
 				if (event.side == 'R' && this.player.look.aim && this.player.look.aim < 3 && (this.player.weapon != 'bow' || this.player.setMana('-'))) this.player.look.aim++;
@@ -1214,6 +1217,27 @@ class Game {
 		this.cam.y += (y - this.cam.y) / s;
 		this.cam.h += (this.cam.targ_h - this.cam.h) / s;
 		this.cam.o += (this.cam.targ_o - this.cam.o) / s;
+
+		if (this.dimension == 0) {
+			this.dimension++;
+			can.classList.remove('grayscale');
+			if (this.fog) {
+				this.fog_map = new FogMap(this.ground.width, this.ground.height);
+				game.fog_map.humans.push(this.player);
+				this.fog_map.fill();
+			}
+		}
+
+		if (this.dimension == 2) {
+			this.dimension++;
+			this.fog_map = null;
+			can.classList.add('grayscale');
+		}
+
+		if (this.dimension == 3) {
+			this.cam.x += ((Math.random() * 2 - 1) / 20) * this.scale;
+			this.cam.y += ((Math.random() * 2 - 1) / 20) * this.scale;
+		}
 	}
 
 	getHuman(name) {

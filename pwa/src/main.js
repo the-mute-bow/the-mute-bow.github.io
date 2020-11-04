@@ -2,7 +2,7 @@ if (location.host == 'the-mute-bow.github.io') location.replace('https://the-mut
 
 let onAndroid = /Android/i.test(navigator.userAgent);
 
-let version = '0.1.2';
+let version = '0.1.3';
 document.getElementById('version').innerHTML = version;
 
 let lang = getCookie('lang-pwa');
@@ -35,6 +35,8 @@ if (options.includes('nfs')) {
 	allow_fullscreen = false;
 	console.log('disabled fullscreen');
 }
+
+if (!getCookie('chapter')) setCookie('chapter', 1);
 
 window.isUpdateAvailable = new Promise(function (resolve, reject) {
 	if ('serviceWorker' in navigator)
