@@ -1036,7 +1036,7 @@ pages['chp1'] = game => {
 																		text:
 																			lang == '#fr'
 																				? `Disparu... On ne se souvient même plus de qui il était. Au fait Piet, pourquoi il manque une barrière à ton enclos?`
-																				: `Gone... We don't even remember who he was. By the way Piet, why is a fence missing to your pen?`,
+																				: `Gone... We don't even remember who he was. By the way Piet, why is a fence missing to your enclosure?`,
 																		click: dialog => {
 																			game.dialog = {
 																				character: 'piet',
@@ -1061,7 +1061,7 @@ pages['chp1'] = game => {
 																										text:
 																											lang == '#fr'
 																												? `Eliot tu peux m'aider à réparer l'enclos? Je vais faire entrer les moutons.`
-																												: `Eliot can you help me fix the pen? I'll bring in the sheep.`,
+																												: `Eliot can you help me fix the enclosure? I'll bring in the sheep.`,
 																										click: dialog => {
 																											game.dialog = {
 																												character: 'piet',
@@ -1096,7 +1096,7 @@ pages['chp1'] = game => {
 				},
 				push_sheep: () => {
 					game.mission = {
-						text: lang == '#fr' ? `Pousse le mouton dans l'enclos pour le refermer.` : `Push the sheep into the pen in order to close it.`,
+						text: lang == '#fr' ? `Pousse le mouton dans l'enclos pour le refermer.` : `Push the sheep into the enclosure in order to close it.`,
 						img: './img/missions/sheep.gif',
 						click: mission => {
 							setScreen('game');
@@ -1213,7 +1213,7 @@ pages['chp1'] = game => {
 
 								game.dialog = {
 									character: 'piet',
-									text: lang == '#fr' ? `Bien, maintenant tu peux refermer l'enclos.` : 'Okay, now you can close the pen.',
+									text: lang == '#fr' ? `Bien, maintenant tu peux refermer l'enclos.` : 'Okay, now you can close the enclosure.',
 									click: dialog => {
 										game.dialog = null;
 										setScreen('mission', game.mission);

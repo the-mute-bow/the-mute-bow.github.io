@@ -93,152 +93,167 @@ class Game {
 	}
 
 	initPauseButton() {
-		this.buttons.push(
-			new Button(
-				'pause',
-				'pause-button',
-				'',
-				btn => ({
-					x: can.width - (btn.img.width + 3) * btn.scale,
-					y: btn.scale * 3
-				}),
-				btn => {
-					this.pause(true);
-
-					this.overlays.push(
-						new OverText(
+		this.events.push(
+			new GameEvent(event => {
+				if (game.mode == 'normal') {
+					event.done = true;
+					this.buttons.push(
+						new Button(
 							'pause',
-							overtext => 'Pause',
-							overtext => ({ x: can.width / 2, y: can.height / 3 }),
-							200,
-							18
-						)
-					);
-
-					this.buttons.push(
-						new Button(
-							'resume',
-							'menu2-button',
-							lang == '#fr' ? 'Reprendre' : 'Resume',
+							'pause-button',
+							'',
 							btn => ({
-								x: (can.width - btn.img.width * this.scale) / 2,
-								y: (can.height / 3) * 2 - btn.img.height * this.scale
+								x: can.width - (btn.img.width + 3) * btn.scale,
+								y: btn.scale * 3
 							}),
 							btn => {
-								this.pause();
-								this.getOverlay('pause').kill(400);
-								this.getButton('pause').mode = 'normal';
-								this.getButton('quit').kill(400);
-								btn.kill(400);
-								this.speed = 1;
-							},
-							200,
-							'normal',
-							10
-						)
-					);
+								this.pause(true);
 
-					this.buttons.push(
-						new Button(
-							'quit',
-							'menu2-button',
-							lang == '#fr' ? 'Quitter' : 'Quit',
-							btn => ({
-								x: (can.width - btn.img.width * this.scale) / 2,
-								y: (can.height / 3) * 2 + 2 * this.scale
-							}),
-							btn => {
-								this.getOverlay('pause').kill(400);
-								this.getButton('pause').mode = 'normal';
-								this.getButton('pause').kill(400);
-								this.getButton('resume').kill(400);
-								btn.kill(400);
-								this.speed = 1;
-								this.events.push(
-									new TimeEvent(500, event => {
-										this.speed = 1;
-										this.pause(false);
-										loadPage('menu');
-									})
+								this.overlays.push(
+									new OverText(
+										'pause',
+										overtext => 'Pause',
+										overtext => ({ x: can.width / 2, y: can.height / 3 }),
+										200,
+										18
+									)
+								);
+
+								this.buttons.push(
+									new Button(
+										'resume',
+										'menu2-button',
+										lang == '#fr' ? 'Reprendre' : 'Resume',
+										btn => ({
+											x: (can.width - btn.img.width * this.scale) / 2,
+											y: (can.height / 3) * 2 - btn.img.height * this.scale
+										}),
+										btn => {
+											this.pause();
+											this.getOverlay('pause').kill(400);
+											this.getButton('pause').mode = 'normal';
+											this.getButton('quit').kill(400);
+											btn.kill(400);
+											this.speed = 1;
+										},
+										200,
+										'normal',
+										10
+									)
+								);
+
+								this.buttons.push(
+									new Button(
+										'quit',
+										'menu2-button',
+										lang == '#fr' ? 'Quitter' : 'Quit',
+										btn => ({
+											x: (can.width - btn.img.width * this.scale) / 2,
+											y: (can.height / 3) * 2 + 2 * this.scale
+										}),
+										btn => {
+											this.getOverlay('pause').kill(400);
+											this.getButton('pause').mode = 'normal';
+											this.getButton('pause').kill(400);
+											this.getButton('resume').kill(400);
+											btn.kill(400);
+											this.speed = 1;
+											this.events.push(
+												new TimeEvent(500, event => {
+													this.speed = 1;
+													this.pause(false);
+													loadPage('menu');
+												})
+											);
+										},
+										200,
+										'normal',
+										10
+									)
 								);
 							},
-							200,
+							400,
 							'normal',
-							10
+							12,
+							'white',
+							this.scale
 						)
 					);
-				},
-				400,
-				'normal',
-				12,
-				'white',
-				game.scale
-			)
+				}
+			})
 		);
 	}
 
 	initDevOverlays() {
-		this.overlays.push(
-			new OverText(
-				'fps',
-				overtext => `${Math.floor(1000 / this.average_dtime)}`,
-				overtext => ({
-					x: 8 * overtext.scale,
-					y: can.height - 2 * overtext.scale
-				}),
-				400,
-				6,
-				'#cdcad3',
-				game.scale
-			),
-			new OverText(
-				'best',
-				overtext => `${Math.floor(1000 / this.best_perf)}`,
-				overtext => ({
-					x: 16 * overtext.scale,
-					y: can.height - 2 * overtext.scale
-				}),
-				400,
-				6,
-				'#cdcad3',
-				game.scale
-			),
-			new OverText(
-				'speed',
-				overtext => `${this.speed}`,
-				overtext => ({
-					x: 24 * overtext.scale,
-					y: can.height - 2 * overtext.scale
-				}),
-				400,
-				6,
-				'#cdcad3',
-				game.scale
-			),
-			new OverText(
-				'fog',
-				overtext => (this.fog_map ? `${this.fog_map.pix_size}` : '*'),
-				overtext => ({
-					x: 32 * overtext.scale,
-					y: can.height - 2 * overtext.scale
-				}),
-				400,
-				6,
-				'#cdcad3',
-				game.scale
-			),
-			new OverText(
-				'attack-sprite',
-				overtext => (this.player && this.player.attack ? `[${this.player.sprites.axe_hit.tile.x}, ${this.player.sprites.axe_hit.tile.y}]` : ''),
-				overtext => ({
-					x: 12 * overtext.scale,
-					y: can.height - 8 * overtext.scale
-				}),
-				400,
-				6,
-				'#cdcad3',
-				game.scale
-			)
+		this.events.push(
+			new GameEvent(event => {
+				if (game.mode == 'normal') {
+					event.done = true;
+
+					this.overlays.push(
+						new OverText(
+							'fps',
+							overtext => `${Math.floor(1000 / this.average_dtime)}`,
+							overtext => ({
+								x: 8 * overtext.scale,
+								y: can.height - 2 * overtext.scale
+							}),
+							400,
+							6,
+							'#cdcad3',
+							this.scale
+						),
+						new OverText(
+							'best',
+							overtext => `${Math.floor(1000 / this.best_perf)}`,
+							overtext => ({
+								x: 16 * overtext.scale,
+								y: can.height - 2 * overtext.scale
+							}),
+							400,
+							6,
+							'#cdcad3',
+							this.scale
+						),
+						new OverText(
+							'speed',
+							overtext => `${this.speed}`,
+							overtext => ({
+								x: 24 * overtext.scale,
+								y: can.height - 2 * overtext.scale
+							}),
+							400,
+							6,
+							'#cdcad3',
+							this.scale
+						),
+						new OverText(
+							'fog',
+							overtext => (this.fog_map ? `${this.fog_map.pix_size}` : '*'),
+							overtext => ({
+								x: 32 * overtext.scale,
+								y: can.height - 2 * overtext.scale
+							}),
+							400,
+							6,
+							'#cdcad3',
+							this.scale
+						),
+						new OverText(
+							'attack-sprite',
+							overtext => (this.player && this.player.attack ? `[${this.player.sprites.axe_hit.tile.x}, ${this.player.sprites.axe_hit.tile.y}]` : ''),
+							overtext => ({
+								x: 12 * overtext.scale,
+								y: can.height - 8 * overtext.scale
+							}),
+							400,
+							6,
+							'#cdcad3',
+							this.scale
+						)
+					);
+				}
+			})
 		);
 	}
 
@@ -286,7 +301,7 @@ class Game {
 								y: 1.5 * overlay.scale
 							}),
 							800,
-							game.scale * 0.64
+							this.scale * 0.64
 						),
 						new OverText(
 							'coins_text',
@@ -298,7 +313,7 @@ class Game {
 							800,
 							6,
 							'#fd8',
-							game.scale,
+							this.scale,
 							'left'
 						)
 					);
@@ -335,7 +350,7 @@ class Game {
 								y: 1.5 * overlay.scale
 							}),
 							800,
-							game.scale * 0.64
+							this.scale * 0.64
 						),
 						new OverText(
 							'coins_text',
@@ -347,7 +362,7 @@ class Game {
 							800,
 							6,
 							'#fd8',
-							game.scale,
+							this.scale,
 							'left'
 						)
 					);
@@ -664,8 +679,8 @@ class Game {
 							'menu-button',
 							lang == '#fr' ? 'Jouer' : 'Play',
 							btn => ({
-								x: (can.width - btn.img.width * game.scale) / 2,
-								y: can.height - (btn.img.height + 5) * game.scale
+								x: (can.width - btn.img.width * this.scale) / 2,
+								y: can.height - (btn.img.height + 5) * this.scale
 							}),
 							btn => {
 								for (let overlay of [...this.overlays, ...this.buttons]) overlay.kill(300);
@@ -795,8 +810,8 @@ class Game {
 											'bow-button',
 											'',
 											btn => ({
-												x: event.start.x - (btn.img.width / 2) * game.scale,
-												y: event.start.y - (btn.img.height / 2 + 10) * game.scale
+												x: event.start.x - (btn.img.width / 2) * this.scale,
+												y: event.start.y - (btn.img.height / 2 + 10) * this.scale
 											}),
 											btn => {
 												hide();
@@ -814,8 +829,8 @@ class Game {
 											'fence-button',
 											'',
 											btn => ({
-												x: event.start.x - (btn.img.width / 2 - 10) * game.scale,
-												y: event.start.y - (btn.img.height / 2) * game.scale
+												x: event.start.x - (btn.img.width / 2 - 10) * this.scale,
+												y: event.start.y - (btn.img.height / 2) * this.scale
 											}),
 											btn => {
 												hide();
@@ -833,8 +848,8 @@ class Game {
 											'axe-button',
 											'',
 											btn => ({
-												x: event.start.x - (btn.img.width / 2 + 10) * game.scale,
-												y: event.start.y - (btn.img.height / 2) * game.scale
+												x: event.start.x - (btn.img.width / 2 + 10) * this.scale,
+												y: event.start.y - (btn.img.height / 2) * this.scale
 											}),
 											btn => {
 												hide();
@@ -852,8 +867,8 @@ class Game {
 											'none-button',
 											'',
 											btn => ({
-												x: event.start.x - (btn.img.width / 2) * game.scale,
-												y: event.start.y - (btn.img.height / 2 - 10) * game.scale
+												x: event.start.x - (btn.img.width / 2) * this.scale,
+												y: event.start.y - (btn.img.height / 2 - 10) * this.scale
 											}),
 											btn => {
 												hide();
@@ -966,20 +981,18 @@ class Game {
 		}
 
 		for (let creature of this.entities.creatures) {
-			let trig_dist = 40;
-
 			if (creature.can_see) {
 				if (creature.target && creature.target.obj) {
 					let dx = Math.abs(creature.target.obj.pos.x - creature.pos.x);
 					let dy = Math.abs(creature.target.obj.pos.y - creature.pos.y);
-					if (dx > trig_dist || dy > trig_dist || Math.sqrt(dx * dx + dy * dy) > trig_dist) creature.target = null;
+					if (dx > creature.view_distance || dy > creature.view_distance || Math.sqrt(dx * dx + dy * dy) > creature.view_distance) creature.target = null;
 				}
 
 				if (!creature.target || !creature.target.obj || creature.target.obj.health.val <= 0) {
 					for (let mob of [...this.entities.humans, ...this.entities.sheeps]) {
 						let dx = Math.abs(mob.pos.x - creature.pos.x);
 						let dy = Math.abs(mob.pos.y - creature.pos.y);
-						if (dx < trig_dist && dy < trig_dist && Math.sqrt(dx * dx + dy * dy) < trig_dist) {
+						if (dx < creature.view_distance && dy < creature.view_distance && Math.sqrt(dx * dx + dy * dy) < creature.view_distance) {
 							creature.setAlert('exclam', 600);
 							creature.target = { obj: mob, x: 0, y: 0 };
 						}
@@ -1128,7 +1141,7 @@ class Game {
 		gctx.globalAlpha = 1;
 
 		// Game canvas draw
-		mctx.drawImage(this.can, -this.cam.x * this.scale + can.width / 2, -this.cam.y * this.scale + can.height / 2, this.ground.width * game.scale, this.ground.height * game.scale);
+		mctx.drawImage(this.can, -this.cam.x * this.scale + can.width / 2, -this.cam.y * this.scale + can.height / 2, this.ground.width * this.scale, this.ground.height * this.scale);
 
 		// Overlays and buttons
 		for (let overlay of this.overlays) overlay.draw();
@@ -1237,6 +1250,7 @@ class Game {
 		if (this.dimension == 3) {
 			this.cam.x += ((Math.random() * 2 - 1) / 20) * this.scale;
 			this.cam.y += ((Math.random() * 2 - 1) / 20) * this.scale;
+			if (this.player.speed < 2) this.dimension = 0;
 		}
 	}
 

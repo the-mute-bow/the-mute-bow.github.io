@@ -397,7 +397,7 @@ class Human extends Mob {
 
 		if (this.look.aim > this.aim_level) this.aim_level = this.look.aim;
 
-		this.view_distance = 12 + this.health.val * 5.7;
+		if (this.name != 'creature') this.view_distance = 12 + this.health.val * 5.7;
 		if (this.health.val <= 0) this.die();
 	}
 
@@ -575,7 +575,7 @@ class Human extends Mob {
 				let x2 = pos.x + dir.x * 9;
 				let y2 = pos.y + dir.y * 9 - 9;
 
-				for (let entity of [...game.entities.creatures, ...game.entities.trees].filter(entity => !entity.dead)) {
+				for (let entity of [...game.entities.creatures, ...game.entities.trees].filter(entity => !entity.dead && entity.name != this.name)) {
 					let d = {
 						x: entity.getFeet().x - pos.x,
 						y: entity.getFeet().y - pos.y
@@ -626,6 +626,7 @@ class Creature extends Human {
 		this.speed = 1.2;
 		this.target = null;
 		this.can_see = true;
+		this.view_distance = 40;
 	}
 
 	die() {
@@ -647,8 +648,12 @@ class Creature extends Human {
 		else if (!this.attack) {
 			mob.pushTo(v.x / mag, v.y / mag, 500);
 			mob.health.val -= 1;
-			mob.view_distance *= 2;
-			if (mob == game.player) game.cam.h *= 1.016;
+
+			if (mob == game.player) {
+				game.cam.h *= 1.1;
+				game.mode = 'normal';
+			}
+
 			this.aim_level = 1;
 			this.shoot();
 		}

@@ -272,14 +272,13 @@ pages['chp2'] = game => {
 					new Fence({ x: 263, y: 112, z: 0 }, 1),
 					new Fence({ x: 262, y: 92, z: 0 }, 1),
 					new Fence({ x: 207, y: 112, z: 0 }, 1),
-					new Fence({ x: 206, y: 93, z: 0 }, 1),
 					new Fence({ x: 218, y: 83, z: 0 }, 0),
 					new Fence({ x: 244, y: 82, z: 0 }, 0)
 				],
 				trees: [],
-				sheeps: [new Sheep({ x: 220, y: 150, z: 0 }), new Sheep({ x: 202, y: 130, z: 0 })],
+				sheeps: [new Sheep({ x: 224, y: 108, z: 0 }), new Sheep({ x: 220, y: 150, z: 0 })],
 				humans: [new Human('eliot', { x: 325, y: 119, z: 0 }), new Human('lea', { x: 315, y: 118, z: 0 }), new Human('shabyn', { x: 308, y: 119, z: 0 }), new Human('piet', { x: 318, y: 124, z: 0 })],
-				creatures: [new Creature({ x: 150, y: 160, z: 0 })],
+				creatures: [],
 				particles: []
 			};
 
@@ -305,17 +304,10 @@ pages['chp2'] = game => {
 			game.dialog = null;
 
 			game.mission = {
-				text: "Ceci est un test pour voir si l'affichage des missions s'effectue correctement avec une image animée et un texte.",
+				text: '',
 				img: './img/missions/the-mute-bow.gif',
 				click: mission => {
-					setScreen('mission', {
-						text: "Ceci est un test pour voir si l'affichage des missions s'effectue correctement avec une image fixe et un texte.",
-						img: './img/missions/sprint.png',
-						pixelated: true,
-						click: mission => {
-							setScreen('game');
-						}
-					});
+					setScreen('game');
 				}
 			};
 
@@ -327,7 +319,13 @@ pages['chp2'] = game => {
 			game.buttons = [];
 			game.overlays = [];
 
-			game.events = [];
+			game.events = [
+				new TimeEvent(1000, event => {
+					game.initCoinOverlays();
+					game.initPauseButton();
+					if (lang == '#dev') game.initDevOverlays();
+				})
+			];
 			game.event_map = {
 				title: () => {
 					game.triggerEvent('start');
@@ -439,11 +437,13 @@ pages['chp2'] = game => {
 					game.mode = 'normal';
 					// for (let event of ['creature_dead', 'creature_nearby', 'dead_human']) game.triggerEvent(event);
 
-					// game.getHuman('eliot').target = { x: 321, y: 128, obj: null };
-					game.getHuman('eliot').target = null;
+					game.getHuman('eliot').target = { x: 321, y: 128, obj: null };
 					game.getHuman('lea').target = { x: 312, y: 118, obj: null };
 					game.getHuman('shabyn').target = { x: 300, y: 122, obj: null };
 					game.getHuman('piet').target = { x: 304, y: 133, obj: null };
+
+					// game.triggerEvent('lets_see');
+					// return;
 
 					game.events.push(
 						new TimeEvent(2000, event => {
@@ -451,7 +451,8 @@ pages['chp2'] = game => {
 								game.getHuman('shabyn').event = null;
 								game.dialog = {
 									character: 'shabyn',
-									text: lang == '#fr' ? `On est censé être en pleine lune, mais je ne la vois pas, le ciel est complètement noir.` : `We're supposed to be on a full moon, but I can't see it, the sky is completely dark.`,
+									text:
+										lang == '#fr' ? `On est censé être en pleine lune, mais je ne la vois pas. Le ciel est complètement noir...` : `We're supposed to be on a full moon, but I can't see it. The sky is completely dark...`,
 									click: dialog => {
 										game.dialog = {
 											character: 'lea',
@@ -489,21 +490,215 @@ pages['chp2'] = game => {
 									}
 								};
 							};
-
-							game.initPauseButton();
-							game.initMissionButton();
-							game.initCoinOverlays();
-							if (lang == '#dev') game.initDevOverlays();
 						})
 					);
-
-					game.triggerEvent('dead_human');
 				},
 				lets_see: () => {
-					game.getHuman('piet').target = { x: 250, y: 150 };
-					game.getHuman('shabyn').target = { x: 250, y: 150 };
-					game.getHuman('lea').target = { x: 250, y: 150 };
+					game.events.push(
+						new TimeEvent(200, event => {
+							game.getHuman('piet').target = { x: 258, y: 119, obj: null };
+							game.getHuman('eliot').target = null;
+						}),
+						new TimeEvent(1200, event => {
+							game.getHuman('shabyn').target = { x: 248, y: 129, obj: null };
+						}),
+						new WalkEvent(280, 150, 24, 0.8, [game.player], 'all', 'in', 'white', event => {
+							game.getHuman('lea').target = { x: 289, y: 125, obj: null };
+							game.events.push(
+								new TimeEvent(1000, event => {
+									game.getHuman('piet').target = { x: 248, y: 100, obj: null };
+									game.getHuman('eliot').target = { x: 260, y: 122, obj: null };
+									game.getHuman('lea').target = { x: 270, y: 130, obj: null };
+								}),
+								new TimeEvent(3000, event => {
+									game.getHuman('piet').event = () => {
+										game.getHuman('piet').event = null;
+
+										game.dialog = {
+											character: 'piet',
+											text:
+												lang == '#fr'
+													? `L'enclos est encore cassé, un moutons est dehors et un autre est absent... Je vois des traces de sang au sol.`
+													: `The enclosure is broken again, a sheep is outside and another is absent... I see traces of blood on the ground.`,
+											click: dialog => {
+												game.dialog = {
+													character: 'lea',
+													text: lang == '#fr' ? `Vous avez pris vos arcs?` : `Did you take your bows?`,
+													click: dialog => {
+														game.dialog = {
+															character: 'shabyn',
+															text: lang == '#fr' ? `Ils sont à l'intérieur.` : `They are inside.`,
+															click: dialog => {
+																game.dialog = null;
+																game.triggerEvent('creature_pass');
+															}
+														};
+													}
+												};
+											}
+										};
+									};
+								})
+							);
+						})
+					);
 				},
+				creature_pass: () => {
+					c = new Creature({ x: 330, y: 124, z: 0 });
+					c.target = game.entities.sheeps[0];
+					c.view_distance = 200;
+					game.cam.target = c;
+					game.entities.creatures.push(c);
+
+					game.events.push(
+						new GameEvent(event => {
+							if (game.entities.sheeps.length < 2) {
+								event.done = true;
+								game.entities.creatures = [];
+								game.triggerEvent('dead_sheep');
+							}
+						})
+					);
+				},
+				dead_sheep: () => {
+					game.events.push(
+						new TimeEvent(1000, event => {
+							game.cam.target = game.player;
+						}),
+						new TimeEvent(2000, event => {
+							game.dialog = {
+								character: 'piet',
+								text: lang == '#fr' ? `Mon mouton!` : `My sheep!`,
+								click: dialog => {
+									game.dialog = {
+										character: 'shabyn',
+										text: lang == '#fr' ? `Mais c'est quoi ce truc?!` : `What the hell is that?!`,
+										click: dialog => {
+											game.dialog = {
+												character: 'lea',
+												text: lang == '#fr' ? `Grouillez-vous à prendre vos arcs!` : `Hurry to take your bows!`,
+												click: dialog => {
+													game.dialog = {
+														character: 'piet',
+														text: lang == '#fr' ? `Shabyn, vas dans la maison prendre nos arcs. Léa, tu restes près d'Éliot.` : `Shabyn, go into the house and get our bows. Lea, you stay near Eliot.`,
+														click: dialog => {
+															game.dialog = null;
+														}
+													};
+												}
+											};
+										}
+									};
+								}
+							};
+						}),
+						new TimeEvent(2100, event => {
+							game.getHuman('piet').target = { x: 250, y: 150, obj: null };
+							game.getHuman('shabyn').target = { x: 318, y: 120, obj: null };
+							game.getHuman('lea').target = { x: 280, y: 118, obj: null };
+						}),
+						new TimeEvent(3000, event => {
+							game.getHuman('eliot').target = { x: 272, y: 128, obj: null };
+						}),
+						new TimeEvent(4500, event => {
+							game.getHuman('piet').target = { x: 290, y: 140, obj: null };
+							game.getHuman('lea').target = { x: 10, y: -6, obj: game.player };
+						}),
+						new TimeEvent(8000, event => {
+							game.dialog = {
+								character: 'piet',
+								text: lang == '#fr' ? `Mais qu'est ce que tu fous, shabyn?` : `What the hell are you doing, shabyn?`,
+								click: dialog => {
+									game.dialog = {
+										character: 'shabyn',
+										text: lang == '#fr' ? `La porte est bloquée!` : `The door is blocked!`,
+										click: dialog => {
+											game.dialog = {
+												character: 'lea',
+												text: lang == '#fr' ? `Eh! Je crois qu'il y a du mouvement dans l'enclos!` : `Hey! I think there is movement in the enclosure!`,
+												click: dialog => {
+													game.dialog = null;
+													game.triggerEvent('creature_enclosure');
+												}
+											};
+										}
+									};
+								}
+							};
+						})
+					);
+				},
+				creature_enclosure: () => {
+					game.entities.sheeps[0].pos.x += 26;
+					game.entities.sheeps[0].pos.y += 10;
+					game.entities.sheeps[0].target = { x: 200, y: 200, obj: null };
+
+					game.getHuman('lea').target.y += 8;
+					game.getHuman('eliot').target = { x: 224, y: 128, obj: null };
+					game.getHuman('piet').target = { x: 250, y: 126, obj: null };
+					game.getHuman('shabyn').target = { x: 264, y: 128, obj: null };
+
+					c = new Creature({ x: 224, y: 96, z: 0 });
+					c.view_distance = 0;
+					game.entities.creatures.push(c);
+
+					game.events.push(
+						new TimeEvent(2500, event => {
+							for (let human of game.entities.humans) human.health.val = 9;
+							game.fog_map.fill();
+							game.soundtrack.pause();
+							game.soundtrack = game.sounds.dark;
+						}),
+						new TimeEvent(5000, event => {
+							game.getHuman('shabyn').event = () => {
+								game.getHuman('shabyn').event = null;
+
+								game.dialog = {
+									character: 'shabyn',
+									text: lang == '#fr' ? `Qu'est ce qu'il se passe? Il fait encore plus sombre!` : `What is happening? It's even darker!`,
+									click: dialog => {
+										game.dialog = {
+											character: 'piet',
+											text: lang == '#fr' ? `La bête est là! Léa, tu sais ce que c'est?` : `The beast is here! Léa, do you know what it is?`,
+											click: dialog => {
+												game.dialog = {
+													character: 'lea',
+													text: lang == '#fr' ? `Non, on dirait même pas un animal...` : `No, it doesn't even look like an animal...`,
+													click: dialog => {
+														game.dialog = {
+															character: 'piet',
+															text: lang == '#fr' ? `On dirait une ombre?` : `Looks like a shadow?`,
+															click: dialog => {
+																game.dialog = {
+																	character: 'shabyn',
+																	text:
+																		lang == '#fr'
+																			? `Une ombre qui possède une ombre, t'es con ou quoi? Ma mère m'a déjà parlé d'un truc comme ça, c'est un soukounian!`
+																			: `A shadow that has a shadow, are you stupid or what? My mother told me about something like that, it's a soukounian!`,
+																	click: dialog => {
+																		game.dialog = {
+																			character: 'piet',
+																			text:
+																				lang == '#fr'
+																					? `Arrête tes conneries et suis moi, on va essayer de s'approcher. Eliot, fais attention à Léa.`
+																					: `Stop your bullshit and follow me, we'll try to get close. Eliot, take care of Léa.`,
+																			click: dialog => {}
+																		};
+																	}
+																};
+															}
+														};
+													}
+												};
+											}
+										};
+									}
+								};
+							};
+						})
+					);
+				},
+
 				creature_dead: () => {
 					game.events.push(
 						new GameEvent(event => {
@@ -513,38 +708,6 @@ pages['chp2'] = game => {
 								game.soundtrack.pause();
 								game.soundtrack = game.sounds.night;
 								for (let human of game.entities.humans) human.health.val = 12;
-							}
-						})
-					);
-				},
-				creature_nearby: () => {
-					game.events.push(
-						new GameEvent(event => {
-							if (game.entities.humans.length < 4) event.done = true;
-							else {
-								for (let creature of game.entities.creatures) {
-									let dx = creature.pos.x - game.player.pos.x;
-									let dy = creature.pos.y - game.player.pos.y;
-									if (Math.sqrt(dx * dx + dy * dy) < 48) {
-										event.done = true;
-										game.player.health.val = 9;
-										game.fog_map.fill();
-										game.soundtrack.pause();
-										game.soundtrack = game.sounds.dark;
-										game.triggerEvent('creature_chase');
-
-										for (let human of game.entities.humans) {
-											if (human.name != 'eliot' && human.name != 'lea')
-												game.events.push(
-													new TimeEvent(Math.random() * 1000, event => {
-														human.setWeapon('bow');
-														human.enemies = 'creatures';
-													})
-												);
-										}
-										break;
-									}
-								}
 							}
 						})
 					);
@@ -604,9 +767,10 @@ pages['chp2'] = game => {
 							for (let name of ['eliot', 'shabyn', 'piet', 'lea']) {
 								if (!game.getHuman(name)) {
 									event.done = true;
+									if (game.getButton('mission')) game.getButton('mission').kill(400);
 									game.end_caption = name.charAt(0).toUpperCase() + name.slice(1) + (lang == '#fr' ? ' est mort' + (['lea', 'shabyn'].includes(name) ? 'e.' : '.') : ' is dead.');
-									game.getButton('mission').kill(400);
 									game.dimension = 0;
+
 									game.events.push(
 										new TimeEvent(1000, event => {
 											game.getButton('pause').mode = 'pressed';
@@ -667,7 +831,14 @@ pages['chp2'] = game => {
 
 			// for (let mob of [...game.entities.humans, ...game.entities.sheeps]) mob.target = null;
 
-			game.player.mana.val = 4;
+			game.triggerEvent('dead_human');
+
+			game.player.weapons = {
+				bow: false,
+				axe: false,
+				fence: false,
+				echo: true
+			};
 		}
 	);
 };

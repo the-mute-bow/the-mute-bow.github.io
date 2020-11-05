@@ -31,6 +31,13 @@ permalink: /readme.html
 
 ## Change log
 
+### 0.1.4
+
+-   `game.dimension` goes back to 0 when `game.player.speed` goes below 2.
+-   `game.mode` goes back to `'normal'` when player gets hit on `'strat'` mode.
+-   Fixed `Creature.shoot()` hitting itself.
+-   Continued chapter 2.
+
 ### 0.1.3
 
 -   Added `game.dimention`.
