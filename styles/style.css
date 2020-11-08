@@ -17,6 +17,7 @@ body {
 
 p,
 a,
+blockquote,
 h1,
 h2,
 h3 {
@@ -33,6 +34,13 @@ h1 {
   font-size: 5vw;
   font-weight: normal;
   margin-left: 5vw;
+}
+
+blockquote {
+  margin: 30px 15px;
+  padding: 0px 15px;
+  font-size: 30px;
+  border-left: 6px solid #cdcad3;
 }
 
 *::-moz-selection {
@@ -311,6 +319,10 @@ img {
   top: 22vw;
 }
 
+#icon {
+  width: 96px;
+}
+
 #text-404 {
   font-size: 4vw;
   top: 30vw;
@@ -328,6 +340,9 @@ img {
 @media (max-width: 600px) {
   h1 {
     font-size: 11vw;
+  }
+  blockquote {
+    font-size: 28px;
   }
   .desk {
     display: none;

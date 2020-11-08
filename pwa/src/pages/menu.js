@@ -8,6 +8,8 @@ pages['menu'] = game => {
 		menu: new Audio('./sounds/Art Of Silence.mp3')
 	};
 
+	game.checkpoint = 0;
+
 	game.soundtrack = game.sounds.menu;
 	game.play_soundtrack = true;
 	game.loadImg(
@@ -19,6 +21,8 @@ pages['menu'] = game => {
 			'buttons/menu-button-shadow.png',
 			'buttons/menu2-button.png',
 			'buttons/menu2-button-shadow.png',
+			'buttons/small-button.png',
+			'buttons/small-button-shadow.png',
 
 			'buttons/france-button.png',
 			'buttons/france-button-shadow.png',
@@ -246,6 +250,8 @@ pages['menu'] = game => {
 
 			game.event_map = {
 				title: () => {
+					game.cam.target = { x: 300, y: 300 };
+
 					game.overlays.push(
 						new Overlay(
 							'title',
@@ -277,6 +283,9 @@ pages['menu'] = game => {
 											new TimeEvent(700, event => {
 												game.getOverlay('title').kill(300);
 												game.triggerEvent('gamemode');
+											}),
+											new TimeEvent(1000, event => {
+												game.getButton('lang').kill(300);
 											})
 										);
 									}
@@ -352,6 +361,26 @@ pages['menu'] = game => {
 														loadPage('chplist');
 													})
 												);
+											})
+										);
+									}
+								),
+								new Button(
+									'quit',
+									'small-button',
+									'<',
+									btn => ({
+										x: 5 * game.scale,
+										y: 5 * game.scale
+									}),
+									btn => {
+										game.events.push(
+											new TimeEvent(200, event => {
+												btn.kill(300);
+											}),
+											new TimeEvent(700, event => {
+												for (let b of game.buttons) b.kill(300);
+												game.triggerEvent('title');
 											})
 										);
 									}

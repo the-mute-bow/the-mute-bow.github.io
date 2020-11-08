@@ -2,7 +2,7 @@ if (location.host == 'the-mute-bow.github.io') location.replace('https://the-mut
 
 let onAndroid = /Android/i.test(navigator.userAgent);
 
-let version = '0.1.4';
+let version = '0.2.0';
 document.getElementById('version').innerHTML = version;
 
 let lang = getCookie('lang-pwa');
@@ -159,7 +159,7 @@ const setScreen = (newmode, data) => {
 
 		if (mode == 'loading') {
 			if (lang == '#dev' && data) gif_text.innerHTML = data;
-			else gif_text.innerHTML = lang == '#fr' ? 'Chargement...<br/><br/><span class="yellow">Encore en développement.</span>' : 'Loading...<br/><br/><span class="yellow">Still in development.</span>';
+			else gif_text.innerHTML = lang == '#fr' ? 'Chargement...' : 'Loading...';
 			load_bar.front.classList.remove('hidden');
 			load_bar.back.classList.remove('hidden');
 		} else {

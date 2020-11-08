@@ -18,7 +18,7 @@ _Durant la nuit, sachant qu'ils sont censés partir en direction de la ferme de 
 >
 > Léa: J'en ai entendu un crier!
 >
-> Shabyn: Très étrange comme cri... Il s'est arrêté.
+> Shabyn: Très étrange comme cri... Il s'est arrêté brusquement.
 >
 > Piet: Ils ne font plus aucun bruit. Alons voir.
 
@@ -72,6 +72,6 @@ _Piet et Shabyn s'approchent de la créature et elle s'attaque à Piet._
 >
 > Piet: Au moins on n'est plus poursuivis. Ça ne sert à rien d'essayer d'ouvrir la porte. On va chez M. Vandebroek, il aura de quoi se défendre.
 >
-> Shabyn: Faites attention à ne pas trop les approcher, on a réussi à semer le permier grâce à la barière mais là on est à découvert.
+> Shabyn: Faites attention à ne pas trop les approcher, on a réussi à semer le permier grâce à la barière mais là on est à découvert. Le mieux serait de rester serrés.
 >
 > Piet: Eliot, je vois presque rien, on te suit. Prend le chemin de terre d'hier pour traverser la fôret.

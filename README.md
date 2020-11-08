@@ -31,6 +31,16 @@ permalink: /readme.html
 
 ## Change log
 
+### 0.2.0 - Chapter 2 release
+
+-   Added `game.checkpoint`.
+-   Added back button on _menu/gamemode_ page.
+-   **Chapter 2 ready.**
+
+**[ main site ]**
+
+-   New [audio-credits.html](audio-credits.html) and [licence.html](licence.html).
+
 ### 0.1.4
 
 -   `game.dimension` goes back to 0 when `game.player.speed` goes below 2.
@@ -47,7 +57,7 @@ permalink: /readme.html
 
 **[ main site ]**
 
--   Official [contact@the-mute-bow.com](mailto:contact@the-mute-bow.com) email.
+-   Official [contact@the-mute-bow.com](mailto:contact@the-mute-bow.com)
 
 ### 0.1.2
 
@@ -68,7 +78,7 @@ permalink: /readme.html
 
 -   Fence aiming draw.
 -   Fence placing with 10 wood cost.
--   <font color="#cfc"><b>Chapter 1 ready.</b></font>
+-   **Chapter 1 ready.**
 
 ### **0.0.51**
 

@@ -75,14 +75,6 @@ pages['chplist'] = game => {
 				}),
 				btn => {
 					game.triggerEvent('chp' + (game.cursor - 1));
-
-					if (game.cursor > 1) {
-						game.events.push(
-							new TimeEvent(400, event => {
-								btn.mode = 'normal';
-							})
-						);
-					}
 				}
 			),
 			new Button(
@@ -95,14 +87,6 @@ pages['chplist'] = game => {
 				}),
 				btn => {
 					game.triggerEvent('chp' + (game.cursor + 1));
-
-					if (game.cursor < 2) {
-						game.events.push(
-							new TimeEvent(400, event => {
-								btn.mode = 'normal';
-							})
-						);
-					}
 				}
 			),
 			new Button(
@@ -146,8 +130,7 @@ pages['chplist'] = game => {
 					y: can.height / 2 + 8 * game.scale
 				}),
 				1800,
-				12,
-				'#202124'
+				12
 			)
 		];
 
@@ -157,7 +140,7 @@ pages['chplist'] = game => {
 
 		game.event_map = {
 			chp1: () => {
-				game.cam.target.x = 108;
+				game.cam.target.x = 132;
 				game.cursor = 1;
 				game.getOverlay('title').getText = overtext => (lang == '#fr' ? 'Chapitre 1: Retrouvailles.' : 'Chapter 1: Reunion.');
 				game.getOverlay('info').getText = overtext => '';
@@ -166,15 +149,26 @@ pages['chplist'] = game => {
 				game.getButton('next').mode = 'normal';
 			},
 			chp2: () => {
-				game.cam.target.x = 108 + 192;
+				game.cam.target.x = 132 + 192;
 				game.cursor = 2;
 				game.getOverlay('title').getText = overtext => (lang == '#fr' ? 'Chapitre 2: Une étrange créature.' : 'Chapter 2: A strange creature.');
+				game.getOverlay('info').getText = overtext => '';
+				game.getButton('prev').mode = 'normal';
+				game.getButton('play').mode = 'normal';
+				game.getButton('next').mode = 'normal';
+			},
+			chp3: () => {
+				game.cam.target.x = 132 + 192 * 2;
+				game.cursor = 3;
+				game.getOverlay('title').getText = overtext => (lang == '#fr' ? 'Chapitre 3: M. Vandebroek.' : 'Chapter 3: Mr. Vandebroek.');
 				game.getOverlay('info').getText = overtext => (lang == '#fr' ? 'Bientôt disponible.' : 'Coming soon.');
 				game.getButton('prev').mode = 'normal';
 				game.getButton('play').mode = lang == '#dev' ? 'normal' : 'disabled';
 				game.getButton('next').mode = 'disabled';
 			}
 		};
+
+		game.checkpoint = 0;
 
 		game.triggerEvent('chp' + getCookie('chapter'));
 

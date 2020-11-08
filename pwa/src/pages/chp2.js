@@ -326,10 +326,52 @@ pages['chp2'] = game => {
 					if (lang == '#dev') game.initDevOverlays();
 				})
 			];
+
 			game.event_map = {
 				title: () => {
-					game.triggerEvent('start');
-					return;
+					if (game.checkpoint == 1) {
+						game.mode = 'normal';
+						game.entities.sheeps = [];
+
+						game.getHuman('shabyn').target = { x: 318, y: 120, obj: null };
+						game.getHuman('eliot').target = { x: 272, y: 128, obj: null };
+						game.getHuman('piet').target = { x: 290, y: 140, obj: null };
+						game.getHuman('lea').target = { x: 10, y: -6, obj: game.player };
+
+						for (let human of game.entities.humans) {
+							human.pos.x = human.getTargCoords().x;
+							human.pos.y = human.getTargCoords().y;
+						}
+
+						game.triggerEvent('creature_enclosure');
+						return;
+					}
+
+					if (game.checkpoint == 2) {
+						game.mode = 'normal';
+						game.entities.sheeps = [];
+
+						game.soundtrack.pause();
+						game.soundtrack = game.sounds.dark;
+
+						game.getHuman('shabyn').pos = { x: 260, y: 186, z: 0 };
+						game.getHuman('eliot').pos = { x: 242, y: 180, z: 0 };
+						game.getHuman('piet').pos = { x: 250, y: 190, z: 0 };
+						game.getHuman('lea').pos = { x: 252, y: 178, z: 0 };
+
+						game.cam.x = game.player.pos.x + 12;
+						game.cam.y = game.player.pos.y + 12;
+
+						game.getHuman('eliot').health.val = 9;
+
+						game.triggerEvent('creature_chase');
+						game.triggerEvent('surrounded');
+
+						return;
+					}
+
+					game.checkpoint = 0;
+
 					game.mode = 'title';
 					game.strat_fog = 1;
 
@@ -468,7 +510,7 @@ pages['chp2'] = game => {
 															click: dialog => {
 																game.dialog = {
 																	character: 'shabyn',
-																	text: lang == '#fr' ? `Très étrange comme cri... Il s'est arrêté.` : `Very strange as a cry... It stopped.`,
+																	text: lang == '#fr' ? `Très étrange comme cri... Il s'est arrêté brusquement.` : `Very strange scream... It stopped suddenly.`,
 																	click: dialog => {
 																		game.dialog = {
 																			character: 'piet',
@@ -545,7 +587,7 @@ pages['chp2'] = game => {
 				},
 				creature_pass: () => {
 					c = new Creature({ x: 330, y: 124, z: 0 });
-					c.target = game.entities.sheeps[0];
+					c.target = { x: 0, y: 0, obj: game.entities.sheeps[1] };
 					c.view_distance = 200;
 					game.cam.target = c;
 					game.entities.creatures.push(c);
@@ -629,6 +671,7 @@ pages['chp2'] = game => {
 					);
 				},
 				creature_enclosure: () => {
+					game.checkpoint = 1;
 					game.entities.sheeps[0].pos.x += 26;
 					game.entities.sheeps[0].pos.y += 10;
 					game.entities.sheeps[0].target = { x: 200, y: 200, obj: null };
@@ -639,8 +682,10 @@ pages['chp2'] = game => {
 					game.getHuman('shabyn').target = { x: 264, y: 128, obj: null };
 
 					c = new Creature({ x: 224, y: 96, z: 0 });
-					c.view_distance = 0;
+					c.view_distance = 20;
 					game.entities.creatures.push(c);
+
+					game.triggerEvent('creature_chase');
 
 					game.events.push(
 						new TimeEvent(2500, event => {
@@ -682,7 +727,10 @@ pages['chp2'] = game => {
 																				lang == '#fr'
 																					? `Arrête tes conneries et suis moi, on va essayer de s'approcher. Eliot, fais attention à Léa.`
 																					: `Stop your bullshit and follow me, we'll try to get close. Eliot, take care of Léa.`,
-																			click: dialog => {}
+																			click: dialog => {
+																				game.dialog = null;
+																				game.triggerEvent('approach');
+																			}
 																		};
 																	}
 																};
@@ -698,16 +746,198 @@ pages['chp2'] = game => {
 						})
 					);
 				},
-
-				creature_dead: () => {
+				approach: () => {
+					game.entities.sheeps = [];
 					game.events.push(
+						new TimeEvent(1000, event => {
+							game.getHuman('piet').target = { x: 245, y: 115, obj: null };
+						}),
+						new TimeEvent(2000, event => {
+							game.getHuman('shabyn').target = { x: 256, y: 124, obj: null };
+						}),
+						new TimeEvent(2500, event => {
+							game.getHuman('piet').target = { x: 0, y: 0, obj: game.entities.creatures[0] };
+						}),
 						new GameEvent(event => {
-							if (!game.entities.creatures.length) {
+							if (game.getHuman('piet').health.val < 8) {
 								event.done = true;
-								game.dimension = 0;
-								game.soundtrack.pause();
-								game.soundtrack = game.sounds.night;
-								for (let human of game.entities.humans) human.health.val = 12;
+								game.entities.creatures[0].view_distance = 40;
+								game.entities.creatures[0].target.obj = game.getHuman('eliot');
+								game.getHuman('piet').target = { x: 250, y: 190, obj: null };
+								game.player.target = null;
+
+								game.events.push(
+									new TimeEvent(1000, event => {
+										game.dialog = {
+											character: 'shabyn',
+											text: lang == '#fr' ? `Courez!` : `Run!`,
+											click: dialog => {
+												game.dialog = null;
+											}
+										};
+
+										game.getHuman('shabyn').target = { x: 260, y: 186, obj: null };
+									}),
+									new WalkEvent(260, 200, 24, 0.8, [game.player], 'all', 'in', 'white', event => {
+										game.getHuman('lea').target = { x: 252, y: 178, obj: null };
+										game.getHuman('eliot').target = { x: 242, y: 180, obj: null };
+										game.events.push(
+											new TimeEvent(2000, event => {
+												game.triggerEvent('surrounded');
+											})
+										);
+									})
+								);
+							}
+						})
+					);
+				},
+				surrounded: () => {
+					game.checkpoint = 2;
+					for (let human of game.entities.humans) human.target = null;
+					game.entities.creatures.push(
+						new Creature({ x: 240, y: 130, z: 0 }),
+						new Creature({ x: 300, y: 150, z: 0 }),
+						new Creature({ x: 180, y: 160, z: 0 }),
+						new Creature({ x: 190, y: 100, z: 0 }),
+						new Creature({ x: 150, y: 120, z: 0 }),
+						new Creature({ x: 150, y: 190, z: 0 }),
+						new Creature({ x: 185, y: 200, z: 0 }),
+						new Creature({ x: 330, y: 130, z: 0 }),
+						new Creature({ x: 325, y: 170, z: 0 }),
+						new Creature({ x: 360, y: 150, z: 0 }),
+						new Creature({ x: 360, y: 175, z: 0 }),
+						new Creature({ x: 200, y: 240, z: 0 }),
+						new Creature({ x: 250, y: 230, z: 0 }),
+						new Creature({ x: 270, y: 260, z: 0 }),
+						new Creature({ x: 290, y: 245, z: 0 }),
+						new Creature({ x: 280, y: 285, z: 0 }),
+						new Creature({ x: 390, y: 220, z: 0 }),
+						new Creature({ x: 388, y: 250, z: 0 }),
+						new Creature({ x: 390, y: 300, z: 0 }),
+						new Creature({ x: 260, y: 334, z: 0 }),
+						new Creature({ x: 234, y: 283, z: 0 }),
+						new Creature({ x: 152, y: 226, z: 0 }),
+						new Creature({ x: 388, y: 339, z: 0 }),
+						new Creature({ x: 236, y: 392, z: 0 }),
+						new Creature({ x: 139, y: 148, z: 0 }),
+						new Creature({ x: 416, y: 387, z: 0 }),
+						new Creature({ x: 313, y: 382, z: 0 }),
+						new Creature({ x: 404, y: 436, z: 0 }),
+						new Creature({ x: 339, y: 475, z: 0 }),
+						new Creature({ x: 216, y: 440, z: 0 }),
+						new Creature({ x: 260, y: 438, z: 0 }),
+						new Creature({ x: 437, y: 317, z: 0 }),
+						new Creature({ x: 254, y: 522, z: 0 }),
+						new Creature({ x: 386, y: 523, z: 0 }),
+						new Creature({ x: 418, y: 479, z: 0 }),
+						new Creature({ x: 204, y: 474, z: 0 }),
+						new Creature({ x: 351, y: 574, z: 0 }),
+						new Creature({ x: 294, y: 410, z: 0 }),
+						new Creature({ x: 232, y: 538, z: 0 }),
+						new Creature({ x: 226, y: 614, z: 0 })
+					);
+
+					game.events.push(
+						new TimeEvent(500, event => {
+							game.dialog = {
+								character: 'shabyn',
+								text: lang == '#fr' ? `Stop! Il y en a d'autres!` : `Stop! There are others!`,
+								click: dialog => {
+									game.dialog = {
+										character: 'lea',
+										text: lang == '#fr' ? `Ils sont partout!` : `They are everywhere!`,
+										click: dialog => {
+											game.dialog = {
+												character: 'lea',
+												text:
+													lang == '#fr'
+														? `Au moins on n'est plus poursuivis. Ça ne sert à rien d'essayer d'ouvrir la porte. On va chez M. Vandebroek, il aura de quoi se défendre.`
+														: `At least we are no longer being prosecuted. There's no point in trying to open the door. We're going to Mr. Vandebroek, he will have enough to defend himself.`,
+												click: dialog => {
+													game.dialog = {
+														character: 'shabyn',
+														text:
+															lang == '#fr'
+																? `Faites attention à ne pas trop les approcher, on a réussi à semer le permier grâce à la barière mais là on est à découvert. Le mieux serait de rester serrés.`
+																: `Be careful not to get too close to them, we managed to sow the first one thanks to the fence but now we are in the open. It would be best to stay tight.`,
+														click: dialog => {
+															game.dialog = {
+																character: 'piet',
+																text:
+																	lang == '#fr'
+																		? `Eliot, je vois presque rien, on te suit. Prend le chemin de terre d'hier pour traverser la fôret.`
+																		: `Eliot, I can hardly see anything, we're following you. Take the dirt road of yesterday to cross the forest.`,
+																click: dialog => {
+																	game.dialog = null;
+																}
+															};
+														}
+													};
+												}
+											};
+										}
+									};
+								}
+							};
+						}),
+
+						new WalkEvent(260, 200, 24, 0.8, game.entities.humans, 'any', 'out', null, event => {
+							game.overlays.push(
+								new OverText(
+									'info',
+									overtext => (lang == '#fr' ? 'Tes amis doivent venir avec toi, guide-les.' : 'Your friends must come with you, guide them.'),
+									overtext => ({
+										x: can.width / 2,
+										y: 6 * overtext.scale
+									}),
+									300,
+									6,
+									'#cdcad3',
+									game.scale
+								)
+							);
+						}),
+						new WalkEvent(260, 200, 24, 0.8, game.entities.humans, 'all', 'out', null, event => {
+							game.getOverlay('info').kill(300);
+						}),
+
+						new WalkEvent(197, 608, 24, 0.8, game.entities.humans, 'any', 'in', null, event => {
+							game.overlays.push(
+								new OverText(
+									'info',
+									overtext => (lang == '#fr' ? 'Tes amis doivent venir avec toi, guide-les.' : 'Your friends must come with you, guide them.'),
+									overtext => ({
+										x: can.width / 2,
+										y: 6 * overtext.scale
+									}),
+									300,
+									6,
+									'#cdcad3',
+									game.scale
+								)
+							);
+						}),
+						new WalkEvent(197, 608, 24, 0.8, game.entities.humans, 'all', 'in', 'white', event => {
+							game.getOverlay('info').kill(300);
+
+							if (game.entities.humans.length == 4)
+								game.events.push(
+									new TimeEvent(1500, event => {
+										game.cam.targ_o = 1;
+									}),
+									new TimeEvent(4000, event => {
+										if (getCookie('chapter') < 3) setCookie('chapter', 3);
+										loadPage('chplist');
+									})
+								);
+
+							for (let h of game.entities.humans) {
+								game.events.push(
+									new TimeEvent(Math.random() * 1000, event => {
+										h.target = { x: 91, y: 622, obj: null };
+									})
+								);
 							}
 						})
 					);
@@ -722,8 +952,7 @@ pages['chp2'] = game => {
 										event.done = true;
 										game.soundtrack.pause();
 										game.soundtrack = game.sounds.tense;
-										game.player.view_distance = 0;
-										game.cam.h *= 0.96;
+										game.cam.h *= 0.9;
 										game.soundtrack.currentTime = 0;
 										game.triggerEvent('creature_toofar');
 										break;
@@ -807,7 +1036,7 @@ pages['chp2'] = game => {
 															new TimeEvent(500, event => {
 																game.speed = 1;
 																game.pause(false);
-																loadPage('chplist');
+																loadPage('chp2');
 															})
 														);
 													},
@@ -837,7 +1066,7 @@ pages['chp2'] = game => {
 				bow: false,
 				axe: false,
 				fence: false,
-				echo: true
+				echo: false
 			};
 		}
 	);

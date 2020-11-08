@@ -385,7 +385,7 @@ class Human extends Mob {
 		if (game.fog_map || game.dimension > 1) this.aura.delay = 10;
 		else this.aura.delay = 100;
 
-		if (!this.tired && this.stamina.val < 1) {
+		if (!this.tired && this.stamina.val < 1 && this.name != 'creature') {
 			this.tired = true;
 			this.setAlert('stamina-red', 1000);
 		}
@@ -626,7 +626,7 @@ class Creature extends Human {
 		this.speed = 1.2;
 		this.target = null;
 		this.can_see = true;
-		this.view_distance = 40;
+		this.view_distance = 25;
 	}
 
 	die() {

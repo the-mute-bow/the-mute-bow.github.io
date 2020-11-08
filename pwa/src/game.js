@@ -26,6 +26,7 @@ class Game {
 		this.speed = 1;
 		this.mode = 'normal';
 		this.dimension = 0;
+		this.checkpoint = 0;
 		this.fog = false;
 		this.pause_time = 0;
 		this.fps = { frames: 0, duration: 0, value: 0 };
@@ -994,6 +995,7 @@ class Game {
 						let dy = Math.abs(mob.pos.y - creature.pos.y);
 						if (dx < creature.view_distance && dy < creature.view_distance && Math.sqrt(dx * dx + dy * dy) < creature.view_distance) {
 							creature.setAlert('exclam', 600);
+							// creature.sprites.ghost.draw(this.fog_map.img.getContext('2d'), { x: Math.floor(creature.pos.x + 0.5), y: Math.floor(creature.pos.y + 0.5) });
 							creature.target = { obj: mob, x: 0, y: 0 };
 						}
 					}
