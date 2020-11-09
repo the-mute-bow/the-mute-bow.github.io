@@ -31,6 +31,11 @@ permalink: /readme.html
 
 ## Change log
 
+### 0.2.1
+
+-   Minor dialogue corrections.
+-   Added chapter 2 mission with `chp2.gif`.
+
 ### 0.2.0 - Chapter 2 release
 
 -   Added `game.checkpoint`.

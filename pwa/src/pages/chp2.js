@@ -304,8 +304,8 @@ pages['chp2'] = game => {
 			game.dialog = null;
 
 			game.mission = {
-				text: '',
-				img: './img/missions/the-mute-bow.gif',
+				text: lang == '#fr' ? 'Utilise le mode stratégie pour guider tes amis dans la forêt.' : 'Use strategy mode to guide your friends through the forest.',
+				img: './img/missions/chp2.gif',
 				click: mission => {
 					setScreen('game');
 				}
@@ -323,7 +323,7 @@ pages['chp2'] = game => {
 				new TimeEvent(1000, event => {
 					game.initCoinOverlays();
 					game.initPauseButton();
-					if (lang == '#dev') game.initDevOverlays();
+					// if (lang == '#dev') game.initDevOverlays();
 				})
 			];
 
@@ -622,7 +622,7 @@ pages['chp2'] = game => {
 												click: dialog => {
 													game.dialog = {
 														character: 'piet',
-														text: lang == '#fr' ? `Shabyn, vas dans la maison prendre nos arcs. Léa, tu restes près d'Éliot.` : `Shabyn, go into the house and get our bows. Lea, you stay near Eliot.`,
+														text: lang == '#fr' ? `Shabyn, vas dans la maison prendre nos arcs. Léa, tu restes près d'Éliot.` : `Shabyn, go into the house and get our bows. Lea, you stay near Éliot.`,
 														click: dialog => {
 															game.dialog = null;
 														}
@@ -725,8 +725,8 @@ pages['chp2'] = game => {
 																			character: 'piet',
 																			text:
 																				lang == '#fr'
-																					? `Arrête tes conneries et suis moi, on va essayer de s'approcher. Eliot, fais attention à Léa.`
-																					: `Stop your bullshit and follow me, we'll try to get close. Eliot, take care of Léa.`,
+																					? `Arrête tes conneries et suis moi, on va essayer de s'approcher. Éliot, fais attention à Léa.`
+																					: `Stop your bullshit and follow me, we'll try to get close. Éliot, take care of Léa.`,
 																			click: dialog => {
 																				game.dialog = null;
 																				game.triggerEvent('approach');
@@ -839,7 +839,7 @@ pages['chp2'] = game => {
 					);
 
 					game.events.push(
-						new TimeEvent(500, event => {
+						new TimeEvent(1000, event => {
 							game.dialog = {
 								character: 'shabyn',
 								text: lang == '#fr' ? `Stop! Il y en a d'autres!` : `Stop! There are others!`,
@@ -849,7 +849,7 @@ pages['chp2'] = game => {
 										text: lang == '#fr' ? `Ils sont partout!` : `They are everywhere!`,
 										click: dialog => {
 											game.dialog = {
-												character: 'lea',
+												character: 'piet',
 												text:
 													lang == '#fr'
 														? `Au moins on n'est plus poursuivis. Ça ne sert à rien d'essayer d'ouvrir la porte. On va chez M. Vandebroek, il aura de quoi se défendre.`
@@ -866,10 +866,13 @@ pages['chp2'] = game => {
 																character: 'piet',
 																text:
 																	lang == '#fr'
-																		? `Eliot, je vois presque rien, on te suit. Prend le chemin de terre d'hier pour traverser la fôret.`
-																		: `Eliot, I can hardly see anything, we're following you. Take the dirt road of yesterday to cross the forest.`,
+																		? `Éliot, je vois presque rien, on te suit. Prend le chemin de terre d'hier pour traverser la fôret.`
+																		: `Éliot, I can hardly see anything, we're following you. Take the dirt road of yesterday to cross the forest.`,
 																click: dialog => {
 																	game.dialog = null;
+																	console.log(game.mission);
+																	setScreen('mission', game.mission);
+																	game.initMissionButton();
 																}
 															};
 														}
