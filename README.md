@@ -31,6 +31,15 @@ permalink: /readme.html
 
 ## Change log
 
+### 0.2.2
+
+-   French version for reload link on `error` screen.
+
+**[ main site ]**
+
+-   Fixed contact link.
+-   Added Copyright message.
+
 ### 0.2.1
 
 -   Minor dialogue corrections.

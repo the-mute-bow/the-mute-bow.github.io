@@ -2,7 +2,7 @@ if (location.host == 'the-mute-bow.github.io') location.replace('https://the-mut
 
 let onAndroid = /Android/i.test(navigator.userAgent);
 
-let version = '0.2.1';
+let version = '0.2.2';
 document.getElementById('version').innerHTML = version;
 
 let lang = getCookie('lang-pwa');
@@ -153,7 +153,7 @@ const setScreen = (newmode, data) => {
 			if (data) gif_text.innerHTML = data;
 			else gif_text.innerHTML = lang == '#fr' ? 'Erreur.' : 'Error.';
 			if (lang == '#dev') gif_text.innerHTML += `<br/>${dev_log}`;
-			gif_text.innerHTML += `<br/><a href="./">Reload</a>`;
+			gif_text.innerHTML += lang == '#fr' ? `<br/><a href="./">Rafraîchir</a>` : `<br/><a href="./">Reload</a>`;
 			gif_text.classList.add('red');
 		}
 

@@ -275,7 +275,6 @@ img {
   width: 40%;
   top: 160vw;
   left: 3vw;
-  margin-bottom: 6vw;
 }
 
 #contact .separator {
@@ -335,6 +334,16 @@ img {
 
 .mobile {
   display: none;
+}
+
+#copyright {
+  position: absolute;
+  top: 176vw;
+  text-align: center;
+  width: 100%;
+  font-size: 2.4vw;
+  opacity: 0.5;
+  margin-bottom: 1vw;
 }
 
 @media (max-width: 600px) {
@@ -453,7 +462,6 @@ img {
   }
   #contact {
     top: 572vw;
-    margin-bottom: 20vw;
     left: 6vw;
     right: 6vw;
     width: auto;
@@ -487,6 +495,11 @@ img {
   #text-404 {
     font-size: 6vw;
     top: 70vw;
+  }
+  #copyright {
+    top: 615vw;
+    font-size: 5.4vw;
+    margin-bottom: 5vw;
   }
 }
 /*# sourceMappingURL=style.css.map */
