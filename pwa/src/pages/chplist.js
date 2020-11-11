@@ -127,7 +127,7 @@ pages['chplist'] = game => {
 				overtext => '',
 				overtext => ({
 					x: can.width / 2,
-					y: can.height / 2 + 8 * game.scale
+					y: can.height / 2
 				}),
 				1800,
 				12
@@ -147,6 +147,8 @@ pages['chplist'] = game => {
 				game.getButton('prev').mode = 'disabled';
 				game.getButton('play').mode = 'normal';
 				game.getButton('next').mode = 'normal';
+
+				if (game.getButton('?')) game.getButton('?').kill(300);
 			},
 			chp2: () => {
 				game.cam.target.x = 132 + 192;
@@ -156,15 +158,31 @@ pages['chplist'] = game => {
 				game.getButton('prev').mode = 'normal';
 				game.getButton('play').mode = 'normal';
 				game.getButton('next').mode = 'normal';
+
+				if (game.getButton('?')) game.getButton('?').kill(300);
 			},
 			chp3: () => {
 				game.cam.target.x = 132 + 192 * 2;
 				game.cursor = 3;
 				game.getOverlay('title').getText = overtext => (lang == '#fr' ? 'Chapitre 3: M. Vandebroek.' : 'Chapter 3: Mr. Vandebroek.');
-				game.getOverlay('info').getText = overtext => (lang == '#fr' ? 'Bientôt disponible.' : 'Coming soon.');
+				game.getOverlay('info').getText = overtext => (lang == '#fr' ? 'Bientôt disponible.' : 'Coming soon');
 				game.getButton('prev').mode = 'normal';
 				game.getButton('play').mode = lang == '#dev' ? 'normal' : 'disabled';
 				game.getButton('next').mode = 'disabled';
+				game.buttons.push(
+					new Button(
+						'?',
+						'small-button',
+						'?',
+						btn => ({
+							x: (can.width - btn.img.width * game.scale) / 2,
+							y: can.height / 2 + 10 * game.scale
+						}),
+						btn => {
+							location.assign('https://the-mute-bow.com');
+						}
+					)
+				);
 			}
 		};
 

@@ -309,168 +309,148 @@ pages['chp1'] = game => {
 
 			game.events = [
 				new TimeEvent(1000, event => {
-					if (lang == '#dev') game.initDevOverlays();
+					// if (lang == '#dev') game.initDevOverlays();
 				})
 			];
 			game.event_map = {
 				title: () => {
-					if (lang != '#dev') {
-						game.player = null;
-						game.mode = 'title';
-						game.strat_fog = 1;
+					game.player = null;
+					game.mode = 'title';
+					game.strat_fog = 1;
 
-						game.events.push(
-							new TimeEvent(1000, event => {
-								game.overlays.push(
-									new OverText(
-										'text1',
-										overtext => (lang == '#fr' ? 'Quand je tire une flèche...' : 'When I shoot an arrow...'),
-										overtext => ({
-											x: can.width / 2,
-											y: can.height / 2
-										}),
-										1800,
-										6,
-										'#cdcad3'
-									)
-								);
-							}),
+					game.events.push(
+						new TimeEvent(1000, event => {
+							game.overlays.push(
+								new OverText(
+									'text1',
+									overtext => (lang == '#fr' ? 'Quand je tire une flèche...' : 'When I shoot an arrow...'),
+									overtext => ({
+										x: can.width / 2,
+										y: can.height / 2
+									}),
+									1800,
+									6,
+									'#cdcad3'
+								)
+							);
+						}),
 
-							new TimeEvent(4000, event => {
-								for (let o of game.overlays) o.kill(500);
+						new TimeEvent(4000, event => {
+							for (let o of game.overlays) o.kill(500);
 
-								game.overlays.push(
-									new OverText(
-										'text1',
-										overtext => (lang == '#fr' ? 'et que je sens la corde de mon arc...' : 'and feel the string of my bow...'),
-										overtext => ({
-											x: can.width / 2,
-											y: can.height / 2
-										}),
-										1800,
-										6,
-										'#cdcad3'
-									)
-								);
-							}),
+							game.overlays.push(
+								new OverText(
+									'text1',
+									overtext => (lang == '#fr' ? 'et que je sens la corde de mon arc...' : 'and feel the string of my bow...'),
+									overtext => ({
+										x: can.width / 2,
+										y: can.height / 2
+									}),
+									1800,
+									6,
+									'#cdcad3'
+								)
+							);
+						}),
 
-							new TimeEvent(7000, event => {
-								for (let o of game.overlays) o.kill(500);
+						new TimeEvent(7000, event => {
+							for (let o of game.overlays) o.kill(500);
 
-								game.overlays.push(
-									new OverText(
-										'text1',
-										overtext => (lang == '#fr' ? 'vibrer jusque dans mon bras...' : 'vibrate up into my arm...'),
-										overtext => ({
-											x: can.width / 2,
-											y: can.height / 2
-										}),
-										1800,
-										6,
-										'#cdcad3'
-									)
-								);
-							}),
+							game.overlays.push(
+								new OverText(
+									'text1',
+									overtext => (lang == '#fr' ? 'vibrer jusque dans mon bras...' : 'vibrate up into my arm...'),
+									overtext => ({
+										x: can.width / 2,
+										y: can.height / 2
+									}),
+									1800,
+									6,
+									'#cdcad3'
+								)
+							);
+						}),
 
-							new TimeEvent(10000, event => {
-								for (let o of game.overlays) o.kill(500);
+						new TimeEvent(10000, event => {
+							for (let o of game.overlays) o.kill(500);
 
-								game.overlays.push(
-									new OverText(
-										'text1',
-										overtext => (lang == '#fr' ? "c'est comme si je pouvais entendre..." : "it's like I could hear..."),
-										overtext => ({
-											x: can.width / 2,
-											y: can.height / 2
-										}),
-										1800,
-										6,
-										'#cdcad3'
-									)
-								);
-							}),
+							game.overlays.push(
+								new OverText(
+									'text1',
+									overtext => (lang == '#fr' ? "c'est comme si je pouvais entendre..." : "it's like I could hear..."),
+									overtext => ({
+										x: can.width / 2,
+										y: can.height / 2
+									}),
+									1800,
+									6,
+									'#cdcad3'
+								)
+							);
+						}),
 
-							new TimeEvent(13000, event => {
-								for (let o of game.overlays) o.kill(500);
+						new TimeEvent(13000, event => {
+							for (let o of game.overlays) o.kill(500);
 
-								game.overlays.push(
-									new OverText(
-										'text1',
-										overtext => (lang == '#fr' ? 'la flèche prendre son envol.' : 'the arrow take off.'),
-										overtext => ({
-											x: can.width / 2,
-											y: can.height / 2
-										}),
-										1800,
-										6,
-										'#cdcad3'
-									)
-								);
-							}),
+							game.overlays.push(
+								new OverText(
+									'text1',
+									overtext => (lang == '#fr' ? 'la flèche prendre son envol.' : 'the arrow take off.'),
+									overtext => ({
+										x: can.width / 2,
+										y: can.height / 2
+									}),
+									1800,
+									6,
+									'#cdcad3'
+								)
+							);
+						}),
 
-							new TimeEvent(15000, event => {
-								for (let o of game.overlays) o.kill(1000);
-							}),
+						new TimeEvent(15000, event => {
+							for (let o of game.overlays) o.kill(1000);
+						}),
 
-							new TimeEvent(16000, event => {
-								game.overlays.push(
-									new OverText(
-										'title',
-										overtext => (lang == '#fr' ? 'Chapitre 1' : 'Chapter 1'),
-										overtext => ({
-											x: can.width / 2,
-											y: can.height / 2
-										}),
-										1800,
-										10,
-										'#cdcad3'
-									)
-								);
-							}),
+						new TimeEvent(16000, event => {
+							game.overlays.push(
+								new OverText(
+									'title',
+									overtext => (lang == '#fr' ? 'Chapitre 1' : 'Chapter 1'),
+									overtext => ({
+										x: can.width / 2,
+										y: can.height / 2
+									}),
+									1800,
+									10,
+									'#cdcad3'
+								)
+							);
+						}),
 
-							new TimeEvent(17500, event => {
-								game.overlays.push(
-									new OverText(
-										'title2',
-										overtext => (lang == '#fr' ? 'Retrouvailles.' : 'Reunion.'),
-										overtext => ({
-											x: can.width / 2,
-											y: can.height / 2 + 6 * game.scale
-										}),
-										1800,
-										6,
-										'#cdcad3'
-									)
-								);
-							}),
+						new TimeEvent(17500, event => {
+							game.overlays.push(
+								new OverText(
+									'title2',
+									overtext => (lang == '#fr' ? 'Retrouvailles.' : 'Reunion.'),
+									overtext => ({
+										x: can.width / 2,
+										y: can.height / 2 + 6 * game.scale
+									}),
+									1800,
+									6,
+									'#cdcad3'
+								)
+							);
+						}),
 
-							new TimeEvent(20000, event => {
-								for (let o of game.overlays) o.kill(1000);
-							}),
+						new TimeEvent(20000, event => {
+							for (let o of game.overlays) o.kill(1000);
+						}),
 
-							new TimeEvent(21000, event => {
-								game.triggerEvent('start');
-							})
-						);
-					} else {
-						game.getHuman('eliot').pos = { x: 284, y: 156, z: 0 };
-						game.getHuman('piet').pos = { x: 256, y: 148, z: 0 };
-						game.getHuman('piet').target = { x: 256, y: 148, obj: null };
-						game.getHuman('shabyn').pos = { x: 270, y: 140, z: 0 };
-						game.getHuman('shabyn').target = { x: 270, y: 140, obj: null };
-
-						game.cam.x = game.getHuman('eliot').pos.x;
-						game.cam.y = game.getHuman('eliot').pos.y;
-
-						game.events.push(
-							new TimeEvent(500, event => {
-								game.getHuman('eliot').weapons.bow = true;
-								game.getHuman('eliot').weapons.axe = true;
-							})
-						);
-
-						game.triggerEvent('fence');
-					}
+						new TimeEvent(21000, event => {
+							game.triggerEvent('start');
+						})
+					);
 				},
 				start: () => {
 					game.getHuman('eliot').target = { x: 185, y: 590, obj: null };

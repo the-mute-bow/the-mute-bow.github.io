@@ -2,7 +2,7 @@ if (location.host == 'the-mute-bow.github.io') location.replace('https://the-mut
 
 let onAndroid = /Android/i.test(navigator.userAgent);
 
-let version = '0.2.2';
+let version = '1.2.0';
 document.getElementById('version').innerHTML = version;
 
 let lang = getCookie('lang-pwa');

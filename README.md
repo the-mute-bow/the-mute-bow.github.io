@@ -33,12 +33,17 @@ permalink: /readme.html
 
 ### 0.2.2
 
--   French version for reload link on `error` screen.
+-   French version for reload link on `'error'` screen.
+-   New python script to write all wanted paths in CACHE file.
+-   Updated cache files, total 96,6Mo.
 
 **[ main site ]**
 
 -   Fixed contact link.
 -   Added Copyright message.
+-   Removed `./audio-credits.html`.
+-   Completed `./licence.html` and added confidentiality rules and audio credits with _#anchors_.
+-   _Audio credits_ and _Confidentiality rules_ links on main page.
 
 ### 0.2.1
 

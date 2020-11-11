@@ -37,10 +37,17 @@ h1 {
 }
 
 blockquote {
-  margin: 30px 15px;
-  padding: 0px 15px;
-  font-size: 30px;
-  border-left: 6px solid #cdcad3;
+  margin: 0.8em 0.5em;
+  padding: 0em 0.5em;
+  font-size: 1.6em;
+  border-left: 0.16em solid #cdcad3;
+}
+
+hr {
+  margin: 2em;
+  opacity: 0.1;
+  background-color: #cdcad3;
+  height: 0.2em;
 }
 
 *::-moz-selection {
@@ -319,7 +326,9 @@ img {
 }
 
 #icon {
-  width: 96px;
+  width: 4em;
+  margin-left: 1em;
+  margin-bottom: 1em;
 }
 
 #text-404 {
@@ -338,7 +347,7 @@ img {
 
 #copyright {
   position: absolute;
-  top: 176vw;
+  top: 177vw;
   text-align: center;
   width: 100%;
   font-size: 2.4vw;
@@ -349,9 +358,6 @@ img {
 @media (max-width: 600px) {
   h1 {
     font-size: 11vw;
-  }
-  blockquote {
-    font-size: 28px;
   }
   .desk {
     display: none;
@@ -497,7 +503,7 @@ img {
     top: 70vw;
   }
   #copyright {
-    top: 615vw;
+    top: 617vw;
     font-size: 5.4vw;
     margin-bottom: 5vw;
   }
