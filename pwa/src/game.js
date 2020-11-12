@@ -1327,8 +1327,11 @@ class Game {
 		this.Screenshot();
 	}
 
-	Screenshot() {
-		document.documentElement.innerHTML = `<img src='${this.can.toDataURL()}'></img>`;
+	screenshot() {
+		var link = document.createElement('a');
+		link.download = 'screenshot.png';
+		link.href = this.can.toDataURL();
+		link.click();
 	}
 
 	getLine(x1, y1, x2, y2) {

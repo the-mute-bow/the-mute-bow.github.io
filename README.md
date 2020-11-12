@@ -31,6 +31,14 @@ permalink: /readme.html
 
 ## Change log
 
+### 1.2.1
+
+-   `game.screenshot` directly downloads `screenshot.png` with no interupt.
+
+**[ Google Play ]**
+
+-   Fixing fullscreen.
+
 ### 1.2.0 - Google Play release
 
 -   French version for reload link on `'error'` screen.
