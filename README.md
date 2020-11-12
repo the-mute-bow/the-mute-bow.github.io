@@ -31,7 +31,7 @@ permalink: /readme.html
 
 ## Change log
 
-### 0.2.2
+### 1.2.0 - Google Play release
 
 -   French version for reload link on `'error'` screen.
 -   New python script to write all wanted paths in CACHE file.
@@ -45,16 +45,13 @@ permalink: /readme.html
 -   Completed `./licence.html` and added confidentiality rules and audio credits with _#anchors_.
 -   _Audio credits_ and _Confidentiality rules_ links on main page.
 
-### 0.2.1
-
--   Minor dialogue corrections.
--   Added chapter 2 mission with `chp2.gif`.
-
 ### 0.2.0 - Chapter 2 release
 
 -   Added `game.checkpoint`.
 -   Added back button on _menu/gamemode_ page.
 -   **Chapter 2 ready.**
+-   Minor dialogue corrections.
+-   Added chapter 2 mission with `chp2.gif`.
 
 **[ main site ]**
 
