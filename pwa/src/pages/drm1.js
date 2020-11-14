@@ -620,7 +620,7 @@ pages['drm1'] = game => {
 				},
 				rand_spawn: () => {
 					game.events.push(
-						new TimeEvent(Math.random() * 10000, event => {
+						new TimeEvent(Math.random() * 30000, event => {
 							if (game.player) {
 								let pos = {
 									x: Math.random() * 50 - 25,
