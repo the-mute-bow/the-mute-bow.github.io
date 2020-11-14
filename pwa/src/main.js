@@ -37,6 +37,7 @@ if (options.includes('nfs')) {
 }
 
 if (!getCookie('chapter')) setCookie('chapter', 1);
+if (!getCookie('dream')) setCookie('dream', 0);
 
 window.isUpdateAvailable = new Promise(function (resolve, reject) {
 	if ('serviceWorker' in navigator)
@@ -265,7 +266,7 @@ window.onload = () => {
 			if (!getCookie('coins')) setCookie('coins', 0);
 
 			initTouch();
-			loadPage(lang == '#dev' ? 'menu' : 'menu');
+			loadPage(lang == '#dev' ? 'drm1' : 'menu');
 			mainloop();
 		}
 	} else setScreen('android');

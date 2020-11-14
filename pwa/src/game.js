@@ -19,6 +19,9 @@ class Game {
 		this.ground = null;
 		this.tree_calc = null;
 		this.fog_map = null;
+		this.fog = false;
+
+		this.rain = null;
 
 		this.bg_color = 'black';
 		this.leave_color = 'green';
@@ -27,7 +30,6 @@ class Game {
 		this.mode = 'normal';
 		this.dimension = 0;
 		this.checkpoint = 0;
-		this.fog = false;
 		this.pause_time = 0;
 		this.fps = { frames: 0, duration: 0, value: 0 };
 
@@ -733,9 +735,17 @@ class Game {
 
 		if (this.fog_map) this.fog_map.animate(dtime);
 
+		if (this.rain) {
+			// for (let i = 1; i < this.rain.amount * Math.random(); i++) {}
+			let { l, t, w, h } = this.getBorders();
+			let pos = { x: l + w * Math.random(), y: t + h * Math.random(), z: h };
+			this.entities.particles.push(new Drop(pos, 'rain'));
+		}
+
 		this.entities.sheeps = this.entities.sheeps.filter(sheep => !sheep.dead);
 		this.entities.humans = this.entities.humans.filter(human => !human.dead);
 		this.entities.creatures = this.entities.creatures.filter(creature => !creature.dead);
+		this.entities.particles = this.entities.particles.filter(particle => !particle.dead);
 
 		let all_entities = [...this.entities.buildings, ...this.entities.trees, ...this.entities.sheeps, ...this.entities.humans, ...this.entities.creatures, ...this.entities.particles];
 		this.ord_ent = all_entities.filter(entity => entity.inScreen()).sort((a, b) => a.getFeet().y - b.getFeet().y);
@@ -816,7 +826,7 @@ class Game {
 											}),
 											btn => {
 												hide();
-												game.player.setWeapon('bow');
+												this.player.setWeapon('bow');
 											},
 											100,
 											this.player.weapons.bow ? 'normal' : 'disabled',
@@ -1012,7 +1022,6 @@ class Game {
 
 		this.buttons = this.buttons.filter(button => !button.done);
 		this.overlays = this.overlays.filter(overlay => !overlay.done);
-		this.entities.particles = this.entities.particles.filter(part => !part.dead);
 
 		this.touch_events = [];
 	}
@@ -1222,7 +1231,7 @@ class Game {
 
 		if (t.pos) {
 			x = t.pos.x + 12;
-			y = t.pos.y + 12;
+			y = t.pos.y + 16;
 		} else {
 			x = t.x;
 			y = t.y;
@@ -1324,7 +1333,8 @@ class Game {
 				ctx.fillRect(x, y, 1, 1);
 			}
 		}
-		this.Screenshot();
+
+		this.screenshot();
 	}
 
 	screenshot() {
@@ -1414,7 +1424,7 @@ class FogMap {
 
 		let { l, t, w, h } = game.getBorders();
 
-		for (let i = 0; i < Math.max(200, (dtime * game.speed * this.humans[0].view_distance * 5000) / (w * h)) / (this.pix_size * this.pix_size); i++) {
+		for (let i = 0; i < Math.max(200, dtime * game.speed * this.humans[0].view_distance * 0.2) / (this.pix_size * this.pix_size); i++) {
 			let p = {
 				x: Math.floor(l + Math.random() * w),
 				y: Math.floor(t + Math.random() * h)
@@ -1425,7 +1435,7 @@ class FogMap {
 			for (let human of this.humans) {
 				let h = {
 					x: Math.floor(human.pos.x + 12),
-					y: Math.floor(human.pos.y + 12)
+					y: Math.floor(human.pos.y + 16)
 				};
 
 				let d = {

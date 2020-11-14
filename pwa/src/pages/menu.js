@@ -50,6 +50,7 @@ pages['menu'] = game => {
 			game.ground = game.images['ground1' + game.variant];
 			game.tree_calc = game.images['tree-calc' + game.variant];
 			game.fog_map = null;
+			game.rain = null;
 
 			game.can.height = game.ground.height;
 			game.can.width = game.ground.width;
@@ -335,14 +336,12 @@ pages['menu'] = game => {
 												btn.kill(300);
 												game.events.push(
 													new TimeEvent(400, event => {
-														console.log('survival');
+														loadPage('drmlist');
 													})
 												);
 											})
 										);
-									},
-									400,
-									'disabled'
+									}
 								),
 								new Button(
 									'campain',

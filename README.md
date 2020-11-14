@@ -31,9 +31,12 @@ permalink: /readme.html
 
 ## Change log
 
-### 1.2.1
+### 1.2.1 - Dream 1 release
 
 -   `game.screenshot` directly downloads `screenshot.png` with no interupt.
+-   Loading screen replacing empty screen at first load.
+-   Survival mode dream list.
+-   **Dream 1 ready.**
 
 **[ Google Play ]**
 

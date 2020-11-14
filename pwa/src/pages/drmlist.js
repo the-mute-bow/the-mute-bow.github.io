@@ -1,4 +1,4 @@
-pages['chplist'] = game => {
+pages['drmlist'] = game => {
 	game.variant = '';
 
 	game.images = [];
@@ -8,8 +8,8 @@ pages['chplist'] = game => {
 
 	game.soundtrack = game.sounds.menu;
 	game.play_soundtrack = true;
-	game.loadImg(['chapters.png', 'buttons/menu-button.png', 'buttons/menu-button-shadow.png', 'buttons/menu2-button.png', 'buttons/menu2-button-shadow.png', 'buttons/small-button.png', 'buttons/small-button-shadow.png'], () => {
-		game.ground = game.images['chapters'];
+	game.loadImg(['dreams.png', 'buttons/menu-button.png', 'buttons/menu-button-shadow.png', 'buttons/menu2-button.png', 'buttons/menu2-button-shadow.png', 'buttons/small-button.png', 'buttons/small-button-shadow.png'], () => {
+		game.ground = game.images['dreams'];
 		game.tree_calc = null;
 		game.fog_map = null;
 
@@ -65,7 +65,7 @@ pages['chplist'] = game => {
 							btn.kill(300);
 						}),
 						new TimeEvent(700, event => {
-							loadPage('chp' + game.cursor);
+							loadPage('drm' + game.cursor);
 						})
 					);
 				}
@@ -79,7 +79,7 @@ pages['chplist'] = game => {
 					y: can.height - (btn.img.height + 5) * game.scale
 				}),
 				btn => {
-					game.triggerEvent('chp' + (game.cursor - 1));
+					game.triggerEvent('drm' + (game.cursor - 1));
 				}
 			),
 			new Button(
@@ -91,7 +91,7 @@ pages['chplist'] = game => {
 					y: can.height - (btn.img.height + 5) * game.scale
 				}),
 				btn => {
-					game.triggerEvent('chp' + (game.cursor + 1));
+					game.triggerEvent('drm' + (game.cursor + 1));
 				}
 			),
 			new Button(
@@ -144,29 +144,18 @@ pages['chplist'] = game => {
 		game.cursor = 1;
 
 		game.event_map = {
-			chp1: () => {
+			drm1: () => {
 				game.cam.target.x = 132;
 				game.cursor = 1;
-				game.getOverlay('title').getText = overtext => (lang == '#fr' ? 'Chapitre 1: Retrouvailles.' : 'Chapter 1: Reunion.');
-				game.getOverlay('info').getText = overtext => '';
+				game.getOverlay('title').getText = overtext => (lang == '#fr' ? 'Premier rêve: Rêve lucide.' : 'First dream: Lucid dream.');
 				game.getButton('prev').mode = 'disabled';
-				game.getButton('play').mode = 'normal';
 				game.getButton('next').mode = 'normal';
 
-				if (game.getButton('?')) game.getButton('?').kill(300);
-			},
-			chp2: () => {
-				game.cam.target.x = 132 + 192;
-				game.cursor = 2;
-				game.getOverlay('title').getText = overtext => (lang == '#fr' ? 'Chapitre 2: Une étrange créature.' : 'Chapter 2: A strange creature.');
-				game.getButton('prev').mode = 'normal';
-				game.getButton('next').mode = 'normal';
-
-				if (getCookie('chapter') >= 2) {
+				if (getCookie('dream') >= 1) {
 					game.getOverlay('info').getText = overtext => '';
 					game.getButton('play').mode = 'normal';
 				} else {
-					game.getOverlay('info').getText = overtext => (lang == '#fr' ? 'Termine le chapitre 1 pour débloquer.' : 'Complete Chapter 1 to unlock.');
+					game.getOverlay('info').getText = overtext => (lang == '#fr' ? 'Termine le chapitre 2 pour débloquer.' : 'Complete Chapter 2 to unlock.');
 					game.getButton('play').mode = 'disabled';
 				}
 
@@ -174,13 +163,14 @@ pages['chplist'] = game => {
 
 				if (game.getButton('?')) game.getButton('?').kill(300);
 			},
-			chp3: () => {
-				game.cam.target.x = 132 + 192 * 2;
-				game.cursor = 3;
-				game.getOverlay('title').getText = overtext => (lang == '#fr' ? 'Chapitre 3: M. Vandebroek.' : 'Chapter 3: Mr. Vandebroek.');
+			drm2: () => {
+				game.cam.target.x = 132 + 192;
+				game.cursor = 2;
+				game.getOverlay('title').getText = overtext => (lang == '#fr' ? 'Deuxième rêve.' : 'Second dream.');
 				game.getOverlay('info').getText = overtext => (lang == '#fr' ? 'Bientôt disponible.' : 'Coming soon');
 				game.getButton('prev').mode = 'normal';
-				game.getButton('play').mode = lang == '#dev' ? 'normal' : 'disabled';
+				// game.getButton('play').mode = lang == '#dev' ? 'normal' : 'disabled';
+				game.getButton('play').mode = 'disabled';
 				game.getButton('next').mode = 'disabled';
 
 				game.getOverlay('info').color = '#cdcad3';
@@ -204,7 +194,8 @@ pages['chplist'] = game => {
 
 		game.checkpoint = 0;
 
-		game.triggerEvent('chp' + getCookie('chapter'));
+		if (getCookie('dream') == '0') game.triggerEvent('drm1');
+		else game.triggerEvent('drm' + getCookie('dream'));
 
 		game.loop = true;
 	});

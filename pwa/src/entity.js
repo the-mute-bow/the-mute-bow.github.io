@@ -1020,7 +1020,7 @@ class Trail extends Particle {
 
 class Arrow extends Trail {
 	constructor(pos, vel, timeout = null, level = 0, damage = 1) {
-		super(pos, vel, 8, 1, true, '#4e443a', 0.5, true, timeout, 0.0001);
+		super(pos, vel, 8, 1, true, game.variant == 'night' ? '474544' : '#4e443a', 0.5, true, timeout, 0.0001);
 		this.endPoint = [null, 'white', '#ccf', '#ccf'][level];
 		this.victims = [];
 		this.start_coords = { ...pos };
@@ -1126,9 +1126,15 @@ class Arrow extends Trail {
 class Drop extends Particle {
 	constructor(pos, type) {
 		let vel = { x: (Math.random() - 0.5) * 0.02, y: (Math.random() - 0.5) * 0.02, z: Math.random() * 0.01 + 0.01 };
-		let color = type == 'mana' ? '#ccf' : '#fd8';
+		let color = { mana: '#ccf', coin: '#fd8', rain: `rgba(240, 240, 255, 0.2)` }[type];
 
 		super(pos, vel, 1, 1, true, color, 0.8);
 		this.type = type;
+
+		if (type == 'rain') {
+			vel.z = -0.1;
+			this.timeout = 1000;
+			this.shadow = false;
+		}
 	}
 }

@@ -285,7 +285,8 @@ pages['chp1'] = game => {
 			game.player.target = null;
 
 			game.fog = false;
-			game.dimension = 0;
+
+			game.rain = null;
 
 			game.cam = {
 				x: game.player.pos.x + 12,

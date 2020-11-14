@@ -316,6 +316,8 @@ pages['chp2'] = game => {
 			game.dimension = 0;
 			game.fog = true;
 
+			game.rain = null;
+
 			game.buttons = [];
 			game.overlays = [];
 
@@ -924,23 +926,28 @@ pages['chp2'] = game => {
 						new WalkEvent(197, 608, 24, 0.8, game.entities.humans, 'all', 'in', 'white', event => {
 							game.getOverlay('info').kill(300);
 
-							if (game.entities.humans.length == 4)
+							if (game.entities.humans.length == 4) {
+								if (getCookie('chapter') < 3) setCookie('chapter', 3);
+								if (getCookie('dream') < 1) setCookie('dream', 1);
+
+								for (let c of game.entities.creatures) c.view_distance = 0;
+
 								game.events.push(
 									new TimeEvent(1500, event => {
 										game.cam.targ_o = 1;
 									}),
 									new TimeEvent(4000, event => {
-										if (getCookie('chapter') < 3) setCookie('chapter', 3);
 										loadPage('chplist');
 									})
 								);
 
-							for (let h of game.entities.humans) {
-								game.events.push(
-									new TimeEvent(Math.random() * 1000, event => {
-										h.target = { x: 91, y: 622, obj: null };
-									})
-								);
+								for (let h of game.entities.humans) {
+									game.events.push(
+										new TimeEvent(Math.random() * 1000, event => {
+											h.target = { x: 91, y: 622, obj: null };
+										})
+									);
+								}
 							}
 						})
 					);
