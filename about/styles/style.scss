@@ -7,7 +7,7 @@ $green: #cfc;
 
 @font-face {
 	font-family: 'Pixelar';
-	src: url('../fonts/Pixelar.woff2') format('woff2'), url('../fonts/Pixelar.woff') format('woff');
+	src: url('../../fonts/Pixelar.woff2') format('woff2'), url('../../fonts/Pixelar.woff') format('woff');
 }
 
 html,
@@ -68,6 +68,10 @@ p::selection {
 
 img {
 	image-rendering: pixelated;
+}
+
+.appear {
+	transition: opacity 1.5s;
 }
 
 .button {
@@ -141,8 +145,6 @@ img {
 #title {
 	position: absolute;
 	width: 40vw;
-	opacity: 1;
-	transition: opacity 0.5s;
 	left: 50%;
 	top: 20vw;
 	transform: translateX(-50%);
@@ -330,12 +332,12 @@ img {
 
 #copyright {
 	position: absolute;
-	top: 177vw;
+	top: 178vw;
 	text-align: center;
 	width: 100%;
 	font-size: 2.4vw;
 	opacity: 0.5;
-	margin-bottom: 1vw;
+	padding: 3vw 0vw;
 }
 
 @media (max-width: 600px) {

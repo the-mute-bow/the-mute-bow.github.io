@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+
+		<title>The Mute Bow</title>
+
+		<meta name="keywords" content="The, Mute, Bow, mobile, game, app, play" />
+		<meta name="description" content="The Mute Bow, fight against dark creatures !" />
+		<meta name="author" content="Nicolas Gouwy" />
+
+		<meta name="google" content="notranslate" />
+		<meta name="googlebot" content="all" />
+		<meta name="robots" content="all" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+		<meta name="mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+
+		<meta name="theme-color" content="#202124" />
+		<link rel="shortcut icon" href="./img/icon/icon512.png" type="image/x-icon" />
+		<link rel="apple-touch-icon" href="./img/icon/icon192.png" />
+
+		<link rel="manifest" href="./manifest.json" />
+		<link rel="stylesheet" href="https://iconejey.github.io/pwa-mge/mge.css" />
+		<link rel="stylesheet" href="./styles/style.css" />
+	</head>
+	<body>
+		<div class="mge-main">
+			<canvas></canvas>
+
+			<div class="mge-overlay">
+				<section id="landscape">
+					<img class="gif" src="./img/gifs/rotate-phone.gif" />
+					<p class="message translate">Tourne l'écran.|Turn the screen.</p>
+					<p class="version">. . .</p>
+				</section>
+
+				<section id="fullscreen">
+					<img class="gif" src="./img/gifs/touch-screen.gif" />
+					<p class="message translate">Touche l'écran.|Touch the screen.</p>
+					<p class="version">. . .</p>
+				</section>
+
+				<section id="blank">
+					<p class="version">. . .</p>
+				</section>
+
+				<section id="loading">
+					<img class="gif" src="./img/gifs/loading.gif" />
+					<p class="message translate">Chargement...|Loading...</p>
+					<div class="load-bar hidden" id="load-bar-back"></div>
+					<div class="load-bar hidden" id="load-bar-front"></div>
+					<p class="version">. . .</p>
+				</section>
+
+				<section id="error">
+					<img class="gif" src="./img/gifs/error.gif" />
+					<p class="message translate red">Erreur|Error</p>
+					<p class="version">. . .</p>
+				</section>
+
+				<section id="compatibility">
+					<img class="gif" src="./img/gifs/android.gif" />
+					<p class="message translate">Jeu disponible uniquement sur Android.<br /><a href="../">Revenir au site principal</a>|Game only available on Android.<br /><a href="../">Go back to main website</a></p>
+					<p class="version">. . .</p>
+				</section>
+
+				<section id="cookies">
+					<img class="gif" src="./img/gifs/cookie.gif" />
+					<p class="message translate">
+						Ce jeu utilise les <span class="cookie">cookies</span> pour enregistrer les préférences de langue et la progression du jeu.<br /><br /><a onclick="setCookie(`allow-cookies`, `1`);loadScene()">Accepter</a>|This game
+						uses <span class="cookie">cookies</span> to save language preferences and progression in game.<br /><br /><a onclick="setCookie(`allow-cookies`, `1`);loadScene()">Accept</a>
+					</p>
+					<p class="version">. . .</p>
+				</section>
+
+				<section id="update-ready">
+					<img class="gif" src="./img/gifs/update-ready.gif" />
+					<p class="message translate">
+						Nouvelle mise à jour disponible !<br /><br /><a onclick="update_ready = false; mge.setOverlay(null);">Ignorer</a> - <a onclick="loadScene()">Actualiser</a>|New update available !<br /><br /><a
+							onclick="update_ready = false; mge.setOverlay(null);"
+							>Ignore</a
+						>
+						- <a onclick="loadScene()">Reload</a>
+					</p>
+					<p class="version">. . .</p>
+				</section>
+
+				<section id="update-done">
+					<img class="gif" src="./img/gifs/update-done.gif" />
+					<p class="message translate">
+						Bienvenue en <a class="version">. . .</a> !<br /><br /><a onclick="setCookie('version', version); loadScene()">Continuer</a>|Welcome in <a class="version">. . .</a> !<br /><br /><a
+							onclick="setCookie('version', version); loadScene()"
+							>Continue</a
+						>
+					</p>
+				</section>
+			</div>
+		</div>
+
+		<script src="https://iconejey.github.io/pwa-mge/cookie.js"></script>
+		<script src="https://iconejey.github.io/pwa-mge/mge.js"></script>
+
+		<script src="./src/main.js"></script>
+		<script src="./src/game.js"></script>
+	</body>
+</html>

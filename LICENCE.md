@@ -1,1 +1,1 @@
-[the-mute-bow.com/licence.html](https://the-mute-bow.com/licence.html)
+[the-mute-bow.com/licence](https://the-mute-bow.com/licence)

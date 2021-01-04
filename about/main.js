@@ -10,30 +10,13 @@ if (lang != location.hash) {
 	location.reload();
 }
 
-const show = () => {
-	document.querySelector('main').classList.remove('hidden');
-	document.querySelector('#load').classList.add('hidden');
-};
-
 for (let text of document.querySelectorAll('.translate')) {
 	text.innerHTML = text.innerHTML.split('|')[Math.floor(lang == '#fr')];
 }
 
 document.querySelector('#flag').href = lang == '#fr' ? '#en' : '#fr';
-document.querySelector('#flag-img').src = `./pwa/img/buttons/${lang == '#fr' ? 'france' : 'usa'}-button.png`;
-document.querySelector('#flag-shad').src = `./pwa/img/buttons/${lang == '#fr' ? 'france' : 'usa'}-button-shadow.png`;
-
-let imgs = document.querySelectorAll('img');
-let imgs_len = imgs.length;
-
-setTimeout(() => show(), 1000);
-
-for (img of imgs) {
-	img.addEventListener('load', event => {
-		imgs_len--;
-		if (!imgs_len) show();
-	});
-}
+document.querySelector('#flag-img').src = `../pwa/img/buttons/${lang == '#fr' ? 'france' : 'usa'}-button.png`;
+document.querySelector('#flag-shad').src = `../pwa/img/buttons/${lang == '#fr' ? 'france' : 'usa'}-button-shadow.png`;
 
 for (let button of document.querySelectorAll('.button')) {
 	button.addEventListener('click', event => {
@@ -92,3 +75,13 @@ for (let element of document.querySelectorAll('.hovering')) {
 }
 
 document.querySelector('#presentation').innerHTML = quotes.default;
+
+window.onload = () => {
+	setTimeout(() => {
+		document.querySelector('#title').classList.remove('transparent');
+	}, 1000);
+
+	setTimeout(() => {
+		document.querySelector('#play-btn').classList.remove('transparent');
+	}, 2000);
+};

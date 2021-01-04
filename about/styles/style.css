@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Pixelar';
-  src: url("../fonts/Pixelar.woff2") format("woff2"), url("../fonts/Pixelar.woff") format("woff");
+  src: url("../../fonts/Pixelar.woff2") format("woff2"), url("../../fonts/Pixelar.woff") format("woff");
 }
 
 html,
@@ -76,6 +76,11 @@ img {
       image-rendering: -moz-crisp-edges;
       image-rendering: -o-pixelated;
       image-rendering: pixelated;
+}
+
+.appear {
+  -webkit-transition: opacity 1.5s;
+  transition: opacity 1.5s;
 }
 
 .button {
@@ -154,9 +159,6 @@ img {
 #title {
   position: absolute;
   width: 40vw;
-  opacity: 1;
-  -webkit-transition: opacity 0.5s;
-  transition: opacity 0.5s;
   left: 50%;
   top: 20vw;
   -webkit-transform: translateX(-50%);
@@ -347,12 +349,12 @@ img {
 
 #copyright {
   position: absolute;
-  top: 177vw;
+  top: 178vw;
   text-align: center;
   width: 100%;
   font-size: 2.4vw;
   opacity: 0.5;
-  margin-bottom: 1vw;
+  padding: 3vw 0vw;
 }
 
 @media (max-width: 600px) {

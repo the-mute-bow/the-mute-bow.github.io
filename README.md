@@ -25,57 +25,49 @@ permalink: /readme.html
   <a href="https://iconejey.github.io/">Other projects</a>
 </p>
 
-<p align="center">
-  <img src="https://iconejey.github.io/img/the-mute-bow.gif"/>
-</p>
-
 ## Change log
 
-### 1.2.1 - Dream 1 release
+## **b3.0.0 - Third version**
+
+---
+
+## **r2.2.1 - Dream 1 release**
 
 -   `game.screenshot` directly downloads `screenshot.png` with no interupt.
 -   Loading screen replacing empty screen at first load.
 -   Survival mode dream list.
 -   **Dream 1 ready.**
 
-**[ Google Play ]**
-
--   Fixing fullscreen.
-
-### 1.2.0 - Google Play release
-
--   French version for reload link on `'error'` screen.
--   New python script to write all wanted paths in CACHE file.
--   Updated cache files, total 96,6Mo.
-
-**[ main site ]**
-
--   Fixed contact link.
--   Added Copyright message.
--   Removed `./audio-credits.html`.
--   Completed `./licence.html` and added confidentiality rules and audio credits with _#anchors_.
--   _Audio credits_ and _Confidentiality rules_ links on main page.
-
-### 0.2.0 - Chapter 2 release
+## **r2.2.0 - Chapter 2 release**
 
 -   Added `game.checkpoint`.
 -   Added back button on _menu/gamemode_ page.
 -   **Chapter 2 ready.**
 -   Minor dialogue corrections.
 -   Added chapter 2 mission with `chp2.gif`.
+-   French version for reload link on `'error'` screen.
+-   New python script to write all wanted paths in CACHE file.
+-   Updated cache files, total 96,6Mo.
 
 **[ main site ]**
 
 -   New [audio-credits.html](audio-credits.html) and [licence.html](licence.html).
+-   Fixed contact link.
+-   Added Copyright message.
+-   Removed `./audio-credits.html`.
+-   Completed `./licence.html` and added confidentiality rules and audio credits with _#anchors_.
+-   _Audio credits_ and _Confidentiality rules_ links on main page.
 
-### 0.1.4
+---
+
+### **r2.1.4**
 
 -   `game.dimension` goes back to 0 when `game.player.speed` goes below 2.
 -   `game.mode` goes back to `'normal'` when player gets hit on `'strat'` mode.
 -   Fixed `Creature.shoot()` hitting itself.
 -   Continued chapter 2.
 
-### 0.1.3
+### **r2.1.3**
 
 -   Added `game.dimention`.
 -   Dimensional sprint.
@@ -86,7 +78,7 @@ permalink: /readme.html
 
 -   Official [contact@the-mute-bow.com](mailto:contact@the-mute-bow.com)
 
-### 0.1.2
+### **r2.1.2**
 
 -   Chapter 2 title.
 
@@ -95,23 +87,25 @@ permalink: /readme.html
 -   New presentation.
 -   Twitter & email links.
 
-### 0.1.1
+### **r2.1.1**
 
 -   Starting chapter 2 script and code.
 -   Gamemode selection.
 -   Chapter selection.
 
-## 0.1.0 - Chapter 1 release
+## **r2.1.0 - Chapter 1 release**
 
 -   Fence aiming draw.
 -   Fence placing with 10 wood cost.
 -   **Chapter 1 ready.**
 
-### **0.0.51**
+---
+
+### **r2.0.51**
 
 -   Chapter 1 push sheep and cut tree.
 
-### **0.0.50**
+### **r2.0.50**
 
 -   Piet and Eliot shoots.
 -   New maskable icon.
@@ -124,7 +118,7 @@ permalink: /readme.html
 -   [LICENCE.md](LICENCE.md) and [chap1.md](scripts/chap1.md) permalinks.
 -   Selection color.
 
-### **0.0.49**
+### **r2.0.49**
 
 -   `Sheep` dialog (Meh).
 
@@ -134,13 +128,13 @@ permalink: /readme.html
 -   Characters highlight on hover with `'strat'` mode like presentation with text.
 -   Donate button linking to https://paypal.me/nicolasgouwy
 
-### **0.0.48**
+### **r2.0.48**
 
 -   Weapon disabling.
 -   Strat target order changed to `[null -> place -> player]`.
 -   Player can't move `Human` on `'strat'` mode if `Human.event` is not null.
 
-### **0.0.47**
+### **r2.0.47**
 
 -   Changed Shabyn skin and hair color.
 -   Continued chapter 1 script.
@@ -149,20 +143,20 @@ permalink: /readme.html
 -   Added `'reload'` link on `'error'` screen.
 -   `'tv-snow.gif'` shown while mission image not loaded.
 
-### **0.0.46**
+### **r2.0.46**
 
 -   `game.fog_map` and dark background colors are both `#202124`.
 -   `'message'` alert icon not shown on `'strat'` mode.
 -   `Creature.aura` is no longer visible to prevent player from seing them on `'strat'` mode.
 -   High vision
 
-### **0.0.45**
+### **r2.0.45**
 
 -   Init shop only if player has coins.
 -   Chapter 1 in game & script writing.
 -   Rename Scott to Piet.
 
-### **0.0.44**
+### **r2.0.44**
 
 **[ main site ]**
 
@@ -172,13 +166,13 @@ permalink: /readme.html
 -   lang and lang-pwa coockies.
 -   lang button.
 
-### **0.0.43**
+### **r2.0.43**
 
 **[ main site ]**
 
 -   Added play button that links to `./pwa`.
 
-### **0.0.42**
+### **r2.0.42**
 
 -   Soundtrack starts on `'title'` screen.
 -   Shop for arrow, stamina, mana and damage bonuses.
@@ -187,21 +181,21 @@ permalink: /readme.html
 
 -   Google search console and indexation in search results.
 
-### **0.0.41**
+### **r2.0.41**
 
 -   Added `'title'` mode.
 -   Chapter title on start.
 -   Better homing for level 3 `Arrow`.
 -   Added `'stop-sign'` screen if an ad blocker is used.
 
-### **0.0.40**
+### **r2.0.40**
 
 -   Added `'coins'` coockie.
 -   Feminine version for french death screen.
 -   `Creature.die()` drops 0 to 5 coins.
 -   game.coins and counter on screen.
 
-### **0.0.39**
+### **r2.0.39**
 
 -   Better homing for level 3 `Arrow`.
 -   mana drop rate set to 10%.
@@ -210,7 +204,7 @@ permalink: /readme.html
 -   Fixed `Human.event` not being called on touch.
 -   Any `Human` death triggers death screen with `'Name is dead.'`.
 
-### **0.0.38**
+### **r2.0.38**
 
 -   Now using `href="./"` to reload the page via a link.
 -   French version of `'coockie'` screen sets `'lang'` coockie to `'#fr'`.
@@ -222,7 +216,7 @@ permalink: /readme.html
 -   Level 2 `Arrow` follows `Game.player.look`. (beta)
 -   Level 3 `Arrow` tracks `Creature`. (beta)
 
-### **0.0.37**
+### **r2.0.37**
 
 -   Resolved service worker problem.
 -   Revisited `Human` alert icons.
@@ -231,7 +225,7 @@ permalink: /readme.html
 -   Mission button will reappear if `'mission'` screen is interrupted.
 -   Added `'coockie'`, `'update-ready'` and `'update-done'` screens.
 
-### **0.0.36**
+### **r2.0.36**
 
 -   Added `'Still in development'` warn sign on `'loading'` screen.
 -   Added `'mission'` screen.
@@ -240,7 +234,7 @@ permalink: /readme.html
 -   Added mission button to trigger `'mission'` screen with `game.mission` as data.
 -   if specified, fixed scale for `Overlay`, `OverText` and `Button`, else `game.scale` is used.
 
-### **0.0.35**
+### **r2.0.35**
 
 -   Link to main website on `'android'` screen.
 -   French version for `#dialog-next` link.
@@ -255,20 +249,20 @@ permalink: /readme.html
 -   Modified `icon-stamina-green` and `icon-stamina-red`.
 -   Limited dtime to 100ms max.
 
-### **0.0.34**
+### **r2.0.34**
 
 -   Creation of the main website and moved the app in the pwa folder.
 -   Better adaptation of `fog_map` for low-performance devices.
 -   Dialog display.
 
-### **0.0.33**
+### **r2.0.33**
 
 -   [the-mute-bow.github.io](https://the-mute-bow.github.io/) redirects to [the-mute-bow.com](https://the-mute-bow.com/).
 -   Modified `'pause'` button.
 -   Allies' events triggered by touch if any.
 -   `forTouch()` checks mobs in foot order.
 
-### **0.0.32**
+### **r2.0.32**
 
 -   Custom domain: [the-mute-bow.com](https://the-mute-bow.com/)
 -   Fixed `Sheep` eat grass animation bug.
@@ -278,7 +272,7 @@ permalink: /readme.html
 -   Added `WalkEvent`.
 -   [ ] Google AdSence test 2.
 
-### **0.0.31**
+### **r2.0.31**
 
 -   Added `Sheep` class.
 -   Added `Mob` class to link `Human` and `Sheep`.
@@ -288,14 +282,14 @@ permalink: /readme.html
 -   Added `Sheep` images to cache.
 -   Corrected `'./img/mobs'` path name.
 
-### **0.0.30**
+### **r2.0.30**
 
 -   `'#dev'` mode allows non-android devices.
 -   `'#dev-nfs'` mode disables fullscreen.
 -   Allies shoot `Arrow` at `Game.entitites.creatures` if any of them is purchasing a `Human`.
 -   Randomized allies shoot direction to decrease precision.
 
-### **0.0.29**
+### **r2.0.29**
 
 -   `img.src` shown on loading screen in dev mode.
 -   `'icon-stamina-green'` and `'icon-stamina-green'` for `Human.alert` when stamina empty or full.
@@ -308,14 +302,14 @@ permalink: /readme.html
 -   Fixed knockback.
 -   No `Human` ghost draw if Eliot is dead.
 
-### **0.0.28**
+### **r2.0.28**
 
 -   `Creature.target` is set to random coordinates around the `Human` who hit it with an `arrow`.
 -   Changed how `setScreen()` data works for `'error'` ans `'loading'`.
 -   Loading bar.
 -   [ ] Google AdSence test. [Failed]
 
-### **0.0.27**
+### **r2.0.27**
 
 -   `Creature` are faster.
 -   `Entity` and `Particle` are filtered to keep only the ones on screen before sorting.
@@ -325,13 +319,13 @@ permalink: /readme.html
 -   `Human.view_ditance` determined from `Human.health.val`.
 -   _You are dead_ pause screen with a `Button` to get back to `'menu'` page.
 
-### **0.0.26**
+### **r2.0.26**
 
 -   `Human` axe hit and special animations.
 -   `Entity` drawed only if `Entity.onScreen()` is `true`.
 -   Better collision algorithm.
 
-### **0.0.25**
+### **r2.0.25**
 
 -   Joysticks apearance now depends on screen height.
 -   Sheep sprites.
@@ -341,7 +335,7 @@ permalink: /readme.html
 -   Displaying version on gif sceens.
 -   Dev mode when `location.hash` set to `'#dev'`.
 
-### **0.0.24**
+### **r2.0.24**
 
 -   More white in `'blood'` color.
 -   `Creature` die if their health is below 0.
@@ -354,7 +348,7 @@ permalink: /readme.html
 -   If `Human.view_distance` is lower than 12, `Human` dies.
 -   No drawing for health, stamina and mana anymore.
 
-### **0.0.23**
+### **r2.0.23**
 
 -   `Game.event_map`.
 -   Fog appears when `Creature` nearby.
@@ -362,7 +356,7 @@ permalink: /readme.html
 -   If a `Human` is a `Creature`'s target, the player's view distance is set to 24 and the soundtrack switches to `'tense-ambience.mp3'`, and this effect goes when all humans get lost by Creatures.
 -   If a `Creature` gets hit by an `Arrow` then `Creature.health.val` goes down according to the `Arrow`'s speed.
 
-### **0.0.22**
+### **r2.0.22**
 
 -   New app icon.
 -   Night soundtrack replaced by `'night-ambience.mp3'`.
@@ -371,28 +365,28 @@ permalink: /readme.html
 -   Nicer and more efficient fog for low performance devices.
 -   `Game.player` can only see `Creature`'s aura when there is no fog.
 
-### **0.0.21**
+### **r2.0.21**
 
 -   `game.fog_map` won't remember light pixels (less RAM consumption) and will use screen borders.
 -   Multiple `Human` can see in `game.fog_map`.
 -   Test for a new app icon.
 -   `'rain-piano.mp3'` is now the night soundtrack.
 
-### **0.0.20**
+### **r2.0.20**
 
 -   Larger `Human` aura.
 -   Stronger `Human` shoot.
 -   `game.fog_map`.
 -   `game.fog_map.pix_size` now adaptative to device performances.
 
-### **0.0.19**
+### **r2.0.19**
 
 -   `Human` aura.
 -   `Creature` dark aura.
 -   `Creature` exclam alert and hunting `Human` if too close.
 -   `Creature` stops hunting if human too far
 
-### **0.0.18**
+### **r2.0.18**
 
 -   Text overlays.
 -   Pause text.
@@ -401,19 +395,19 @@ permalink: /readme.html
 -   `Arrow` trails.
 -   `Human.stamina.val` goes up faster.
 
-### **0.0.17**
+### **r2.0.17**
 
 -   `'pause'` mode now sets `game.speed` to 0.1.
 -   Fixed `'menu2-button'` && `'pause-button'` cache error.
 -   Fixed `Arrow` not getting stuck in solids.
 -   Fixed `Human.sprites['bow-aim']` always drawed in front of `Human.sprites.main`.
 
-### **0.0.16**
+### **r2.0.16**
 
 -   `'pause'` mode.
 -   Quit / resume / pause buttons.
 
-### **0.0.15**
+### **r2.0.15**
 
 -   `game.player` aims with right joystick.
 -   `Human` look where they aims if `Human.stamina.val > 0`.
@@ -425,7 +419,7 @@ permalink: /readme.html
 -   Shooting `Arrow` drains `Human.stamina` and costs 1 wood.
 -   _No amo_ and _plus_ icons.
 
-### **0.0.14**
+### **r2.0.14**
 
 -   Screenshot of `game.can` via command line with `game.screenshot()`.
 -   Bigger map for `menu` and `chap1`.
@@ -435,32 +429,32 @@ permalink: /readme.html
 -   New app icon.
 -   Updated cache file list.
 
-### **0.0.13**
+### **r2.0.13**
 
 -   Beta weapon selection with buttons via right `'tap'` event.
 -   `Human.alert` and weapon indication.
 
-### **0.0.12**
+### **r2.0.12**
 
 -   Fixed button opacity problem.
 -   Overlays.
 -   Title on menu screen
 -   Added sounds to cache.
 
-### **0.0.11**
+### **r2.0.11**
 
 -   Borders on touch surface to prevent unwanted touches.
 -   fade apearing for buttons.
 -   Click sound for buttons.
 -   Game soundtrack.
 
-### **0.0.10**
+### **r2.0.10**
 
 -   Left special move chaged from dodge/boost to sprint.
 -   True menu and chap1 pages.
 -   Buttons and game events.
 
-### **0.0.9**
+### **r2.0.9**
 
 -   Human footsteps.
 -   `'strat'` game mode with left tap.
@@ -468,25 +462,25 @@ permalink: /readme.html
 -   Everything darkens in strategy mode except Humans.
 -   Strategy mode allows to make `Human` instances to follow `game.player`'s movements of to go/stay at a `(x, y)` position.
 
-### **0.0.8**
+### **r2.0.8**
 
 -   Hard colisions with `Entity` and `Tree` instances.
 -   Soft colisions with other `Human` instances.
 -   Dicreased `cam.h`.
 
-### **0.0.7**
+### **r2.0.7**
 
 -   `Human` walk cycle.
 -   Scott got a new haircut.
 -   Left `'special'` touch gives a speed boost to player and drains stamina.
 
-### **0.0.6**
+### **r2.0.6**
 
 -   Fixed game crash caused by `'special'` touch event detection.
 -   Fixed service worker version.
 -   Added `menu.js` images to cache storage.
 
-### **0.0.5**
+### **r2.0.5**
 
 -   Trees with animation.
 -   Tree calc.
@@ -494,7 +488,7 @@ permalink: /readme.html
 -   Entities now have shadows.
 -   [x] Test for `viewport-fit=cover` in `viewport` meta tag.
 
-### **0.0.4**
+### **r2.0.4**
 
 -   Better camera system and transitions with `game.cam.target` and `game.cam.targ_h`.
 -   Using `game.cam.h` to calculate `game.scale`.
@@ -503,7 +497,7 @@ permalink: /readme.html
 -   Use of a `Human` instance for `game.cam.target`.
 -   `game.player` is now a `Human` instance and moves thanks to the left joystick.
 
-### **0.0.3**
+### **r2.0.3**
 
 -   Resolved _turn the screen_ page not displaying after loading the page.
 -   Added French version for update pop up.
@@ -512,3 +506,5 @@ permalink: /readme.html
 -   Added `'tap'` and `'drag'` touch events.
 -   Added joysticks' logic and graphics.
 -   Added Licence.
+
+## **r2.0.0 - Second version**

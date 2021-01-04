@@ -1,0 +1,125 @@
+@font-face {
+  font-family: 'Pixelar';
+  src: url("../../fonts/Pixelar.woff2") format("woff2"), url("../../fonts/Pixelar.woff") format("woff");
+}
+
+* {
+  padding: 0px;
+  margin: 0px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+html {
+  background-color: #202124;
+  color: #cdcad3;
+}
+
+.red {
+  color: #e88;
+}
+
+.yellow {
+  color: #fd8;
+}
+
+.blue {
+  color: #ccf;
+}
+
+.green {
+  color: #cfc;
+}
+
+.cookie {
+  color: #ec9;
+}
+
+a {
+  color: #ccf;
+  text-decoration: none;
+}
+
+a,
+p {
+  font-family: Pixelar;
+}
+
+.mge-main canvas {
+  background-color: #202124;
+}
+
+.pixelated {
+  -ms-interpolation-mode: nearest-neighbor;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: -o-pixelated;
+      image-rendering: pixelated;
+}
+
+.mge-overlay .gif {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 64px;
+  -webkit-transform: translate(-50%, -36px);
+          transform: translate(-50%, -36px);
+  -ms-interpolation-mode: nearest-neighbor;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: -o-pixelated;
+      image-rendering: pixelated;
+}
+
+.mge-overlay .message,
+.mge-overlay p.version {
+  position: absolute;
+  text-align: center;
+  font-size: 24px;
+  margin: 0px 10%;
+  width: 80%;
+}
+
+.mge-overlay .message {
+  top: 50%;
+  -webkit-transform: translate(0, 36px);
+          transform: translate(0, 36px);
+}
+
+.mge-overlay p.version {
+  bottom: 8px;
+  opacity: 0.2;
+}
+
+.mge-overlay #landscape,
+.mge-overlay #fullscreen,
+.mge-overlay #help,
+.mge-overlay #loading,
+.mge-overlay #error,
+.mge-overlay #compatibility,
+.mge-overlay #cookies,
+.mge-overlay #update-ready,
+.mge-overlay #update-done {
+  background-color: #202124;
+}
+
+.mge-overlay #loading .load-bar {
+  position: absolute;
+  width: 128px;
+  height: 4px;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-64px, 72px);
+          transform: translate(-64px, 72px);
+}
+
+.mge-overlay #loading #load-bar-back {
+  background-color: #cdcad3;
+  opacity: 0.1;
+}
+
+.mge-overlay #loading #load-bar-front {
+  width: 0px;
+  background-color: #cdcad3;
+}
+/*# sourceMappingURL=style.css.map */
