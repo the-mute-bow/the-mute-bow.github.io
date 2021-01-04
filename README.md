@@ -8,7 +8,7 @@ permalink: /readme.html
   </a>
 </p>
 
-<h3 align="center">The Mute Bow</h3>
+<h3 align="center"><a href="https://the-mute-bow.com/readme.html">The Mute Bow</h3>
 
 <p align="center">
   A mobile pixel-art game made with web thecnologies.
