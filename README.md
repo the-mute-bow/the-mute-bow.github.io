@@ -27,7 +27,18 @@ permalink: /readme.html
 
 ## Change log
 
+### **b3.0.1**
+
+-   Test scene integration.
+-   loading page sync with image loading.
+-   Default scene background.
+-   `game.scene` drawing.
+
 ## **b3.0.0 - Third version**
+
+-   `./` page redirects to `./about`.
+-   MGE integration.
+-   Error page integration.
 
 ---
 

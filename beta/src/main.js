@@ -96,7 +96,7 @@ onload = () => {
 		if (!mge.overlayID) {
 			try {
 				// If not running on Android device
-				if (!/Android/i.test(navigator.userAgent)) mge.setOverlay('android');
+				if (!/Android/i.test(navigator.userAgent)) mge.setOverlay('compatibility');
 				// If cookies not allowed
 				else if (!getCookie('allow-cookies')) mge.setOverlay('cookies');
 				// If an update is ready
