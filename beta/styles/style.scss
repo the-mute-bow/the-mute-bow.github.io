@@ -51,73 +51,73 @@ p {
 	font-family: Pixelar;
 }
 
-.mge-main canvas {
-	background-color: $black;
-}
+.mge-main {
+	position: relative;
 
-.pixelated {
-	image-rendering: pixelated;
-}
-
-.mge-overlay {
-	.gif {
-		position: absolute;
-		left: 50%;
-		top: 50%;
-		width: 64px;
-		transform: translate(-50%, -36px);
-		image-rendering: pixelated;
+	canvas {
+		background-color: red;
 	}
 
-	.message,
-	p.version {
-		position: absolute;
-		text-align: center;
-		font-size: 24px;
-		margin: 0px 10%;
-		width: 80%;
-	}
-
-	.message {
-		top: 50%;
-		transform: translate(0, 36px);
-	}
-
-	p.version {
-		bottom: 8px;
-		opacity: 0.2;
-	}
-
-	#landscape,
-	#fullscreen,
-	#help,
-	#loading,
-	#error,
-	#compatibility,
-	#cookies,
-	#update-ready,
-	#update-done {
-		background-color: $black;
-	}
-
-	#loading {
-		.load-bar {
+	.mge-overlay {
+		.gif {
 			position: absolute;
-			width: 128px;
-			height: 4px;
 			left: 50%;
 			top: 50%;
-			transform: translate(-64px, 72px);
+			transform: translate(-50%, -36px);
+			width: 64px;
+			image-rendering: pixelated;
 		}
 
-		#load-bar-back {
-			background-color: $lightgray;
-			opacity: 0.1;
+		.message,
+		p.version {
+			position: absolute;
+			text-align: center;
+			font-size: 24px;
+			margin: 0px 10%;
+			width: 80%;
 		}
 
-		#load-bar-front {
-			width: 0px;
-			background-color: $lightgray;
+		.message {
+			top: 50%;
+			transform: translate(0, 36px);
+		}
+
+		p.version {
+			bottom: 8px;
+			opacity: 0.2;
+		}
+
+		#landscape,
+		#fullscreen,
+		#help,
+		#loading,
+		#error,
+		#compatibility,
+		#cookies,
+		#update-ready,
+		#update-done {
+			background-color: $black;
+		}
+
+		#loading {
+			.load-bar {
+				position: absolute;
+				width: 128px;
+				height: 4px;
+				left: 50%;
+				top: 50%;
+				transform: translate(-64px, 72px);
+			}
+
+			#load-bar-back {
+				background-color: $lightgray;
+				opacity: 0.1;
+			}
+
+			#load-bar-front {
+				width: 0px;
+				background-color: $lightgray;
+			}
 		}
 	}
 }

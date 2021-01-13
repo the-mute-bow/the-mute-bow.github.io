@@ -45,25 +45,21 @@ p {
   font-family: Pixelar;
 }
 
+.mge-main {
+  position: relative;
+}
+
 .mge-main canvas {
-  background-color: #202124;
+  background-color: red;
 }
 
-.pixelated {
-  -ms-interpolation-mode: nearest-neighbor;
-      image-rendering: -webkit-optimize-contrast;
-      image-rendering: -moz-crisp-edges;
-      image-rendering: -o-pixelated;
-      image-rendering: pixelated;
-}
-
-.mge-overlay .gif {
+.mge-main .mge-overlay .gif {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 64px;
   -webkit-transform: translate(-50%, -36px);
           transform: translate(-50%, -36px);
+  width: 64px;
   -ms-interpolation-mode: nearest-neighbor;
       image-rendering: -webkit-optimize-contrast;
       image-rendering: -moz-crisp-edges;
@@ -71,8 +67,8 @@ p {
       image-rendering: pixelated;
 }
 
-.mge-overlay .message,
-.mge-overlay p.version {
+.mge-main .mge-overlay .message,
+.mge-main .mge-overlay p.version {
   position: absolute;
   text-align: center;
   font-size: 24px;
@@ -80,30 +76,30 @@ p {
   width: 80%;
 }
 
-.mge-overlay .message {
+.mge-main .mge-overlay .message {
   top: 50%;
   -webkit-transform: translate(0, 36px);
           transform: translate(0, 36px);
 }
 
-.mge-overlay p.version {
+.mge-main .mge-overlay p.version {
   bottom: 8px;
   opacity: 0.2;
 }
 
-.mge-overlay #landscape,
-.mge-overlay #fullscreen,
-.mge-overlay #help,
-.mge-overlay #loading,
-.mge-overlay #error,
-.mge-overlay #compatibility,
-.mge-overlay #cookies,
-.mge-overlay #update-ready,
-.mge-overlay #update-done {
+.mge-main .mge-overlay #landscape,
+.mge-main .mge-overlay #fullscreen,
+.mge-main .mge-overlay #help,
+.mge-main .mge-overlay #loading,
+.mge-main .mge-overlay #error,
+.mge-main .mge-overlay #compatibility,
+.mge-main .mge-overlay #cookies,
+.mge-main .mge-overlay #update-ready,
+.mge-main .mge-overlay #update-done {
   background-color: #202124;
 }
 
-.mge-overlay #loading .load-bar {
+.mge-main .mge-overlay #loading .load-bar {
   position: absolute;
   width: 128px;
   height: 4px;
@@ -113,12 +109,12 @@ p {
           transform: translate(-64px, 72px);
 }
 
-.mge-overlay #loading #load-bar-back {
+.mge-main .mge-overlay #loading #load-bar-back {
   background-color: #cdcad3;
   opacity: 0.1;
 }
 
-.mge-overlay #loading #load-bar-front {
+.mge-main .mge-overlay #loading #load-bar-front {
   width: 0px;
   background-color: #cdcad3;
 }

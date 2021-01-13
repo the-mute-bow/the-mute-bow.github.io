@@ -30,20 +30,26 @@
 		<div class="mge-main">
 			<canvas></canvas>
 
+			<div class="tactile">
+				<span class="joystick left base"></span>
+				<span class="joystick left tip"></span>
+
+				<span class="joystick right base"></span>
+				<span class="joystick right tip"></span>
+			</div>
+
 			<div class="mge-overlay">
+				<section id="blank"></section>
+
 				<section id="landscape">
 					<img class="gif" src="./img/gifs/rotate-phone.gif" />
-					<p class="message translate">Tourne l'écran.|Turn the screen.</p>
+					<p class="message translate">Tourne l'écran.<br /><a onclick="loadScene()">Rafraîchir</a>|Turn the screen.<br /><a onclick="loadScene()">Reload</a></p>
 					<p class="version">. . .</p>
 				</section>
 
 				<section id="fullscreen">
 					<img class="gif" src="./img/gifs/touch-screen.gif" />
-					<p class="message translate">Touche l'écran.|Touch the screen.</p>
-					<p class="version">. . .</p>
-				</section>
-
-				<section id="blank">
+					<p class="message translate">Touche l'écran.<br /><a onclick="loadScene()">Rafraîchir</a>|Touch the screen.<br /><a onclick="loadScene()">Reload</a></p>
 					<p class="version">. . .</p>
 				</section>
 
@@ -105,5 +111,7 @@
 
 		<script src="./src/main.js"></script>
 		<script src="./src/game.js"></script>
+		<script src="./src/entities.js"></script>
+		<script src="./src/particles.js"></script>
 	</body>
 </html>
