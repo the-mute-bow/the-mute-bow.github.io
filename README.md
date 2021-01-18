@@ -27,18 +27,47 @@ permalink: /readme.html
 
 ## Change log
 
+### **b3.0.3**
+
+-   `Animate` and `Sprite` classes.
+-   Added `game.entities.add` function.
+-   Scene shadows and entities drawing.
+-   Prevent pitch zoom in/out.
+-   Ground fog concept using `game.fog`.
+-   Created `house_0` entity.
+-   Removed `nfs` url param.
+-   Fulscreen detection changed to `outerHeight > 0.98 * screen.height`.
+-   Added `android` url param to bypass android device checking.
+
+### **b3.0.2**
+
+-   Game time and delay.
+-   Integration of 2.# Mobile Game Engine.
+    Game `setEvent`, `setTimeout` and `resolveEvents` functions.
+-   Game camera.
+-   Camera move with left-joystick.
+-   Tree animation script.
+-   `between` function.
+-   Scene canvases for `scene_elements`.
+-   `Entity` class including `Particles` class.
+-   Game entities update function.
+
 ### **b3.0.1**
 
--   Test scene integration.
--   loading page sync with image loading.
 -   Default scene background.
 -   `game.scene` drawing.
+-   Language determined by `'lang'` cookie.
+-   Game `screenshot` function.
 
 ## **b3.0.0 - Third version**
 
 -   `./` page redirects to `./about`.
 -   MGE integration.
 -   Error page integration.
+-   `urlParams` intergration.
+-   Test scene integration.
+-   loading page sync with image loading.
+-   Scene determined by `urlParams`.
 
 ---
 

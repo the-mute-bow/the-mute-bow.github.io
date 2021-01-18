@@ -4,10 +4,12 @@ class Game {
 	constructor(img_srcs, callback = _ => {}) {
 		// Environment
 		this.scene;
+		this.shadow_opacity = 1;
 		this.time = 0;
 		this.delay = 1;
 		this.speed = 1;
 		this.camera = null;
+		this.fog = null;
 		this.scene_elements = ['water', 'shadows', 'entities', 'darkness'];
 
 		// Entities
@@ -15,9 +17,25 @@ class Game {
 			types: [],
 			all: [],
 
+			add: (...ents) => {
+				let e = game.entities;
+				for (let ent of ents) {
+					if (!(ent.type in e)) {
+						e.types.push(ent.type);
+						e[ent.type] = [];
+					}
+
+					e[ent.type].push(ent);
+				}
+			},
+
 			get: (...types) => {
+				let e = game.entities;
 				let l = [];
-				for (let type of types) l.push(this.entities[type]);
+				for (let type of types) {
+					if (type in e) l.push(...e[type]);
+					else console.warn(type + ' type not in entities.');
+				}
 				return l;
 			},
 
@@ -26,13 +44,11 @@ class Game {
 				e.all = [];
 
 				for (let type of e.types) {
-					if (type in e) e[type] = e[type].filter(e => !e.dead);
-					else e[type] = [];
-
+					e[type] = e[type].filter(e => !e.dead);
 					e.all.push(...e[type]);
 				}
 
-				e.all = e.all.sort((a, b) => a.pos.y > b.pos.y);
+				e.all = e.all.sort((a, b) => a.pos.y - b.pos.y);
 			}
 		};
 
@@ -68,6 +84,8 @@ class Game {
 		// Events
 		this.resolveEvents();
 
+		for (let ent of this.entities.all) ent.behave();
+
 		// Kill and sort entities
 		this.entities.update();
 	}
@@ -76,22 +94,34 @@ class Game {
 	graphics() {
 		mge.clear();
 
+		// Update fog
+		if (this.fog) {
+			this.fog.actual.b = this.fog.actual.b * (1 - this.fog.ratio) + this.fog.target.b * this.fog.ratio;
+			this.fog.actual.t = this.fog.actual.t * (1 - this.fog.ratio) + this.fog.target.t * this.fog.ratio;
+		}
+
+		// Render entities
+		for (let ent of this.entities.all) ent.render();
+
 		// Draw scene
 		for (let elem of this.scene) {
 			if (this.scene_elements.includes(elem)) {
 				let c = this.scene[elem + '_canvas'];
+				let cctx = c.getContext('2d');
 
 				if (elem == 'shadows') {
-					c.clearRect(0, 0, c.width, c.height);
-					for (let entity of this.entities.all) entity.drawShadow();
+					cctx.clearRect(0, 0, c.width, c.height);
+					for (let ent of this.entities.all) ent.drawShadow(cctx);
+					mge.ctx.globalAlpha = this.shadow_opacity;
 				}
 
-				if (elem == 'shadows') {
-					c.clearRect(0, 0, c.width, c.height);
-					for (let entity of this.entities.all) entity.draw();
+				if (elem == 'entities') {
+					cctx.clearRect(0, 0, c.width, c.height);
+					for (let ent of this.entities.all) ent.draw(cctx);
 				}
 
 				mge.ctx.drawImage(c, 0, 0);
+				mge.ctx.globalAlpha = 1;
 			} else mge.ctx.drawImage(this.imgs[elem], 0, 0);
 		}
 
@@ -101,7 +131,8 @@ class Game {
 	}
 
 	// Set canvas and scene elements
-	setScene(width, height, background_color, drawn_elements) {
+	setScene(width, height, background_color, shadow_opacity, drawn_elements) {
+		this.shadow_opacity = shadow_opacity;
 		mge.elem.setAttribute('style', 'background-color: ' + background_color);
 		mge.canvas.width = width;
 		mge.canvas.height = height;

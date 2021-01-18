@@ -8,6 +8,10 @@
   margin: 0px;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
 html {
@@ -45,15 +49,15 @@ p {
   font-family: Pixelar;
 }
 
-.mge-main {
+div.mge-main {
   position: relative;
 }
 
-.mge-main canvas {
-  background-color: red;
+div.mge-main canvas {
+  background-color: transparent;
 }
 
-.mge-main .mge-overlay .gif {
+div.mge-main div.mge-overlay img.gif {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -67,8 +71,8 @@ p {
       image-rendering: pixelated;
 }
 
-.mge-main .mge-overlay .message,
-.mge-main .mge-overlay p.version {
+div.mge-main div.mge-overlay .message,
+div.mge-main div.mge-overlay p.version {
   position: absolute;
   text-align: center;
   font-size: 24px;
@@ -76,30 +80,30 @@ p {
   width: 80%;
 }
 
-.mge-main .mge-overlay .message {
+div.mge-main div.mge-overlay .message {
   top: 50%;
   -webkit-transform: translate(0, 36px);
           transform: translate(0, 36px);
 }
 
-.mge-main .mge-overlay p.version {
+div.mge-main div.mge-overlay p.version {
   bottom: 8px;
   opacity: 0.2;
 }
 
-.mge-main .mge-overlay #landscape,
-.mge-main .mge-overlay #fullscreen,
-.mge-main .mge-overlay #help,
-.mge-main .mge-overlay #loading,
-.mge-main .mge-overlay #error,
-.mge-main .mge-overlay #compatibility,
-.mge-main .mge-overlay #cookies,
-.mge-main .mge-overlay #update-ready,
-.mge-main .mge-overlay #update-done {
+div.mge-main div.mge-overlay #landscape,
+div.mge-main div.mge-overlay #fullscreen,
+div.mge-main div.mge-overlay #help,
+div.mge-main div.mge-overlay #loading,
+div.mge-main div.mge-overlay #error,
+div.mge-main div.mge-overlay #compatibility,
+div.mge-main div.mge-overlay #cookies,
+div.mge-main div.mge-overlay #update-ready,
+div.mge-main div.mge-overlay #update-done {
   background-color: #202124;
 }
 
-.mge-main .mge-overlay #loading .load-bar {
+div.mge-main div.mge-overlay #loading .load-bar {
   position: absolute;
   width: 128px;
   height: 4px;
@@ -109,12 +113,12 @@ p {
           transform: translate(-64px, 72px);
 }
 
-.mge-main .mge-overlay #loading #load-bar-back {
+div.mge-main div.mge-overlay #loading #load-bar-back {
   background-color: #cdcad3;
   opacity: 0.1;
 }
 
-.mge-main .mge-overlay #loading #load-bar-front {
+div.mge-main div.mge-overlay #loading #load-bar-front {
   width: 0px;
   background-color: #cdcad3;
 }

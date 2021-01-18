@@ -2,7 +2,7 @@
 if (location.host == 'the-mute-bow.github.io') location.replace('https://the-mute-bow.com');
 
 // Game version
-let version = 'b3.0.2';
+let version = 'b3.0.3';
 for (let elem of document.querySelectorAll('.version')) elem.innerHTML = version;
 
 // Show load screen
@@ -80,21 +80,16 @@ const showError = (error, message) => {
 onload = () => {
 	translate();
 
-	// 'nfs' param
-	if (urlParams.has('nfs')) {
-		mge.forceFullscreen = false;
-		console.log('disabled fullscreen');
-	}
-
 	// If not running on Android device
-	if (!/Android/i.test(navigator.userAgent)) mge.setOverlay('compatibility');
-	else {
+	if (urlParams.has('android') || /Android/i.test(navigator.userAgent)) {
 		// Media metadata
 		navigator.mediaSession.metadata = new MediaMetadata({
 			title: 'The Mute Bow',
 			artist: 'Nicolas Gouwy',
 			artwork: [{ src: './img/icon/icon512.png', sizes: '512x512', type: 'image/png' }]
 		});
+
+		mge.getFullscreen = _ => outerHeight > 0.98 * screen.height;
 
 		// Game logic call
 		mge.logic = () => {
@@ -140,5 +135,5 @@ onload = () => {
 		);
 
 		document.body.appendChild(script);
-	}
+	} else mge.setOverlay('compatibility');
 };
