@@ -2,7 +2,7 @@
 if (location.host == 'the-mute-bow.github.io') location.replace('https://the-mute-bow.com');
 
 // Game version
-let version = 'b3.0.3';
+let version = 'b3.0.4';
 for (let elem of document.querySelectorAll('.version')) elem.innerHTML = version;
 
 // Show load screen
@@ -135,5 +135,8 @@ onload = () => {
 		);
 
 		document.body.appendChild(script);
-	} else mge.setOverlay('compatibility');
+	} else {
+		mge.forceFullscreen = false;
+		mge.setOverlay('compatibility');
+	}
 };

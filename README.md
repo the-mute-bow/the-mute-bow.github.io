@@ -27,6 +27,18 @@ permalink: /readme.html
 
 ## Change log
 
+### **b3.0.4**
+
+-   Two animated `Pine` types.
+-   Four `Herb` types.
+-   Simplex noise `Wind` entity.
+-   `'wind'` scene element shows wind representation matrix on ground.
+-   Pines move according to wind entity.
+-   `fps` url param to show fps counter.
+-   `Leave` spawn from pines when wind > 0.9 then float in the air following wind moves.
+-   `Pine` image animation and shadow automation with `tree.py`.
+-   `Entity.die()` function.
+
 ### **b3.0.3**
 
 -   `Animate` and `Sprite` classes.

@@ -45,6 +45,7 @@ a {
 }
 
 a,
+span,
 p {
   font-family: Pixelar;
 }
@@ -121,5 +122,12 @@ div.mge-main div.mge-overlay #loading #load-bar-back {
 div.mge-main div.mge-overlay #loading #load-bar-front {
   width: 0px;
   background-color: #cdcad3;
+}
+
+div.mge-main div.mge-overlay #blank span#fps {
+  position: absolute;
+  font-size: 2em;
+  left: 6vh;
+  top: 5vh;
 }
 /*# sourceMappingURL=style.css.map */

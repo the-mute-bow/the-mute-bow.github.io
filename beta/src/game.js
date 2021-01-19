@@ -10,7 +10,10 @@ class Game {
 		this.speed = 1;
 		this.camera = null;
 		this.fog = null;
-		this.scene_elements = ['water', 'shadows', 'entities', 'darkness'];
+		this.scene_elements = ['water', 'wind', 'shadows', 'entities', 'darkness'];
+
+		// FPS
+		this.fps = null;
 
 		// Entities
 		this.entities = {
@@ -59,7 +62,7 @@ class Game {
 		mge.resize();
 
 		this.imgs = [];
-		img_srcs = [...img_srcs, './img/default_background.png'];
+		img_srcs = [...img_srcs, './img/maps/default/default_grass.png'];
 
 		mge.loadImg(
 			img_srcs,
@@ -67,6 +70,11 @@ class Game {
 			p => (load_bar.front.style.width = `${p * 128}px`),
 			src => showError('Could not load "' + src + '"'),
 			_ => {
+				if (urlParams.has('fps')) {
+					document.querySelector('section#blank').innerHTML += '<span id="fps">0<span/>';
+					this.fps = { elem: document.querySelector('span#fps'), val: 0 };
+				}
+
 				callback();
 				mge.setOverlay('blank');
 				mge.resize();
@@ -78,8 +86,14 @@ class Game {
 	// Logic loop
 	logic() {
 		// Time passing
-		this.delay = delay * this.speed;
+		this.delay = between(10, delay, 50) * this.speed;
 		this.time += this.delay;
+
+		// FPS
+		if (this.fps) {
+			this.fps.val = this.fps.val * 0.9 + delay * 0.1;
+			this.fps.elem.innerHTML = Math.floor(1000 / this.fps.val);
+		}
 
 		// Events
 		this.resolveEvents();
@@ -108,6 +122,19 @@ class Game {
 			if (this.scene_elements.includes(elem)) {
 				let c = this.scene[elem + '_canvas'];
 				let cctx = c.getContext('2d');
+
+				if (elem == 'wind') {
+					cctx.clearRect(0, 0, c.width, c.height);
+					cctx.fillStyle = 'white';
+					let w = this.entities.get('wind')[0];
+
+					for (let y = 0; y < c.height; y += 3) {
+						for (let x = 0; x < c.height; x += 3) {
+							cctx.globalAlpha = w.get({ x: x, y: y, z: 0 }, 40);
+							cctx.fillRect(x, y, 2, 2);
+						}
+					}
+				}
 
 				if (elem == 'shadows') {
 					cctx.clearRect(0, 0, c.width, c.height);
@@ -190,7 +217,7 @@ class Game {
 	screenshot() {
 		let link = document.createElement('a');
 		link.download = 'screenshot.png';
-		link.href = this.canvas.toDataURL();
+		link.href = mge.canvas.toDataURL();
 		link.click();
 	}
 }
