@@ -70,9 +70,16 @@ class Game {
 			p => (load_bar.front.style.width = `${p * 128}px`),
 			src => showError('Could not load "' + src + '"'),
 			_ => {
-				if (urlParams.has('fps')) {
+				// FPS
+				if (urlParams.has('fps') || location.pathname.includes('beta')) {
 					document.querySelector('section#blank').innerHTML += '<span id="fps">0<span/>';
 					this.fps = { elem: document.querySelector('span#fps'), val: 0 };
+				}
+
+				// No fullscreen
+				if (urlParams.has('nfs')) {
+					console.log('Disabled fullscreen.');
+					mge.forceFullscreen = false;
 				}
 
 				callback();

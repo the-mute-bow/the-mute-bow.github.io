@@ -27,6 +27,18 @@ permalink: /readme.html
 
 ## Change log
 
+### **b3.0.5**
+
+-   `Floating` class to extend with `Leave` and `Smoke` classes.
+-   `House` class.
+-   `Fixed` class to extend with `House`, `Herb` and `Pine` classes.
+-   Added new herbs and trees.
+-   Automatized `tree.py` rendering animation and shadows.
+-   Added `addScript` function to load `.js` file and add `<script>` to `<body>`.
+-   Automatized `map.py` detecting pines/herbs files then write list of images and entities in `./vegetations/{scene}_vegetation.js`.
+-   Fps counter triggered if running on `/beta/`.
+-   `nfs` url param to disable `mge.forceFullscreen`.
+
 ### **b3.0.4**
 
 -   Two animated `Pine` types.

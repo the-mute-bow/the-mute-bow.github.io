@@ -2,7 +2,7 @@
 if (location.host == 'the-mute-bow.github.io') location.replace('https://the-mute-bow.com');
 
 // Game version
-let version = 'b3.0.4';
+let version = 'b3.0.5';
 for (let elem of document.querySelectorAll('.version')) elem.innerHTML = version;
 
 // Show load screen
@@ -68,13 +68,31 @@ let load_bar = {
 };
 
 // Error screen
-const showError = (error, message) => {
+const showError = (error, message, trans = true) => {
 	console.error(error);
 	let elem = document.querySelector('#error .message');
 	elem.innerHTML = message ? message : error;
-	elem.classList.add('translate');
-	translate();
+
+	if (trans) {
+		elem.classList.add('translate');
+		translate();
+	}
+
 	mge.setOverlay('error');
+};
+
+// To add a js script in body
+const addScript = src => {
+	let script = document.createElement('script');
+	script.src = src;
+
+	let mess = src + ` <span class="translate">n'existe pas.|does not exist.</span><br /><a class="translate" onclick="loadScene('test')">Retour|Back</a>`;
+	script.addEventListener('error', error => {
+		showError(src + ' does not exist.', mess, false);
+		translate();
+	});
+
+	document.body.appendChild(script);
 };
 
 onload = () => {
@@ -124,17 +142,8 @@ onload = () => {
 			}
 		};
 
-		// Loading scene script
-		let script = document.createElement('script');
-		script.src = `./scenes/${urlParams.get('scene')}.js`;
-		script.addEventListener('error', error =>
-			showError(
-				`"${urlParams.get('scene')}" scene does not exist.`,
-				`La scène "${urlParams.get('scene')}" n'existe pas.<br /><a onclick="loadScene('test')">Retour</a>|"${urlParams.get('scene')}" scene does not exist.<br /><a onclick="loadScene('test')">Back</a>`
-			)
-		);
-
-		document.body.appendChild(script);
+		// Loading vegetation script
+		addScript(`./vegetations/${urlParams.get('scene')}_vegetation.js`);
 	} else {
 		mge.forceFullscreen = false;
 		mge.setOverlay('compatibility');

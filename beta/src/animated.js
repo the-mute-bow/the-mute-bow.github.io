@@ -75,9 +75,17 @@ class Animated extends Entity {
 	}
 }
 
-class Herb extends Animated {
+class Fixed extends Animated {
+	constructor(type = 'fixed', x, y, offx, offy, sprites) {
+		super(type, { x: x, y: y }, {}, {}, {}, offx, offy, sprites);
+	}
+
+	behave() {}
+}
+
+class Herb extends Fixed {
 	constructor(x, y, t) {
-		super('herb', { x: x, y: y }, {}, {}, {}, 4, 4, {
+		super('herb', x, y, 4, 8, {
 			main: new Sprite('herb_' + t, 8, 8),
 			shadow: new Sprite('herb_' + t + '_shadow', 8, 8)
 		});
@@ -86,9 +94,9 @@ class Herb extends Animated {
 	}
 }
 
-class Pine extends Animated {
+class Pine extends Fixed {
 	constructor(x, y, t) {
-		super('tree', { x: x, y: y }, {}, {}, {}, 96, 168, {
+		super('tree', x, y, 96, 168, {
 			main: new Sprite('pine_' + t, 192, 192),
 			shadow: new Sprite('pine_' + t + '_shadow', 192, 192)
 		});
@@ -129,4 +137,19 @@ class Pine extends Animated {
 			if (n > 0.9 && Math.random() > 0.9) game.entities.add(new Leave(this.pos, w));
 		}
 	}
+}
+
+class House extends Fixed {
+	constructor(x, y, t) {
+		let offset = {
+			0: [72, 144]
+		}[t];
+
+		super('house', x, y, ...offset, {
+			main: new Sprite('house_' + t, 144, 144),
+			shadow: new Sprite('house_' + t + '_shadow', 144, 144)
+		});
+	}
+
+	behave() {}
 }

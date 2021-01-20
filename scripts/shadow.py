@@ -20,7 +20,9 @@ for y in range(H):
     z = feet - y
     offx = ratio[0] * z
     offy = ratio[1] * z
-    print(int(y / H * 100), '%', int(z), int(offx), int(offy), end='       \r')
+
+    if (y % 10 == 0):
+        print(int(y / H * 100), '%', int(z), int(offx), int(offy), end='       \r')
     
     # sleep(.1)
 

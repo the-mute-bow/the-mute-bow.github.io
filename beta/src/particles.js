@@ -19,14 +19,39 @@ class Particle extends Entity {
 	}
 }
 
-class Leave extends Particle {
+class Floating extends Particle {
+	constructor(type = 'floating', wind, pos, vel, forces, rand, time, color) {
+		super(type, pos, vel, {}, { a: 0.01, g: 0.5 }, color);
+		this.wind = wind;
+		this.rand = rand;
+		this.forces = { x: 0, y: 0, z: 0, ...forces };
+		this.time = game.time + time + Math.random() * time;
+	}
+
+	behave() {
+		let r = s => (Math.random() - 0.5) * s * 2;
+		let n = this.wind.get(this.pos);
+
+		this.acc = {
+			x: -this.wind.vel.x * (n - 0.6) * 0.05 + r(this.rand) + this.forces.x,
+			y: -this.wind.vel.y * (n - 0.6) * 0.05 + r(this.rand) + this.forces.y,
+			z: (n - 0.6) * 0.5 * this.rand + r(this.rand) + this.forces.z
+		};
+
+		this.physics();
+
+		if (game.time - this.time > 0 || this.pos.x < 0 || this.pos.x > mge.canvas.width || this.pos.y < 0 || this.pos.y > mge.canvas.height) this.die();
+	}
+}
+
+class Leave extends Floating {
 	constructor(pos, wind) {
 		let r = s => (Math.random() - 0.5) * s * 2;
 
 		pos = {
 			x: pos.x + r(20),
 			y: pos.y + r(20),
-			z: 20 + Math.random() * 40
+			z: 10 + Math.random() * 30
 		};
 
 		let vel = {
@@ -35,23 +60,19 @@ class Leave extends Particle {
 			z: r(10)
 		};
 
-		super('leave', pos, vel, { z: -0.01 }, { a: 0.01, g: 0.5 }, '#324333');
-		this.wind = wind;
-		this.time = game.time + 20000 + Math.random() * 20000;
+		super('leave', wind, pos, vel, { z: -0.01 }, 10, 20000, '#324333');
 	}
+}
 
-	behave() {
+class Smoke extends Floating {
+	constructor(pos, wind, rad = 2) {
 		let r = s => (Math.random() - 0.5) * s * 2;
-		let n = this.wind.get(this.pos);
 
-		this.acc = {
-			x: -this.wind.vel.x * (n - 0.7) * 0.1 + r(10),
-			y: -this.wind.vel.y * (n - 0.7) * 0.1 + r(10),
-			z: (n - 0.75) * 10 + r(10)
-		};
+		pos.x += r(rad);
+		pos.y += r(rad);
+		pos.z += r(rad);
 
-		this.physics();
-
-		if (game.time - this.time > 0 || this.pos.x < 0 || this.pos.x > mge.canvas.width || this.pos.y < 0 || this.pos.y > mge.canvas.height) this.die();
+		let c = Math.floor(100 + Math.random() * 50);
+		super('smoke', wind, pos, { z: 5 }, { z: 1 }, 10, 1000, `rgba(230, 230, 230, ${c})`);
 	}
 }
