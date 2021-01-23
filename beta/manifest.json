@@ -5,7 +5,7 @@
 	"background_color": "#202124",
 	"theme_color": "#202124",
 	"display": "fullscreen",
-	"orientation": "landscape",
+	"orientation": "any",
 	"icons": [
 		{
 			"src": "img/icon/icon192.png",

@@ -59,6 +59,8 @@ class Wind extends Entity {
 	}
 
 	get(pos, offz = 0) {
+		if (!game.wind_allowed) return 0.5;
+
 		let x = (pos.x + this.pos.x) / this.scale;
 		let y = (pos.y + this.pos.y) / this.scale;
 		let z = (pos.z + this.pos.z + offz) / this.scale;

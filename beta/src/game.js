@@ -4,13 +4,16 @@ class Game {
 	constructor(img_srcs, callback = _ => {}) {
 		// Environment
 		this.scene;
-		this.shadow_opacity = 1;
 		this.time = 0;
 		this.delay = 1;
 		this.speed = 1;
 		this.camera = null;
-		this.fog = null;
 		this.scene_elements = ['water', 'wind', 'shadows', 'entities', 'darkness'];
+		this.wind_allowed = getCookie('#wind') == 'true';
+		this.shadow_color = { r: 0, g: 0, b: 0, a: 64 };
+		this.ambient_color = { r: 50, g: 43, b: 63, a: 85 };
+		this.wood_color = '#504231';
+		this.leave_color = '#324333';
 
 		// FPS
 		this.fps = null;
@@ -71,17 +74,12 @@ class Game {
 			src => showError('Could not load "' + src + '"'),
 			_ => {
 				// FPS
-				if (urlParams.has('fps') || location.pathname.includes('beta')) {
+				if (urlParams.has('fps') || beta) {
 					document.querySelector('section#blank').innerHTML += '<span id="fps">0<span/>';
 					this.fps = { elem: document.querySelector('span#fps'), val: 0 };
 				}
 
-				// No fullscreen
-				if (urlParams.has('nfs')) {
-					console.log('Disabled fullscreen.');
-					mge.forceFullscreen = false;
-				}
-
+				this.initVegetation();
 				callback();
 				mge.setOverlay('blank');
 				mge.resize();
@@ -98,7 +96,8 @@ class Game {
 
 		// FPS
 		if (this.fps) {
-			this.fps.val = this.fps.val * 0.9 + delay * 0.1;
+			let ratio = 0.02;
+			this.fps.val = this.fps.val * (1 - ratio) + delay * ratio;
 			this.fps.elem.innerHTML = Math.floor(1000 / this.fps.val);
 		}
 
@@ -113,25 +112,22 @@ class Game {
 
 	// Graphics loop
 	graphics() {
+		// Clear canvas
 		mge.clear();
 
-		// Update fog
-		if (this.fog) {
-			this.fog.actual.b = this.fog.actual.b * (1 - this.fog.ratio) + this.fog.target.b * this.fog.ratio;
-			this.fog.actual.t = this.fog.actual.t * (1 - this.fog.ratio) + this.fog.target.t * this.fog.ratio;
-		}
-
-		// Render entities
-		for (let ent of this.entities.all) ent.render();
+		// Draw entities on scene elements [todo]
 
 		// Draw scene
 		for (let elem of this.scene) {
 			if (this.scene_elements.includes(elem)) {
+				// Some context
 				let c = this.scene[elem + '_canvas'];
 				let cctx = c.getContext('2d');
+				let entire_canvas = [0, 0, c.width, c.height];
 
+				// Wind element
 				if (elem == 'wind') {
-					cctx.clearRect(0, 0, c.width, c.height);
+					cctx.clearRect(...entire_canvas);
 					cctx.fillStyle = 'white';
 					let w = this.entities.get('wind')[0];
 
@@ -143,14 +139,20 @@ class Game {
 					}
 				}
 
+				// Shadows element
 				if (elem == 'shadows') {
-					cctx.clearRect(0, 0, c.width, c.height);
+					cctx.clearRect(...entire_canvas);
 					for (let ent of this.entities.all) ent.drawShadow(cctx);
-					mge.ctx.globalAlpha = this.shadow_opacity;
+
+					cctx.globalCompositeOperation = 'source-in';
+					cctx.fillStyle = this.toColorStr(this.shadow_color);
+					cctx.fillRect(...entire_canvas);
+					cctx.globalCompositeOperation = 'source-over';
 				}
 
+				// Entities element
 				if (elem == 'entities') {
-					cctx.clearRect(0, 0, c.width, c.height);
+					cctx.clearRect(...entire_canvas);
 					for (let ent of this.entities.all) ent.draw(cctx);
 				}
 
@@ -165,9 +167,7 @@ class Game {
 	}
 
 	// Set canvas and scene elements
-	setScene(width, height, background_color, shadow_opacity, drawn_elements) {
-		this.shadow_opacity = shadow_opacity;
-		mge.elem.setAttribute('style', 'background-color: ' + background_color);
+	setScene(width, height, drawn_elements) {
 		mge.canvas.width = width;
 		mge.canvas.height = height;
 		this.scene = [];
@@ -181,6 +181,44 @@ class Game {
 				this.scene[elem + '_canvas'] = c;
 			}
 		}
+	}
+
+	// Set vegetation
+	initVegetation() {
+		for (let veg of vegetation_entities) {
+			let args = [];
+			for (let a of veg.split(' ').slice(1)) args.push(parseInt(a));
+			if (veg.includes('pine')) this.entities.add(new Pine(...args));
+
+			if (veg.includes('herb')) this.entities.add(new Herb(...args));
+		}
+	}
+
+	// --- Colors ---
+
+	setBackground(color) {
+		mge.elem.setAttribute('style', 'background-color: ' + color);
+	}
+
+	toColorStr(obj) {
+		return `rgba(${obj.r}, ${obj.g}, ${obj.b}, ${obj.a / 255})`;
+	}
+
+	toColorObj(str) {
+		let sub = i => parseInt(str.substr(i * 2 + 1, 2), 16);
+		return { r: sub(0), g: sub(1), b: sub(2), a: 255 };
+	}
+
+	blendColor(c1, c2, a = -1) {
+		if (a < 0) a = c1.a;
+		a /= 255;
+
+		return {
+			r: c1.r * a + c2.r * (1 - a),
+			g: c1.g * a + c2.g * (1 - a),
+			b: c1.b * a + c2.b * (1 - a),
+			a: c2.a
+		};
 	}
 
 	// --- Events ---
@@ -221,6 +259,7 @@ class Game {
 
 	// --- Other ---
 
+	// Take a screenshot of whole canvas
 	screenshot() {
 		let link = document.createElement('a');
 		link.download = 'screenshot.png';

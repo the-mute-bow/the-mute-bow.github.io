@@ -4,6 +4,7 @@ if (location.host == 'the-mute-bow.github.io') location.replace('https://the-mut
 // Game version
 let version = 'b3.0.5';
 for (let elem of document.querySelectorAll('.version')) elem.innerHTML = version;
+var beta = location.pathname.includes('beta');
 
 // Show load screen
 mge.setOverlay('loading');
@@ -25,14 +26,19 @@ const loadScene = scene => {
 if (!urlParams.has('scene')) loadScene('test');
 
 // Init cookies
-if (!getCookie('lang')) setCookie('lang', 'en');
+initCookie('lang', 'en');
+initCookie('#wind', true);
+initCookie('#fullscreen', true);
+
+// Langage
+const fr = getCookie('lang') == 'fr';
 
 // Translation
 const translate = _ => {
 	for (let elem of document.querySelectorAll('.translate')) {
 		elem.classList.remove('translate');
 		let html = elem.innerHTML.split('|');
-		elem.innerHTML = html[html.length < 2 || getCookie('lang') == 'fr' ? 0 : 1];
+		elem.innerHTML = html[html.length < 2 || fr ? 0 : 1];
 	}
 };
 
@@ -97,9 +103,16 @@ const addScript = src => {
 
 onload = () => {
 	translate();
+	mge.forceFullscreen = false;
 
 	// If not running on Android device
-	if (urlParams.has('android') || /Android/i.test(navigator.userAgent)) {
+	if (!urlParams.has('android') && !/Android/i.test(navigator.userAgent) && urlParams.get('scene') != 'wallpaper') mge.setOverlay('compatibility');
+	// If cookies not allowed
+	else if (!getCookie('allow-cookies')) mge.setOverlay('cookies');
+	// If an update was done
+	else if (getCookie('version') != version) mge.setOverlay('update-done');
+	// Start
+	else {
 		// Media metadata
 		navigator.mediaSession.metadata = new MediaMetadata({
 			title: 'The Mute Bow',
@@ -107,22 +120,21 @@ onload = () => {
 			artwork: [{ src: './img/icon/icon512.png', sizes: '512x512', type: 'image/png' }]
 		});
 
+		// Dev sign
+		if (beta) document.querySelector('section#loading span#dev-sign').classList.remove('mge-hidden');
+
+		// Fullscreen
 		mge.getFullscreen = _ => outerHeight > 0.98 * screen.height;
+		mge.forceFullscreen = getCookie('#fullscreen') == 'true';
 
 		// Game logic call
 		mge.logic = () => {
 			if (mge.overlayID == 'blank') {
 				try {
-					// If cookies not allowed
-					if (!getCookie('allow-cookies')) mge.setOverlay('cookies');
 					// If an update is ready
-					else if (update_ready) mge.setOverlay('update-ready');
-					// If an update was done
-					else if (getCookie('version') != version) mge.setOverlay('update-done');
+					if (update_ready) mge.setOverlay('update-ready');
 					// Game goes on
-					else {
-						game.logic();
-					}
+					else game.logic();
 				} catch (error) {
 					// Logic error
 					showError(error, 'Erreur de logique.|Logic error.');
@@ -132,6 +144,9 @@ onload = () => {
 
 		// Game graphics call
 		mge.graphics = () => {
+			// mge.forceLandscape = false;
+
+			// Game
 			if (mge.overlayID == 'blank') {
 				try {
 					game.graphics();
@@ -144,8 +159,5 @@ onload = () => {
 
 		// Loading vegetation script
 		addScript(`./vegetations/${urlParams.get('scene')}_vegetation.js`);
-	} else {
-		mge.forceFullscreen = false;
-		mge.setOverlay('compatibility');
 	}
 };

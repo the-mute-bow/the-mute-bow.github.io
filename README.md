@@ -29,6 +29,20 @@ permalink: /readme.html
 
 ### **b3.0.5**
 
+-   Switched `mge.forceFullscreen` control to `'#fullscreen'` cookie.
+-   `'compatibility'`, `'cookies'` and `'update-done'` sections will be shown at first with `mge.forceFullscreen` set to `false` and will prevent game from loading.
+-   `'#wind'` cookie defines if wind is enabled.
+-   Adding vegetation entities with `game.initVegetation`.
+-   Removed `gmae.fog`.
+-   Huge performance boost thanks to `Entity.render()` optimisation.
+-   `'wallpaper'` scene.
+-   Color system using `setBackground`, `toColorStr`, `toColorObj` and `blendColor` functions.
+-   Environment colors: `shadow_color`, `ambient_color`, `wood_color` and `leave_color`.
+-   Using `globalCompositeOperation = 'source-in'` on `game.scene.shadows_canvas` to apply `game.shadow_color`
+-   `'Strill in developpement'` sign shows up on `'loading'` section if running on `/beta/`.
+
+### **b3.0.5**
+
 -   `Floating` class to extend with `Leave` and `Smoke` classes.
 -   `House` class.
 -   `Fixed` class to extend with `House`, `Herb` and `Pine` classes.

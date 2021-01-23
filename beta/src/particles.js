@@ -60,7 +60,7 @@ class Leave extends Floating {
 			z: r(10)
 		};
 
-		super('leave', wind, pos, vel, { z: -0.01 }, 10, 20000, '#324333');
+		super('leave', wind, pos, vel, { z: -0.01 }, 10, 20000, game.leave_color);
 	}
 }
 
