@@ -1,0 +1,197 @@
+$black: #202124;
+$lightgray: #cdcad3;
+$blue: #ccf;
+$yellow: #fd8;
+$red: #e88;
+$green: #cfc;
+
+@font-face {
+	font-family: 'Pixelar';
+	src: url('../../fonts/Pixelar.woff2') format('woff2'), url('../../fonts/Pixelar.woff') format('woff');
+}
+
+* {
+	padding: 0px;
+	margin: 0px;
+	box-sizing: border-box;
+}
+
+html {
+	background-color: $black;
+}
+
+body {
+	color: $lightgray;
+}
+
+canvas {
+	background-color: $black;
+	position: absolute;
+}
+
+a {
+	color: $blue;
+	text-decoration: none;
+}
+
+p {
+	font-family: Pixelar;
+}
+
+.whisper {
+	opacity: 0.5;
+}
+
+.grayscale {
+	filter: grayscale(1) invert(1);
+}
+
+.text {
+	font-size: 8vh;
+	margin: 8px 13vh;
+	text-align: justify;
+}
+
+.pixelated {
+	image-rendering: pixelated;
+}
+
+.next {
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+	margin: 3vh 12vh;
+	font-size: 10vh;
+	font-family: Pixelar;
+}
+
+#dialog {
+	top: 0px;
+	left: 0px;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: $black;
+
+	.top {
+		display: flex;
+		width: auto;
+		margin: 12vh 12vh 2vh 12vh;
+
+		#dialog-img {
+			width: 18vh;
+			image-rendering: pixelated;
+		}
+
+		#dialog-title {
+			font-size: 18vh;
+			margin: 0px 6vh;
+		}
+	}
+
+	#dialog-line {
+		background-color: $lightgray;
+		width: auto;
+		height: 1.2vh;
+		margin: 0px 12vh;
+	}
+}
+
+#mission-content {
+	background-color: $black;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+
+	img {
+		position: absolute;
+		border-radius: 8vh;
+		box-shadow: black 0px 0px 3vh -1vh;
+		left: 50%;
+		transform: translate(-50%);
+		margin-top: 4vh;
+		height: 60%;
+	}
+
+	.text {
+		position: absolute;
+		bottom: 10vh;
+	}
+}
+
+.over {
+	background-color: $black;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+
+	img {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		width: 64px;
+		transform: translate(-50%, -36px);
+		image-rendering: pixelated;
+	}
+
+	p {
+		position: absolute;
+		text-align: center;
+		font-size: 24px;
+		margin: 0px 10%;
+		width: 80%;
+	}
+
+	#message {
+		top: 50%;
+		transform: translate(0, 36px);
+	}
+
+	#version {
+		bottom: 8px;
+		opacity: 0.2;
+	}
+
+	.load-bar {
+		position: absolute;
+		width: 128px;
+		height: 4px;
+		left: 50%;
+		top: 50%;
+		transform: translate(-64px, 72px);
+	}
+
+	#load-bar-back {
+		background-color: $lightgray;
+		opacity: 0.1;
+	}
+
+	#load-bar-front {
+		width: 0px;
+		background-color: $lightgray;
+	}
+}
+
+.hidden {
+	display: none;
+}
+
+.red {
+	color: $red;
+}
+
+.yellow {
+	color: $yellow;
+}
+
+.blue {
+	color: $blue;
+}
+
+.green {
+	color: $green;
+}
+
+.coockie {
+	color: #cfa278;
+}

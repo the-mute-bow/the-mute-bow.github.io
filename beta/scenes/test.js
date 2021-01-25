@@ -29,4 +29,17 @@ let game = new Game(img_srcs, _ => {
 
 	// Activate joysticks
 	game.setTimeout('joysticks', 1000, event => mge.joysticks.forEach(j => j.setActive(true)));
+
+	// Play button
+	game.setTimeout('play-btn', 2000, event => {
+		var play = createButton(blank, 'play', {
+			left: '50vw',
+			top: '85vh',
+			text: 'Jouer|Play',
+			scale: mge.elem.clientHeight / 100,
+			onclick: event => {
+				game.setTimeout('btn-recover', 1000, event => setButton('play', 'normal'));
+			}
+		});
+	});
 });

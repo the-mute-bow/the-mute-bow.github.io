@@ -5,52 +5,9 @@ $yellow: #fd8;
 $red: #e88;
 $green: #cfc;
 
-@font-face {
-	font-family: 'Pixelar';
-	src: url('../../fonts/Pixelar.woff2') format('woff2'), url('../../fonts/Pixelar.woff') format('woff');
-}
-
-* {
-	padding: 0px;
-	margin: 0px;
-	box-sizing: border-box;
-	user-select: none;
-}
-
 html {
 	background-color: $black;
 	color: $lightgray;
-}
-
-.red {
-	color: $red;
-}
-
-.yellow {
-	color: $yellow;
-}
-
-.blue {
-	color: $blue;
-}
-
-.green {
-	color: $green;
-}
-
-.cookie {
-	color: #ec9;
-}
-
-a {
-	color: $blue;
-	text-decoration: none;
-}
-
-a,
-span,
-p {
-	font-family: Pixelar;
 }
 
 div.mge-main {

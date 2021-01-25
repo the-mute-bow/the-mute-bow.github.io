@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+
+		<title>The Mute Bow</title>
+
+		<meta name="keywords" content="The, Mute, Bow, mobile, game, app, play" />
+		<meta name="description" content="The Mute Bow, fight against dark creatures !" />
+		<meta name="author" content="Nicolas Gouwy" />
+
+		<meta name="google" content="notranslate" />
+		<meta name="googlebot" content="all" />
+		<meta name="robots" content="all" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+		<meta name="mobile-web-app-capable" content="yes" />
+		<meta name="theme-color" content="#202124" />
+		<link rel="shortcut icon" href="img/icon/icon512.png" type="image/x-icon" />
+		<link rel="apple-touch-icon" href="./img/icon/icon192.png" />
+		<link rel="manifest" href="./manifest.json" />
+		<link rel="stylesheet" href="./styles/style.css" />
+	</head>
+	<body>
+		<canvas class="hidden"></canvas>
+
+		<div class="hidden" id="dialog">
+			<div class="top">
+				<img id="dialog-img" src="./img/humans/eliot-pp.png" />
+				<p id="dialog-title"></p>
+			</div>
+
+			<div id="dialog-line"></div>
+			<p class="text" id="dialog-text"></p>
+			<a class="next" id="dialog-next"></a>
+		</div>
+
+		<div class="hidden" id="mission">
+			<div id="mission-content">
+				<img class="pixelated" src="./img/missions/tv-snow.gif" id="mission-snow" />
+			</div>
+			<a class="next" id="mission-next"></a>
+		</div>
+
+		<div class="over">
+			<img class="gif hidden" src="./img/gifs/error.gif" id="error" />
+			<img class="gif hidden" src="./img/gifs/stop-sign.gif" id="stop-sign" />
+			<img class="gif hidden" src="./img/gifs/android.gif" id="android" />
+			<img class="gif" src="./img/gifs/loading.gif" id="loading" />
+			<img class="gif hidden" src="./img/gifs/rotate-phone.gif" id="rotate-phone" />
+			<img class="gif hidden" src="./img/gifs/touch-screen.gif" id="touch-screen" />
+			<img class="gif hidden" src="./img/gifs/cookie.gif" id="cookie" />
+			<img class="gif hidden" src="./img/gifs/update-ready.gif" id="update-ready" />
+			<img class="gif hidden" src="./img/gifs/update-done.gif" id="update-done" />
+
+			<p id="message">Loading...</p>
+			<p id="version">. . .</p>
+
+			<div class="load-bar hidden" id="load-bar-back"></div>
+			<div class="load-bar hidden" id="load-bar-front"></div>
+		</div>
+
+		<script src="../cookie.js"></script>
+		<script src="./src/touch.js"></script>
+		<script src="./src/overlay.js"></script>
+		<script src="./src/button.js"></script>
+		<script src="./src/event.js"></script>
+		<script src="./src/entity.js"></script>
+		<script src="./src/game.js"></script>
+
+		<script src="./src/pages/menu.js"></script>
+
+		<script src="./src/pages/chplist.js"></script>
+		<script src="./src/pages/chp1.js"></script>
+		<script src="./src/pages/chp2.js"></script>
+
+		<script src="./src/pages/drmlist.js"></script>
+		<script src="./src/pages/drm1.js"></script>
+
+		<script src="./src/ads.js"></script>
+		<script src="./src/main.js"></script>
+	</body>
+</html>

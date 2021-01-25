@@ -27,7 +27,13 @@ permalink: /readme.html
 
 ## Change log
 
-### **b3.0.5**
+### **b3.0.6**
+
+-   Removed `'type nor in entities'` warning;
+-   Global CSS
+-   Added `createButton` and `setButton` functions.
+
+### **b3.0.6**
 
 -   Switched `mge.forceFullscreen` control to `'#fullscreen'` cookie.
 -   `'compatibility'`, `'cookies'` and `'update-done'` sections will be shown at first with `mge.forceFullscreen` set to `false` and will prevent game from loading.

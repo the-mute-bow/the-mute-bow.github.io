@@ -1,0 +1,29 @@
+{
+	"name": "The Mute Bow",
+	"short_name": "The Mute Bow",
+	"start_url": "https://the-mute-bow.com/pwa/",
+	"background_color": "#35363a",
+	"theme_color": "#202124",
+	"display": "fullscreen",
+	"orientation": "any",
+	"icons": [
+		{
+			"src": "img/icon/icon192.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "img/icon/icon512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "img/icon/maskable_icon.png",
+			"sizes": "1024x1024",
+			"type": "image/png",
+			"purpose": "maskable"
+		}
+	]
+}

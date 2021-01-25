@@ -2,7 +2,7 @@
 if (location.host == 'the-mute-bow.github.io') location.replace('https://the-mute-bow.com');
 
 // Game version
-let version = 'b3.0.5';
+let version = 'b3.0.6';
 for (let elem of document.querySelectorAll('.version')) elem.innerHTML = version;
 var beta = location.pathname.includes('beta');
 
@@ -72,6 +72,9 @@ let load_bar = {
 	back: document.querySelector('#load-bar-back'),
 	front: document.querySelector('#load-bar-front')
 };
+
+// blank section element
+let blank = document.querySelector('section#blank');
 
 // Error screen
 const showError = (error, message, trans = true) => {

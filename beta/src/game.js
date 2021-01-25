@@ -38,10 +38,7 @@ class Game {
 			get: (...types) => {
 				let e = game.entities;
 				let l = [];
-				for (let type of types) {
-					if (type in e) l.push(...e[type]);
-					else console.warn(type + ' type not in entities.');
-				}
+				for (let type of types) if (type in e) l.push(...e[type]);
 				return l;
 			},
 
@@ -114,8 +111,6 @@ class Game {
 	graphics() {
 		// Clear canvas
 		mge.clear();
-
-		// Draw entities on scene elements [todo]
 
 		// Draw scene
 		for (let elem of this.scene) {

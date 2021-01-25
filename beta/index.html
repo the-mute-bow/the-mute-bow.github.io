@@ -24,11 +24,12 @@
 
 		<link rel="manifest" href="./manifest.json" />
 		<link rel="stylesheet" href="https://iconejey.github.io/pwa-mge/mge.css" />
+		<link rel="stylesheet" href="../styles/global.css" />
 		<link rel="stylesheet" href="./styles/style.css" />
 	</head>
 	<body>
 		<div class="mge-main">
-			<canvas></canvas>
+			<canvas id="mge-can"></canvas>
 
 			<div class="tactile">
 				<span class="joystick left base"></span>
@@ -115,6 +116,7 @@
 		<script src="https://iconejey.github.io/pwa-mge/cookie.js"></script>
 		<script src="https://iconejey.github.io/pwa-mge/mge.js"></script>
 
+		<script src="../button.js"></script>
 		<script src="./src/perlin.js"></script>
 		<script src="./src/main.js"></script>
 		<script src="./src/game.js"></script>
