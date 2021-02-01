@@ -3,6 +3,9 @@ let img_srcs = [
 	'./img/buildings/houses/house_0.png',
 	'./img/buildings/houses/house_0_shadow.png',
 
+	// Buttons
+	'./img/buttons/pause-button.png',
+
 	// Vegetation
 	...vegetation_imgs
 ];
@@ -21,25 +24,23 @@ let game = new Game(img_srcs, _ => {
 	};
 
 	// Init scene
-	game.setScene(256, 256, ['default_grass', 'shadows', 'entities']);
+	game.setScene(256, 256, ['default_grass', 'shadows', 'entities', 'light', 'darkness']);
+	game.darkness_color = { r: 60, g: 10, b: 0, a: 0 };
+	game.shadow_color = { r: 10, g: 10, b: 20, a: 100 };
+	game.fireflies = true;
+
+	// Night fall
+	game.setTimeout('nightfall', 5000, game.setEvent, 'darkness', event => {
+		game.darkness_color = game.transitionColor(game.darkness_color, { r: 10, g: 10, b: 38, a: 150 }, 0.0002 * game.delay);
+	});
 
 	// Init camera
-	game.camera = { x: 128, y: 128, z: 150 };
+	game.camera = { x: 128, y: 100, z: 150 };
 	mge.camera.set(game.camera, 1);
 
 	// Activate joysticks
 	game.setTimeout('joysticks', 1000, event => mge.joysticks.forEach(j => j.setActive(true)));
 
-	// Play button
-	game.setTimeout('play-btn', 2000, event => {
-		var play = createButton(blank, 'play', {
-			left: '50vw',
-			top: '85vh',
-			text: 'Jouer|Play',
-			scale: mge.elem.clientHeight / 100,
-			onclick: event => {
-				game.setTimeout('btn-recover', 1000, event => setButton('play', 'normal'));
-			}
-		});
-	});
+	// Pause button
+	game.setTimeout('play-btn', 2000, event => showPauseBtn());
 });

@@ -59,4 +59,30 @@ a.btn {
 		width: 100%;
 		height: 100%;
 	}
+
+	canvas {
+		position: absolute;
+	}
+}
+a.pressed {
+	opacity: 0.5;
+}
+
+a.btn.fadein {
+	animation: 0.4s btn-fade-in;
+}
+
+a.btn.fadeout {
+	transition: opacity 0.4s;
+	opacity: 0;
+}
+
+@keyframes btn-fade-in {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: inherit;
+	}
 }

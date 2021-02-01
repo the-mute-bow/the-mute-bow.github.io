@@ -7,12 +7,13 @@ const get2dPos = (pos, offx = false) => ({
 });
 
 class Entity {
-	constructor(type = 'any', pos, vel, acc, fric) {
+	constructor(type = 'any', pos, vel, acc, fric, glowing = null) {
 		this.type = type;
 		this.pos = { x: 0, y: 0, z: 0, ...pos };
 		this.vel = { x: 0, y: 0, z: 0, ...vel };
 		this.acc = { x: 0, y: 0, z: 0, ...acc };
 		this.fric = { a: 0, g: 0, ...fric };
+		this.glowing = glowing;
 		this.dead = false;
 	}
 

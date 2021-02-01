@@ -8,12 +8,18 @@ class Game {
 		this.delay = 1;
 		this.speed = 1;
 		this.camera = null;
-		this.scene_elements = ['water', 'wind', 'shadows', 'entities', 'darkness'];
+		this.scene_elements = ['water', 'wind', 'shadows', 'entities', 'darkness', 'light'];
 		this.wind_allowed = getCookie('#wind') == 'true';
+		this.hide_glow = getCookie('#hide_glow') == 'true';
+		this.water_color = { r: 0, g: 0, b: 0, a: 64 };
 		this.shadow_color = { r: 0, g: 0, b: 0, a: 64 };
-		this.ambient_color = { r: 50, g: 43, b: 63, a: 85 };
-		this.wood_color = '#504231';
-		this.leave_color = '#324333';
+		this.darkness_color = { r: 0, g: 0, b: 0, a: 0 };
+		this.light_color = { r: 255, g: 255, b: 255, a: 0 };
+		this.wood_color = { r: 80, g: 66, b: 49, a: 255 };
+		this.leave_color = { r: 50, g: 67, b: 51, a: 255 };
+
+		// random spawns
+		this.fireflies = false;
 
 		// FPS
 		this.fps = null;
@@ -71,7 +77,7 @@ class Game {
 			src => showError('Could not load "' + src + '"'),
 			_ => {
 				// FPS
-				if (urlParams.has('fps') || beta) {
+				if ((urlParams.has('fps') || beta) && urlParams.get('scene') != 'wallpaper') {
 					document.querySelector('section#blank').innerHTML += '<span id="fps">0<span/>';
 					this.fps = { elem: document.querySelector('span#fps'), val: 0 };
 				}
@@ -112,6 +118,9 @@ class Game {
 		// Clear canvas
 		mge.clear();
 
+		// Temp background color
+		let bg_color = game.leave_color;
+
 		// Draw scene
 		for (let elem of this.scene) {
 			if (this.scene_elements.includes(elem)) {
@@ -119,6 +128,8 @@ class Game {
 				let c = this.scene[elem + '_canvas'];
 				let cctx = c.getContext('2d');
 				let entire_canvas = [0, 0, c.width, c.height];
+
+				cctx.imageSmoothingEnabled = false;
 
 				// Wind element
 				if (elem == 'wind') {
@@ -151,10 +162,49 @@ class Game {
 					for (let ent of this.entities.all) ent.draw(cctx);
 				}
 
+				// Light
+				if (elem == 'light') {
+					cctx.clearRect(...entire_canvas);
+					cctx.fillStyle = this.toColorStr(this.light_color);
+					cctx.fillRect(...entire_canvas);
+					bg_color = game.blendColor(game.light_color, bg_color);
+				}
+
+				// Darkness
+				if (elem == 'darkness') {
+					cctx.clearRect(...entire_canvas);
+					bg_color = game.blendColor(game.darkness_color, bg_color);
+
+					cctx.fillStyle = 'black';
+					cctx.globalCompositeOperation = 'source-over';
+					cctx.fillRect(...entire_canvas);
+
+					let glow = [];
+
+					for (let ent of this.entities.all.filter(e => e.type != 'herb')) {
+						if (ent.glowing) {
+							cctx.globalCompositeOperation = 'destination-out';
+							let { x, y } = get2dPos(ent.pos);
+							cctx.drawImage(ent.glowing.canvas, x - ent.glowing.m, y - ent.glowing.m);
+							glow.push({ x: x, y: y });
+						} else if (game.hide_glow && glow) {
+							cctx.globalCompositeOperation = 'source-over';
+							ent.draw(cctx);
+						}
+					}
+
+					cctx.globalCompositeOperation = 'source-in';
+					cctx.fillStyle = this.toColorStr(this.darkness_color);
+					cctx.fillRect(...entire_canvas);
+				}
+
 				mge.ctx.drawImage(c, 0, 0);
 				mge.ctx.globalAlpha = 1;
 			} else mge.ctx.drawImage(this.imgs[elem], 0, 0);
 		}
+
+		// Apply background color
+		game.setBackground(game.toColorStr(bg_color));
 
 		// Camera
 		if (this.camera) mge.camera.set(this.camera, 0.05);
@@ -196,7 +246,7 @@ class Game {
 	}
 
 	toColorStr(obj) {
-		return `rgba(${obj.r}, ${obj.g}, ${obj.b}, ${obj.a / 255})`;
+		return `rgba(${Math.floor(obj.r)}, ${Math.floor(obj.g)}, ${Math.floor(obj.b)}, ${obj.a / 255})`;
 	}
 
 	toColorObj(str) {
@@ -216,6 +266,15 @@ class Game {
 		};
 	}
 
+	transitionColor(c1, c2, a) {
+		return {
+			r: c2.r * a + c1.r * (1 - a),
+			g: c2.g * a + c1.g * (1 - a),
+			b: c2.b * a + c1.b * (1 - a),
+			a: c2.a * a + c1.a * (1 - a)
+		};
+	}
+
 	// --- Events ---
 
 	resolveEvents() {
@@ -224,7 +283,8 @@ class Game {
 
 			if (event.type == 'timeout' && this.time > event.end_time) {
 				event.done = true;
-				event.callback(event);
+				if (event.args) event.callback(...event.args);
+				else event.callback(event);
 			}
 		}
 
@@ -232,21 +292,22 @@ class Game {
 	}
 
 	setEvent(id, callback = event => {}) {
-		this.events.push({
+		game.events.push({
 			id: id,
-			start_time: this.time,
+			start_time: game.time,
 			callback: callback,
 			type: 'lambda',
 			done: false
 		});
 	}
 
-	setTimeout(id, ms, callback = event => {}) {
-		this.events.push({
+	setTimeout(id, ms, callback = event => {}, ...args) {
+		game.events.push({
 			id: id,
-			start_time: this.time,
-			end_time: this.time + ms,
+			start_time: game.time,
+			end_time: game.time + ms,
 			callback: callback,
+			args: args,
 			type: 'timeout',
 			done: false
 		});

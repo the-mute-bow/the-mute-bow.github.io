@@ -57,4 +57,41 @@ a.btn p {
   width: 100%;
   height: 100%;
 }
+
+a.btn canvas {
+  position: absolute;
+}
+
+a.pressed {
+  opacity: 0.5;
+}
+
+a.btn.fadein {
+  -webkit-animation: 0.4s btn-fade-in;
+          animation: 0.4s btn-fade-in;
+}
+
+a.btn.fadeout {
+  -webkit-transition: opacity 0.4s;
+  transition: opacity 0.4s;
+  opacity: 0;
+}
+
+@-webkit-keyframes btn-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: inherit;
+  }
+}
+
+@keyframes btn-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: inherit;
+  }
+}
 /*# sourceMappingURL=global.css.map */

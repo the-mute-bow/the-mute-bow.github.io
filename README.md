@@ -27,9 +27,27 @@ permalink: /readme.html
 
 ## Change log
 
+### **b3.0.7**
+
+-   Fixed button performance issue (replaced `filter: 'drop-shadow()'` by `canvas#shad`).
+-   Added `'pause'` button (created by `showPauseBtn` function).
+-   Added `setButton(id, 'dead')` case witch calls `removeChild` of given button id.
+-   New CSS transitions triggered by `createButton()` and `setButton(btn_id, 'dead')` using `options.fade` to attribute `.fadein`/`.fadeout` class to button.
+-   Added `section#menu`.
+    Added `options.temp` to tag button with `.temps` class and `killTempBtns(section_id)` fuction to call setButton(btn_id, 'dead') for every `btn.temp` included in given section.
+-   Added French and English language selection buttons (created by `showLangBtns` function) to set `'lang'` cookie on `section#menu`.
+-   Added `'light'` and `'darkness'` scene elements with `game.light_color` and `game.darkness_color` objects.
+-   Added `Firefly` class with `glowing` property that ereases an arc on `'darkness'` canvas.
+-   `Pine` entities have 5% chance to make `Firefly` entities spawn if `game.fireflies` is `true` and `wind.get()` is higher than `0.9`.
+-   Renamed `./old` by `./old-v1` and copied `./pwa` as `./old-v2` to keep live backup.
+-   Set `cctx.imageSmoothingEnabled` to `false` and `'darkness'` draws entities that hide light except for `Herb` entities only since the frist glowing element was drawed and if `game.hide_glow` (set by `'#hide_glow'` cookie) is `true`.
+-   Added background sync with `game.leave_colors` with `game.light_color` and `game.darness_color` applied.
+-   Added `game.colorTransition` function to make color transitions like nightfall.
+-   Added `...args` to `game.setTimeout` to define arguments to give to `callback` fuction if needed. `event` being default if `args` is empty.
+
 ### **b3.0.6**
 
--   Removed `'type nor in entities'` warning;
+-   Removed `'type not in entities'` warning.
 -   Global CSS
 -   Added `createButton` and `setButton` functions.
 

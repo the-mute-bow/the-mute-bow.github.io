@@ -2,7 +2,7 @@
 if (location.host == 'the-mute-bow.github.io') location.replace('https://the-mute-bow.com');
 
 // Game version
-let version = 'b3.0.6';
+let version = 'b3.0.7';
 for (let elem of document.querySelectorAll('.version')) elem.innerHTML = version;
 var beta = location.pathname.includes('beta');
 
@@ -26,9 +26,9 @@ const loadScene = scene => {
 if (!urlParams.has('scene')) loadScene('test');
 
 // Init cookies
-initCookie('lang', 'en');
 initCookie('#wind', true);
 initCookie('#fullscreen', true);
+initCookie('#hide_glow', true);
 
 // Langage
 const fr = getCookie('lang') == 'fr';
@@ -107,9 +107,16 @@ const addScript = src => {
 onload = () => {
 	translate();
 	mge.forceFullscreen = false;
+	mge.forceLandscape = false;
 
 	// If not running on Android device
 	if (!urlParams.has('android') && !/Android/i.test(navigator.userAgent) && urlParams.get('scene') != 'wallpaper') mge.setOverlay('compatibility');
+	// If lang not set
+	else if (!getCookie('lang')) {
+		mge.setOverlay('menu');
+		showLangBtns();
+		mge.resize();
+	}
 	// If cookies not allowed
 	else if (!getCookie('allow-cookies')) mge.setOverlay('cookies');
 	// If an update was done
@@ -126,9 +133,15 @@ onload = () => {
 		// Dev sign
 		if (beta) document.querySelector('section#loading span#dev-sign').classList.remove('mge-hidden');
 
+		// Landscpe
+		mge.forceLandscape = true;
+
 		// Fullscreen
 		mge.getFullscreen = _ => outerHeight > 0.98 * screen.height;
 		mge.forceFullscreen = getCookie('#fullscreen') == 'true';
+
+		// Call resize on overlay change
+		mge.onOverlayChange = _ => setTimeout(_ => mge.resize(), 10);
 
 		// Game logic call
 		mge.logic = () => {

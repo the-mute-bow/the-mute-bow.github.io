@@ -99,7 +99,8 @@ class Pine extends Fixed {
 
 	behave() {
 		if (game.time > this.time) {
-			this.time = game.time + Math.random() * 50 + 50;
+			let rand = Math.random();
+			this.time = game.time + rand * 50 + 50;
 			let w = game.entities.get('wind')[0];
 
 			let n = w.get(this.pos, 40);
@@ -109,7 +110,10 @@ class Pine extends Fixed {
 				this.render();
 			}
 
-			if (n > 0.9 && Math.random() > 0.9) game.entities.add(new Leave(this.pos, w));
+			if (n > 0.9 && rand > 0.9) {
+				game.entities.add(new Leave(this.pos, w));
+				if (game.fireflies && rand > 0.95) game.entities.add(new Firefly(this.pos, w));
+			}
 		}
 	}
 }
