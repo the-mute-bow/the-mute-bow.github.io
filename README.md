@@ -1,23 +1,11 @@
-<style>
-  p.title {
-    background: #88888833;
-  }
-
-  img.icon {
-    width: 165px;
-    height: 165px;
-    border-radius: 30px;
-    box-shadow: 0px 0px 5px 0px black;
-  }
-
-  hr {
-    background: #58a6ff;
-  }
-</style>
-
-<p id="title" align="center">
+<p id="title" align="center" style="background-color: #88888833">
   <a href="https://the-mute-bow.com/">
-    <img class="icon" src="https://the-mute-bow.com/global/img/icons/mask512.png" alt="App">
+    <img class="icon" src="https://the-mute-bow.com/global/img/icons/mask512.png" alt="App" style="
+      width: 165px;
+      height: 165px;
+      border-radius: 30px;
+      box-shadow: 0px 0px 5px 0px black;
+    ">
   </a>
 </p>
 
