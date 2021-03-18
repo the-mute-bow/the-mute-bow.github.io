@@ -1,11 +1,6 @@
-<p id="title" align="center" style="background-color: #88888833">
+<p id="title" align="center" style="background-color: #88888811">
   <a href="https://the-mute-bow.com/">
-    <img class="icon" src="https://the-mute-bow.com/global/img/icons/mask512.png" alt="App" style="
-      width: 165px;
-      height: 165px;
-      border-radius: 30px;
-      box-shadow: 0px 0px 5px 0px black;
-    ">
+    <img class="icon" src="https://the-mute-bow.com/global/img/icons/cut1024.png" alt="App" width="96px">
   </a>
 </p>
 
@@ -32,7 +27,7 @@
 
 -   Connected to new pwa-mge custom components library etended with `GameElement` class.
 -   Reoganized folders and files with `./beta/`, `./release/` and `./global/`.
--   Kept b3.0.0 url params use for scene selection combined with `<script>` elements`.
+-   Kept [b3.0.0](https://github.com/the-mute-bow/the-mute-bow.github.io#b300---third-version) url params use for scene selection combined with `<script>` elements`.
 -   Reworked python stripts to match new _scene_/img file config.
 -   Separated vegetation img and animations listing from _scene_ entities listing to `vegetation.py` and `map.py`.
 -   Each _scene_ has its own folder with a `map.js` for entity listing and `script.js` for _scene_ code.
