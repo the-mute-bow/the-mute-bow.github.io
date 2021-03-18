@@ -1,0 +1,49 @@
+// sass --no-source-map --watch styles/scss:styles
+
+@font-face {
+	font-family: 'Pixelar';
+	src: url('https://the-mute-bow.com/global/fonts/Pixelar.woff2') format('woff2'), url('https://the-mute-bow.com/global/fonts/Pixelar.woff') format('woff');
+}
+
+* {
+	padding: 0px;
+	margin: 0px;
+	box-sizing: border-box;
+	font-family: Pixelar;
+	--normal-font-size: 24px;
+	font-size: var(--normal-font-size);
+}
+
+html {
+	--black: #202124;
+	--white: #cdcad3;
+	--blue: #ccf;
+	--yellow: #fd8;
+	--red: #e88;
+	--green: #cfc;
+}
+
+.red {
+	color: var(--red);
+}
+
+.yellow {
+	color: var(--yellow);
+}
+
+.blue {
+	color: var(--blue);
+}
+
+.green {
+	color: var(--green);
+}
+
+.cookie {
+	color: #ec9;
+}
+
+a {
+	color: var(--blue);
+	// text-decoration: none;
+}

@@ -8,7 +8,7 @@ data = ''
 def search(IN: str) -> None:
 	global data
 	for file in listdir(IN if IN != '' else None):
-		path = ('../' + file) if IN == '' else ('../' + IN + '/' + file)
+		path = ('./' + file) if IN == '' else ('./' + IN + '/' + file)
 		
 		if any(file == elem for elem in black_list):
 			print('[Ignored]', path)

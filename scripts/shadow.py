@@ -5,7 +5,7 @@ from time import sleep
 
 system('cls')
 
-path = '../beta/img/' + argv[1]
+path = './beta/img/' + argv[1]
 feet = int(argv[2])
 ratio = 0.82, 0.57
 
