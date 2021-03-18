@@ -1,6 +1,6 @@
-<p id="title" align="center" style="background-color: #88888811">
+<p align="center" style="background-color: #88888811">
   <a href="https://the-mute-bow.com/">
-    <img class="icon" src="https://the-mute-bow.com/global/img/icons/cut1024.png" alt="App" width="96px">
+    <img src="https://the-mute-bow.com/global/img/icons/cut1024.png" alt="App" width="96px">
   </a>
 </p>
 
