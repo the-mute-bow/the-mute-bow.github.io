@@ -46,7 +46,7 @@ let update_ready = false;
 window.isUpdateAvailable = new Promise((resolve, reject) => {
 	if ('serviceWorker' in navigator)
 		navigator.serviceWorker
-			.register('./sw.js', {
+			.register('./service-worker.js', {
 				scope: './'
 			})
 			.then(reg => {
