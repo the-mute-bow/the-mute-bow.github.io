@@ -1,6 +1,3 @@
-// Redirect to custom domain
-if (location.host == 'the-mute-bow.github.io') location.replace('https://the-mute-bow.com');
-
 // Game version
 let version = 'b3.0.8';
 for (let elem of document.querySelectorAll('.version')) elem.innerHTML = version;
