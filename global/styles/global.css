@@ -1,6 +1,6 @@
 @font-face {
   font-family: "Pixelar";
-  src: url("https://the-mute-bow.com/global/fonts/Pixelar.woff2") format("woff2"), url("https://the-mute-bow.com/global/fonts/Pixelar.woff") format("woff");
+  src: url("/global/fonts/Pixelar.woff2") format("woff2"), url("/global/fonts/Pixelar.woff") format("woff");
 }
 * {
   padding: 0px;
