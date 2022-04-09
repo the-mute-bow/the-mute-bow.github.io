@@ -1,0 +1,34 @@
+{
+	"name": "The Mute Bow",
+	"short_name": "The Mute Bow",
+
+	"start_url": "./",
+	"scope": "./",
+
+	"background_color": "#202124",
+	"theme_color": "#202124",
+
+	"display": "fullscreen",
+	"orientation": "any",
+
+	"icons": [
+		{
+			"src": "./global/img/icons/mask192.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "maskable"
+		},
+		{
+			"src": "./global/img/icons/mask512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "maskable"
+		},
+		{
+			"src": "./global/img/icons/mask1024.png",
+			"sizes": "1024x1024",
+			"type": "image/png",
+			"purpose": "maskable"
+		}
+	]
+}
